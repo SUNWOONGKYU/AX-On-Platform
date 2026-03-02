@@ -867,7 +867,7 @@ S5 AI    │ S5MS        │ S5FA        │ S5MO        │ S5FI        │ S5L
 
 1. **AX 모듈 라이브러리** (155개+ 모듈)
 2. **산업별 데이터 템플릿** (14개 산업)
-3. **AI 전문가 Pool** (분야별 AI 활용 고수)
+3. **AI 전문가 Pool** (분야별 AI 전문가)
 4. **AX-On Platform** (www.ax-on.net)
 
 ---
@@ -925,6 +925,6 @@ S5 AI    │ S5MS        │ S5FA        │ S5MO        │ S5FI        │ S5L
 ### AX-On Platform 연계
 
 이 모든 모듈은 AX-On Platform(www.ax-on.net)의 **AX 프로젝트** 메뉴를 통해:
-- AI 고수 전문가가 기업에 투입되어 실행
+- 분야별 AI 전문가들이 직접 프로젝트를 추진
 - 기업 규모별 5단계 로드맵에 따라 단계적 적용
 - 산업별 특화 모듈 조합으로 맞춤형 AX 패키지 구성
