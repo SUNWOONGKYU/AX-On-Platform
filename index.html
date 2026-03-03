@@ -308,21 +308,21 @@ body {
 /* ── CYCLE ── */
 .cycle-section {
   padding: 120px 40px;
-  background: var(--dark-bg);
-  color: #fff;
+  background: var(--surface-warm);
+  color: var(--ink);
   position: relative; overflow: hidden;
 }
 .cycle-section::before {
   content: ''; position: absolute; inset: 0;
   background:
-    radial-gradient(circle at 20% 50%, rgba(232, 146, 13, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 50%, rgba(13, 148, 136, 0.06) 0%, transparent 50%);
+    radial-gradient(circle at 20% 50%, rgba(232, 146, 13, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(13, 148, 136, 0.04) 0%, transparent 50%);
 }
 .cycle-inner {
   max-width: 1280px; margin: 0 auto;
   position: relative; z-index: 1;
 }
-.cycle-section .section-desc { color: var(--dark-text-muted); }
+.cycle-section .section-desc { color: var(--ink-muted); }
 
 .cycle-diagram {
   margin-top: 60px;
@@ -352,25 +352,27 @@ body {
 .cycle-return {
   margin-top: 16px;
   font-size: 14px;
-  color: var(--dark-text-muted); opacity: 0.7;
+  color: var(--ink-muted); opacity: 0.7;
   text-align: center;
 }
 .cycle-node {
-  background: var(--dark-bg-hover);
-  border: 1px solid var(--dark-border);
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.08);
   border-radius: 16px; padding: 24px 28px;
   text-align: center; min-width: 160px;
   transition: all 0.3s ease;
   position: relative;
+  box-shadow: var(--shadow-soft);
 }
 .cycle-node:hover {
-  background: var(--dark-bg-active);
+  background: var(--surface-card);
   transform: translateY(-4px);
   border-color: var(--amber);
+  box-shadow: var(--shadow-hover);
 }
 .cycle-icon { font-size: 28px; margin-bottom: 10px; }
 .cycle-name { font-size: 15px; font-weight: 700; }
-.cycle-sub { font-size: 12px; color: var(--dark-text-muted); margin-top: 4px; }
+.cycle-sub { font-size: 12px; color: var(--ink-muted); margin-top: 4px; }
 
 /* ── TARGET ── */
 .target-section { padding: 120px 40px; }
@@ -802,8 +804,8 @@ body {
 <section class="cycle-section" id="cycle" aria-labelledby="cycle-title">
   <div class="cycle-inner">
     <div class="fade-in">
-      <div class="section-label" style="color: var(--amber-light);">ECOSYSTEM</div>
-      <h2 class="section-title" id="cycle-title" style="color: #fff;">선순환 생태계</h2>
+      <div class="section-label" style="color: var(--amber);">ECOSYSTEM</div>
+      <h2 class="section-title" id="cycle-title">선순환 생태계</h2>
       <p class="section-desc">AX-On의 모든 서비스는 하나의 선순환 구조로 연결되어, 참여할수록 강해지는 생태계를 만듭니다.</p>
     </div>
     <div class="cycle-diagram fade-in">
