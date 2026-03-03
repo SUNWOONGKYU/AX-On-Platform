@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform — 분야별 AI 전문가 목록. 산업 분류와 기능 분야로 필터링하여 최적의 AI 전문가를 찾아보세요.">
+<meta property="og:title" content="AI 전문가 — AX-On Platform">
+<meta property="og:image" content="https://axon-platform.com/images/og-default.png">
+<meta property="og:description" content="분야별 AI 전문가 목록. 산업 분류와 기능 분야로 필터링하여 최적의 전문가를 찾아보세요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.ax-on.net/expert.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>AI 전문가 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --teal: #0d9488;
+  --teal-light: #2dd4bf;
+  --coral: #e85d4a;
+  --violet: #7c5ce0;
+  --sky: #3b82f6;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+  --dark-bg: #002451;
+  --dark-bg-deep: #001126;
+  --dark-text-muted: #7285b7;
+  --dark-border: rgba(114, 133, 183, 0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(250, 249, 247, 0.85);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(26, 26, 46, 0.06);
+  transition: all 0.4s ease;
+}
+.nav.scrolled {
+  background: rgba(250, 249, 247, 0.95);
+  box-shadow: 0 2px 20px rgba(26, 26, 46, 0.08);
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 72px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--ink);
+}
+.logo-mark {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.logo-mark svg { width: 28px; height: 32px; }
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 22px;
+  letter-spacing: -0.5px;
+}
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a {
+  text-decoration: none; color: var(--ink-muted);
+  font-size: 15px; font-weight: 500;
+  padding: 8px 14px; border-radius: 10px;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--ink); background: rgba(26, 26, 46, 0.04); }
+.nav-links a.active { color: var(--sky); font-weight: 700; }
+
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-auth-btn {
+  text-decoration: none;
+  font-size: 14px; font-weight: 600;
+  padding: 8px 18px; border-radius: 10px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.nav-login { color: var(--ink-muted); }
+.nav-login:hover { color: var(--ink); }
+.nav-signup {
+  background: var(--ink); color: #fff;
+  border-radius: 12px;
+}
+.nav-signup:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 26, 46, 0.2);
+}
+
+.mobile-toggle {
+  display: none; background: none; border: none;
+  width: 44px; height: 44px; cursor: pointer;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.mobile-toggle span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 2px;
+  transition: all 0.3s ease;
+}
+/* 햄버거 X 애니메이션 */
+.mobile-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mobile-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.mobile-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* 데스크톱에서 nav-links 안의 mobile-only auth 링크 숨김 */
+.nav-auth-mobile-divider,
+.nav-auth-btn-mobile { display: none; }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 120px 40px 48px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute; top: -100px; right: -200px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.page-header-inner { position: relative; z-index: 1; }
+.page-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2);
+  padding: 8px 18px; border-radius: 50px;
+  font-size: 15px; font-weight: 600; color: var(--sky);
+  margin-bottom: 20px;
+}
+.page-header h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 900; line-height: 1.3;
+  letter-spacing: -0.5px; margin-bottom: 14px;
+}
+.page-header p {
+  font-size: 17px; color: var(--ink-muted);
+  max-width: 560px; margin: 0 auto; line-height: 1.8;
+  word-break: keep-all;
+}
+
+/* ── STATS ROW ── */
+.stats-row {
+  display: flex; justify-content: center; gap: 32px;
+  flex-wrap: wrap; margin-top: 40px;
+}
+.stat-item {
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 32px; font-weight: 900;
+  background: linear-gradient(135deg, var(--sky), #6366f1);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label { font-size: 14px; color: var(--ink-muted); font-weight: 500; }
+
+/* ── FILTER BAR ── */
+.filter-wrap {
+  max-width: 1280px; margin: 0 auto;
+  padding: 20px 40px 40px;
+  position: sticky; top: 72px; z-index: 90;
+  background: var(--surface);
+  border-bottom: 1px solid rgba(26, 26, 46, 0.05);
+}
+.search-row {
+  display: flex; gap: 12px; align-items: center;
+  margin-bottom: 16px;
+}
+.search-box {
+  flex: 1; max-width: 400px;
+  position: relative;
+}
+.search-box input {
+  width: 100%; padding: 12px 16px 12px 44px;
+  border: 1px solid rgba(26, 26, 46, 0.12);
+  border-radius: var(--radius-sm);
+  font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface-card);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+.search-box input:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+.search-icon {
+  position: absolute; left: 14px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-muted); font-size: 16px; pointer-events: none;
+}
+.register-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--sky), #2563eb);
+  color: #fff; font-size: 14px; font-weight: 700;
+  text-decoration: none; cursor: pointer; border: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  white-space: nowrap;
+}
+.register-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.4);
+}
+
+.filter-tabs-wrap { display: flex; flex-direction: column; gap: 12px; }
+.filter-row { display: flex; align-items: flex-start; gap: 10px; }
+.filter-row-label {
+  font-size: 12px; font-weight: 700; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 1px;
+  padding-top: 7px; min-width: 60px; flex-shrink: 0;
+}
+.filter-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 14px; border-radius: 50px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  background: var(--surface-card);
+  border-color: rgba(26, 26, 46, 0.1);
+  color: var(--ink-muted);
+  user-select: none;
+}
+.chip:hover { border-color: var(--sky); color: var(--sky); }
+.chip.active {
+  background: var(--sky); color: #fff;
+  border-color: var(--sky);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+.chip.chip-fn.active {
+  background: var(--teal); border-color: var(--teal);
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+}
+.chip:hover.chip-fn { border-color: var(--teal); color: var(--teal); }
+.chip-all {
+  background: var(--ink); color: #fff;
+  border-color: var(--ink);
+}
+.chip-all:hover { background: #2a2a4e; }
+.chip-all.active { background: var(--ink); border-color: var(--ink); }
+
+.filter-count {
+  font-size: 13px; color: var(--ink-muted);
+  padding-top: 4px; white-space: nowrap;
+}
+
+/* ── EXPERT GRID ── */
+.expert-main {
+  max-width: 1280px; margin: 0 auto;
+  padding: 40px 40px 80px;
+}
+.expert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ── EXPERT CARD ── */
+.expert-card {
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.07);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none; color: inherit;
+  display: flex; flex-direction: column; gap: 0;
+}
+.expert-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+.expert-card-top {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 14px;
+}
+.expert-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid rgba(59, 130, 246, 0.3);
+  flex-shrink: 0;
+}
+.expert-info { flex: 1; min-width: 0; }
+.expert-name {
+  font-size: 17px; font-weight: 700;
+  margin-bottom: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.expert-status {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 600; color: var(--teal);
+}
+.expert-status::before {
+  content: ''; display: block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal);
+}
+.expert-tagline {
+  font-size: 14px; color: var(--ink-muted);
+  line-height: 1.6; word-break: keep-all;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.expert-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 20px;
+}
+.expert-tag {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 4px 10px; border-radius: 50px;
+  font-size: 11px; font-weight: 600;
+}
+.expert-tag.industry {
+  background: rgba(232, 146, 13, 0.08);
+  color: var(--amber);
+  border: 1px solid rgba(232, 146, 13, 0.15);
+}
+.expert-tag.function {
+  background: rgba(13, 148, 136, 0.08);
+  color: var(--teal);
+  border: 1px solid rgba(13, 148, 136, 0.15);
+}
+.expert-card-footer {
+  margin-top: auto;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid rgba(26, 26, 46, 0.05);
+  padding-top: 16px;
+}
+.expert-link-text {
+  font-size: 13px; font-weight: 700; color: var(--sky);
+  display: flex; align-items: center; gap: 4px;
+}
+.expert-link-text:after { content: '→'; font-size: 14px; }
+.expert-ext-icon {
+  font-size: 20px; color: var(--ink-muted);
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 80px 40px;
+  grid-column: 1 / -1;
+}
+.empty-icon { font-size: 48px; margin-bottom: 16px; }
+.empty-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.empty-desc { font-size: 15px; color: var(--ink-muted); }
+
+/* ── REGISTER CTA ── */
+.register-cta {
+  background: var(--surface-warm);
+  padding: 80px 40px;
+  text-align: center;
+}
+.register-cta-inner { max-width: 560px; margin: 0 auto; }
+.register-cta h2 {
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 900; margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.register-cta p {
+  font-size: 16px; color: var(--ink-muted);
+  margin-bottom: 28px; word-break: keep-all;
+}
+.register-cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; border-radius: 14px;
+  font-size: 15px; font-weight: 700;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.3s ease; border: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--sky), #2563eb);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(59, 130, 246, 0.4);
+}
+.btn-outline {
+  background: transparent; color: var(--ink);
+  border: 2px solid rgba(26, 26, 46, 0.15);
+}
+.btn-outline:hover {
+  border-color: var(--ink); background: rgba(26, 26, 46, 0.03);
+}
+
+/* ── NAV AUTH STATE ── */
+.nav-user-name {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  white-space: nowrap;
+}
+.nav-logout-btn {
+  background: none; border: 1px solid rgba(26,26,46,0.15);
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  padding: 6px 14px; border-radius: 10px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.25s ease;
+}
+.nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ── REGISTRATION MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(26,26,46,0.5); backdrop-filter: blur(4px);
+  align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--surface-card); border-radius: var(--radius);
+  padding: 40px 36px; width: 90%; max-width: 520px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(26,26,46,0.2);
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: none; border: none; font-size: 24px;
+  color: var(--ink-muted); cursor: pointer; line-height: 1;
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; transition: background 0.2s;
+}
+.modal-close:hover { background: rgba(26,26,46,0.06); }
+.modal-title {
+  font-size: 22px; font-weight: 900; margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+.modal-desc {
+  font-size: 14px; color: var(--ink-muted); margin-bottom: 28px;
+}
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block; font-size: 13px; font-weight: 700;
+  color: var(--ink); margin-bottom: 6px;
+}
+.form-label .required { color: var(--coral); margin-left: 2px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 12px 14px;
+  border: 1px solid rgba(26,26,46,0.12);
+  border-radius: var(--radius-sm);
+  font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface); color: var(--ink);
+  outline: none; transition: border-color 0.25s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-submit {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--sky), #2563eb);
+  color: #fff; border: none; border-radius: 14px;
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 24px rgba(59,130,246,0.3);
+}
+.form-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(59,130,246,0.4);
+}
+.form-submit:disabled {
+  opacity: 0.6; cursor: not-allowed; transform: none;
+}
+.form-msg {
+  text-align: center; padding: 16px; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 600; margin-top: 16px; display: none;
+}
+.form-msg.success { display: block; background: rgba(13,148,136,0.1); color: var(--teal); }
+.form-msg.error { display: block; background: rgba(232,93,74,0.1); color: var(--coral); }
+
+/* ── FOOTER ── */
+.footer {
+  padding: 24px 40px 16px;
+  background: var(--dark-bg);
+  color: var(--dark-text-muted);
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px;
+}
+.footer-logo {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 20px; color: #fff;
+}
+.footer-logo span { color: var(--amber); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  color: var(--dark-text-muted);
+  text-decoration: none; font-size: 14px;
+  transition: color 0.3s ease;
+}
+.footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
+  border-top: 1px solid rgba(114, 133, 183, 0.15);
+  text-align: center; font-size: 12px; color: #7285b7; opacity: 0.7;
+}
+
+/* ── ANIMATION ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeUp 0.6s ease both; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .expert-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+}
+@media (max-width: 768px) {
+  /* 가로 스크롤 방지 */
+  body { overflow-x: hidden; }
+
+  /* NAV */
+  .nav-inner { padding: 0 16px; height: 60px; }
+  .nav-links { display: none; }
+  .mobile-toggle { display: flex; }
+
+  /* 햄버거 열렸을 때: nav-links + auth 링크 모두 표시 */
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 60px; left: 0; right: 0;
+    background: var(--surface);
+    padding: 12px 20px 20px;
+    border-bottom: 1px solid rgba(26,26,46,0.06);
+    box-shadow: 0 8px 24px rgba(26,26,46,0.08);
+    z-index: 99;
+  }
+  /* 모바일 메뉴 링크 터치 영역 확보 */
+  .nav-links.open a {
+    padding: 12px 14px;
+    font-size: 15px;
+    min-height: 44px;
+    display: flex; align-items: center;
+    border-bottom: 1px solid rgba(26,26,46,0.04);
+  }
+  .nav-links.open a:last-child { border-bottom: none; }
+
+  /* 햄버거 열렸을 때 nav-right auth 버튼 숨김 (메뉴 안에 표시하므로) */
+  .nav-links.open ~ .nav-right .nav-auth-btn { display: none; }
+
+  /* 데스크톱에서 nav-right의 auth 버튼 숨김 처리 (모바일 전용) */
+  .nav-right .nav-auth-btn { display: none; }
+  .nav-right { gap: 4px; }
+
+  /* 모바일 메뉴 안에 auth 링크 스타일 */
+  .nav-links.open .nav-auth-mobile-divider {
+    height: 1px; background: rgba(26,26,46,0.08);
+    margin: 8px 0;
+  }
+  .nav-links.open .nav-auth-btn-mobile {
+    text-decoration: none;
+    font-size: 14px; font-weight: 600;
+    padding: 12px 14px; border-radius: 10px;
+    min-height: 44px; display: flex; align-items: center;
+    transition: all 0.2s ease;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .nav-links.open .nav-auth-btn-mobile.login {
+    color: var(--ink-muted);
+  }
+  .nav-links.open .nav-auth-btn-mobile.signup {
+    background: var(--ink); color: #fff;
+    border-radius: 12px; margin-top: 4px;
+    justify-content: center;
+  }
+
+  /* PAGE HEADER */
+  .page-header { padding: 80px 16px 28px; }
+  .page-header h1 { font-size: 24px; }
+  .page-header p { font-size: 14px; }
+  .page-badge { font-size: 13px; padding: 6px 14px; }
+  .stats-row { gap: 16px; margin-top: 24px; }
+  .stat-num { font-size: 26px; }
+  .stat-label { font-size: 13px; }
+
+  /* FILTER — sticky top 조정 */
+  .filter-wrap {
+    padding: 12px 16px 16px;
+    top: 60px;
+  }
+  .search-row {
+    flex-wrap: wrap; gap: 8px;
+  }
+  .search-box { max-width: 100%; }
+  .register-btn {
+    font-size: 13px; padding: 10px 16px;
+    min-height: 44px;
+    width: 100%;
+    justify-content: center;
+  }
+  /* 필터 칩: 가로 스크롤 */
+  .filter-row { flex-wrap: nowrap; align-items: flex-start; }
+  .filter-row-label { min-width: 44px; font-size: 11px; }
+  .filter-chips {
+    display: flex; flex-wrap: nowrap;
+    overflow-x: auto; gap: 6px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .filter-chips::-webkit-scrollbar { display: none; }
+  .chip {
+    white-space: nowrap; flex-shrink: 0;
+    min-height: 36px;
+    padding: 6px 12px;
+  }
+  .filter-count { display: none; }
+
+  /* EXPERT GRID — 1열 */
+  .expert-main { padding: 20px 16px 60px; }
+  .expert-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  /* EXPERT CARD */
+  .expert-card { padding: 20px 16px; }
+  .expert-card-top { gap: 12px; }
+  .expert-avatar { width: 52px; height: 52px; }
+  .expert-name { font-size: 15px; }
+  .expert-tagline { font-size: 13px; }
+  .expert-link-text { font-size: 12px; }
+
+  /* CTA */
+  .register-cta { padding: 48px 16px; }
+  .register-cta h2 { font-size: 20px; }
+  .register-cta p { font-size: 14px; }
+  .btn { padding: 12px 20px; font-size: 14px; min-height: 44px; }
+
+  /* FOOTER */
+  .footer { padding: 24px 16px 16px; }
+  .footer-links { flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .footer-links a { min-height: 44px; display: flex; align-items: center; }
+}
+@media (max-width: 480px) {
+  .expert-grid { grid-template-columns: 1fr; }
+  .register-cta-actions { flex-direction: column; align-items: stretch; }
+  .register-cta-actions .btn { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="startup.html">우리의 창업</a>
+      <a href="ax-project.html">AX 프로젝트</a>
+      <a href="expert.html" class="active">AI 전문가</a>
+      <a href="community.html">커뮤니티</a>
+      <!-- 모바일 햄버거 메뉴 안에만 표시되는 auth 링크 -->
+      <div class="nav-auth-mobile-divider"></div>
+      <a href="pages/auth/login.html" class="nav-auth-btn-mobile login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn-mobile signup">회원가입</a>
+    </div>
+    <div class="nav-right">
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-header-inner fade-in">
+    <div class="page-badge">👥 AI EXPERT POOL</div>
+    <h1>AI 전문가 풀</h1>
+    <p>분야별 AI 전문가들이 시니어 AI 창업 교육의 강사로 참여하고, 기업의 AX 프로젝트를 직접 수행합니다.</p>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num" id="totalCount">0</div>
+        <div class="stat-label">등록 전문가</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="industryCount">0</div>
+        <div class="stat-label">산업 분류</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="functionCount">0</div>
+        <div class="stat-label">기능 분야</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filter-wrap">
+  <div class="search-row">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="이름 또는 키워드 검색..." aria-label="전문가 검색">
+    </div>
+    <span class="filter-count" id="filterCount"></span>
+    <button class="register-btn" id="openRegisterModal">+ 전문가 등록 신청</button>
+  </div>
+  <div class="filter-tabs-wrap">
+    <!-- 산업 분류 필터 — JS에서 Supabase 카테고리 데이터로 동적 렌더링 -->
+    <div class="filter-row">
+      <span class="filter-row-label">산업</span>
+      <div class="filter-chips" id="industryFilter">
+        <span class="chip chip-all active" data-value="all">전체</span>
+      </div>
+    </div>
+    <!-- 기능 분야 필터 — JS에서 Supabase 카테고리 데이터로 동적 렌더링 -->
+    <div class="filter-row">
+      <span class="filter-row-label">기능</span>
+      <div class="filter-chips" id="functionFilter">
+        <span class="chip chip-fn chip-all active" data-value="all">전체</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERT GRID -->
+<main class="expert-main">
+  <div class="expert-grid" id="expertGrid">
+    <!-- 카드 JS로 렌더링 -->
+  </div>
+</main>
+
+<!-- REGISTER CTA -->
+<section class="register-cta">
+  <div class="register-cta-inner fade-in">
+    <h2>AI 전문가로 등록하시겠어요?</h2>
+    <p>귀하의 전문 분야에서 AI를 활용한 경험을 공유하고, AX-On 플랫폼의 AI 전문가로 활동하세요. 시니어 창업 교육 강사 참여 및 기업 AX 프로젝트 수행 기회를 드립니다.</p>
+    <div class="register-cta-actions">
+      <button class="btn btn-primary" id="openRegisterModal2">등록 신청하기</button>
+      <a href="index.html" class="btn btn-outline">AX-On 플랫폼 소개</a>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRATION MODAL -->
+<div class="modal-overlay" id="registerModal" aria-modal="true" role="dialog">
+  <div class="modal-box">
+    <button class="modal-close" id="closeRegisterModal" aria-label="닫기">&times;</button>
+    <div class="modal-title">AI 전문가 등록 신청</div>
+    <div class="modal-desc">아래 정보를 입력해 주시면 검토 후 등록 안내 드리겠습니다.</div>
+    <form id="registerForm">
+      <div class="form-group">
+        <label class="form-label" for="reg-name">이름 <span class="required">*</span></label>
+        <input class="form-input" type="text" id="reg-name" name="name" required placeholder="홍길동" maxlength="100">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="reg-email">이메일 <span class="required">*</span></label>
+        <input class="form-input" type="email" id="reg-email" name="email" required placeholder="email@example.com" maxlength="200">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="reg-category">전문분야 <span class="required">*</span></label>
+        <select class="form-select" id="reg-category" name="category_id" required>
+          <option value="">선택해 주세요</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="reg-career">경력요약 <span class="required">*</span></label>
+        <textarea class="form-textarea" id="reg-career" name="career_summary" required placeholder="주요 경력과 전문 분야를 간략히 기술해 주세요." maxlength="2000"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="reg-portfolio">포트폴리오 URL</label>
+        <input class="form-input" type="url" id="reg-portfolio" name="portfolio_url" placeholder="https://..." maxlength="500">
+      </div>
+      <button type="submit" class="form-submit" id="registerSubmit">신청하기</button>
+      <div class="form-msg" id="registerMsg"></div>
+    </form>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">AX-<span>On</span></div>
+    <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    &copy; 2026 AX-On Platform. All rights reserved.
+  </div>
+</footer>
+
+<!-- Supabase CDN -->
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+// ─── Supabase 설정 ───
+let supabaseClient = null;
+try {
+  if (typeof window.supabase !== 'undefined') {
+    supabaseClient = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+  }
+} catch(e) { console.error('Supabase init error:', e); }
+
+// ─── 상태 ───
+let allExperts = [];
+let categoryMap = {};  // { id: { label, icon, type } } — Supabase에서 fetch
+let categoriesLoaded = false;
+let isSubmitting = false;
+let activeIndustry = 'all';
+let activeFunction = 'all';
+let searchQuery = '';
+
+// ─── 카테고리 레이블 조회 헬퍼 ───
+function catLabel(id) {
+  const c = categoryMap[id];
+  return c ? c.label : id;
+}
+
+// ─── 아바타 SVG (photo_url 없을 때 이니셜 표시) ───
+function avatarHTML(expert) {
+  if (expert.photo_url && isSafeUrl(expert.photo_url)) {
+    return `<img class="expert-avatar" src="${escapeHtml(expert.photo_url)}" alt="${escapeHtml(expert.name)} 프로필" loading="lazy">`;
+  }
+  const initial = expert.name ? escapeHtml(expert.name.charAt(0)) : '?';
+  return `<svg class="expert-avatar" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" style="background:linear-gradient(135deg,#3b82f6,#6366f1);">
+    <text x="30" y="34" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="white">${initial}</text>
+  </svg>`;
+}
+
+// ─── 필터 칩 렌더링 (카테고리 데이터 기반) ───
+function renderFilterChips(categories) {
+  const industries = categories.filter(c => c.type === 'industry');
+  const functions  = categories.filter(c => c.type === 'function');
+
+  const indEl = document.getElementById('industryFilter');
+  indEl.innerHTML = `<span class="chip chip-all active" data-value="all">전체</span>` +
+    industries.map(c =>
+      `<span class="chip" data-value="${c.id}">${c.label}</span>`
+    ).join('');
+
+  const fnEl = document.getElementById('functionFilter');
+  fnEl.innerHTML = `<span class="chip chip-fn chip-all active" data-value="all">전체</span>` +
+    functions.map(c =>
+      `<span class="chip chip-fn" data-value="${c.id}">${c.label}</span>`
+    ).join('');
+}
+
+// ─── 카드 렌더링 (Task 1: cards link to expert-template.html?id=) ───
+function renderExperts() {
+  const grid = document.getElementById('expertGrid');
+  const filtered = allExperts.filter(e => {
+    const matchIndustry = activeIndustry === 'all' || (e.industry || []).includes(activeIndustry);
+    const matchFunction = activeFunction === 'all' || (e.functions || []).includes(activeFunction);
+    const q = searchQuery.toLowerCase();
+    const matchSearch = !q ||
+      (e.name || '').toLowerCase().includes(q) ||
+      (e.title || '').toLowerCase().includes(q) ||
+      (e.industry || []).some(i => catLabel(i).toLowerCase().includes(q)) ||
+      (e.functions || []).some(f => catLabel(f).toLowerCase().includes(q));
+    return matchIndustry && matchFunction && matchSearch;
+  });
+
+  document.getElementById('filterCount').textContent =
+    filtered.length > 0 ? `${filtered.length}명의 전문가` : '';
+  document.getElementById('totalCount').textContent = allExperts.length;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-title">해당 조건의 전문가가 없습니다</div>
+        <div class="empty-desc">다른 분류나 검색어를 시도해 보세요.</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(e => {
+    const industryTags = (e.industry || []).slice(0, 2).map(i =>
+      `<span class="expert-tag industry">${escapeHtml(catLabel(i))}</span>`).join('');
+    const functionTags = (e.functions || []).slice(0, 2).map(f =>
+      `<span class="expert-tag function">${escapeHtml(catLabel(f))}</span>`).join('');
+    const href = `expert-template.html?id=${encodeURIComponent(e.id)}`;
+    return `
+      <a class="expert-card" href="${href}">
+        <div class="expert-card-top">
+          ${avatarHTML(e)}
+          <div class="expert-info">
+            <div class="expert-name">${escapeHtml(e.name)}</div>
+            <div class="expert-status">활동 중</div>
+          </div>
+        </div>
+        <p class="expert-tagline">${escapeHtml(e.title || '')}</p>
+        <div class="expert-tags">
+          ${industryTags}
+          ${functionTags}
+        </div>
+        <div class="expert-card-footer">
+          <span class="expert-link-text">프로필 보기</span>
+          <span class="expert-ext-icon">→</span>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+// ─── 로딩 상태 표시 ───
+function showLoading() {
+  document.getElementById('expertGrid').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon" style="display:inline-block;">⏳</div>
+      <div class="empty-title">전문가 목록을 불러오는 중...</div>
+    </div>`;
+}
+
+// ─── Supabase에서 카테고리 + 전문가 목록 병렬 fetch ───
+async function init() {
+  showLoading();
+  if (!supabaseClient) {
+    console.warn('Supabase 클라이언트 초기화 실패');
+    renderExperts();
+    return;
+  }
+  try {
+    const [catResult, expertResult] = await Promise.all([
+      supabaseClient
+        .from('expert_categories')
+        .select('id, type, label, icon')
+        .order('sort_order', { ascending: true }),
+      supabaseClient
+        .from('experts')
+        .select('id, name, title, industry, functions, photo_url, website_url')
+        .order('created_at', { ascending: false }),
+    ]);
+
+    if (catResult.error) throw catResult.error;
+    if (expertResult.error) throw expertResult.error;
+
+    // categoryMap 구성
+    (catResult.data || []).forEach(c => { categoryMap[c.id] = c; });
+
+    // 필터 칩 동적 렌더링
+    renderFilterChips(catResult.data || []);
+
+    // 등록 폼 카테고리 드롭다운 채우기 (Task 2)
+    populateCategorySelect(catResult.data || []);
+
+    // Task 4: 카테고리 수 동적 표시 with fallback
+    const industries = (catResult.data || []).filter(c => c.type === 'industry');
+    const functions = (catResult.data || []).filter(c => c.type === 'function');
+    document.getElementById('industryCount').textContent = industries.length;
+    document.getElementById('functionCount').textContent = functions.length;
+
+    allExperts = expertResult.data || [];
+  } catch (err) {
+    console.error('데이터 로드 오류:', err);
+    // Task 4: fallback — show "—" instead of "0" on error
+    document.getElementById('totalCount').textContent = '—';
+    document.getElementById('industryCount').textContent = '—';
+    document.getElementById('functionCount').textContent = '—';
+    allExperts = [];
+  }
+  renderExperts();
+}
+
+// ─── Task 2: 등록 폼 카테고리 드롭다운 채우기 ───
+function populateCategorySelect(categories) {
+  const sel = document.querySelector('#registerForm select[name="category_id"]');
+  if (!sel) return;
+
+  const industries = categories.filter(c => c.type === 'industry');
+  const functions = categories.filter(c => c.type === 'function');
+
+  if (industries.length > 0) {
+    const indGroup = document.createElement('optgroup');
+    indGroup.label = '산업';
+    industries.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = (c.icon ? c.icon + ' ' : '') + c.label;
+      indGroup.appendChild(opt);
+    });
+    sel.appendChild(indGroup);
+  }
+
+  if (functions.length > 0) {
+    const fnGroup = document.createElement('optgroup');
+    fnGroup.label = '기능';
+    functions.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = (c.icon ? c.icon + ' ' : '') + c.label;
+      fnGroup.appendChild(opt);
+    });
+    sel.appendChild(fnGroup);
+  }
+
+  categoriesLoaded = true;
+  document.getElementById('registerSubmit').disabled = false;
+}
+
+// ─── Task 2: 등록 모달 열기/닫기 ───
+function openModal() {
+  const modal = document.getElementById('registerModal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // H-7: If categories not loaded, disable submit and show loading
+  if (!categoriesLoaded) {
+    document.getElementById('registerSubmit').disabled = true;
+    const sel = document.querySelector('#registerForm select[name="category_id"]');
+    if (sel && sel.options.length <= 1) {
+      sel.options[0].textContent = '카테고리 로딩 중...';
+    }
+  }
+  // H-3: Focus first input
+  setTimeout(() => {
+    const firstInput = modal.querySelector('input, select, textarea');
+    if (firstInput) firstInput.focus();
+  }, 100);
+}
+function closeModal() {
+  document.getElementById('registerModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('openRegisterModal').addEventListener('click', openModal);
+document.getElementById('openRegisterModal2').addEventListener('click', openModal);
+document.getElementById('closeRegisterModal').addEventListener('click', closeModal);
+document.getElementById('registerModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+// H-3: Escape key closes modal
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ─── Task 2: 등록 폼 제출 ───
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  // H-5: Double-submit guard
+  if (isSubmitting) return;
+  isSubmitting = true;
+
+  const msgEl = document.getElementById('registerMsg');
+  const submitBtn = document.getElementById('registerSubmit');
+  msgEl.className = 'form-msg';
+  msgEl.style.display = 'none';
+  submitBtn.disabled = true;
+  submitBtn.textContent = '제출 중...';
+
+  try {
+    if (!supabaseClient) throw new Error('서버 연결 실패');
+    const form = e.target;
+    const emailVal = form.email.value.trim();
+    const portfolioVal = form.portfolio_url.value.trim();
+
+    // C-4: Email validation
+    if (!isValidEmail(emailVal)) {
+      throw new Error('올바른 이메일 주소를 입력해 주세요.');
+    }
+    // C-4: URL validation
+    if (portfolioVal && !isSafeUrl(portfolioVal)) {
+      throw new Error('포트폴리오 URL은 http:// 또는 https://로 시작해야 합니다.');
+    }
+
+    const payload = {
+      name: form.name.value.trim(),
+      email: emailVal,
+      category_id: form.category_id.value,
+      career_summary: form.career_summary.value.trim(),
+      portfolio_url: portfolioVal || null,
+      status: 'pending',
+      created_at: new Date().toISOString(),
+    };
+    const { error } = await supabaseClient.from('expert_applications').insert([payload]);
+    if (error) throw error;
+    msgEl.className = 'form-msg success';
+    msgEl.textContent = '신청이 완료되었습니다! 검토 후 안내 메일을 보내드리겠습니다.';
+    msgEl.style.display = 'block';
+    form.reset();
+    isSubmitting = false;
+  } catch (err) {
+    console.error('등록 오류:', err);
+    msgEl.className = 'form-msg error';
+    msgEl.textContent = err.message || '제출 중 오류가 발생했습니다. 다시 시도해 주세요.';
+    msgEl.style.display = 'block';
+    isSubmitting = false;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '신청하기';
+  }
+});
+
+// ─── 필터 이벤트 ───
+document.getElementById('industryFilter').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  document.querySelectorAll('#industryFilter .chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeIndustry = chip.dataset.value;
+  renderExperts();
+});
+
+document.getElementById('functionFilter').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  document.querySelectorAll('#functionFilter .chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeFunction = chip.dataset.value;
+  renderExperts();
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  renderExperts();
+});
+
+// ─── NAV 스크롤 ───
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+// ─── Task 5: Nav login state ───
+async function checkAuthState() {
+  if (!supabaseClient) return;
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (user) {
+      // Fetch profile name or fallback to email
+      let displayName = user.email;
+      try {
+        const { data: profile } = await supabaseClient
+          .from('profiles')
+          .select('name')
+          .eq('id', user.id)
+          .single();
+        if (profile && profile.name) displayName = profile.name;
+      } catch(e) {}
+
+      // Desktop nav-right
+      const navRight = document.querySelector('.nav-right');
+      const authBtns = navRight.querySelectorAll('.nav-auth-btn');
+      authBtns.forEach(btn => btn.style.display = 'none');
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'nav-user-name';
+      nameSpan.textContent = displayName;
+      const logoutBtn = document.createElement('button');
+      logoutBtn.className = 'nav-logout-btn';
+      logoutBtn.textContent = '로그아웃';
+      logoutBtn.addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+        location.reload();
+      });
+      navRight.insertBefore(logoutBtn, navRight.querySelector('.mobile-toggle'));
+      navRight.insertBefore(nameSpan, logoutBtn);
+
+      // Mobile menu auth links
+      const mobileLogin = document.querySelector('.nav-auth-btn-mobile.login');
+      const mobileSignup = document.querySelector('.nav-auth-btn-mobile.signup');
+      if (mobileLogin) {
+        mobileLogin.textContent = displayName;
+        mobileLogin.href = '#';
+        mobileLogin.style.fontWeight = '700';
+        mobileLogin.style.color = 'var(--ink)';
+      }
+      if (mobileSignup) {
+        mobileSignup.textContent = '로그아웃';
+        mobileSignup.href = '#';
+        mobileSignup.addEventListener('click', async (ev) => {
+          ev.preventDefault();
+          await supabaseClient.auth.signOut();
+          location.reload();
+        });
+      }
+    }
+  } catch(e) { console.error('Auth check error:', e); }
+}
+
+// ─── 초기화 ───
+init();
+checkAuthState();
+
+// ── 모바일 네비게이션 토글 ──
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+mobileToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = navLinks.classList.toggle('open');
+  mobileToggle.classList.toggle('open', isOpen);
+  mobileToggle.setAttribute('aria-label', isOpen ? '메뉴 닫기' : '메뉴 열기');
+});
+document.addEventListener('click', (e) => {
+  if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
+    navLinks.classList.remove('open');
+    mobileToggle.classList.remove('open');
+    mobileToggle.setAttribute('aria-label', '메뉴 열기');
+  }
+});
+
+</script>
+</body>
+</html>

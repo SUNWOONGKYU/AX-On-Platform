@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 문의하기 — 서비스 문의, AX 프로젝트 상담, AI 전문가 등록, 교육 프로그램 문의 등 무엇이든 편하게 문의해 주세요.">
+<meta property="og:title" content="문의하기 — AX-On Platform">
+<meta property="og:image" content="https://axon-platform.com/images/og-default.png">
+<meta property="og:description" content="AX-On Platform에 대한 문의사항을 접수해 주세요. 담당자가 빠르게 답변 드리겠습니다.">
+<meta property="og:type" content="website">
+<title>문의하기 — AX-On Platform</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --surface: #faf9f7; --surface-warm: #f5f0eb; --ink: #1a1a2e; --ink-muted: #5a5f7d;
+  --amber: #e8920d; --amber-light: #f5b942; --border: rgba(26,26,46,0.08);
+  --radius-sm: 14px; --shadow-soft: 0 2px 12px rgba(26,26,46,0.06);
+}
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.8; }
+a { color: var(--amber); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250,249,247,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; padding: 0 40px; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { width: 42px; height: 42px; background: linear-gradient(135deg, #e8920d, #f0a832); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(232,146,13,0.3); }
+.logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: var(--ink); }
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--ink-muted); font-size: 15px; font-weight: 500; padding: 8px 14px; border-radius: 10px; transition: all 0.25s; }
+.nav-links a:hover { color: var(--ink); background: rgba(26,26,46,0.04); text-decoration: none; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-auth-btn { text-decoration: none; font-size: 14px; font-weight: 600; padding: 8px 18px; border-radius: 10px; transition: all 0.3s; font-family: 'Noto Sans KR', sans-serif; }
+.nav-login { color: var(--ink-muted); }
+.nav-login:hover { color: var(--ink); background: rgba(26,26,46,0.04); text-decoration: none; }
+.nav-signup { background: var(--ink); color: white; }
+.nav-signup:hover { opacity: 0.85; text-decoration: none; }
+.mobile-toggle { display: none; background: none; border: none; width: 40px; height: 40px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+.mobile-toggle span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: all 0.3s ease; }
+
+/* CONTACT */
+.contact-wrap { max-width: 640px; margin: 0 auto; padding: 120px 40px 80px; }
+.contact-title { font-family: 'Outfit', sans-serif; font-size: 36px; font-weight: 900; margin-bottom: 8px; }
+.contact-desc { font-size: 15px; color: var(--ink-muted); margin-bottom: 40px; line-height: 1.7; }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+.form-label .req { color: #ef4444; margin-left: 2px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 12px 16px; font-size: 14px;
+  border: 1.5px solid rgba(26,26,46,0.12); border-radius: 10px;
+  background: white; color: var(--ink); font-family: 'Noto Sans KR', sans-serif;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none; border-color: var(--amber);
+}
+.form-textarea { resize: vertical; min-height: 140px; line-height: 1.7; }
+.form-select { cursor: pointer; }
+.submit-btn {
+  width: 100%; padding: 14px; font-size: 16px; font-weight: 700;
+  background: linear-gradient(135deg, var(--amber), #d4820b); color: white; border: none; border-radius: 12px;
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.3s; margin-top: 8px;
+  box-shadow: 0 6px 24px rgba(232,146,13,0.3);
+}
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(232,146,13,0.4); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* INFO CARDS */
+.contact-info { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+.info-card {
+  background: white; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 24px; text-align: center;
+}
+.info-icon { font-size: 28px; margin-bottom: 8px; }
+.info-label { font-size: 12px; color: var(--ink-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.info-value { font-size: 14px; font-weight: 600; color: var(--ink); }
+
+/* SUCCESS */
+.success-view { display: none; text-align: center; padding: 80px 20px; }
+.success-icon { font-size: 64px; margin-bottom: 20px; }
+.success-title { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+.success-desc { font-size: 15px; color: var(--ink-muted); margin-bottom: 32px; line-height: 1.7; }
+.success-btn {
+  display: inline-block; padding: 12px 32px; background: var(--ink); color: white;
+  border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 15px;
+  transition: opacity 0.2s;
+}
+.success-btn:hover { opacity: 0.85; text-decoration: none; }
+
+.footer { background: #002451; color: #7285b7; padding: 24px 40px 16px; margin-top: 80px; }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.footer-logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: white; }
+.footer-logo span { color: var(--amber); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { color: #7285b7; text-decoration: none; font-size: 14px; transition: color 0.3s ease; }
+.footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
+  border-top: 1px solid rgba(114, 133, 183, 0.15);
+  text-align: center; font-size: 12px; color: #7285b7; opacity: 0.7;
+}
+
+/* ERROR */
+.form-error {
+  display: none; font-size: 12px; color: #ef4444; margin-top: 4px; font-weight: 500;
+}
+.form-error.show { display: block; }
+.form-input.invalid, .form-select.invalid, .form-textarea.invalid {
+  border-color: #ef4444;
+}
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: #ef4444; color: white; padding: 14px 28px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; z-index: 999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* NAV USER */
+.nav-user { display: flex; align-items: center; gap: 10px; }
+.nav-user-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.nav-logout-btn {
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  background: none; border: 1.5px solid rgba(26,26,46,0.12);
+  padding: 6px 14px; border-radius: 8px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s;
+}
+.nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+/* FOCUS */
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; border-radius: 4px; }
+
+@media (max-width: 768px) {
+  /* 가로 스크롤 방지 */
+  body { overflow-x: hidden; }
+
+  /* NAV */
+  .nav-inner { padding: 0 20px; }
+  .nav-login { display: none; }
+  .nav-signup { display: none; }
+  .mobile-toggle { display: flex; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 72px; left: 0; right: 0;
+    background: var(--surface); padding: 16px 20px 20px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(26,26,46,0.08);
+    z-index: 99;
+  }
+  /* 햄버거 메뉴 링크 터치 영역 */
+  .nav-links a {
+    padding: 12px 16px; min-height: 44px;
+    display: flex; align-items: center;
+    border-radius: 10px; font-size: 15px;
+  }
+  /* 모바일 로그인/회원가입 */
+  .nav-links.open .nav-mobile-auth {
+    display: flex; flex-direction: column; gap: 8px;
+    margin-top: 8px; padding-top: 12px;
+    border-top: 1px solid rgba(26,26,46,0.06);
+  }
+  .nav-mobile-auth { display: none; }
+  .nav-mobile-auth a {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 10px 16px;
+    border-radius: 10px; font-size: 15px; font-weight: 600;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .nav-mobile-auth .nav-mobile-login {
+    color: var(--ink-muted); border: 1.5px solid rgba(26,26,46,0.12);
+  }
+  .nav-mobile-auth .nav-mobile-login:hover { color: var(--ink); background: rgba(26,26,46,0.04); }
+  .nav-mobile-auth .nav-mobile-signup { background: var(--ink); color: #fff; }
+  .nav-mobile-auth .nav-mobile-signup:hover { opacity: 0.85; }
+
+  /* CONTACT */
+  .contact-wrap { padding: 96px 20px 60px; max-width: 100%; }
+  .contact-title { font-size: 26px; line-height: 1.3; }
+  .contact-desc { font-size: 14px; margin-bottom: 28px; }
+
+  /* 폼 입력 - iOS 줌 방지용 16px */
+  .form-input, .form-select, .form-textarea { font-size: 16px; padding: 13px 14px; }
+  .form-select { min-height: 48px; }
+
+  /* 버튼 터치 영역 */
+  .submit-btn { min-height: 52px; font-size: 16px; padding: 15px; margin-top: 12px; }
+
+  /* INFO CARDS */
+  .contact-info { grid-template-columns: 1fr; gap: 12px; margin-top: 36px; }
+  .info-card { padding: 20px; }
+  .info-value { font-size: 13px; }
+
+  /* SUCCESS */
+  .success-view { padding: 60px 16px; }
+  .success-title { font-size: 24px; }
+  .success-btn { min-height: 48px; display: inline-flex; align-items: center; padding: 13px 28px; }
+
+  /* FOOTER */
+  .footer { padding: 24px 16px 16px; }
+  .footer-inner { flex-direction: column; gap: 6px; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .footer-links a { min-height: 44px; display: flex; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="startup.html">우리의 창업</a>
+      <a href="ax-project.html">AX 프로젝트</a>
+      <a href="expert.html">AI 전문가</a>
+      <a href="community.html">커뮤니티</a>
+      <!-- 모바일 햄버거 메뉴 안 로그인/회원가입 -->
+      <div class="nav-mobile-auth">
+        <a href="pages/auth/login.html" class="nav-mobile-login">로그인</a>
+        <a href="pages/auth/signup.html" class="nav-mobile-signup">회원가입</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="contact-wrap">
+  <div id="formView">
+    <h1 class="contact-title">문의하기</h1>
+    <p class="contact-desc">AX-On Platform에 대한 문의사항이 있으시면 아래 양식을 작성해 주세요.<br>담당자가 확인 후 빠르게 답변 드리겠습니다.</p>
+
+    <form id="contactForm" onsubmit="submitContact(event)">
+      <div class="form-group">
+        <label class="form-label" for="contactType">문의 유형<span class="req">*</span></label>
+        <select class="form-select" id="contactType" required>
+          <option value="">선택해 주세요</option>
+          <option value="서비스 문의">서비스 문의</option>
+          <option value="AX 프로젝트 상담">AX 프로젝트 상담</option>
+          <option value="AI 전문가 등록">AI 전문가 등록</option>
+          <option value="교육 프로그램 문의">교육 프로그램 문의</option>
+          <option value="제휴/협업 제안">제휴/협업 제안</option>
+          <option value="기술 지원">기술 지원</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="contactName">이름<span class="req">*</span></label>
+        <input type="text" class="form-input" id="contactName" placeholder="이름을 입력해 주세요" autocomplete="name" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="contactEmail">이메일<span class="req">*</span></label>
+        <input type="email" class="form-input" id="contactEmail" placeholder="example@email.com" autocomplete="email" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="contactPhone">연락처</label>
+        <input type="tel" class="form-input" id="contactPhone" placeholder="010-0000-0000" autocomplete="tel">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="contactOrg">소속 (기업/기관명)</label>
+        <input type="text" class="form-input" id="contactOrg" placeholder="소속이 있으시면 입력해 주세요" autocomplete="organization">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="contactMessage">문의 내용<span class="req">*</span></label>
+        <textarea class="form-textarea" id="contactMessage" placeholder="문의 내용을 상세히 작성해 주세요" required></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">문의 보내기</button>
+    </form>
+
+    <div class="contact-info">
+      <div class="info-card">
+        <div class="info-icon">📧</div>
+        <div class="info-label">이메일</div>
+        <div class="info-value">contact@ax-on.net</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🕐</div>
+        <div class="info-label">응답 시간</div>
+        <div class="info-value">평일 09:00 - 18:00</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-view" id="successView">
+    <div class="success-icon">✅</div>
+    <h2 class="success-title">문의가 접수되었습니다</h2>
+    <p class="success-desc">담당자가 확인 후 입력하신 이메일로 답변 드리겠습니다.<br>통상 1~2 영업일 이내에 회신됩니다.</p>
+    <a href="index.html" class="success-btn">메인으로 돌아가기</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div><div class="footer-logo">AX-<span>On</span> Platform</div></div>
+    <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    &copy; 2026 AX-On Platform. All rights reserved.
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── Supabase 초기화 ──
+const supabase = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+
+// ── 모바일 메뉴 ──
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+
+function setMenuOpen(open) {
+  navLinks.classList.toggle('open', open);
+  mobileToggle.setAttribute('aria-expanded', String(open));
+  mobileToggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  // 햄버거 → X 애니메이션
+  const spans = mobileToggle.querySelectorAll('span');
+  if (open) {
+    spans[0].style.cssText = 'transform: translateY(7px) rotate(45deg)';
+    spans[1].style.cssText = 'opacity: 0; transform: scaleX(0)';
+    spans[2].style.cssText = 'transform: translateY(-7px) rotate(-45deg)';
+  } else {
+    spans[0].style.cssText = '';
+    spans[1].style.cssText = '';
+    spans[2].style.cssText = '';
+  }
+}
+
+mobileToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  setMenuOpen(!navLinks.classList.contains('open'));
+});
+document.addEventListener('click', (e) => {
+  if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) setMenuOpen(false);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+    setMenuOpen(false);
+    mobileToggle.focus();
+  }
+});
+
+// ── 로그인 상태 확인 ──
+(async function checkAuth() {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const displayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0];
+      // 데스크톱 auth 버튼 교체
+      const navRight = document.querySelector('.nav-right');
+      const loginBtn = navRight.querySelector('.nav-login');
+      const signupBtn = navRight.querySelector('.nav-signup');
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (signupBtn) signupBtn.style.display = 'none';
+      const userEl = document.createElement('div');
+      userEl.className = 'nav-user';
+      userEl.innerHTML = '<span class="nav-user-name">' + escapeHtml(displayName) + '님</span><button class="nav-logout-btn" onclick="handleLogout()">로그아웃</button>';
+      navRight.insertBefore(userEl, navRight.querySelector('.mobile-toggle'));
+      // 모바일 auth 링크 교체
+      const mobileAuth = document.querySelector('.nav-mobile-auth');
+      if (mobileAuth) {
+        mobileAuth.innerHTML = '<span style="font-size:14px;font-weight:600;color:var(--ink);padding:8px 16px;">' + escapeHtml(displayName) + '님</span><a href="#" class="nav-mobile-login" onclick="handleLogout();return false;">로그아웃</a>';
+      }
+    }
+  } catch (e) { /* 미인증 상태 — 기본 UI 유지 */ }
+})();
+
+async function handleLogout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+// ── 폼 유효성 검사 ──
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validatePhone(phone) {
+  return /^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(phone);
+}
+
+function showFieldError(fieldId, message) {
+  const field = document.getElementById(fieldId);
+  field.classList.add('invalid');
+  let errEl = field.parentElement.querySelector('.form-error');
+  if (!errEl) {
+    errEl = document.createElement('div');
+    errEl.className = 'form-error';
+    field.parentElement.appendChild(errEl);
+  }
+  errEl.textContent = message;
+  errEl.classList.add('show');
+}
+
+function clearFieldError(fieldId) {
+  const field = document.getElementById(fieldId);
+  field.classList.remove('invalid');
+  const errEl = field.parentElement.querySelector('.form-error');
+  if (errEl) errEl.classList.remove('show');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// 실시간 에러 클리어
+['contactType','contactName','contactEmail','contactPhone','contactOrg','contactMessage'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => clearFieldError(id));
+});
+
+// ── 문의 제출 (Supabase) ──
+async function submitContact(e) {
+  e.preventDefault();
+
+  // 모든 에러 초기화
+  ['contactType','contactName','contactEmail','contactMessage'].forEach(clearFieldError);
+
+  const type = document.getElementById('contactType').value.trim();
+  const name = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const phone = document.getElementById('contactPhone').value.trim();
+  const company = document.getElementById('contactOrg').value.trim();
+  const message = document.getElementById('contactMessage').value.trim();
+
+  // 유효성 검사
+  let valid = true;
+  if (!type) { showFieldError('contactType', '문의 유형을 선택해 주세요.'); valid = false; }
+  if (!name) { showFieldError('contactName', '이름을 입력해 주세요.'); valid = false; }
+  if (!email) { showFieldError('contactEmail', '이메일을 입력해 주세요.'); valid = false; }
+  else if (!validateEmail(email)) { showFieldError('contactEmail', '올바른 이메일 형식을 입력해 주세요.'); valid = false; }
+  if (phone && !validatePhone(phone)) { showFieldError('contactPhone', '올바른 연락처 형식을 입력해 주세요. (예: 010-1234-5678)'); valid = false; }
+  if (!message) { showFieldError('contactMessage', '문의 내용을 입력해 주세요.'); valid = false; }
+  if (!valid) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '전송 중...';
+
+  try {
+    const { error } = await supabase.from('contact_inquiries').insert([{
+      inquiry_type: type,
+      name: name,
+      email: email,
+      phone: phone || null,
+      company: company || null,
+      message: message
+    }]);
+
+    if (error) throw error;
+
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+  } catch (err) {
+    console.error('문의 접수 오류:', err);
+    btn.disabled = false;
+    btn.textContent = '문의 보내기';
+    showToast('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+  }
+}
+</script>
+</body>
+</html>

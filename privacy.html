@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개인정보처리방침 — AX-On Platform</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --surface: #faf9f7; --surface-warm: #f5f0eb; --ink: #1a1a2e; --ink-muted: #6b7280;
+  --amber: #e8920d; --amber-light: #f5b942; --border: rgba(26,26,46,0.08);
+  --radius-sm: 14px; --shadow-soft: 0 2px 12px rgba(26,26,46,0.06);
+}
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--surface); color: var(--ink); line-height: 1.8; }
+a { color: var(--amber); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250,249,247,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; padding: 0 40px; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { width: 36px; height: 36px; background: var(--ink); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: var(--ink); }
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--ink-muted); font-size: 15px; font-weight: 500; padding: 8px 14px; border-radius: 10px; transition: all 0.25s; }
+.nav-links a:hover { color: var(--ink); background: rgba(26,26,46,0.04); text-decoration: none; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-auth-btn { text-decoration: none; font-size: 14px; font-weight: 600; padding: 8px 18px; border-radius: 10px; transition: all 0.3s; font-family: 'Noto Sans KR', sans-serif; }
+.nav-login { color: var(--ink-muted); }
+.nav-login:hover { color: var(--ink); background: rgba(26,26,46,0.04); text-decoration: none; }
+.nav-signup { background: var(--ink); color: white; }
+.nav-signup:hover { opacity: 0.85; text-decoration: none; }
+.mobile-toggle { display: none; background: none; border: none; width: 40px; height: 40px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+.mobile-toggle span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px; }
+.legal-wrap { max-width: 800px; margin: 0 auto; padding: 120px 40px 80px; }
+.legal-title { font-family: 'Outfit', sans-serif; font-size: 36px; font-weight: 900; margin-bottom: 8px; }
+.legal-date { font-size: 14px; color: var(--ink-muted); margin-bottom: 40px; }
+.legal-section { margin-bottom: 36px; }
+.legal-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--amber); display: inline-block; }
+.legal-section h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; }
+.legal-section p, .legal-section li { font-size: 14px; color: #374151; line-height: 1.9; }
+.legal-section ul, .legal-section ol { padding-left: 24px; margin: 8px 0; }
+.legal-section li { margin-bottom: 4px; }
+table.info-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+table.info-table th, table.info-table td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; }
+table.info-table th { background: var(--surface-warm); font-weight: 700; white-space: nowrap; }
+.footer { background: #002451; color: #7285b7; padding: 24px 40px 16px; margin-top: 80px; }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.footer-logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: white; }
+.footer-logo span { color: var(--amber); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { color: #7285b7; text-decoration: none; font-size: 14px; transition: color 0.3s ease; }
+.footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
+  border-top: 1px solid rgba(114, 133, 183, 0.15);
+  text-align: center; font-size: 12px; color: #7285b7; opacity: 0.7;
+}
+
+/* FOCUS */
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; border-radius: 4px; }
+
+/* 테이블 반응형 wrapper */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; margin: 12px 0; }
+.table-scroll table { min-width: 480px; }
+
+@media (max-width: 768px) {
+  /* 가로 스크롤 방지 */
+  body { overflow-x: hidden; }
+
+  /* NAV */
+  .nav-inner { padding: 0 20px; }
+  .nav-login { display: none; }
+  .nav-signup { display: none; }
+  .mobile-toggle { display: flex; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 72px; left: 0; right: 0;
+    background: var(--surface); padding: 16px 20px 20px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(26,26,46,0.08);
+    z-index: 99;
+  }
+  /* 햄버거 메뉴 링크 터치 영역 */
+  .nav-links a {
+    padding: 12px 16px; min-height: 44px;
+    display: flex; align-items: center;
+    border-radius: 10px; font-size: 15px;
+  }
+  /* 모바일 로그인/회원가입 */
+  .nav-links.open .nav-mobile-auth {
+    display: flex; flex-direction: column; gap: 8px;
+    margin-top: 8px; padding-top: 12px;
+    border-top: 1px solid rgba(26,26,46,0.06);
+  }
+  .nav-mobile-auth { display: none; }
+  .nav-mobile-auth a {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 10px 16px;
+    border-radius: 10px; font-size: 15px; font-weight: 600;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .nav-mobile-auth .nav-mobile-login {
+    color: var(--ink-muted); border: 1.5px solid rgba(26,26,46,0.12);
+  }
+  .nav-mobile-auth .nav-mobile-login:hover { color: var(--ink); background: rgba(26,26,46,0.04); }
+  .nav-mobile-auth .nav-mobile-signup { background: var(--ink); color: #fff; }
+  .nav-mobile-auth .nav-mobile-signup:hover { opacity: 0.85; }
+
+  /* CONTENT */
+  .legal-wrap { padding: 96px 20px 60px; }
+  .legal-title { font-size: 26px; line-height: 1.3; }
+  .legal-date { font-size: 13px; margin-bottom: 28px; }
+  .legal-section { margin-bottom: 28px; }
+  .legal-section h2 { font-size: 16px; }
+  .legal-section h3 { font-size: 14px; }
+  .legal-section p, .legal-section li { font-size: 13px; line-height: 1.85; }
+  table.info-table { font-size: 12px; }
+  table.info-table th, table.info-table td { padding: 8px 10px; }
+
+  /* FOOTER */
+  .footer { padding: 24px 16px 16px; }
+  .footer-inner { flex-direction: column; gap: 6px; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .footer-links a { min-height: 44px; display: flex; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="startup.html">우리의 창업</a>
+      <a href="ax-project.html">AX 프로젝트</a>
+      <a href="expert.html">AI 전문가</a>
+      <a href="community.html">커뮤니티</a>
+      <!-- 모바일 햄버거 메뉴 안 로그인/회원가입 -->
+      <div class="nav-mobile-auth">
+        <a href="pages/auth/login.html" class="nav-mobile-login">로그인</a>
+        <a href="pages/auth/signup.html" class="nav-mobile-signup">회원가입</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="legal-wrap">
+  <h1 class="legal-title">개인정보처리방침</h1>
+  <p class="legal-date">시행일: 2026년 3월 1일 | 최종 수정일: 2026년 3월 3일</p>
+
+  <div class="legal-section">
+    <h2>제1조 (개인정보의 처리 목적)</h2>
+    <p>AX-On Platform(이하 "플랫폼")은 다음의 목적을 위하여 개인정보를 처리합니다.</p>
+    <ul>
+      <li><strong>회원 가입 및 관리:</strong> 회원제 서비스 제공에 따른 본인 식별·인증, 회원자격 유지·관리</li>
+      <li><strong>서비스 제공:</strong> 시니어 AI 창업 교육, AX 프로젝트 매칭, AI 전문가 연결, 커뮤니티 운영</li>
+      <li><strong>문의 응대:</strong> 이용자 문의사항 확인 및 답변, 공지사항 전달</li>
+      <li><strong>마케팅 및 광고:</strong> 이벤트·광고성 정보 제공 (동의한 경우에 한함)</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>제2조 (수집하는 개인정보 항목)</h2>
+    <div class="table-scroll">
+    <table class="info-table">
+      <tr><th>구분</th><th>수집 항목</th><th>수집 목적</th></tr>
+      <tr><td>회원가입 (필수)</td><td>이름, 닉네임, 이메일, 비밀번호</td><td>본인 식별, 서비스 제공</td></tr>
+      <tr><td>회원가입 (선택)</td><td>프로필 사진, 자기소개, 역할(AI전문가/기업/일반)</td><td>맞춤 서비스 제공</td></tr>
+      <tr><td>AX 프로젝트 접수</td><td>기업명, 담당자명, 연락처, 이메일</td><td>프로젝트 상담 및 매칭</td></tr>
+      <tr><td>AI 전문가 등록</td><td>전문 분야, 경력, 포트폴리오</td><td>전문가 프로필 운영</td></tr>
+      <tr><td>자동 수집</td><td>IP 주소, 방문 일시, 서비스 이용 기록</td><td>서비스 개선, 보안</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="legal-section">
+    <h2>제3조 (개인정보의 보유 및 이용 기간)</h2>
+    <p>플랫폼은 개인정보 수집·이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 단, 관련 법령에 의해 보존이 필요한 경우 아래 기간 동안 보관합니다.</p>
+    <div class="table-scroll">
+    <table class="info-table">
+      <tr><th>보존 항목</th><th>근거 법령</th><th>보존 기간</th></tr>
+      <tr><td>계약 또는 청약철회 기록</td><td>전자상거래법</td><td>5년</td></tr>
+      <tr><td>대금결제 및 재화 공급 기록</td><td>전자상거래법</td><td>5년</td></tr>
+      <tr><td>소비자 불만 또는 분쟁 처리 기록</td><td>전자상거래법</td><td>3년</td></tr>
+      <tr><td>웹사이트 방문 기록</td><td>통신비밀보호법</td><td>3개월</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="legal-section">
+    <h2>제4조 (개인정보의 제3자 제공)</h2>
+    <p>플랫폼은 이용자의 개인정보를 원칙적으로 외부에 제공하지 않습니다. 다만, 다음의 경우에는 예외로 합니다.</p>
+    <ul>
+      <li>이용자가 사전에 동의한 경우</li>
+      <li>법령의 규정에 의하거나 수사 목적으로 법령에 정해진 절차에 따라 요청이 있는 경우</li>
+      <li>AX 프로젝트 매칭을 위해 AI 전문가에게 기업 정보를 공유하는 경우 (사전 동의 후)</li>
+    </ul>
+  </div>
+
+  <div class="legal-section">
+    <h2>제5조 (개인정보의 파기)</h2>
+    <ol>
+      <li>개인정보 보유 기간 경과, 처리 목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다.</li>
+      <li>전자적 파일: 복원이 불가능한 방법으로 영구 삭제합니다.</li>
+      <li>종이 문서: 분쇄기로 분쇄하거나 소각합니다.</li>
+    </ol>
+  </div>
+
+  <div class="legal-section">
+    <h2>제6조 (이용자의 권리·의무)</h2>
+    <p>이용자는 언제든지 다음의 권리를 행사할 수 있습니다.</p>
+    <ul>
+      <li>개인정보 열람 요구</li>
+      <li>오류 등이 있을 경우 정정 요구</li>
+      <li>삭제 요구</li>
+      <li>처리정지 요구</li>
+    </ul>
+    <p>위 권리 행사는 플랫폼에 서면, 이메일, 고객센터를 통해 하실 수 있으며, 플랫폼은 지체 없이 조치하겠습니다.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>제7조 (개인정보 보호책임자)</h2>
+    <div class="table-scroll">
+    <table class="info-table">
+      <tr><th>구분</th><th>내용</th></tr>
+      <tr><td>성명</td><td>AX-On 개인정보보호팀</td></tr>
+      <tr><td>이메일</td><td>privacy@ax-on.net</td></tr>
+      <tr><td>연락처</td><td>문의하기 페이지를 이용해 주세요</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="legal-section">
+    <h2>제8조 (개인정보 처리방침 변경)</h2>
+    <p>이 개인정보처리방침은 시행일로부터 적용되며, 법령 및 방침에 따른 변경 내용의 추가·삭제 및 수정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지합니다.</p>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div><div class="footer-logo">AX-<span>On</span> Platform</div></div>
+    <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    &copy; 2026 AX-On Platform. All rights reserved.
+  </div>
+</footer>
+
+<script>
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+mobileToggle.addEventListener('click', (e) => { e.stopPropagation(); navLinks.classList.toggle('open'); });
+document.addEventListener('click', (e) => { if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) navLinks.classList.remove('open'); });
+</script>
+</body>
+</html>

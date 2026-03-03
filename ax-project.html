@@ -6,6 +6,10 @@
 <meta name="description" content="AX-On Platform — AX 프로젝트 접수. 산업, 기업 규모, 필요 분야를 선택하여 AI 전환 프로젝트를 신청하세요.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
 <title>AX 프로젝트 접수 — AX-On Platform</title>
+<meta property="og:title" content="AX 프로젝트 접수 — AX-On Platform">
+<meta property="og:description" content="산업, 기업 규모, 필요 분야를 선택하여 AI 전환 프로젝트를 신청하세요.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://axon-platform.com/images/og-default.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -29,6 +33,8 @@
   --radius-sm: 12px;
   --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
   --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+  --dark-bg: #002451;
+  --dark-text-muted: #7285b7;
 }
 
 html { scroll-behavior: smooth; }
@@ -362,6 +368,13 @@ body {
 }
 .form-input:focus { border-color: var(--teal); }
 .form-input::placeholder { color: rgba(26, 26, 46, 0.3); }
+.form-input.input-error { border-color: var(--coral); background: rgba(232, 93, 74, 0.03); }
+.form-input.input-error:focus { border-color: var(--coral); }
+.form-error-msg {
+  font-size: 13px; color: var(--coral); font-weight: 500;
+  margin-top: 2px; display: none;
+}
+.form-error-msg.visible { display: block; }
 textarea.form-input { resize: vertical; min-height: 120px; }
 
 /* ── NAV BUTTONS ── */
@@ -467,14 +480,14 @@ textarea.form-input { resize: vertical; min-height: 120px; }
 
 /* ── FOOTER ── */
 .footer {
-  padding: 60px 40px 40px;
-  background: #002451;
-  color: #7285b7;
+  padding: 24px 40px 16px;
+  background: var(--dark-bg);
+  color: var(--dark-text-muted);
 }
 .footer-inner {
   max-width: 1280px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 20px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px;
 }
 .footer-logo {
   font-family: 'Outfit', sans-serif;
@@ -483,11 +496,47 @@ textarea.form-input { resize: vertical; min-height: 120px; }
 .footer-logo span { color: var(--amber); }
 .footer-links { display: flex; gap: 24px; }
 .footer-links a {
-  color: #7285b7;
+  color: var(--dark-text-muted);
   text-decoration: none; font-size: 14px;
   transition: color 0.3s ease;
 }
 .footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
+  border-top: 1px solid rgba(114, 133, 183, 0.15);
+  text-align: center; font-size: 12px; color: var(--dark-text-muted); opacity: 0.7;
+}
+
+/* ── NAV AUTH STATE ── */
+.nav-user-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-user-name {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  text-decoration: none; padding: 8px 12px; border-radius: 10px;
+  transition: all 0.25s ease;
+}
+.nav-user-name:hover { background: rgba(26,26,46,0.04); }
+.nav-logout-btn {
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  background: none; border: 1.5px solid rgba(26,26,46,0.12);
+  padding: 6px 14px; border-radius: 10px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.25s ease;
+}
+.nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ── FORM TOAST ── */
+.form-toast {
+  position: fixed; top: 88px; left: 50%; transform: translateX(-50%);
+  background: var(--coral); color: #fff;
+  padding: 14px 28px; border-radius: 14px;
+  font-size: 15px; font-weight: 600;
+  box-shadow: 0 8px 32px rgba(232, 93, 74, 0.3);
+  z-index: 300;
+  animation: fadeUp 0.4s ease both;
+  max-width: 90vw; text-align: center;
+}
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp {
@@ -501,6 +550,7 @@ textarea.form-input { resize: vertical; min-height: 120px; }
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+  html { scroll-behavior: auto; }
 }
 :focus-visible {
   outline: 3px solid var(--teal);
@@ -510,32 +560,145 @@ textarea.form-input { resize: vertical; min-height: 120px; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  .nav-links { display: none; }
+  /* ── 가로 스크롤 방지 ── */
+  body { overflow-x: hidden; }
+
+  /* ── NAV ── */
+  .nav-inner { padding: 0 20px; }
+  .nav-login { display: none; } /* 데스크톱 nav-right에서 숨김 */
+  .nav-signup { display: none; } /* 데스크톱 nav-right에서 숨김 */
+  .nav-user-wrap .nav-user-name { display: none; }
+  .nav-user-wrap .nav-logout-btn { display: none; }
   .mobile-toggle { display: flex; }
-  .nav-login { display: none; }
-  .nav-signup { font-size: 13px; padding: 7px 14px; }
+  .nav-links { display: none; }
   .nav-links.open {
     display: flex; flex-direction: column;
     position: absolute; top: 72px; left: 0; right: 0;
     background: var(--surface);
-    padding: 16px 24px;
+    padding: 16px 20px 20px;
     border-bottom: 1px solid rgba(26,26,46,0.06);
     box-shadow: 0 8px 24px rgba(26,26,46,0.08);
+    z-index: 99;
   }
-  .page-header { padding: 100px 24px 32px; }
-  .wizard-wrap { padding: 0 24px 60px; }
-  .step-line { width: 40px; }
-  .step-label { font-size: 11px; }
-  .industry-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-  .size-grid { grid-template-columns: 1fr; }
-  .form-grid { grid-template-columns: 1fr; }
+  /* 햄버거 메뉴 안 링크 터치 영역 */
+  .nav-links a {
+    padding: 12px 16px;
+    min-height: 44px;
+    display: flex; align-items: center;
+    border-radius: 10px;
+    font-size: 15px;
+  }
+  /* 햄버거 메뉴 안 auth 링크 */
+  .nav-links.open .nav-auth-mobile {
+    display: flex !important;
+  }
+  .nav-auth-mobile {
+    display: none;
+    text-decoration: none;
+    font-size: 16px; font-weight: 600;
+    padding: 12px 16px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.2s;
+    font-family: 'Noto Sans KR', sans-serif;
+    white-space: nowrap;
+  }
+  .nav-auth-mobile.login-mobile {
+    color: var(--ink-muted);
+    margin-top: 8px;
+    border-top: 1px solid rgba(26,26,46,0.06);
+    padding-top: 16px;
+  }
+  .nav-auth-mobile.login-mobile:hover { color: var(--ink); background: rgba(26,26,46,0.04); }
+  .nav-auth-mobile.signup-mobile {
+    background: var(--ink); color: #fff;
+    margin-top: 6px;
+  }
+  .nav-auth-mobile.signup-mobile:hover { background: #2a2a4e; }
+
+  /* ── PAGE HEADER ── */
+  .page-header { padding: 96px 20px 28px; }
+  .page-header h1 { font-size: clamp(22px, 6vw, 32px); }
+  .page-header p { font-size: 14px; }
+  .page-header-badge { font-size: 13px; padding: 6px 14px; }
+
+  /* ── WIZARD ── */
+  .wizard-wrap { padding: 0 20px 80px; max-width: 100%; }
+
+  /* ── STEP INDICATOR ── */
+  .step-indicator { margin-bottom: 36px; gap: 0; }
+  .step-line { width: 32px; }
+  .step-dot { width: 36px; height: 36px; font-size: 13px; }
+  .step-label { font-size: 10px; top: 44px; }
+
+  /* ── STEP PANEL ── */
+  .step-title { font-size: 18px; }
+  .step-desc { font-size: 13px; margin-bottom: 24px; }
+
+  /* ── INDUSTRY GRID (Step 1) ── */
+  .industry-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .industry-card { padding: 16px 12px; }
+  .industry-icon { font-size: 28px; }
+  .industry-name { font-size: 13px; }
+
+  /* ── SIZE GRID (Step 2) ── */
+  .size-grid { grid-template-columns: 1fr; gap: 12px; }
+  .size-card { padding: 20px 18px; }
+  .size-card-title { font-size: 16px; }
+
+  /* ── AREA LIST (Step 3) ── */
+  .area-header { padding: 14px 16px; min-height: 56px; }
+  .area-checkbox { width: 26px; height: 26px; font-size: 15px; }
+  .area-icon { font-size: 22px; }
+  .area-name { font-size: 15px; }
+  .area-modules-inner { padding: 12px 14px 16px; gap: 6px; }
+  .module-tag { padding: 6px 12px; font-size: 12px; }
+
+  /* ── FORM (Step 4) ── */
+  .form-grid { grid-template-columns: 1fr; gap: 14px; }
   .form-group.full { grid-column: 1; }
+  .form-input { font-size: 16px; padding: 13px 14px; } /* 16px → iOS 줌 방지 */
+
+  /* ── NAV BUTTONS ── */
+  .wizard-nav {
+    position: sticky; bottom: 0;
+    background: var(--surface);
+    padding: 14px 0 20px;
+    margin-top: 28px;
+    border-top: 1px solid rgba(26,26,46,0.06);
+    z-index: 10;
+  }
+  .btn {
+    min-height: 48px;
+    padding: 13px 22px;
+    font-size: 15px;
+    flex: 1;
+  }
+  .btn-prev { flex: 0 0 auto; min-width: 88px; }
+  .btn-next { flex: 1; }
+  .btn-submit { flex: 1; padding: 14px 20px; }
+
+  /* ── COMPLETION ── */
+  .completion { padding: 40px 0; }
+  .completion h2 { font-size: 22px; }
+  .completion-summary { padding: 20px; }
+  .summary-label { min-width: 72px; font-size: 13px; }
+  .summary-value { font-size: 14px; }
+
+  /* ── FOOTER ── */
+  .footer { padding: 24px 16px 16px; }
+  .footer-inner { flex-direction: column; gap: 6px; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .footer-links a { min-height: 44px; display: flex; align-items: center; }
 }
+
 @media (max-width: 480px) {
-  .nav-inner { padding: 0 20px; }
-  .industry-grid { grid-template-columns: 1fr 1fr; }
-  .step-line { width: 24px; }
-  .step-dot { width: 34px; height: 34px; font-size: 13px; }
+  .step-line { width: 20px; }
+  .step-dot { width: 32px; height: 32px; font-size: 12px; }
+  .step-label { font-size: 9px; }
+  .industry-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 }
 </style>
 </head>
@@ -549,15 +712,18 @@ textarea.form-input { resize: vertical; min-height: 120px; }
       <div class="logo-text">AX-<span>On</span></div>
     </a>
     <div class="nav-links" id="navLinks">
-      <a href="index.html#sec-startup">우리의 창업</a>
-      <a href="index.html#sec-project" class="active">AX 프로젝트</a>
-      <a href="index.html#sec-expert">AI 전문가</a>
-      <a href="index.html#sec-community">커뮤니티</a>
+      <a href="startup.html">우리의 창업</a>
+      <a href="ax-project.html" class="active">AX 프로젝트</a>
+      <a href="expert.html">AI 전문가</a>
+      <a href="community.html">커뮤니티</a>
+      <!-- 모바일 전용 auth 링크 (햄버거 메뉴 안에 표시) -->
+      <a href="pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-mobile signup-mobile">회원가입</a>
     </div>
     <div class="nav-right">
-      <a href="#" class="nav-auth-btn nav-login">로그인</a>
-      <a href="#" class="nav-auth-btn nav-signup">회원가입</a>
-      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴">
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -642,24 +808,28 @@ textarea.form-input { resize: vertical; min-height: 120px; }
     <p class="step-desc">접수 후 담당 AI 전문가가 검토하여 연락드립니다.</p>
     <div class="form-grid" id="formGrid">
       <div class="form-group">
-        <label class="form-label">기업명 <span class="req">*</span></label>
+        <label class="form-label" for="companyName">기업명 <span class="req">*</span></label>
         <input type="text" class="form-input" id="companyName" placeholder="(주)기업명" required>
+        <div class="form-error-msg" id="companyNameError">기업명을 입력해 주세요.</div>
       </div>
       <div class="form-group">
-        <label class="form-label">담당자명 <span class="req">*</span></label>
+        <label class="form-label" for="contactName">담당자명 <span class="req">*</span></label>
         <input type="text" class="form-input" id="contactName" placeholder="홍길동" required>
+        <div class="form-error-msg" id="contactNameError">담당자명을 입력해 주세요.</div>
       </div>
       <div class="form-group">
-        <label class="form-label">연락처 <span class="req">*</span></label>
+        <label class="form-label" for="phone">연락처 <span class="req">*</span></label>
         <input type="tel" class="form-input" id="phone" placeholder="010-0000-0000" required>
+        <div class="form-error-msg" id="phoneError">올바른 연락처를 입력해 주세요.</div>
       </div>
       <div class="form-group">
-        <label class="form-label">이메일 <span class="req">*</span></label>
+        <label class="form-label" for="email">이메일 <span class="req">*</span></label>
         <input type="email" class="form-input" id="email" placeholder="example@company.com" required>
+        <div class="form-error-msg" id="emailError">올바른 이메일 주소를 입력해 주세요.</div>
       </div>
       <div class="form-group full">
-        <label class="form-label">추가 요청사항</label>
-        <textarea class="form-input" id="message" placeholder="프로젝트 관련 추가 요청사항이 있으시면 자유롭게 작성해 주세요."></textarea>
+        <label class="form-label" for="message">추가 요청사항</label>
+        <textarea class="form-input" id="message" maxlength="2000" placeholder="프로젝트 관련 추가 요청사항이 있으시면 자유롭게 작성해 주세요."></textarea>
       </div>
     </div>
     <div class="wizard-nav">
@@ -690,29 +860,39 @@ textarea.form-input { resize: vertical; min-height: 120px; }
       <div class="footer-logo">AX-<span>On</span> Platform</div>
     </div>
     <div class="footer-links">
-      <a href="#">이용약관</a>
-      <a href="#">개인정보처리방침</a>
-      <a href="#">문의하기</a>
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
     </div>
   </div>
-  <div style="max-width: 1280px; margin: 20px auto 0; padding: 20px 40px 0; border-top: 1px solid rgba(114,133,183,0.15); text-align: center; font-size: 13px; color: #7285b7; opacity: 0.7;">
+  <div class="footer-copyright">
     &copy; 2026 AX-On Platform. All rights reserved.
   </div>
 </footer>
 
 <!-- Supabase CDN -->
+<script src="js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
 // ─── Supabase 설정 ───
-const SUPABASE_URL = 'https://gifxpfdnnfwufzdncmor.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnhwZmRubmZ3dWZ6ZG5jbW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTE0NjIsImV4cCI6MjA4ODA4NzQ2Mn0.OzhTlF_kroJVd6uxJO5YPT-OGU7gPuo3m17gHBE2kvY';
 let supabaseClient = null;
 try {
   if (typeof window.supabase !== 'undefined') {
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
   }
 } catch(e) { console.error('Supabase init error:', e); }
+
+// ─── Toast notification ───
+function showToast(msg) {
+  const existing = document.querySelector('.form-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'form-toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.remove(); }, 4000);
+}
 
 // ─── 데이터 정의 ───
 const industries = [
@@ -920,6 +1100,7 @@ function renderAreas() {
   const list = document.getElementById('areaList');
   const areas = areasBySize[selectedSize] || [];
   selectedAreas = [];
+  document.getElementById('btn3Next').disabled = true;
 
   list.innerHTML = areas.map(a => `
     <div class="area-item" data-id="${a.id}">
@@ -1001,28 +1182,61 @@ function goToStep(step) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ─── 폼 검증 ───
-function validateForm() {
-  const company = document.getElementById('companyName').value.trim();
-  const contact = document.getElementById('contactName').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const email = document.getElementById('email').value.trim();
+// ─── 인라인 폼 검증 ───
+function setFieldError(inputId, errorId, hasError) {
+  const input = document.getElementById(inputId);
+  const error = document.getElementById(errorId);
+  if (hasError) {
+    input.classList.add('input-error');
+    error.classList.add('visible');
+  } else {
+    input.classList.remove('input-error');
+    error.classList.remove('visible');
+  }
+  return !hasError;
+}
 
-  if (!company || !contact || !phone || !email) {
-    alert('필수 항목을 모두 입력해 주세요.');
-    return false;
+function validateField(inputId) {
+  const input = document.getElementById(inputId);
+  const val = input.value.trim();
+
+  switch (inputId) {
+    case 'companyName':
+      return setFieldError('companyName', 'companyNameError', !val);
+    case 'contactName':
+      return setFieldError('contactName', 'contactNameError', !val);
+    case 'phone':
+      return setFieldError('phone', 'phoneError', !val || !/^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(val));
+    case 'email':
+      return setFieldError('email', 'emailError', !val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
+    default:
+      return true;
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    alert('올바른 이메일 주소를 입력해 주세요.');
-    document.getElementById('email').focus();
-    return false;
-  }
-  if (!/[\d\-]{9,}/.test(phone)) {
-    alert('올바른 연락처를 입력해 주세요.');
-    document.getElementById('phone').focus();
-    return false;
-  }
-  return true;
+}
+
+// Blur validation
+['companyName', 'contactName', 'phone', 'email'].forEach(id => {
+  const input = document.getElementById(id);
+  input.addEventListener('blur', () => validateField(id));
+  input.addEventListener('input', () => {
+    // Clear error on typing
+    input.classList.remove('input-error');
+    const errorEl = document.getElementById(id + 'Error');
+    if (errorEl) errorEl.classList.remove('visible');
+  });
+});
+
+function validateForm() {
+  const fields = ['companyName', 'contactName', 'phone', 'email'];
+  let allValid = true;
+  let firstInvalid = null;
+  fields.forEach(id => {
+    const valid = validateField(id);
+    if (!valid && !firstInvalid) firstInvalid = id;
+    if (!valid) allValid = false;
+  });
+  if (firstInvalid) document.getElementById(firstInvalid).focus();
+  return allValid;
 }
 
 // ─── 접수 처리 ───
@@ -1067,7 +1281,7 @@ async function handleSubmit() {
         .single();
       if (error) {
         console.error('Supabase insert error:', error);
-        alert('접수 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        showToast('접수 중 오류가 발생했습니다. 다시 시도해 주세요.');
         btn.disabled = false;
         btn.textContent = '접수하기';
         isSubmitting = false;
@@ -1077,7 +1291,7 @@ async function handleSubmit() {
       savedAt = result.created_at;
     } catch (e) {
       console.error('Supabase error:', e);
-      alert('서버 연결에 실패했습니다. 다시 시도해 주세요.');
+      showToast('서버 연결에 실패했습니다. 다시 시도해 주세요.');
       btn.disabled = false;
       btn.textContent = '접수하기';
       isSubmitting = false;
@@ -1092,30 +1306,30 @@ async function handleSubmit() {
 
   const summaryEl = document.getElementById('completionSummary');
   summaryEl.innerHTML = `
-    ${savedId ? `<div class="summary-row"><span class="summary-label">접수번호</span><span class="summary-value" style="font-size:13px; color:var(--teal);">${savedId.slice(0, 8).toUpperCase()}</span></div>` : ''}
+    ${savedId ? `<div class="summary-row"><span class="summary-label">접수번호</span><span class="summary-value" style="font-size:13px; color:var(--teal);">${escapeHtml(savedId.slice(0, 8).toUpperCase())}</span></div>` : ''}
     <div class="summary-row">
       <span class="summary-label">접수일시</span>
-      <span class="summary-value">${dateStr}</span>
+      <span class="summary-value">${escapeHtml(dateStr)}</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">산업</span>
-      <span class="summary-value">${indName}</span>
+      <span class="summary-value">${escapeHtml(indName)}</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">기업 규모</span>
-      <span class="summary-value">${sizeName}</span>
+      <span class="summary-value">${escapeHtml(sizeName)}</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">선택 분야</span>
-      <span class="summary-value">${areaNames.join(', ')}</span>
+      <span class="summary-value">${escapeHtml(areaNames.join(', '))}</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">기업명</span>
-      <span class="summary-value">${data.company_name}</span>
+      <span class="summary-value">${escapeHtml(data.company_name)}</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">담당자</span>
-      <span class="summary-value">${data.contact_name}</span>
+      <span class="summary-value">${escapeHtml(data.contact_name)}</span>
     </div>
   `;
 
@@ -1146,13 +1360,62 @@ const mobileToggle = document.getElementById('mobileToggle');
 const navLinks = document.getElementById('navLinks');
 mobileToggle.addEventListener('click', (e) => {
   e.stopPropagation();
-  navLinks.classList.toggle('open');
+  const isOpen = navLinks.classList.toggle('open');
+  mobileToggle.setAttribute('aria-expanded', String(isOpen));
 });
 document.addEventListener('click', (e) => {
   if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
     navLinks.classList.remove('open');
+    mobileToggle.setAttribute('aria-expanded', 'false');
   }
 });
+
+// ─── Auth 상태 확인 ───
+(async function checkAuth() {
+  if (!supabaseClient) return;
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (user) {
+      const displayName = escapeHtml(user.user_metadata?.display_name || user.user_metadata?.full_name || user.email?.split('@')[0] || '사용자');
+
+      // Desktop nav-right
+      const navRight = document.querySelector('.nav-right');
+      const loginBtn = navRight.querySelector('.nav-login');
+      const signupBtn = navRight.querySelector('.nav-signup');
+      if (loginBtn) loginBtn.remove();
+      if (signupBtn) signupBtn.remove();
+
+      const userWrap = document.createElement('div');
+      userWrap.className = 'nav-user-wrap';
+      userWrap.innerHTML = '<a href="pages/auth/profile.html" class="nav-user-name">' + displayName + '님</a><button class="nav-logout-btn" id="navLogoutBtn">로그아웃</button>';
+      navRight.insertBefore(userWrap, navRight.querySelector('.mobile-toggle'));
+
+      document.getElementById('navLogoutBtn').addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+        location.reload();
+      });
+
+      // Mobile auth links
+      const mobileLogin = document.querySelector('.nav-auth-mobile.login-mobile');
+      const mobileSignup = document.querySelector('.nav-auth-mobile.signup-mobile');
+      if (mobileLogin) {
+        mobileLogin.textContent = displayName + '님';
+        mobileLogin.href = 'pages/auth/profile.html';
+      }
+      if (mobileSignup) {
+        mobileSignup.textContent = '로그아웃';
+        mobileSignup.href = '#';
+        mobileSignup.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await supabaseClient.auth.signOut();
+          location.reload();
+        });
+      }
+    }
+  } catch (e) {
+    console.error('Auth check error:', e);
+  }
+})();
 </script>
 </body>
 </html>

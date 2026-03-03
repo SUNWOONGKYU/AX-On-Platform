@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "description": "AX-On Platform AI 전문가 풀 데이터 구조",
+  "categories": {
+    "industries": [
+      { "id": "manufacturing", "name": "제조업", "icon": "🏭" },
+      { "id": "finance", "name": "금융·핀테크", "icon": "🏦" },
+      { "id": "healthcare", "name": "의료·헬스케어", "icon": "🏥" },
+      { "id": "retail", "name": "유통·커머스", "icon": "🛒" },
+      { "id": "construction", "name": "건설·부동산", "icon": "🏗️" },
+      { "id": "education", "name": "교육", "icon": "📚" },
+      { "id": "media", "name": "미디어·콘텐츠", "icon": "🎬" },
+      { "id": "energy", "name": "에너지·환경", "icon": "⚡" },
+      { "id": "logistics", "name": "물류·운송", "icon": "🚚" },
+      { "id": "agriculture", "name": "농업·식품", "icon": "🌾" },
+      { "id": "proptech", "name": "부동산(PropTech)", "icon": "🏠" },
+      { "id": "hospitality", "name": "관광·호텔·외식", "icon": "🏨" },
+      { "id": "legal", "name": "법률·법무서비스", "icon": "⚖️" },
+      { "id": "public", "name": "공공·사회서비스", "icon": "🏛️" }
+    ],
+    "functions": [
+      { "id": "FN", "name": "경영·재무", "icon": "💰" },
+      { "id": "MK", "name": "마케팅·영업", "icon": "📈" },
+      { "id": "OP", "name": "운영·관리", "icon": "⚙️" },
+      { "id": "HR", "name": "인사", "icon": "👥" },
+      { "id": "IT", "name": "IT·보안", "icon": "🔐" },
+      { "id": "SF", "name": "전략·재무", "icon": "💼" },
+      { "id": "PO", "name": "생산·운영", "icon": "🏭" },
+      { "id": "SM", "name": "영업·마케팅", "icon": "📊" },
+      { "id": "MS", "name": "경영·전략", "icon": "🎯" },
+      { "id": "FA", "name": "재무·감사", "icon": "📋" },
+      { "id": "MO", "name": "제조·운영", "icon": "🏭" },
+      { "id": "FI", "name": "금융·투자", "icon": "💹" },
+      { "id": "LC", "name": "법무·컴플라이언스", "icon": "⚖️" },
+      { "id": "AO", "name": "AI 오케스트레이터", "icon": "🤖" },
+      { "id": "RD", "name": "연구·개발", "icon": "🔬" }
+    ]
+  },
+  "expert_card_schema": {
+    "description": "AX-On 플랫폼 카드에 표시되는 최소 정보",
+    "fields": {
+      "id": { "type": "string", "description": "고유 식별자 (UUID 권장)" },
+      "name": { "type": "string", "required": true, "description": "전문가 실명" },
+      "profile_image": { "type": "string", "required": true, "description": "프로필 이미지 URL (외부 URL 허용)" },
+      "industries": {
+        "type": "array",
+        "items": "string (industry.id)",
+        "required": true,
+        "description": "담당 산업 분류 (최대 3개 권장)"
+      },
+      "functions": {
+        "type": "array",
+        "items": "string (function.id)",
+        "required": true,
+        "description": "담당 기능 분야 (최대 3개 권장)"
+      },
+      "tagline": { "type": "string", "maxLength": 60, "required": true, "description": "한 줄 소개" },
+      "external_url": { "type": "string", "format": "url", "required": true, "description": "전문가 개인 페이지 URL (GitHub Pages 등)" },
+      "status": {
+        "type": "string",
+        "enum": ["active", "inactive", "pending"],
+        "default": "pending",
+        "description": "활동 상태"
+      },
+      "created_at": { "type": "string", "format": "datetime" },
+      "updated_at": { "type": "string", "format": "datetime" }
+    }
+  },
+  "supabase_sql": "CREATE TABLE experts (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  name TEXT NOT NULL,\n  profile_image TEXT NOT NULL,\n  industries TEXT[] NOT NULL DEFAULT '{}',\n  functions TEXT[] NOT NULL DEFAULT '{}',\n  tagline TEXT NOT NULL CHECK (char_length(tagline) <= 60),\n  external_url TEXT NOT NULL,\n  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('active', 'inactive', 'pending')),\n  created_at TIMESTAMPTZ DEFAULT now(),\n  updated_at TIMESTAMPTZ DEFAULT now()\n);",
+  "sample_experts": [
+    {
+      "id": "expert-001",
+      "name": "홍길동",
+      "profile_image": "https://홍길동.github.io/profile/avatar.jpg",
+      "industries": ["manufacturing", "energy"],
+      "functions": ["MO", "IT"],
+      "tagline": "스마트 팩토리 AI 전환 10년 경력의 제조업 전문가",
+      "external_url": "https://홍길동.github.io",
+      "status": "active",
+      "created_at": "2026-03-01T00:00:00Z",
+      "updated_at": "2026-03-01T00:00:00Z"
+    }
+  ]
+}

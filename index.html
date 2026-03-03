@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="AX-On Platform — 분야별 AI 전문가들이 시니어 AI 창업 교육과 기업 AX 프로젝트를 추진하고, 모든 참여자가 커뮤니티에서 만나는 AI 활용 플랫폼.">
 <meta property="og:title" content="AX-On Platform">
+<meta property="og:image" content="https://axon-platform.com/images/og-default.png">
 <meta property="og:description" content="분야별 AI 전문가들이 시니어 AI 창업 교육과 기업 AX 프로젝트를 추진하고, 모든 참여자가 커뮤니티에서 만나는 AI 활용 플랫폼">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.ax-on.net">
@@ -305,6 +306,18 @@ body {
   word-break: keep-all;
 }
 
+/* ── QUICK LINKS ── */
+.quick-link-wrap {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;
+}
+.quick-link-card {
+  flex: 1; min-width: 140px; display: flex; align-items: center; gap: 8px;
+  padding: 14px 18px; background: var(--surface-card);
+  border: 1px solid rgba(26,26,46,0.06); border-radius: 12px;
+  text-decoration: none; color: var(--ink);
+  font-size: 14px; font-weight: 600; transition: all 0.25s ease;
+}
+
 /* ── CYCLE ── */
 .cycle-section {
   padding: 120px 40px;
@@ -418,14 +431,14 @@ body {
 
 /* ── FOOTER ── */
 .footer {
-  padding: 60px 40px 40px;
+  padding: 24px 40px 16px;
   background: var(--dark-bg);
   color: var(--dark-text-muted);
 }
 .footer-inner {
   max-width: 1280px; margin: 0 auto;
   display: flex; flex-direction: column; align-items: center;
-  gap: 16px;
+  gap: 6px;
 }
 .footer-logo {
   font-family: 'Outfit', sans-serif;
@@ -440,6 +453,11 @@ body {
   transition: color 0.3s ease;
 }
 .footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
+  border-top: 1px solid var(--dark-border);
+  text-align: center; font-size: 12px; color: var(--dark-text-muted); opacity: 0.7;
+}
 
 /* ── FLOATING CHATBOT ── */
 .floating-tutor {
@@ -573,6 +591,44 @@ body {
 }
 .chat-send:hover { background: #d4820b; }
 
+/* ── TYPING INDICATOR ── */
+.chat-typing {
+  display: flex; gap: 4px; align-items: center;
+  padding: 12px 16px;
+  align-self: flex-start;
+}
+.chat-typing .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink-muted);
+  animation: typingBounce 1.4s infinite ease-in-out both;
+}
+.chat-typing .dot:nth-child(1) { animation-delay: 0s; }
+.chat-typing .dot:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing .dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ── NAV AUTH STATE ── */
+.nav-user-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-user-name {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  text-decoration: none; padding: 8px 12px; border-radius: 10px;
+  transition: all 0.25s ease;
+}
+.nav-user-name:hover { background: rgba(26,26,46,0.04); }
+.nav-logout-btn {
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  background: none; border: 1.5px solid rgba(26,26,46,0.12);
+  padding: 6px 14px; border-radius: 10px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.25s ease;
+}
+.nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
+
 /* ── ANIMATIONS ── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(30px); }
@@ -633,32 +689,123 @@ body {
   .target-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
+  /* NAV */
+  .nav-inner { padding: 0 16px; }
   .nav-links { display: none; }
-  .mobile-toggle { display: flex; }
+  .mobile-toggle { display: flex; min-width: 44px; min-height: 44px; }
   .nav-login { display: none; }
-  .nav-signup { font-size: 13px; padding: 7px 14px; }
+  .nav-signup { display: none; }
+  .nav-user-wrap .nav-user-name { display: none; }
+  .nav-user-wrap .nav-logout-btn { display: none; }
   .nav-links.open {
     display: flex; flex-direction: column;
     position: absolute; top: 72px; left: 0; right: 0;
     background: var(--surface);
-    padding: 16px 24px;
+    padding: 12px 16px 20px;
     border-bottom: 1px solid rgba(26,26,46,0.06);
     box-shadow: 0 8px 24px rgba(26,26,46,0.08);
+    gap: 2px;
   }
-  .hero { padding: 100px 24px 40px; }
+  .nav-links.open a {
+    padding: 12px 16px;
+    min-height: 44px;
+    display: flex; align-items: center;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+  /* 햄버거 메뉴 안 auth 링크 */
+  .nav-links.open .nav-auth-mobile {
+    display: flex !important;
+  }
+  .nav-auth-mobile {
+    display: none;
+    text-decoration: none;
+    font-size: 16px; font-weight: 600;
+    padding: 12px 16px; border-radius: 10px;
+    min-height: 44px; align-items: center;
+    transition: all 0.25s ease;
+    font-family: 'Noto Sans KR', sans-serif;
+    white-space: nowrap;
+  }
+  .nav-auth-mobile.login-mobile {
+    color: var(--ink-muted);
+    margin-top: 8px;
+    border-top: 1px solid rgba(26,26,46,0.06);
+    padding-top: 16px;
+  }
+  .nav-auth-mobile.login-mobile:hover { color: var(--ink); background: rgba(26,26,46,0.04); }
+  .nav-auth-mobile.signup-mobile {
+    background: var(--ink); color: #fff;
+    margin-top: 6px;
+  }
+  .nav-auth-mobile.signup-mobile:hover { background: #2a2a4e; }
+
+  /* HERO */
+  .hero { padding: 96px 16px 48px; }
+  .hero-desc { font-size: 16px; }
+  .hero-actions {
+    justify-content: center;
+    flex-direction: column; align-items: stretch;
+    gap: 12px;
+  }
+  .hero-actions .btn { justify-content: center; min-height: 48px; }
+
+  /* SECTIONS */
   .section, .service-section, .cycle-section, .target-section, .cta-section {
-    padding: 80px 24px;
+    padding: 72px 16px;
   }
-  .target-grid { grid-template-columns: 1fr 1fr; }
-  .cycle-branch { gap: 24px; }
-  .cycle-merge { gap: 80px; }
-  .chat-window { width: calc(100vw - 32px); right: 16px; bottom: 100px; }
-  .floating-tutor { bottom: 24px; right: 24px; }
+  .service-inner { width: 100%; }
+
+  /* SERVICE STATS */
+  .service-stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+  /* CYCLE */
+  .cycle-branch {
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .cycle-branch-left, .cycle-branch-right { align-items: center; }
+  .cycle-merge { gap: 40px; }
+  .cycle-node { min-width: 130px; padding: 18px 16px; }
+
+  /* TARGET */
+  .target-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .target-card { padding: 24px 16px; }
+
+  /* CTA */
+  .cta-actions {
+    flex-direction: column; align-items: stretch;
+    gap: 12px;
+  }
+  .cta-actions .btn { justify-content: center; min-height: 48px; }
+
+  /* FOOTER */
+  .footer { padding: 24px 16px 16px; }
+  .footer-inner { text-align: center; gap: 6px; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* FLOATING */
+  .floating-tutor { bottom: 20px; right: 16px; }
+  .chat-window { width: calc(100vw - 24px); right: 12px; bottom: 96px; }
+
+  /* SVG overflow guard */
+  svg { max-width: 100%; }
+  img { max-width: 100%; height: auto; }
 }
+
 @media (max-width: 480px) {
+  .nav-inner { padding: 0 12px; }
   .service-stats { grid-template-columns: 1fr 1fr; }
   .target-grid { grid-template-columns: 1fr; }
-  .nav-inner { padding: 0 20px; }
+  .stat-card { padding: 16px 12px; }
+  .stat-num { font-size: 28px; }
+  .cycle-node { min-width: 110px; padding: 14px 12px; }
+  .cycle-branch { gap: 8px; }
+  .cycle-merge { gap: 28px; }
+  .community-sub { padding: 18px 16px; }
+  .footer-links { gap: 12px; }
 }
 </style>
 </head>
@@ -670,20 +817,23 @@ body {
 <!-- NAV -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#" class="nav-logo">
+    <a href="index.html" class="nav-logo">
       <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
       <div class="logo-text">AX-<span>On</span></div>
     </a>
     <div class="nav-links" id="navLinks">
-      <a href="#">우리의 창업</a>
-      <a href="#">AX 프로젝트</a>
-      <a href="#">AI 전문가</a>
-      <a href="#">커뮤니티</a>
+      <a href="startup.html">우리의 창업</a>
+      <a href="ax-project.html">AX 프로젝트</a>
+      <a href="expert.html">AI 전문가</a>
+      <a href="community.html">커뮤니티</a>
+      <!-- 모바일 전용 auth 링크 (햄버거 메뉴 안에 표시) -->
+      <a href="pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-mobile signup-mobile">회원가입</a>
     </div>
     <div class="nav-right">
-      <a href="#" class="nav-auth-btn nav-login">로그인</a>
-      <a href="#" class="nav-auth-btn nav-signup">회원가입</a>
-      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴">
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -698,7 +848,7 @@ body {
         <span class="highlight">AX-On</span> Platform
       </h1>
       <p class="hero-desc">
-        분야별 AI 전문가들이 시니어 AI 창업 교육과 기업 AX 프로젝트를 추진하고, 모든 참여자가 커뮤니티에서 만나서 서로 소통하고 협력하는 AI 활용 플랫폼입니다.
+        분야별 AI 전문가들이 시니어 AI 창업 교육과 기업 AX 프로젝트를 추진하고, 참여자들과 AI에 관심이 있는 일반인들이 모여서 서로 소통하고 협력하는 AI 활용 플랫폼입니다.
       </p>
     </div>
   </div>
@@ -715,7 +865,7 @@ body {
     <p class="service-desc">
       AI를 활용하여 창업하려는 시니어를 위한 체계적인 교육 프로그램입니다. AI 전문가가 강사로 직접 참여하여, 실전 중심의 AI 창업 역량을 전달합니다.
     </p>
-    <a href="#" class="service-link">자세히 보기 →</a>
+    <a href="startup.html" class="service-link">자세히 보기 →</a>
   </div>
 </section>
 
@@ -732,7 +882,7 @@ body {
     </p>
     <div class="service-stats">
       <div class="stat-card">
-        <div class="stat-num">14</div>
+        <div class="stat-num" id="idx-industry-count">0</div>
         <div class="stat-label">산업 분류</div>
       </div>
       <div class="stat-card">
@@ -740,11 +890,11 @@ body {
         <div class="stat-label">기업 규모</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">15</div>
+        <div class="stat-num" id="idx-function-count">0</div>
         <div class="stat-label">기능 분야</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">155+</div>
+        <div class="stat-num" id="idx-module-count">0</div>
         <div class="stat-label">AX 모듈</div>
       </div>
     </div>
@@ -763,7 +913,7 @@ body {
     <p class="service-desc">
       전문분야별 AI 전문가를 등록·관리합니다. AI 전문가는 시니어 AI 창업 교육의 강사로 참여하고, 기업의 AX 프로젝트를 직접 수행합니다.
     </p>
-    <a href="#" class="service-link">전문가 등록 →</a>
+    <a href="expert.html" class="service-link">전문가 등록 →</a>
   </div>
 </section>
 
@@ -786,16 +936,22 @@ body {
     <p class="service-desc">
       시니어 창업자, AI 전문가들, AX 추진 기업, AI 관심 일반인이 모여 경험과 노하우를 나눕니다. 모든 참여자가 교류하는 공간입니다.
     </p>
-    <a href="#" class="service-link">커뮤니티 참여 →</a>
+    <a href="community.html" class="service-link">커뮤니티 참여 →</a>
     <div class="community-sub" style="margin-top: 32px;">
       <div class="community-sub-item">
         <span class="community-sub-icon">📚</span>
         <div>
           <div class="community-sub-title">AI 활용법</div>
           <div class="community-sub-desc">GitHub 기반 위키 방식의 AI 활용법 지식베이스. SAL Grid 구조로 체계화된 지식을 웹에서 탐색하고, AI 튜터에게 질문할 수 있습니다.</div>
-          <a href="#" class="service-link" style="margin-top: 12px;">AI 활용법 탐색 →</a>
+          <a href="community.html?cat=ai_tips" class="service-link" style="margin-top: 12px;">AI 활용법 탐색 →</a>
         </div>
       </div>
+    </div>
+    <div class="quick-link-wrap">
+      <a href="expert.html" class="quick-link-card">👥 AI 전문가 풀</a>
+      <a href="community.html" class="quick-link-card">💬 커뮤니티</a>
+      <a href="ax-project.html" class="quick-link-card">🚀 AX 프로젝트</a>
+      <a href="startup.html" class="quick-link-card">🎓 교육 프로그램</a>
     </div>
   </div>
 </section>
@@ -899,7 +1055,7 @@ body {
       AI 창업, 분야별 AI 전문가 활동, 기업 AX 프로젝트 추진, 커뮤니티 참여 — 나에게 맞는 시작점을 찾아보세요.
     </p>
     <div class="cta-actions">
-      <a href="#" class="btn btn-primary">회원가입</a>
+      <a href="pages/auth/signup.html" class="btn btn-primary">회원가입</a>
     </div>
   </div>
 </section>
@@ -911,12 +1067,12 @@ body {
       <div class="footer-logo">AX-<span>On</span> Platform</div>
     </div>
     <div class="footer-links">
-      <a href="#">이용약관</a>
-      <a href="#">개인정보처리방침</a>
-      <a href="#">문의하기</a>
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
     </div>
   </div>
-  <div style="max-width: 1280px; margin: 20px auto 0; padding: 20px 40px 0; border-top: 1px solid var(--dark-border); text-align: center; font-size: 13px; color: var(--dark-text-muted); opacity: 0.7;">
+  <div class="footer-copyright">
     &copy; 2026 AX-On Platform. All rights reserved.
   </div>
 </footer>
@@ -944,7 +1100,7 @@ body {
     </div>
     <button class="chat-close" id="chatClose" aria-label="닫기">✕</button>
   </div>
-  <div class="chat-body" id="chatBody">
+  <div class="chat-body" id="chatBody" aria-live="polite">
     <div class="chat-msg bot">
       안녕하세요! AX-On AI 튜터입니다. AI 활용법에 대해 궁금한 것이 있으시면 무엇이든 물어보세요!
     </div>
@@ -955,7 +1111,10 @@ body {
   </div>
 </div>
 
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+
 // Nav scroll effect
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
@@ -965,13 +1124,38 @@ window.addEventListener('scroll', () => {
 // Mobile menu
 const mobileToggle = document.getElementById('mobileToggle');
 const navLinks = document.getElementById('navLinks');
+
+function setMenuOpen(open) {
+  navLinks.classList.toggle('open', open);
+  mobileToggle.setAttribute('aria-expanded', String(open));
+  mobileToggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  // 햄버거 → X 애니메이션
+  const spans = mobileToggle.querySelectorAll('span');
+  if (open) {
+    spans[0].style.cssText = 'transform: translateY(7px) rotate(45deg)';
+    spans[1].style.cssText = 'opacity: 0; transform: scaleX(0)';
+    spans[2].style.cssText = 'transform: translateY(-7px) rotate(-45deg)';
+  } else {
+    spans[0].style.cssText = '';
+    spans[1].style.cssText = '';
+    spans[2].style.cssText = '';
+  }
+}
+
 mobileToggle.addEventListener('click', (e) => {
   e.stopPropagation();
-  navLinks.classList.toggle('open');
+  setMenuOpen(!navLinks.classList.contains('open'));
 });
 document.addEventListener('click', (e) => {
   if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
-    navLinks.classList.remove('open');
+    setMenuOpen(false);
+  }
+});
+// ESC 키로 메뉴 닫기
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+    setMenuOpen(false);
+    mobileToggle.focus();
   }
 });
 
@@ -1006,23 +1190,136 @@ chatClose.addEventListener('click', () => {
   floatingTutor.style.display = 'flex';
 });
 
-// Chat demo
+// Chat — smart keyword fallback responses
+const chatKeywordResponses = {
+  'AI': [
+    'AI는 다양한 산업에서 업무 효율을 높이는 핵심 기술입니다. AX-On에서는 산업별 맞춤 AI 솔루션을 제공합니다.',
+    'AI 활용의 첫걸음은 현재 업무에서 자동화할 수 있는 영역을 파악하는 것입니다. AX-On의 AI 전문가와 상담해 보세요!',
+    'AX-On의 AI 활용법 지식베이스에서 다양한 AI 도구와 활용 사례를 확인하실 수 있습니다.'
+  ],
+  '전문가': [
+    '분야별 AI 전문가들이 AX-On에 등록되어 있습니다. expert.html에서 전문가 프로필을 확인해 보세요!',
+    'AI 전문가는 시니어 창업 교육의 강사로 참여하고, 기업 AX 프로젝트도 직접 수행합니다.',
+    'AX-On의 AI 전문가들은 각 산업 분야에 특화된 실전 경험을 갖추고 있습니다.'
+  ],
+  '프로젝트': [
+    'AX 프로젝트는 소기업·중기업·중견기업의 전사적 AI 전환을 지원합니다. ax-project.html에서 접수하실 수 있습니다.',
+    '프로젝트 접수 후 담당 AI 전문가가 검토하여 맞춤형 AX 로드맵을 제안합니다.',
+    'AX 프로젝트는 산업 분류, 기업 규모, 기능 분야에 따라 최적화된 모듈을 제공합니다.'
+  ],
+  '교육': [
+    '시니어 AI 창업 교육은 AI를 활용한 실전 창업 역량을 키워드립니다. startup.html에서 자세한 내용을 확인하세요!',
+    'AI 전문가가 직접 강사로 참여하여 실전 중심의 교육을 진행합니다.',
+    '창업 교육 프로그램은 AI 기초부터 사업화까지 체계적인 커리큘럼으로 구성되어 있습니다.'
+  ],
+  '수강': [
+    '수강 신청은 startup.html에서 가능합니다. 다양한 AI 창업 교육 프로그램이 준비되어 있습니다!',
+    '교육 프로그램은 수준별로 구성되어 있어 초보자도 쉽게 시작할 수 있습니다.',
+  ],
+  '문의': [
+    '문의사항은 contact.html 페이지에서 접수하실 수 있습니다. 빠른 시일 내에 답변 드리겠습니다!',
+    'AX 프로젝트 관련 문의는 ax-project.html에서 직접 접수하시면 담당 전문가가 연락드립니다.',
+    '기타 문의사항은 커뮤니티에서도 질문하실 수 있습니다.'
+  ],
+  '커뮤니티': [
+    '커뮤니티에서는 시니어 창업자, AI 전문가, AX 추진 기업, AI 관심 일반인이 모여 소통합니다. community.html에서 참여하세요!',
+    '커뮤니티에서 AI 활용 경험과 노하우를 공유하고, 다른 참여자들과 네트워킹할 수 있습니다.',
+    'AI 활용법 지식베이스도 커뮤니티에서 접근하실 수 있습니다.'
+  ],
+  'AX': [
+    'AX(AI Transformation)는 기업의 전사적 AI 전환을 의미합니다. AX-On은 이를 체계적으로 지원하는 플랫폼입니다.',
+    'AX-On 플랫폼은 AI 전문가 풀, 창업 교육, AX 프로젝트, 커뮤니티가 선순환하는 생태계입니다.',
+    'AX 프로젝트를 통해 소기업부터 중견기업까지 맞춤형 AI 전환을 실행할 수 있습니다.'
+  ]
+};
+const chatKeywordCounters = {};
+
 function addMsg(text, type) {
   const msg = document.createElement('div');
   msg.className = 'chat-msg ' + type;
   msg.textContent = text;
   chatBody.appendChild(msg);
   chatBody.scrollTop = chatBody.scrollHeight;
+  return msg;
 }
 
-function handleSend() {
+function showTyping() {
+  const typing = document.createElement('div');
+  typing.className = 'chat-typing';
+  typing.id = 'chatTypingIndicator';
+  typing.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  chatBody.appendChild(typing);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return typing;
+}
+
+function removeTyping() {
+  const el = document.getElementById('chatTypingIndicator');
+  if (el) el.remove();
+}
+
+function getKeywordResponse(userMsg) {
+  const msg = userMsg.toLowerCase();
+  for (const [keyword, responses] of Object.entries(chatKeywordResponses)) {
+    if (msg.includes(keyword.toLowerCase())) {
+      if (!chatKeywordCounters[keyword]) chatKeywordCounters[keyword] = 0;
+      const idx = chatKeywordCounters[keyword] % responses.length;
+      chatKeywordCounters[keyword]++;
+      return responses[idx];
+    }
+  }
+  return null;
+}
+
+async function getBotResponse(userMsg) {
+  // Primary: try Supabase Edge Function
+  try {
+    const res = await fetch('https://gifxpfdnnfwufzdncmor.supabase.co/functions/v1/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + AXON_CONFIG.SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ message: userMsg })
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.reply) return json.reply;
+    }
+  } catch (e) {
+    // Edge function not available, fall through to keyword matching
+  }
+
+  // Fallback: keyword matching
+  const keywordReply = getKeywordResponse(userMsg);
+  if (keywordReply) return keywordReply;
+
+  // Default fallback
+  return 'AX-On 플랫폼에 대해 궁금한 점이 있으시면 "AI", "프로젝트", "교육", "전문가", "커뮤니티" 등의 키워드로 질문해 주세요! 더 자세한 문의는 contact.html에서 접수하실 수 있습니다.';
+}
+
+async function handleSend() {
   const val = chatInput.value.trim();
   if (!val) return;
   addMsg(val, 'user');
   chatInput.value = '';
-  setTimeout(() => {
-    addMsg('좋은 질문이네요! AI 활용법 지식베이스에서 관련 내용을 찾아보겠습니다. 잠시만 기다려주세요. 😊', 'bot');
-  }, 800);
+  chatInput.disabled = true;
+  chatSend.disabled = true;
+
+  showTyping();
+
+  try {
+    const reply = await getBotResponse(val);
+    removeTyping();
+    addMsg(reply, 'bot');
+  } catch (e) {
+    removeTyping();
+    addMsg('죄송합니다. 응답을 가져오는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'bot');
+  } finally {
+    chatInput.disabled = false;
+    chatSend.disabled = false;
+    chatInput.focus();
+  }
 }
 
 // ESC key closes chat
@@ -1035,9 +1332,81 @@ document.addEventListener('keydown', (e) => {
 });
 
 chatSend.addEventListener('click', handleSend);
-chatInput.addEventListener('keypress', (e) => {
+chatInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') handleSend();
 });
+
+// AX 프로젝트 통계 동적 로드 & Auth 상태 확인
+(async function loadStatsAndAuth() {
+  try {
+    const sb = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+
+    // Stats
+    const { data } = await sb.from('expert_categories').select('id, type');
+    if (data) {
+      const ind = data.filter(c => c.type === 'industry').length;
+      const fn = data.filter(c => c.type === 'function').length;
+      const el1 = document.getElementById('idx-industry-count');
+      const el2 = document.getElementById('idx-function-count');
+      const el3 = document.getElementById('idx-module-count');
+      if (el1) el1.textContent = ind;
+      if (el2) el2.textContent = fn;
+      if (el3) el3.textContent = (ind + fn) + '+';
+    }
+
+    // Auth state
+    try {
+      const { data: { user } } = await sb.auth.getUser();
+      if (user) {
+        const displayName = escapeHtml(user.user_metadata?.display_name || user.user_metadata?.full_name || user.email?.split('@')[0] || '사용자');
+
+        // Desktop nav-right
+        const navRight = document.querySelector('.nav-right');
+        const loginBtn = navRight.querySelector('.nav-login');
+        const signupBtn = navRight.querySelector('.nav-signup');
+        if (loginBtn) loginBtn.remove();
+        if (signupBtn) signupBtn.remove();
+
+        const userWrap = document.createElement('div');
+        userWrap.className = 'nav-user-wrap';
+        userWrap.innerHTML = '<a href="pages/auth/profile.html" class="nav-user-name">' + displayName + '님</a><button class="nav-logout-btn" id="navLogoutBtn">로그아웃</button>';
+        navRight.insertBefore(userWrap, navRight.querySelector('.mobile-toggle'));
+
+        document.getElementById('navLogoutBtn').addEventListener('click', async () => {
+          await sb.auth.signOut();
+          location.reload();
+        });
+
+        // Mobile auth links
+        const mobileLogin = document.querySelector('.nav-auth-mobile.login-mobile');
+        const mobileSignup = document.querySelector('.nav-auth-mobile.signup-mobile');
+        if (mobileLogin) {
+          mobileLogin.textContent = displayName + '님';
+          mobileLogin.href = 'pages/auth/profile.html';
+          mobileLogin.classList.remove('login-mobile');
+        }
+        if (mobileSignup) {
+          mobileSignup.textContent = '로그아웃';
+          mobileSignup.href = '#';
+          mobileSignup.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await sb.auth.signOut();
+            location.reload();
+          });
+        }
+
+        // CTA section: update if logged in
+        const ctaSignup = document.querySelector('.cta-actions .btn-primary');
+        if (ctaSignup && ctaSignup.textContent.includes('회원가입')) {
+          ctaSignup.textContent = '마이페이지';
+          ctaSignup.href = 'pages/auth/profile.html';
+        }
+      }
+    } catch (authErr) {
+      console.error('Auth check error:', authErr);
+    }
+  } catch(e) { console.error(e); }
+})();
 </script>
 </body>
 </html>

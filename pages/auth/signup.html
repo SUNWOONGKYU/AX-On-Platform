@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 회원가입">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>회원가입 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="../../js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --success: #10b981;
+  --danger: #ef4444;
+  --border: rgba(26, 26, 46, 0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(232, 146, 13, 0.06) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 20%, rgba(13, 148, 136, 0.05) 0%, transparent 50%);
+}
+
+.auth-card {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  max-width: 500px;
+  width: 100%;
+  padding: 44px 40px;
+  border: 1px solid var(--border);
+}
+
+/* Logo */
+.logo { text-align: center; margin-bottom: 28px; }
+.logo a {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--ink);
+}
+.logo-mark {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 22px; letter-spacing: -0.5px;
+}
+.logo-text span { color: var(--amber); }
+
+.auth-title { text-align: center; font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.auth-subtitle { text-align: center; font-size: 14px; color: var(--ink-muted); margin-bottom: 28px; }
+
+/* Alert */
+.alert {
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  margin-bottom: 20px; font-size: 14px; display: none; line-height: 1.5;
+}
+.alert-error { background: rgba(239,68,68,0.08); color: #c0392b; border: 1px solid rgba(239,68,68,0.2); }
+.alert-success { background: rgba(16,185,129,0.08); color: #0d7a5a; border: 1px solid rgba(16,185,129,0.2); }
+.alert-warning { background: rgba(245,158,11,0.08); color: #92400e; border: 1px solid rgba(245,158,11,0.2); }
+
+/* Form */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; margin-bottom: 7px; font-size: 14px; font-weight: 600; color: var(--ink); }
+.required { color: var(--danger); }
+.form-input {
+  width: 100%; padding: 13px 16px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 15px; font-family: 'Noto Sans KR', sans-serif; color: var(--ink);
+  background: var(--surface); transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+}
+.form-input:focus {
+  border-color: var(--amber); box-shadow: 0 0 0 3px var(--amber-glow); background: #fff;
+}
+.form-input::placeholder { color: #aab0c4; }
+.form-input.error { border-color: var(--danger); }
+
+.pw-wrapper { position: relative; }
+.pw-wrapper .form-input { padding-right: 44px; }
+.pw-toggle {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; padding: 4px;
+  color: var(--ink-muted); font-size: 18px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.pw-toggle:hover { color: var(--ink); }
+
+.help-text { font-size: 12px; color: var(--ink-muted); margin-top: 4px; }
+.error-text { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
+
+/* Password strength */
+.strength-bar { height: 4px; background: #e9ecef; border-radius: 2px; overflow: hidden; margin-top: 8px; }
+.strength-fill { height: 100%; width: 0; transition: width 0.3s, background 0.3s; }
+.strength-text { font-size: 11px; margin-top: 4px; }
+
+/* Role selector */
+.role-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px; }
+.role-option { display: none; }
+.role-label {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 8px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; text-align: center; font-size: 13px; font-weight: 500;
+  color: var(--ink-muted); transition: all 0.2s; background: var(--surface);
+}
+.role-label:hover { border-color: var(--amber); background: var(--amber-glow); }
+.role-icon { font-size: 22px; }
+.role-option:checked + .role-label {
+  border-color: var(--amber); background: var(--amber-glow); color: var(--ink); font-weight: 700;
+  box-shadow: 0 0 0 3px var(--amber-glow);
+}
+
+/* Checkbox group */
+.checkbox-group {
+  margin: 20px 0; padding: 16px; background: var(--surface-warm);
+  border-radius: var(--radius-sm); border: 1.5px solid transparent; transition: border-color 0.2s;
+}
+.checkbox-group.error {
+  border-color: var(--danger); animation: shake 0.4s ease-in-out;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-4px); }
+  40%,80% { transform: translateX(4px); }
+}
+.checkbox-item {
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px;
+}
+.checkbox-item:last-child { margin-bottom: 0; }
+.checkbox-item input[type="checkbox"] {
+  width: 17px; height: 17px; margin-top: 2px;
+  accent-color: var(--amber); cursor: pointer; flex-shrink: 0;
+}
+.checkbox-item label {
+  font-size: 13px; color: var(--ink-muted); cursor: pointer; line-height: 1.5;
+}
+.checkbox-item label a { color: var(--amber); text-decoration: none; }
+.checkbox-item label a:hover { text-decoration: underline; }
+.cb-divider { height: 1px; background: var(--border); margin: 10px 0; }
+.checkbox-error { font-size: 13px; color: var(--danger); margin-top: 8px; display: none; }
+.checkbox-error.show { display: block; }
+
+/* Button */
+.btn-primary {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  color: #fff; border: none; border-radius: var(--radius-sm);
+  font-size: 16px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,146,13,0.4); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { background: #d1d5db; box-shadow: none; cursor: not-allowed; transform: none; }
+
+.auth-footer { text-align: center; margin-top: 24px; font-size: 14px; color: var(--ink-muted); }
+.auth-footer a { color: var(--amber); text-decoration: none; font-weight: 600; }
+.auth-footer a:hover { text-decoration: underline; }
+
+/* Loading */
+.loading-overlay {
+  position: fixed; inset: 0; background: rgba(250,249,247,0.85);
+  display: none; align-items: center; justify-content: center; z-index: 1000;
+}
+.spinner {
+  width: 48px; height: 48px;
+  border: 4px solid rgba(232,146,13,0.15); border-top: 4px solid var(--amber);
+  border-radius: 50%; animation: spin 0.9s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .auth-card { padding: 32px 20px; }
+  .auth-title { font-size: 21px; }
+  .role-group { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="auth-card">
+  <div class="logo">
+    <a href="../../index.html">
+      <div class="logo-mark">
+        <svg width="26" height="26" viewBox="0 0 40 44">
+          <text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text>
+          <text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text>
+        </svg>
+      </div>
+      <span class="logo-text">AX-<span>On</span></span>
+    </a>
+  </div>
+
+  <h1 class="auth-title">회원가입</h1>
+  <p class="auth-subtitle">AX-On Platform과 함께 AI 여정을 시작하세요</p>
+
+  <div id="alertMessage" class="alert"></div>
+
+  <form id="signupForm" onsubmit="handleSignup(event)">
+    <div class="form-group">
+      <label class="form-label" for="name">이름 <span class="required">*</span></label>
+      <input class="form-input" type="text" id="name" required placeholder="실명 입력" maxlength="30" autocomplete="name">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="nickname">닉네임 <span class="required">*</span></label>
+      <input class="form-input" type="text" id="nickname" required placeholder="2-20자" maxlength="20" autocomplete="nickname">
+      <p class="help-text">플랫폼에서 표시되는 이름입니다</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="email">이메일 <span class="required">*</span></label>
+      <input class="form-input" type="email" id="email" required placeholder="example@email.com" autocomplete="email">
+      <p id="emailError" class="error-text"></p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="password">비밀번호 <span class="required">*</span></label>
+      <div class="pw-wrapper">
+        <input class="form-input" type="password" id="password" required placeholder="8자 이상" autocomplete="new-password" oninput="checkPasswordStrength()">
+        <button type="button" class="pw-toggle" onclick="togglePassword('password', this)" title="비밀번호 표시" aria-label="비밀번호 표시" aria-pressed="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="strength-bar"><div id="strengthFill" class="strength-fill"></div></div>
+      <p id="strengthText" class="strength-text"></p>
+      <p class="help-text">영문, 숫자 포함 8자 이상</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="passwordConfirm">비밀번호 확인 <span class="required">*</span></label>
+      <div class="pw-wrapper">
+        <input class="form-input" type="password" id="passwordConfirm" required placeholder="비밀번호 재입력" autocomplete="new-password" oninput="checkPasswordMatch()">
+        <button type="button" class="pw-toggle" onclick="togglePassword('passwordConfirm', this)" title="비밀번호 표시" aria-label="비밀번호 표시" aria-pressed="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <p id="passwordMatchError" class="error-text"></p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">역할 선택 <span class="required">*</span></label>
+      <div class="role-group">
+        <div>
+          <input class="role-option" type="radio" name="role" id="role_ai_expert" value="ai_expert" required>
+          <label class="role-label" for="role_ai_expert">
+            <span class="role-icon">🤖</span>
+            AI 전문가
+          </label>
+        </div>
+        <div>
+          <input class="role-option" type="radio" name="role" id="role_company" value="company">
+          <label class="role-label" for="role_company">
+            <span class="role-icon">🏢</span>
+            기업 담당자
+          </label>
+        </div>
+        <div>
+          <input class="role-option" type="radio" name="role" id="role_general" value="general">
+          <label class="role-label" for="role_general">
+            <span class="role-icon">👤</span>
+            일반인
+          </label>
+        </div>
+      </div>
+      <p id="roleError" class="error-text"></p>
+    </div>
+
+    <div class="checkbox-group" id="agreementGroup">
+      <div class="checkbox-item">
+        <input type="checkbox" id="agreeAll" onchange="toggleAllAgreements()">
+        <label for="agreeAll"><strong>전체 동의</strong></label>
+      </div>
+      <div class="cb-divider"></div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="agreeTerms" required onchange="updateAgreeAll()">
+        <label for="agreeTerms">서비스 이용약관 동의 <span class="required">*</span></label>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="agreePrivacy" required onchange="updateAgreeAll()">
+        <label for="agreePrivacy">개인정보 처리방침 동의 <span class="required">*</span></label>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="agreeMarketing" onchange="updateAgreeAll()">
+        <label for="agreeMarketing">마케팅 정보 수신 동의 (선택)</label>
+      </div>
+      <p id="agreementError" class="checkbox-error"></p>
+    </div>
+
+    <button type="submit" class="btn-primary" id="submitBtn">회원가입</button>
+  </form>
+
+  <div class="auth-footer">
+    이미 계정이 있으신가요? <a href="login.html">로그인</a>
+  </div>
+</div>
+
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="spinner"></div>
+</div>
+
+<script>
+  // ── Supabase 초기화 ──
+  const { createClient } = supabase;
+  const supabaseClient = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+
+  // ── 비밀번호 표시 토글 ──
+  function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    btn.title = isPassword ? '비밀번호 숨기기' : '비밀번호 표시';
+    btn.setAttribute('aria-label', isPassword ? '비밀번호 숨기기' : '비밀번호 표시');
+    btn.setAttribute('aria-pressed', String(isPassword));
+    btn.innerHTML = isPassword
+      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+      : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  }
+
+  // ── 유틸리티 ──
+  function showAlert(message, type = 'error') {
+    const el = document.getElementById('alertMessage');
+    el.textContent = message;
+    el.className = `alert alert-${type}`;
+    el.style.display = 'block';
+    if (type === 'error') setTimeout(() => { el.style.display = 'none'; }, 5000);
+  }
+
+  function showLoading() {
+    document.getElementById('loadingOverlay').style.display = 'flex';
+    document.getElementById('submitBtn').disabled = true;
+  }
+
+  function hideLoading() {
+    document.getElementById('loadingOverlay').style.display = 'none';
+    document.getElementById('submitBtn').disabled = false;
+  }
+
+  // ── 비밀번호 강도 ──
+  function checkPasswordStrength() {
+    const pw = document.getElementById('password').value;
+    const fill = document.getElementById('strengthFill');
+    const text = document.getElementById('strengthText');
+    let s = 0;
+    if (pw.length >= 8) s++;
+    if (pw.length >= 12) s++;
+    if (/[a-zA-Z]/.test(pw)) s++;
+    if (/[0-9]/.test(pw)) s++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(pw)) s++;
+    const levels = [
+      { label: '', color: '' },
+      { label: '약함', color: '#ef4444' },
+      { label: '보통', color: '#f59e0b' },
+      { label: '강함', color: '#10b981' },
+      { label: '강함', color: '#10b981' },
+      { label: '매우 강함', color: '#059669' }
+    ];
+    const lv = levels[s] || levels[0];
+    fill.style.width = (s / 5 * 100) + '%';
+    fill.style.background = lv.color;
+    text.textContent = pw ? `비밀번호 강도: ${lv.label}` : '';
+    text.style.color = lv.color;
+  }
+
+  // ── 비밀번호 일치 ──
+  function checkPasswordMatch() {
+    const pw = document.getElementById('password').value;
+    const conf = document.getElementById('passwordConfirm').value;
+    const err = document.getElementById('passwordMatchError');
+    const inp = document.getElementById('passwordConfirm');
+    if (conf && pw !== conf) {
+      err.textContent = '비밀번호가 일치하지 않습니다.';
+      err.style.display = 'block';
+      inp.classList.add('error');
+    } else {
+      err.style.display = 'none';
+      inp.classList.remove('error');
+    }
+  }
+
+  // ── 약관 동의 ──
+  function toggleAllAgreements() {
+    const v = document.getElementById('agreeAll').checked;
+    ['agreeTerms', 'agreePrivacy', 'agreeMarketing'].forEach(id => {
+      document.getElementById(id).checked = v;
+    });
+  }
+
+  function updateAgreeAll() {
+    const t = document.getElementById('agreeTerms').checked;
+    const p = document.getElementById('agreePrivacy').checked;
+    const m = document.getElementById('agreeMarketing').checked;
+    document.getElementById('agreeAll').checked = t && p && m;
+  }
+
+  // ── 회원가입 처리 ──
+  async function handleSignup(event) {
+    event.preventDefault();
+
+    const name = DOMPurify.sanitize(document.getElementById('name').value.trim());
+    const nickname = DOMPurify.sanitize(document.getElementById('nickname').value.trim());
+    const email = DOMPurify.sanitize(document.getElementById('email').value.trim());
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    const roleInput = document.querySelector('input[name="role"]:checked');
+    const agreeTerms = document.getElementById('agreeTerms').checked;
+    const agreePrivacy = document.getElementById('agreePrivacy').checked;
+    const agreeMarketing = document.getElementById('agreeMarketing').checked;
+
+    // 유효성 검사
+    if (!name || name.length < 2) { showAlert('이름을 2자 이상 입력하세요.'); return; }
+    if (!nickname || nickname.length < 2 || nickname.length > 20) { showAlert('닉네임을 2-20자로 입력하세요.'); return; }
+    if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+      showAlert('비밀번호는 영문, 숫자 포함 8자 이상이어야 합니다.'); return;
+    }
+    if (password !== passwordConfirm) { showAlert('비밀번호가 일치하지 않습니다.'); return; }
+    if (!roleInput) {
+      document.getElementById('roleError').textContent = '역할을 선택해주세요.';
+      document.getElementById('roleError').style.display = 'block';
+      return;
+    } else {
+      document.getElementById('roleError').textContent = '';
+      document.getElementById('roleError').style.display = 'none';
+    }
+    if (!agreeTerms || !agreePrivacy) {
+      const grp = document.getElementById('agreementGroup');
+      grp.classList.add('error');
+      const err = document.getElementById('agreementError');
+      err.textContent = '필수 약관에 동의해주세요.';
+      err.classList.add('show');
+      setTimeout(() => { grp.classList.remove('error'); }, 500);
+      return;
+    }
+
+    const role = roleInput.value;
+
+    try {
+      showLoading();
+
+      // H-1: file:// 프로토콜에서는 origin이 'null'이므로 프로덕션 URL 사용
+      const emailRedirectTo = window.location.protocol === 'file:'
+        ? 'https://axon-platform.com/pages/auth/login.html'
+        : window.location.origin + '/pages/auth/login.html';
+
+      const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name, nickname, role },
+          emailRedirectTo
+        }
+      });
+
+      if (authError) throw authError;
+
+      // C-2: Supabase는 이메일 인증 전에도 user 객체를 반환합니다.
+      // 프로필은 즉시 생성하여 인증 완료 후 바로 사용할 수 있도록 합니다 (by design).
+      if (authData.user) {
+        const { error: profileError } = await supabaseClient
+          .from('profiles')
+          .upsert({
+            id: authData.user.id,
+            display_name: name,        // C-3: 실명(name)을 display_name으로 설정
+            username: nickname,         // C-3: 닉네임을 username으로 설정
+            email: email,
+            role,
+            created_at: new Date().toISOString()
+          }, { onConflict: 'id' });
+
+        // C-4: 프로필 오류 시 사용자에게 경고 표시
+        if (profileError) {
+          console.warn('프로필 INSERT 오류:', profileError.message);
+          showAlert('회원가입은 완료되었지만 프로필 설정 중 오류가 발생했습니다. 로그인 후 프로필을 확인해주세요.', 'warning');
+        }
+      }
+
+      hideLoading();
+      showAlert('회원가입이 완료되었습니다! 이메일 인증 링크를 확인해주세요.', 'success');
+      // M-8: 자동 리다이렉트를 5초로 변경 (메시지 확인 시간 확보)
+      setTimeout(() => { window.location.href = 'login.html'; }, 5000);
+
+    } catch (error) {
+      hideLoading();
+      if (error.message.includes('already registered') || error.message.includes('already been registered')) {
+        showAlert('이미 가입된 이메일입니다. 로그인 페이지에서 로그인해주세요.');
+      } else if (error.message.includes('Password')) {
+        showAlert('비밀번호가 보안 요구사항을 충족하지 않습니다.');
+      } else if (error.message.includes('rate limit') || error.status === 429) {
+        showAlert('요청이 너무 많습니다. 잠시 후 다시 시도해주세요.');
+      } else if (error.message.includes('valid email') || error.message.includes('invalid')) {
+        showAlert('올바른 이메일 형식을 입력해주세요.');
+      } else {
+        showAlert('회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      }
+    }
+  }
+
+  // M-10: 역할 선택 시 roleError 초기화
+  document.querySelectorAll('input[name="role"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.getElementById('roleError').textContent = '';
+      document.getElementById('roleError').style.display = 'none';
+    });
+  });
+</script>
+</body>
+</html>
