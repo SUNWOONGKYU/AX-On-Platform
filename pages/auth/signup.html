@@ -267,30 +267,32 @@ body {
     </div>
 
     <div class="form-group">
-      <label class="form-label">역할 선택 <span class="required">*</span></label>
-      <div class="role-group">
-        <div>
-          <input class="role-option" type="radio" name="role" id="role_ai_expert" value="ai_expert" required>
-          <label class="role-label" for="role_ai_expert">
-            <span class="role-icon">🤖</span>
-            AI 전문가
-          </label>
+      <fieldset style="border:none;padding:0;margin:0">
+        <legend class="form-label">역할 선택 <span class="required">*</span></legend>
+        <div class="role-group">
+          <div>
+            <input class="role-option" type="radio" name="role" id="role_ai_expert" value="ai_expert" required>
+            <label class="role-label" for="role_ai_expert">
+              <span class="role-icon">🤖</span>
+              AI 전문가
+            </label>
+          </div>
+          <div>
+            <input class="role-option" type="radio" name="role" id="role_company" value="company">
+            <label class="role-label" for="role_company">
+              <span class="role-icon">🏢</span>
+              기업 담당자
+            </label>
+          </div>
+          <div>
+            <input class="role-option" type="radio" name="role" id="role_general" value="general">
+            <label class="role-label" for="role_general">
+              <span class="role-icon">👤</span>
+              일반인
+            </label>
+          </div>
         </div>
-        <div>
-          <input class="role-option" type="radio" name="role" id="role_company" value="company">
-          <label class="role-label" for="role_company">
-            <span class="role-icon">🏢</span>
-            기업 담당자
-          </label>
-        </div>
-        <div>
-          <input class="role-option" type="radio" name="role" id="role_general" value="general">
-          <label class="role-label" for="role_general">
-            <span class="role-icon">👤</span>
-            일반인
-          </label>
-        </div>
-      </div>
+      </fieldset>
       <p id="roleError" class="error-text"></p>
     </div>
 
@@ -346,6 +348,10 @@ body {
   }
 
   // ── 유틸리티 ──
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
   function showAlert(message, type = 'error') {
     const el = document.getElementById('alertMessage');
     el.textContent = message;
@@ -436,6 +442,7 @@ body {
     const agreeMarketing = document.getElementById('agreeMarketing').checked;
 
     // 유효성 검사
+    if (!isValidEmail(email)) { showAlert('올바른 이메일 형식을 입력하세요.'); hideLoading(); return; }
     if (!name || name.length < 2) { showAlert('이름을 2자 이상 입력하세요.'); return; }
     if (!nickname || nickname.length < 2 || nickname.length > 20) { showAlert('닉네임을 2-20자로 입력하세요.'); return; }
     if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {

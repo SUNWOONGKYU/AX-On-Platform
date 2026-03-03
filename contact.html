@@ -438,8 +438,11 @@ function showToast(msg) {
 });
 
 // ── 문의 제출 (Supabase) ──
+let isSubmitting = false;
+
 async function submitContact(e) {
   e.preventDefault();
+  if (isSubmitting) return;
 
   // 모든 에러 초기화
   ['contactType','contactName','contactEmail','contactMessage'].forEach(clearFieldError);
@@ -461,6 +464,8 @@ async function submitContact(e) {
   if (!message) { showFieldError('contactMessage', '문의 내용을 입력해 주세요.'); valid = false; }
   if (!valid) return;
 
+  isSubmitting = true;
+
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = '전송 중...';
@@ -477,10 +482,13 @@ async function submitContact(e) {
 
     if (error) throw error;
 
+    isSubmitting = false;
+    showToast('문의가 성공적으로 접수되었습니다!');
     document.getElementById('formView').style.display = 'none';
     document.getElementById('successView').style.display = 'block';
   } catch (err) {
     console.error('문의 접수 오류:', err);
+    isSubmitting = false;
     btn.disabled = false;
     btn.textContent = '문의 보내기';
     showToast('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');

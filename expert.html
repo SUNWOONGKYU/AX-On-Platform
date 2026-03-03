@@ -779,10 +779,10 @@ body {
 </section>
 
 <!-- REGISTRATION MODAL -->
-<div class="modal-overlay" id="registerModal" aria-modal="true" role="dialog">
+<div class="modal-overlay" id="registerModal" aria-modal="true" role="dialog" aria-labelledby="modal-title">
   <div class="modal-box">
     <button class="modal-close" id="closeRegisterModal" aria-label="닫기">&times;</button>
-    <div class="modal-title">AI 전문가 등록 신청</div>
+    <div class="modal-title" id="modal-title">AI 전문가 등록 신청</div>
     <div class="modal-desc">아래 정보를 입력해 주시면 검토 후 등록 안내 드리겠습니다.</div>
     <form id="registerForm">
       <div class="form-group">
@@ -792,6 +792,10 @@ body {
       <div class="form-group">
         <label class="form-label" for="reg-email">이메일 <span class="required">*</span></label>
         <input class="form-input" type="email" id="reg-email" name="email" required placeholder="email@example.com" maxlength="200">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="reg-phone">연락처 <span class="required">*</span></label>
+        <input class="form-input" type="tel" id="reg-phone" name="phone" required maxlength="20" placeholder="010-1234-5678">
       </div>
       <div class="form-group">
         <label class="form-label" for="reg-category">전문분야 <span class="required">*</span></label>
@@ -1037,6 +1041,14 @@ function populateCategorySelect(categories) {
   document.getElementById('registerSubmit').disabled = false;
 }
 
+// ─── 토스트 알림 ───
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) { t = document.createElement('div'); t.id = 'toast'; t.style.cssText = 'position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:14px 32px;border-radius:12px;font-size:15px;z-index:10000;opacity:0;transition:opacity .3s;pointer-events:none;'; document.body.appendChild(t); }
+  t.textContent = msg; t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; }, 3000);
+}
+
 // ─── Task 2: 등록 모달 열기/닫기 ───
 function openModal() {
   const modal = document.getElementById('registerModal');
@@ -1068,6 +1080,16 @@ document.getElementById('registerModal').addEventListener('click', e => {
 });
 // H-3: Escape key closes modal
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+// H-3: Focus trap for modal
+const registerModal = document.getElementById('registerModal');
+registerModal.addEventListener('keydown', function(e) {
+  if (e.key === 'Tab') {
+    const focusable = registerModal.querySelectorAll('input,select,textarea,button,[tabindex]:not([tabindex="-1"])');
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+    else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
+  }
+});
 
 // ─── Task 2: 등록 폼 제출 ───
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
@@ -1088,21 +1110,27 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     const form = e.target;
     const emailVal = form.email.value.trim();
     const portfolioVal = form.portfolio_url.value.trim();
+    const nameVal = form.name.value.trim();
+    const careerVal = form.career_summary.value.trim();
 
     // C-4: Email validation
     if (!isValidEmail(emailVal)) {
       throw new Error('올바른 이메일 주소를 입력해 주세요.');
     }
+    // Phone validation
+    const phoneVal = document.getElementById('reg-phone').value.trim();
+    if (!phoneVal || !validateKoreanPhone(phoneVal)) throw new Error('올바른 연락처를 입력하세요. (예: 010-1234-5678)');
     // C-4: URL validation
     if (portfolioVal && !isSafeUrl(portfolioVal)) {
       throw new Error('포트폴리오 URL은 http:// 또는 https://로 시작해야 합니다.');
     }
 
     const payload = {
-      name: form.name.value.trim(),
+      name: escapeHtml(nameVal),
       email: emailVal,
+      phone: phoneVal,
       category_id: form.category_id.value,
-      career_summary: form.career_summary.value.trim(),
+      career_summary: escapeHtml(careerVal),
       portfolio_url: portfolioVal || null,
       status: 'pending',
       created_at: new Date().toISOString(),
@@ -1113,14 +1141,15 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     msgEl.textContent = '신청이 완료되었습니다! 검토 후 안내 메일을 보내드리겠습니다.';
     msgEl.style.display = 'block';
     form.reset();
-    isSubmitting = false;
+    showToast('전문가 신청이 완료되었습니다!');
+    setTimeout(() => { closeModal(); }, 2000);
   } catch (err) {
     console.error('등록 오류:', err);
     msgEl.className = 'form-msg error';
     msgEl.textContent = err.message || '제출 중 오류가 발생했습니다. 다시 시도해 주세요.';
     msgEl.style.display = 'block';
-    isSubmitting = false;
   } finally {
+    isSubmitting = false;
     submitBtn.disabled = false;
     submitBtn.textContent = '신청하기';
   }
