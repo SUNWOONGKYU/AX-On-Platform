@@ -1007,28 +1007,47 @@ function validateForm() {
   const contact = document.getElementById('contactName').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
-  return company && contact && phone && email;
+
+  if (!company || !contact || !phone || !email) {
+    alert('필수 항목을 모두 입력해 주세요.');
+    return false;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('올바른 이메일 주소를 입력해 주세요.');
+    document.getElementById('email').focus();
+    return false;
+  }
+  if (!/[\d\-]{9,}/.test(phone)) {
+    alert('올바른 연락처를 입력해 주세요.');
+    document.getElementById('phone').focus();
+    return false;
+  }
+  return true;
 }
 
 // ─── 접수 처리 ───
+let isSubmitting = false;
 async function handleSubmit() {
-  if (!validateForm()) {
-    alert('필수 항목을 모두 입력해 주세요.');
-    return;
-  }
+  if (isSubmitting) return;
+  if (!validateForm()) return;
 
+  isSubmitting = true;
   const btn = document.getElementById('btnSubmit');
   btn.disabled = true;
   btn.textContent = '접수 중...';
 
+  const indName = industries.find(i => i.id === selectedIndustry)?.name || selectedIndustry;
+  const sizeName = selectedSize === 'small' ? '소기업' : selectedSize === 'medium' ? '중기업' : '중견기업';
+  const areaNames = selectedAreas.map(id => {
+    const areas = areasBySize[selectedSize] || [];
+    const area = areas.find(a => a.id === id);
+    return area ? area.name : id;
+  });
+
   const data = {
-    industry: selectedIndustry,
-    company_size: selectedSize === 'small' ? '소기업' : selectedSize === 'medium' ? '중기업' : '중견기업',
-    selected_areas: selectedAreas.map(id => {
-      const areas = areasBySize[selectedSize] || [];
-      const area = areas.find(a => a.id === id);
-      return area ? area.name : id;
-    }),
+    industry: indName,
+    company_size: sizeName,
+    selected_areas: areaNames,
     company_name: document.getElementById('companyName').value.trim(),
     contact_name: document.getElementById('contactName').value.trim(),
     phone: document.getElementById('phone').value.trim(),
@@ -1037,32 +1056,58 @@ async function handleSubmit() {
   };
 
   // Supabase 저장
+  let savedId = null;
+  let savedAt = null;
   if (supabase) {
     try {
-      const { error } = await supabase
+      const { data: result, error } = await supabase
         .from('ax_project_requests')
-        .insert([data]);
-      if (error) console.error('Supabase insert error:', error);
+        .insert([data])
+        .select('id, created_at')
+        .single();
+      if (error) {
+        console.error('Supabase insert error:', error);
+        alert('접수 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        btn.disabled = false;
+        btn.textContent = '접수하기';
+        isSubmitting = false;
+        return;
+      }
+      savedId = result.id;
+      savedAt = result.created_at;
     } catch (e) {
       console.error('Supabase error:', e);
+      alert('서버 연결에 실패했습니다. 다시 시도해 주세요.');
+      btn.disabled = false;
+      btn.textContent = '접수하기';
+      isSubmitting = false;
+      return;
     }
   }
 
   // 완료 화면 렌더
-  const indName = industries.find(i => i.id === selectedIndustry)?.name || selectedIndustry;
+  const dateStr = savedAt
+    ? new Date(savedAt).toLocaleString('ko-KR', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' })
+    : new Date().toLocaleString('ko-KR', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+
   const summaryEl = document.getElementById('completionSummary');
   summaryEl.innerHTML = `
+    ${savedId ? `<div class="summary-row"><span class="summary-label">접수번호</span><span class="summary-value" style="font-size:13px; color:var(--teal);">${savedId.slice(0, 8).toUpperCase()}</span></div>` : ''}
+    <div class="summary-row">
+      <span class="summary-label">접수일시</span>
+      <span class="summary-value">${dateStr}</span>
+    </div>
     <div class="summary-row">
       <span class="summary-label">산업</span>
       <span class="summary-value">${indName}</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">기업 규모</span>
-      <span class="summary-value">${data.company_size}</span>
+      <span class="summary-value">${sizeName}</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">선택 분야</span>
-      <span class="summary-value">${data.selected_areas.join(', ')}</span>
+      <span class="summary-value">${areaNames.join(', ')}</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">기업명</span>
