@@ -331,8 +331,11 @@ body {
 
 <script>
   // ── Supabase 초기화 ──
-  const { createClient } = supabase;
-  const supabaseClient = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+  let supabaseClient = null;
+  const _sbReady = AXON_CONFIG.init().then(() => {
+    const { createClient } = supabase;
+    supabaseClient = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+  });
 
   // ── 비밀번호 표시 토글 ──
   function togglePassword(inputId, btn) {
@@ -430,6 +433,7 @@ body {
   // ── 회원가입 처리 ──
   async function handleSignup(event) {
     event.preventDefault();
+    await _sbReady;
 
     const name = DOMPurify.sanitize(document.getElementById('name').value.trim());
     const nickname = DOMPurify.sanitize(document.getElementById('nickname').value.trim());
@@ -474,7 +478,7 @@ body {
 
       // H-1: file:// 프로토콜에서는 origin이 'null'이므로 프로덕션 URL 사용
       const emailRedirectTo = window.location.protocol === 'file:'
-        ? 'https://axon-platform.com/pages/auth/login.html'
+        ? 'https://www.ax-on.net/pages/auth/login.html'
         : window.location.origin + '/pages/auth/login.html';
 
       const { data: authData, error: authError } = await supabaseClient.auth.signUp({

@@ -3,8 +3,11 @@
 -- Migration: 20260303090000_create_users_profiles.sql
 -- ============================================================
 
--- 역할 ENUM 타입
-CREATE TYPE user_role AS ENUM ('ai_expert', 'company', 'general');
+-- 역할 ENUM 타입 (중복 생성 방지)
+DO $$ BEGIN
+  CREATE TYPE user_role AS ENUM ('ai_expert', 'company', 'general');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- users_profiles 테이블 (auth.users 확장)
 CREATE TABLE IF NOT EXISTS public.users_profiles (

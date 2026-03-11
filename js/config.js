@@ -1,7 +1,35 @@
+// @task S5S1
 // AX-On Platform — Shared Configuration
+// Supabase 키는 환경 변수로 분리 — /api/config 엔드포인트에서 동적 로드
+
 const AXON_CONFIG = {
-  SUPABASE_URL: 'https://gifxpfdnnfwufzdncmor.supabase.co',
-  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnhwZmRubmZ3dWZ6ZG5jbW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTE0NjIsImV4cCI6MjA4ODA4NzQ2Mn0.OzhTlF_kroJVd6uxJO5YPT-OGU7gHBE2kvY'
+  SUPABASE_URL: null,
+  SUPABASE_ANON_KEY: null,
+  _initialized: false,
+  _initPromise: null,
+
+  async init() {
+    if (this._initialized) return this;
+    if (this._initPromise) return this._initPromise;
+
+    this._initPromise = fetch('/api/config')
+      .then(res => {
+        if (!res.ok) throw new Error('Config fetch failed: ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        this.SUPABASE_URL = data.supabaseUrl;
+        this.SUPABASE_ANON_KEY = data.supabaseAnonKey;
+        this._initialized = true;
+        return this;
+      })
+      .catch(err => {
+        console.error('[AXON_CONFIG] 설정 로드 실패:', err);
+        throw err;
+      });
+
+    return this._initPromise;
+  }
 };
 
 // Shared utility functions

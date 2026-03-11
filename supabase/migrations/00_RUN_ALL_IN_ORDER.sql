@@ -148,9 +148,16 @@ WHERE NOT EXISTS (SELECT 1 FROM public.experts WHERE experts.email = v.email);
 
 
 -- ════════════════════════════════════════════
--- 5. users_profiles 테이블 (로그인/회원가입용)
+-- 5. users_profiles 테이블 (DEPRECATED — S5D5에서 profiles로 통합)
+--    아래 테이블 정의는 비활성화됨. 07_profiles_consolidation.sql 참조
 -- ════════════════════════════════════════════
 
+-- [S5D5] users_profiles 테이블은 profiles 테이블로 통합되었습니다.
+-- 신규 컬럼(display_name, email, phone, interests, notification_settings, updated_at)은
+-- 07_profiles_consolidation.sql에서 profiles 테이블에 추가됩니다.
+-- 기존 users_profiles 데이터는 07_profiles_consolidation.sql에서 profiles로 마이그레이션됩니다.
+
+-- 하위 호환성을 위해 users_profiles 테이블은 유지하되 신규 데이터 삽입을 권장하지 않습니다.
 CREATE TABLE IF NOT EXISTS public.users_profiles (
   id          uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   name        text NOT NULL,
@@ -211,10 +218,11 @@ CREATE TABLE IF NOT EXISTS community_posts (
   updated_at    TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- @task S5D1
 CREATE TABLE IF NOT EXISTS post_votes (
   post_id    UUID REFERENCES community_posts(id) ON DELETE CASCADE,
   user_id    UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  vote       SMALLINT NOT NULL CHECK (vote IN (1, -1)),
+  vote_type  SMALLINT NOT NULL CHECK (vote_type IN (1, -1)),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   PRIMARY KEY (post_id, user_id)
 );
@@ -233,10 +241,11 @@ CREATE TABLE IF NOT EXISTS community_comments (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- @task S5D1
 CREATE TABLE IF NOT EXISTS comment_votes (
   comment_id UUID REFERENCES community_comments(id) ON DELETE CASCADE,
   user_id    UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  vote       SMALLINT NOT NULL CHECK (vote IN (1, -1)),
+  vote_type  SMALLINT NOT NULL CHECK (vote_type IN (1, -1)),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   PRIMARY KEY (comment_id, user_id)
 );

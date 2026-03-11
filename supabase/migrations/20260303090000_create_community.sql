@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS community_posts (
 CREATE TABLE IF NOT EXISTS post_votes (
   post_id    UUID REFERENCES community_posts(id) ON DELETE CASCADE,
   user_id    UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  vote       SMALLINT NOT NULL CHECK (vote IN (1, -1)),
+  vote_type  SMALLINT NOT NULL CHECK (vote_type IN (1, -1)),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   PRIMARY KEY (post_id, user_id)
 );
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS community_comments (
 CREATE TABLE IF NOT EXISTS comment_votes (
   comment_id UUID REFERENCES community_comments(id) ON DELETE CASCADE,
   user_id    UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  vote       SMALLINT NOT NULL CHECK (vote IN (1, -1)),
+  vote_type  SMALLINT NOT NULL CHECK (vote_type IN (1, -1)),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   PRIMARY KEY (comment_id, user_id)
 );

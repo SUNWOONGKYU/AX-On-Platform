@@ -367,8 +367,11 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 <script>
   // ── Supabase 초기화 ──
-  const { createClient } = supabase;
-  const supabaseClient = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+  let supabaseClient = null;
+  const _sbReady = AXON_CONFIG.init().then(() => {
+    const { createClient } = supabase;
+    supabaseClient = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+  });
 
   // ── 유틸리티 ──
   function isValidEmail(email) {
@@ -474,6 +477,7 @@ body {
 
   // ── 페이지 로드 ──
   document.addEventListener('DOMContentLoaded', async () => {
+    await _sbReady;
     const savedEmail = localStorage.getItem('ax_remember_email');
     if (savedEmail) {
       document.getElementById('email').value = savedEmail;
