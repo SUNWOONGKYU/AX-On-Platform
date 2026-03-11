@@ -2,7 +2,7 @@
 // Vercel Serverless Function — 클라이언트에 Supabase 설정 제공
 // service_role key는 절대 여기에 포함하지 않음
 
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   // CORS 설정 — 자사 도메인만 허용
   const allowedOrigins = ['https://www.ax-on.net', 'https://ax-on-platform.vercel.app'];
   const origin = req.headers.origin;
