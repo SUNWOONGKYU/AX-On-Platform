@@ -44,6 +44,9 @@ body {
   color: var(--ink);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 a { color: var(--amber); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -136,7 +139,7 @@ a:hover { text-decoration: underline; }
 .nav-logout-btn:hover { color: var(--ink); border-color: rgba(26,26,46,0.2); }
 
 /* ── CONTACT FORM ── */
-.contact-wrap { max-width: 640px; margin: 0 auto; padding: 120px 40px 80px; }
+.contact-wrap { max-width: 640px; margin: 0 auto; padding: 120px 40px 80px; flex: 1; width: 100%; }
 .contact-header { margin-bottom: 40px; }
 .contact-title {
   font-family: 'Outfit', sans-serif; font-size: clamp(28px, 4vw, 36px);

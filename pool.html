@@ -49,6 +49,9 @@ body {
   line-height: 1.7;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 a { color: var(--amber); text-decoration: none; }
@@ -234,6 +237,8 @@ a:hover { text-decoration: underline; }
 .expert-main {
   max-width: 1280px; margin: 0 auto;
   padding: 0 40px 80px;
+  flex: 1;
+  width: 100%;
 }
 .expert-grid {
   display: grid;
@@ -922,8 +927,14 @@ a:hover { text-decoration: underline; }
           <textarea class="form-textarea" id="regCareer" placeholder="주요 경력을 입력해주세요" maxlength="2000"></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label" for="regPhotoUrl">프로필 사진 URL</label>
-          <input type="url" class="form-input" id="regPhotoUrl" placeholder="https://..." maxlength="500">
+          <label class="form-label" for="regPhoto">프로필 사진</label>
+          <div id="photoPreviewWrap" style="display:none;text-align:center;margin-bottom:12px;">
+            <img id="photoPreview" src="" alt="미리보기" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(232,146,13,0.3);">
+            <button type="button" onclick="removePhoto()" style="display:block;margin:6px auto 0;font-size:12px;color:var(--danger);background:none;border:none;cursor:pointer;">삭제</button>
+          </div>
+          <input type="file" class="form-input" id="regPhoto" accept="image/jpeg,image/png,image/webp" style="padding:10px;">
+          <p style="font-size:12px;color:var(--ink-muted);margin-top:4px;">JPG, PNG, WebP (최대 2MB)</p>
+          <input type="hidden" id="regPhotoUrl">
         </div>
 
         <div class="form-nav">
@@ -935,6 +946,46 @@ a:hover { text-decoration: underline; }
       <div class="form-step" data-step="2">
         <div class="form-step-title">AI 역량</div>
         <div class="form-step-desc">AI 관련 경험과 역량을 알려주세요.</div>
+
+        <div class="form-group">
+          <label class="form-label">전문 분야 — 산업 <span class="form-hint">(해당하는 산업 분야를 선택해주세요, 복수 선택 가능)</span></label>
+          <div class="pill-select" id="specialtyPills">
+            <span class="pill-option" data-value="제조업">🏭 제조업</span>
+            <span class="pill-option" data-value="금융·핀테크">🏦 금융·핀테크</span>
+            <span class="pill-option" data-value="의료·헬스케어">🏥 의료·헬스케어</span>
+            <span class="pill-option" data-value="유통·커머스">🛒 유통·커머스</span>
+            <span class="pill-option" data-value="건설·부동산">🏗️ 건설·부동산</span>
+            <span class="pill-option" data-value="교육">📚 교육</span>
+            <span class="pill-option" data-value="미디어·콘텐츠">🎬 미디어·콘텐츠</span>
+            <span class="pill-option" data-value="에너지·환경">⚡ 에너지·환경</span>
+            <span class="pill-option" data-value="물류·운송">🚚 물류·운송</span>
+            <span class="pill-option" data-value="농업·식품">🌾 농업·식품</span>
+            <span class="pill-option" data-value="부동산(PropTech)">🏠 부동산(PropTech)</span>
+            <span class="pill-option" data-value="관광·호텔·외식">🏨 관광·호텔·외식</span>
+            <span class="pill-option" data-value="법률·법무서비스">⚖️ 법률·법무서비스</span>
+            <span class="pill-option" data-value="공공·사회서비스">🏛️ 공공·사회서비스</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">전문 분야 — 기능 <span class="form-hint">(해당하는 기능 분야를 선택해주세요, 복수 선택 가능)</span></label>
+          <div class="pill-select" id="functionPills">
+            <span class="pill-option" data-value="경영·재무">💰 경영·재무</span>
+            <span class="pill-option" data-value="마케팅·영업">📈 마케팅·영업</span>
+            <span class="pill-option" data-value="운영·관리">⚙️ 운영·관리</span>
+            <span class="pill-option" data-value="인사">👥 인사</span>
+            <span class="pill-option" data-value="IT·보안">🔐 IT·보안</span>
+            <span class="pill-option" data-value="전략·재무">💼 전략·재무</span>
+            <span class="pill-option" data-value="생산·운영">🏭 생산·운영</span>
+            <span class="pill-option" data-value="영업·마케팅">📊 영업·마케팅</span>
+            <span class="pill-option" data-value="경영·전략">🎯 경영·전략</span>
+            <span class="pill-option" data-value="재무·감사">📋 재무·감사</span>
+            <span class="pill-option" data-value="제조·운영">🏭 제조·운영</span>
+            <span class="pill-option" data-value="금융·투자">💹 금융·투자</span>
+            <span class="pill-option" data-value="법무·컴플라이언스">⚖️ 법무·컴플라이언스</span>
+            <span class="pill-option" data-value="AI 오케스트레이터">🤖 AI 오케스트레이터</span>
+            <span class="pill-option" data-value="연구·개발">🔬 연구·개발</span>
+          </div>
+        </div>
 
         <div class="form-group">
           <label class="form-label" for="regAiExp">AI 경험</label>
@@ -1145,6 +1196,7 @@ let selectedGender = '';
 let selectedChatbot = '';
 let selectedAiTools = [];
 let selectedInterests = [];
+let selectedSpecialties = [];
 let currentView = 'grid'; // 'grid' or 'list'
 
 // ─── Sanitize helper ───
@@ -1447,6 +1499,47 @@ document.getElementById('regOverlay').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeRegOverlay();
 });
 
+// ─── Photo upload preview ───
+let selectedPhotoFile = null;
+document.getElementById('regPhoto').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    showToast('이미지 파일은 2MB 이하만 가능합니다.', false);
+    e.target.value = '';
+    return;
+  }
+  if (!['image/jpeg','image/png','image/webp'].includes(file.type)) {
+    showToast('JPG, PNG, WebP 형식만 가능합니다.', false);
+    e.target.value = '';
+    return;
+  }
+  selectedPhotoFile = file;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    document.getElementById('photoPreview').src = ev.target.result;
+    document.getElementById('photoPreviewWrap').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
+
+function removePhoto() {
+  selectedPhotoFile = null;
+  document.getElementById('regPhoto').value = '';
+  document.getElementById('regPhotoUrl').value = '';
+  document.getElementById('photoPreviewWrap').style.display = 'none';
+}
+
+async function uploadPhoto(userId) {
+  if (!selectedPhotoFile || !sb) return '';
+  const ext = selectedPhotoFile.name.split('.').pop().toLowerCase();
+  const path = userId + '/avatar.' + ext;
+  const { error } = await sb.storage.from('avatars').upload(path, selectedPhotoFile, { upsert: true });
+  if (error) { console.error('Photo upload error:', error); return ''; }
+  const { data } = sb.storage.from('avatars').getPublicUrl(path);
+  return data.publicUrl || '';
+}
+
 // ─── Pill toggle (AI tools & interests) ───
 document.querySelectorAll('.pill-select .pill-option').forEach(pill => {
   pill.addEventListener('click', () => {
@@ -1454,6 +1547,10 @@ document.querySelectorAll('.pill-select .pill-option').forEach(pill => {
     // Sync state
     selectedAiTools = Array.from(document.querySelectorAll('#aiToolsPills .pill-option.selected')).map(p => p.dataset.value);
     selectedInterests = Array.from(document.querySelectorAll('#interestPills .pill-option.selected')).map(p => p.dataset.value);
+    selectedSpecialties = [
+      ...Array.from(document.querySelectorAll('#specialtyPills .pill-option.selected')).map(p => p.dataset.value),
+      ...Array.from(document.querySelectorAll('#functionPills .pill-option.selected')).map(p => p.dataset.value)
+    ];
   });
 });
 
@@ -1653,6 +1750,7 @@ function gatherFormData() {
     ai_experience: sanitize(document.getElementById('regAiExp').value.trim()),
     ai_projects: sanitize(document.getElementById('regAiProject').value.trim()),
     ai_tools: selectedAiTools,
+    specialties: selectedSpecialties,
     can_build_chatbot: { '가능': 'possible', '불가능': 'impossible', '학습중': 'learning' }[selectedChatbot] || selectedChatbot,
     want_to_do: sanitize(document.getElementById('regWantToDo').value.trim()),
     vision: sanitize(document.getElementById('regVision').value.trim()),
@@ -1710,6 +1808,12 @@ async function submitRegistration() {
   if (data.sns_other) snsLinks.other = data.sns_other;
 
   try {
+    // Upload photo if selected
+    if (selectedPhotoFile) {
+      const photoUrl = await uploadPhoto(data.user_id);
+      if (photoUrl) data.profile_image_url = photoUrl;
+    }
+
     const { error } = await sb.from('ax_experts').insert([{
       user_id: data.user_id,
       name: data.name,
@@ -1724,6 +1828,7 @@ async function submitRegistration() {
       ai_experience: data.ai_experience || null,
       ai_projects: data.ai_projects || null,
       ai_tools: data.ai_tools.length > 0 ? data.ai_tools : null,
+      specialties: data.specialties.length > 0 ? data.specialties : null,
       can_build_chatbot: data.can_build_chatbot || null,
       want_to_do: data.want_to_do || null,
       vision: data.vision || null,
