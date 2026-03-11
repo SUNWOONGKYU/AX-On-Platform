@@ -948,11 +948,13 @@ async function initAuth() {
   }
 
   currentUser = user;
-  updateNavAuth(user);
 
   // Check if user is a registered expert
   const { data: expert, error } = await db
-    .from('ax_experts').select('id, name').eq('user_id', user.id).single();
+    .from('ax_experts').select('id, name').eq('user_id', user.id).maybeSingle();
+
+  // Nav에 실명 표시 (expert 있으면 실명, 없으면 fallback)
+  updateNavAuth(user, expert ? expert.name : null);
 
   if (error || !expert) {
     showGate('expert');
@@ -997,12 +999,12 @@ function showGate(type) {
   }
 }
 
-function updateNavAuth(user) {
+function updateNavAuth(user, expertName) {
   document.getElementById('navLoginBtn').style.display = 'none';
   document.getElementById('navSignupBtn').style.display = 'none';
   const info = document.getElementById('navUserInfo');
   info.style.display = 'flex';
-  const name = user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
+  const name = expertName || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
   document.getElementById('navUserName').textContent = name;
   document.getElementById('navUserAvatar').textContent = name.charAt(0).toUpperCase();
   // 관리자 링크

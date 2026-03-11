@@ -455,7 +455,12 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && navLinks
   try {
     const { data: { user } } = await db.auth.getUser();
     if (user) {
-      const name = user.user_metadata?.display_name || user.user_metadata?.full_name || user.email?.split('@')[0] || '사용자';
+      let realName = '';
+      try {
+        const { data: expert } = await db.from('ax_experts').select('name').eq('user_id', user.id).maybeSingle();
+        if (expert && expert.name) realName = expert.name;
+      } catch (e) { /* ignore */ }
+      const name = realName || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
       document.getElementById('navLoginBtn').style.display = 'none';
       document.getElementById('navSignupBtn').style.display = 'none';
       const info = document.getElementById('navUserInfo');

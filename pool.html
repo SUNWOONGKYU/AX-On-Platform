@@ -1255,7 +1255,13 @@ document.addEventListener('keydown', (e) => {
     const { data: { user } } = await sb.auth.getUser();
     if (user) {
       currentUser = user;
-      const displayName = user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
+      // ax_experts 테이블에서 실명 조회
+      let realName = '';
+      try {
+        const { data: expert } = await sb.from('ax_experts').select('name').eq('user_id', user.id).maybeSingle();
+        if (expert && expert.name) realName = expert.name;
+      } catch (e) { /* ignore */ }
+      const displayName = realName || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
       const navRight = document.querySelector('.nav-right');
       const loginBtn = navRight.querySelector('.nav-login');
       const signupBtn = navRight.querySelector('.nav-signup');
