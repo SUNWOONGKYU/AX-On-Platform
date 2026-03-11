@@ -1128,11 +1128,11 @@ a:hover { text-decoration: underline; }
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 <script>
 // ─── Supabase Init ───
-let supabase = null;
+let sb = null;
 let currentUser = null;
 const _sbReady = AXON_CONFIG.init().then(() => {
   const { createClient } = window.supabase;
-  supabase = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+  sb = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
 }).catch(err => {
   console.error('Config init failed:', err);
 });
@@ -1198,9 +1198,9 @@ document.addEventListener('keydown', (e) => {
 // ─── Auth state ───
 (async function checkAuth() {
   await _sbReady;
-  if (!supabase) return;
+  if (!sb) return;
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await sb.auth.getUser();
     if (user) {
       currentUser = user;
       const displayName = user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
@@ -1237,7 +1237,7 @@ document.addEventListener('keydown', (e) => {
 })();
 
 async function handleLogout() {
-  await supabase.auth.signOut();
+  await sb.auth.signOut();
   location.reload();
 }
 
@@ -1426,8 +1426,8 @@ async function openRegOverlay() {
     return;
   }
   // Check if already registered
-  if (supabase) {
-    const { data: existing } = await supabase.from('ax_experts').select('id').eq('user_id', currentUser.id).maybeSingle();
+  if (sb) {
+    const { data: existing } = await sb.from('ax_experts').select('id').eq('user_id', currentUser.id).maybeSingle();
     if (existing) {
       showToast('이미 전문가로 등록되어 있습니다.', true);
       return;
@@ -1691,7 +1691,7 @@ async function submitRegistration() {
   }
 
   // Check if already registered
-  const { data: existing } = await supabase.from('ax_experts').select('id').eq('user_id', data.user_id).maybeSingle();
+  const { data: existing } = await sb.from('ax_experts').select('id').eq('user_id', data.user_id).maybeSingle();
   if (existing) {
     showToast('이미 전문가로 등록되어 있습니다.', false);
     isSubmitting = false;
@@ -1710,7 +1710,7 @@ async function submitRegistration() {
   if (data.sns_other) snsLinks.other = data.sns_other;
 
   try {
-    const { error } = await supabase.from('ax_experts').insert([{
+    const { error } = await sb.from('ax_experts').insert([{
       user_id: data.user_id,
       name: data.name,
       birth_date: data.birth_date || null,
@@ -1772,12 +1772,12 @@ function showToast(msg, success) {
 // ─── Fetch experts ───
 async function fetchExperts() {
   await _sbReady;
-  if (!supabase) {
+  if (!sb) {
     renderExperts();
     return;
   }
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('ax_experts')
       .select('*')
       .order('created_at', { ascending: false });
