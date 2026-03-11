@@ -1114,7 +1114,7 @@ a:hover { text-decoration: underline; }
     <div class="footer-links">
       <a href="terms.html">이용약관</a>
       <a href="privacy.html">개인정보처리방침</a>
-      <a href="mailto:ax-on@ax-on.net">문의하기</a>
+      <a href="contact.html">문의하기</a>
     </div>
   </div>
   <div class="footer-copyright">
@@ -1212,6 +1212,8 @@ document.addEventListener('keydown', (e) => {
       userEl.className = 'nav-user';
       userEl.innerHTML = '<span class="nav-user-name">' + escapeHtml(displayName) + '님</span><button class="nav-logout-btn" onclick="handleLogout()">로그아웃</button>';
       navRight.insertBefore(userEl, navRight.querySelector('.mobile-toggle'));
+      // 관리자 링크
+      injectAdminLink(user);
       // Mobile auth
       const mobileLogin = navLinks.querySelector('.nav-auth-btn-mobile.login');
       const mobileSignup = navLinks.querySelector('.nav-auth-btn-mobile.signup');

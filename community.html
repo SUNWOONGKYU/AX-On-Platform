@@ -843,7 +843,7 @@ body {
     <div class="footer-links">
       <a href="terms.html">이용약관</a>
       <a href="privacy.html">개인정보처리방침</a>
-      <a href="mailto:ax-on@ax-on.net">문의하기</a>
+      <a href="contact.html">문의하기</a>
     </div>
   </div>
   <div class="footer-copyright">
@@ -1001,6 +1001,8 @@ function updateNavAuth(user) {
   const name = user.user_metadata?.display_name || user.email?.split('@')[0] || '사용자';
   document.getElementById('navUserName').textContent = name;
   document.getElementById('navUserAvatar').textContent = name.charAt(0).toUpperCase();
+  // 관리자 링크
+  injectAdminLink(user);
 }
 
 async function doLogout() {
