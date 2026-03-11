@@ -50,21 +50,24 @@ function validateKoreanPhone(phone) {
   return /^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(phone);
 }
 
-// 관리자 Nav 링크 삽입 (admin이면 Nav에 "관리자" 링크 표시)
+// 관리자 Nav 링크 삽입 (admin이면 이름 옆 nav-right에 "관리자" 링크 표시)
 function injectAdminLink(user, basePath) {
   if (!user || user.app_metadata?.role !== 'admin') return;
   const prefix = basePath || '';
-  // 데스크톱: nav-links 마지막에 추가
-  const navLinksEl = document.querySelector('.nav-links');
-  if (navLinksEl && !navLinksEl.querySelector('.nav-admin-link')) {
+  const navRight = document.querySelector('.nav-right');
+  if (navRight && !navRight.querySelector('.nav-admin-link')) {
     const a = document.createElement('a');
     a.href = prefix + 'pages/admin/admin.html';
     a.className = 'nav-admin-link';
     a.textContent = '관리자';
-    a.style.cssText = 'color:#e85d4a;font-weight:700;';
-    // nav-mobile-auth 앞에 삽입
-    const mobileAuth = navLinksEl.querySelector('.nav-mobile-auth');
-    if (mobileAuth) navLinksEl.insertBefore(a, mobileAuth);
-    else navLinksEl.appendChild(a);
+    a.style.cssText = 'color:#e85d4a;font-weight:700;font-size:14px;text-decoration:none;padding:8px 12px;border-radius:10px;';
+    // nav-user나 mobile-toggle 앞에 삽입
+    const navUser = navRight.querySelector('.nav-user');
+    if (navUser) navRight.insertBefore(a, navUser);
+    else {
+      const toggle = navRight.querySelector('.mobile-toggle');
+      if (toggle) navRight.insertBefore(a, toggle);
+      else navRight.appendChild(a);
+    }
   }
 }
