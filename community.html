@@ -998,7 +998,7 @@ function updateNavAuth(user) {
   document.getElementById('navSignupBtn').style.display = 'none';
   const info = document.getElementById('navUserInfo');
   info.style.display = 'flex';
-  const name = user.user_metadata?.display_name || user.email?.split('@')[0] || '사용자';
+  const name = user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
   document.getElementById('navUserName').textContent = name;
   document.getElementById('navUserAvatar').textContent = name.charAt(0).toUpperCase();
   // 관리자 링크

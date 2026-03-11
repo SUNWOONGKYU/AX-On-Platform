@@ -1202,7 +1202,7 @@ document.addEventListener('keydown', (e) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       currentUser = user;
-      const displayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0];
+      const displayName = user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
       const navRight = document.querySelector('.nav-right');
       const loginBtn = navRight.querySelector('.nav-login');
       const signupBtn = navRight.querySelector('.nav-signup');
