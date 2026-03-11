@@ -1131,10 +1131,11 @@ a:hover { text-decoration: underline; }
 let supabase = null;
 let currentUser = null;
 const _sbReady = AXON_CONFIG.init().then(() => {
-  if (typeof window.supabase !== 'undefined') {
-    supabase = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
-  }
-}).catch(err => console.error('Config init failed:', err));
+  const { createClient } = window.supabase;
+  supabase = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+}).catch(err => {
+  console.error('Config init failed:', err);
+});
 
 // ─── State ───
 let allExperts = [];
@@ -1232,7 +1233,7 @@ document.addEventListener('keydown', (e) => {
       if (user.email) document.getElementById('regEmail').value = user.email;
       if (user.user_metadata?.full_name) document.getElementById('regName').value = user.user_metadata.full_name;
     }
-  } catch (e) { /* not authenticated */ }
+  } catch (e) { console.error('Auth check error:', e); }
 })();
 
 async function handleLogout() {
