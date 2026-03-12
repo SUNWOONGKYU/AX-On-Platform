@@ -255,6 +255,12 @@ body {
 .cat-item.active .cat-count { background: rgba(124, 92, 224, 0.15); color: var(--violet); }
 
 /* ── GUIDE LIST (지식 허브 아코디언) ── */
+.cat-write-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 12px; padding: 0; opacity: 0.4;
+  transition: opacity 0.15s; line-height: 1;
+}
+.cat-item:hover .cat-write-btn, .cat-write-btn:hover { opacity: 1; }
 .cat-knowledge {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 12px; border-radius: 10px;
@@ -920,13 +926,19 @@ body {
           <span><span class="cat-icon">📢</span>공지사항</span>
           <span class="cat-count" id="cnt-notice">0</span>
         </div>
-        <div class="cat-item" role="button" tabindex="0" data-cat="discussion" onclick="filterCategory(this, 'discussion')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'discussion')}">
+        <div class="cat-item" role="button" tabindex="0" data-cat="discussion" onclick="filterCategory(this,'discussion')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'discussion')}">
           <span><span class="cat-icon">💬</span>자유토론</span>
-          <span class="cat-count" id="cnt-discussion">0</span>
+          <span style="display:flex;align-items:center;gap:5px;">
+            <span class="cat-count" id="cnt-discussion">0</span>
+            <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">✏️</button>
+          </span>
         </div>
-        <div class="cat-item" role="button" tabindex="0" data-cat="reference" onclick="filterCategory(this, 'reference')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'reference')}">
+        <div class="cat-item" role="button" tabindex="0" data-cat="reference" onclick="filterCategory(this,'reference')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'reference')}">
           <span><span class="cat-icon">📚</span>참고자료</span>
-          <span class="cat-count" id="cnt-reference">0</span>
+          <span style="display:flex;align-items:center;gap:5px;">
+            <span class="cat-count" id="cnt-reference">0</span>
+            <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='reference';openWriteModal();" title="참고자료 올리기">✏️</button>
+          </span>
         </div>
         <!-- 지식 허브 아코디언 -->
         <div class="cat-knowledge" id="catKnowledge" data-cat="knowledge" role="button" tabindex="0"
@@ -984,33 +996,7 @@ body {
 <div class="write-modal-overlay" id="writeModal" role="dialog" aria-modal="true" aria-label="게시글 작성">
   <div class="write-modal">
     <button class="modal-close" onclick="closeWriteModal()" aria-label="닫기">✕</button>
-    <div class="write-modal-title">새 게시글 작성</div>
-    <div class="form-group">
-      <label class="form-label">카테고리</label>
-      <div class="cat-radio-group" id="writeCatGroup">
-        <label class="cat-radio-item" data-cat="discussion" onclick="selectWriteCat(this,'discussion')">
-          <input type="radio" name="writeCategory" value="discussion" checked>
-          💬 자유토론
-        </label>
-        <label class="cat-radio-item" data-cat="reference" onclick="selectWriteCat(this,'reference')">
-          <input type="radio" name="writeCategory" value="reference">
-          📚 참고자료
-        </label>
-        <label class="cat-radio-item" data-cat="project" onclick="selectWriteCat(this,'project')">
-          <input type="radio" name="writeCategory" value="project">
-          🏗 프로젝트
-        </label>
-        <!-- 관리자 전용 카테고리 (JS에서 admin일 때만 표시) -->
-        <label class="cat-radio-item admin-only-cat" data-cat="notice" onclick="selectWriteCat(this,'notice')" style="display:none;">
-          <input type="radio" name="writeCategory" value="notice">
-          📢 공지사항
-        </label>
-        <label class="cat-radio-item admin-only-cat" data-cat="knowledge" onclick="selectWriteCat(this,'knowledge')" style="display:none;">
-          <input type="radio" name="writeCategory" value="knowledge">
-          💡 지식Hub
-        </label>
-      </div>
-    </div>
+    <div class="write-modal-title" id="writeModalTitle">자유토론 글쓰기</div>
     <div class="form-group">
       <label class="form-label">제목 <span style="color:var(--coral);">*</span></label>
       <input type="text" class="form-input" id="writeTitle" placeholder="제목을 입력하세요" required maxlength="200">
@@ -1254,10 +1240,6 @@ function showCommunity() {
   // Show mobile category bar on small screens
   if (window.innerWidth <= 768) {
     document.getElementById('mobileCatBar').style.display = 'flex';
-  }
-  // 관리자면 공지사항/지식Hub 글쓰기 카테고리 표시
-  if (currentUser && currentUser.app_metadata?.role === 'admin') {
-    document.querySelectorAll('.admin-only-cat').forEach(el => el.style.display = '');
   }
   // Default select discussion category radio in write modal
   selectWriteCat(document.querySelector('.cat-radio-item[data-cat="discussion"]'), 'discussion');
@@ -1898,16 +1880,6 @@ function openProjectWriteModal() {
     return;
   }
   openWriteModal();
-  // Auto-select project category
-  const projRadio = document.querySelector('.cat-radio-item[data-cat="project"]');
-  if (projRadio) selectWriteCat(projRadio, 'project');
-  // Pre-select project if one is selected
-  if (selectedProjectId) {
-    setTimeout(() => {
-      const sel = document.getElementById('writeProjectId');
-      if (sel) sel.value = selectedProjectId;
-    }, 200);
-  }
 }
 
 async function loadProjectList() {
@@ -1947,6 +1919,8 @@ function filterCategory(el, cat) {
   el.classList.add('active');
   state.currentCat = cat;
   state.expandedPostId = null;
+  // sync write category
+  if (cat === 'discussion' || cat === 'reference') selectedWriteCat = cat;
   renderPosts();
 }
 
@@ -1983,12 +1957,6 @@ function selectWriteCat(el, cat) {
   const fileGroup = document.getElementById('fileUploadGroup');
   if (fileGroup) fileGroup.style.display = cat === 'reference' ? 'flex' : 'none';
 
-  const projectGroup = document.getElementById('projectSelectGroup');
-  if (projectGroup) {
-    projectGroup.style.display = cat === 'project' ? 'block' : 'none';
-    if (cat === 'project') loadProjectList();
-  }
-
   const tagGroup = document.getElementById('tagGroup');
   if (tagGroup) tagGroup.style.display = cat === 'discussion' ? 'block' : 'none';
 }
@@ -1998,6 +1966,18 @@ function openWriteModal() {
     showToast('로그인이 필요합니다.', true);
     return;
   }
+  // ensure valid write cat
+  if (selectedWriteCat !== 'discussion' && selectedWriteCat !== 'reference') {
+    selectedWriteCat = 'discussion';
+  }
+  const catLabel = selectedWriteCat === 'reference' ? '📚 참고자료 글쓰기' : '💬 자유토론 글쓰기';
+  const titleEl = document.getElementById('writeModalTitle');
+  if (titleEl) titleEl.textContent = catLabel;
+  // sync file upload visibility
+  const fileGroup = document.getElementById('fileUploadGroup');
+  if (fileGroup) fileGroup.style.display = selectedWriteCat === 'reference' ? 'flex' : 'none';
+  const tagGroup = document.getElementById('tagGroup');
+  if (tagGroup) tagGroup.style.display = selectedWriteCat === 'discussion' ? 'block' : 'none';
   document.getElementById('writeModal').classList.add('open');
   document.body.style.overflow = 'hidden';
   document.getElementById('writeTitle').value = '';
