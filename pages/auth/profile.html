@@ -393,6 +393,10 @@ footer a:hover { color: var(--amber); }
                 <option value="female">여성</option>
               </select>
             </div>
+            <div class="form-group">
+              <label class="form-label">생년월일 <span style="font-size:11px;color:var(--ink-muted);font-weight:400;">(비공개)</span></label>
+              <input class="form-input" id="fieldBirth" type="date">
+            </div>
             <div class="form-group full">
               <label class="form-label">한줄 소개</label>
               <input class="form-input" id="fieldTagline" type="text" placeholder="나를 한줄로 표현해주세요" maxlength="100">
@@ -668,6 +672,7 @@ function showEditMode() {
   document.getElementById('fieldEmail').value = expertData.email || '';
   document.getElementById('fieldPhone').value = expertData.phone || '';
   document.getElementById('fieldGender').value = expertData.gender || '';
+  document.getElementById('fieldBirth').value = expertData.birth_date || '';
   document.getElementById('fieldTagline').value = expertData.tagline || '';
   document.getElementById('fieldEducation').value = expertData.education || '';
   document.getElementById('fieldCareer').value = expertData.career || '';
@@ -703,6 +708,7 @@ async function handleProfileSave(event) {
   const name = DOMPurify.sanitize(document.getElementById('fieldName').value.trim());
   const phone = DOMPurify.sanitize(document.getElementById('fieldPhone').value.trim());
   const gender = document.getElementById('fieldGender').value || null;
+  const birth_date = document.getElementById('fieldBirth').value || null;
   const tagline = DOMPurify.sanitize(document.getElementById('fieldTagline').value.trim()) || null;
   const education = DOMPurify.sanitize(document.getElementById('fieldEducation').value.trim()) || null;
   const career = DOMPurify.sanitize(document.getElementById('fieldCareer').value.trim()) || null;
@@ -732,7 +738,7 @@ async function handleProfileSave(event) {
   }
 
   const updates = {
-    name, phone, gender, tagline, education, career,
+    name, phone, gender, birth_date, tagline, education, career,
     ai_experience, ai_projects,
     ai_tools: ai_tools.length ? ai_tools : [],
     can_build_chatbot, interest_areas: interest_areas.length ? interest_areas : [],
