@@ -1,6 +1,6 @@
 <!--
 @task S5F1
-@description 마이페이지 — 전문가 프로필 확인/수정, 수강 내역, AX 프로젝트, 커뮤니티 활동
+@description 마이페이지 — 전문가 프로필 확인/수정, AX 프로젝트 참여 내역, 커뮤니티 활동
 -->
 <!DOCTYPE html>
 <html lang="ko">
@@ -340,11 +340,8 @@ footer a:hover { color: var(--amber); }
       <button class="menu-item active" data-section="profile" onclick="switchSection('profile', this)">
         <span class="menu-icon">👤</span> 내 프로필
       </button>
-      <button class="menu-item" data-section="enrollments" onclick="switchSection('enrollments', this)">
-        <span class="menu-icon">📚</span> 수강 내역
-      </button>
       <button class="menu-item" data-section="projects" onclick="switchSection('projects', this)">
-        <span class="menu-icon">🏗</span> AX 프로젝트
+        <span class="menu-icon">🏗</span> AX 프로젝트 참여 내역
       </button>
       <button class="menu-item" data-section="community" onclick="switchSection('community', this)">
         <span class="menu-icon">💬</span> 커뮤니티 활동
@@ -464,19 +461,9 @@ footer a:hover { color: var(--amber); }
       </div>
     </div>
 
-    <!-- Enrollments Section -->
-    <div class="section" id="section-enrollments">
-      <h2 class="section-title"><span class="section-icon">📚</span> 수강 내역</h2>
-      <div class="card">
-        <div id="enrollmentsContent">
-          <div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-msg">불러오는 중...</div></div>
-        </div>
-      </div>
-    </div>
-
     <!-- Projects Section -->
     <div class="section" id="section-projects">
-      <h2 class="section-title"><span class="section-icon">🏗</span> AX 프로젝트 접수 내역</h2>
+      <h2 class="section-title"><span class="section-icon">🏗</span> AX 프로젝트 참여 내역</h2>
       <div class="card">
         <div id="projectsContent">
           <div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-msg">불러오는 중...</div></div>
