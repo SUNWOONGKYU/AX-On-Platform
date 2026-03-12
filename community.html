@@ -248,10 +248,14 @@ body {
   color: var(--violet); border-color: rgba(124, 92, 224, 0.2);
 }
 .cat-icon { margin-right: 8px; font-size: 15px; }
+.cat-right {
+  display: flex; align-items: center; gap: 6px;
+  min-width: 72px; justify-content: flex-end;
+}
 .cat-count {
   font-size: 11px; background: rgba(26,26,46,0.06);
   padding: 2px 7px; border-radius: 20px; color: var(--ink-muted);
-  min-width: 28px; text-align: center;
+  min-width: 28px; text-align: center; flex-shrink: 0;
 }
 .cat-item.active .cat-count { background: rgba(124, 92, 224, 0.15); color: var(--violet); }
 
@@ -952,18 +956,20 @@ body {
       <div class="cat-list" id="catList">
         <div class="cat-item" role="button" tabindex="0" data-cat="notice" onclick="filterCategory(this, 'notice')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'notice')}">
           <span><span class="cat-icon">📢</span>공지사항</span>
-          <span class="cat-count" id="cnt-notice">0</span>
+          <span class="cat-right">
+            <span class="cat-count" id="cnt-notice">0</span>
+          </span>
         </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="discussion" onclick="filterCategory(this,'discussion')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'discussion')}">
           <span><span class="cat-icon">💬</span>자유토론</span>
-          <span style="display:flex;align-items:center;gap:5px;">
+          <span class="cat-right">
             <span class="cat-count" id="cnt-discussion">0</span>
             <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">글쓰기</button>
           </span>
         </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="reference" onclick="filterCategory(this,'reference')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'reference')}">
           <span><span class="cat-icon">📚</span>참고자료</span>
-          <span style="display:flex;align-items:center;gap:5px;">
+          <span class="cat-right">
             <span class="cat-count" id="cnt-reference">0</span>
             <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='reference';openWriteModal();" title="참고자료 올리기">글쓰기</button>
           </span>
@@ -973,7 +979,7 @@ body {
           onclick="filterCategory(this,'knowledge')"
           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'knowledge')}">
           <span><span class="cat-icon">💡</span>지식HUB</span>
-          <span style="display:flex;align-items:center;gap:6px;">
+          <span class="cat-right">
             <span class="cat-count" id="cnt-knowledge">0</span>
             <button type="button" class="knowledge-chevron" id="knowledgeChevron"
               onclick="event.stopPropagation();toggleKnowledgeGuides()" aria-label="가이드 목록 펼치기">▾</button>
