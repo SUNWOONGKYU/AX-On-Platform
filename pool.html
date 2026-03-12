@@ -119,20 +119,24 @@ a:hover { text-decoration: underline; }
   background: var(--ink); border-radius: 2px; transition: all 0.3s ease;
 }
 
-/* NAV USER */
-.nav-user { display: flex; align-items: center; gap: 10px; }
-.nav-user-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+/* NAV USER — index.html과 동일 */
+.nav-user-wrap { display: flex; align-items: center; gap: 8px; }
+.nav-user-name {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  text-decoration: none; padding: 8px 12px; border-radius: 10px;
+  transition: all 0.25s ease;
+}
+.nav-user-name:hover { background: rgba(26,26,46,0.04); text-decoration: none; }
 .nav-logout-btn {
   font-size: 13px; font-weight: 600; color: var(--ink-muted);
   background: none; border: 1.5px solid rgba(26,26,46,0.12);
-  padding: 6px 14px; border-radius: 8px; cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s;
+  padding: 6px 14px; border-radius: 10px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.25s ease;
 }
 .nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
 
 /* Desktop: hide mobile auth links */
-.nav-auth-mobile-divider,
-.nav-auth-btn-mobile { display: none; }
+.nav-auth-mobile { display: none; }
 
 /* ── PAGE HEADER ── */
 .page-header {
@@ -797,9 +801,8 @@ a:hover { text-decoration: underline; }
     <div class="nav-links" id="navLinks">
       <a href="pool.html" class="active">전문가 풀</a>
       <a href="community.html">커뮤니티</a>
-      <div class="nav-auth-mobile-divider"></div>
-      <a href="pages/auth/login.html" class="nav-auth-btn-mobile login">로그인</a>
-      <a href="pages/auth/signup.html" class="nav-auth-btn-mobile signup">회원가입</a>
+      <a href="pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-mobile signup-mobile">회원가입</a>
     </div>
     <div class="nav-right">
       <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
@@ -1262,30 +1265,30 @@ document.addEventListener('keydown', (e) => {
         if (expert && expert.name) realName = expert.name;
       } catch (e) { /* ignore */ }
       const displayName = realName || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
+      // Desktop nav-right (index.html과 동일 패턴)
       const navRight = document.querySelector('.nav-right');
       const loginBtn = navRight.querySelector('.nav-login');
       const signupBtn = navRight.querySelector('.nav-signup');
-      if (loginBtn) loginBtn.style.display = 'none';
-      if (signupBtn) signupBtn.style.display = 'none';
-      const userEl = document.createElement('div');
-      userEl.className = 'nav-user';
-      userEl.innerHTML = '<span class="nav-user-name">' + escapeHtml(displayName) + '님</span><button class="nav-logout-btn" onclick="handleLogout()">로그아웃</button>';
-      navRight.insertBefore(userEl, navRight.querySelector('.mobile-toggle'));
+      if (loginBtn) loginBtn.remove();
+      if (signupBtn) signupBtn.remove();
+      const userWrap = document.createElement('div');
+      userWrap.className = 'nav-user-wrap';
+      userWrap.innerHTML = '<a href="pages/auth/profile.html" class="nav-user-name">' + escapeHtml(displayName) + '님</a><button class="nav-logout-btn" onclick="handleLogout()">로그아웃</button>';
+      navRight.insertBefore(userWrap, navRight.querySelector('.mobile-toggle'));
       // 관리자 링크
       injectAdminLink(user);
-      // Mobile auth
-      const mobileLogin = navLinks.querySelector('.nav-auth-btn-mobile.login');
-      const mobileSignup = navLinks.querySelector('.nav-auth-btn-mobile.signup');
+      // Mobile auth (index.html과 동일 패턴)
+      const mobileLogin = document.querySelector('.nav-auth-mobile.login-mobile');
+      const mobileSignup = document.querySelector('.nav-auth-mobile.signup-mobile');
       if (mobileLogin) {
         mobileLogin.textContent = escapeHtml(displayName) + '님';
-        mobileLogin.href = '#';
-        mobileLogin.style.cssText = 'font-weight:700;color:var(--ink);';
-        mobileLogin.onclick = (e) => e.preventDefault();
+        mobileLogin.href = 'pages/auth/profile.html';
+        mobileLogin.classList.remove('login-mobile');
       }
       if (mobileSignup) {
         mobileSignup.textContent = '로그아웃';
         mobileSignup.href = '#';
-        mobileSignup.onclick = (e) => { e.preventDefault(); handleLogout(); };
+        mobileSignup.addEventListener('click', async (e) => { e.preventDefault(); handleLogout(); });
       }
       // Pre-fill email
       if (user.email) document.getElementById('regEmail').value = user.email;

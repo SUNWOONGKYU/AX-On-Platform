@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="AX-On 전문가 커뮤니티 — 등록된 전문가들의 지식 공유 공간">
-<meta property="og:title" content="AX-On 전문가 커뮤니티">
-<meta property="og:description" content="AX-On 전문가들의 지식 공유 공간">
+<meta name="description" content="AI 전문가 커뮤니티 — AI 전문가들의 지식 공유, 프로젝트 협업, 네트워킹 공간">
+<meta property="og:title" content="AI 전문가 커뮤니티 — AX-On">
+<meta property="og:description" content="AI 전문가들의 지식 공유, 프로젝트 협업, 네트워킹 공간">
 <meta property="og:image" content="https://www.ax-on.net/images/og-default.png">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
-<title>AX-On 전문가 커뮤니티</title>
+<title>AI 전문가 커뮤니티 — AX-On</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
 
@@ -120,28 +120,24 @@ body {
 .mobile-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .mobile-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .mobile-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-.nav-auth-mobile-divider,
-.nav-auth-btn-mobile { display: none; }
+/* Desktop: hide mobile auth links */
+.nav-auth-mobile { display: none; }
 
-.nav-user-info {
-  display: flex; align-items: center; gap: 8px;
-}
-.nav-user-avatar {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--violet), #a78bfa);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; color: #fff; font-weight: 700;
-}
+/* NAV USER — index.html과 동일 */
+.nav-user-wrap { display: flex; align-items: center; gap: 8px; }
 .nav-user-name {
   font-size: 14px; font-weight: 600; color: var(--ink);
+  text-decoration: none; padding: 8px 12px; border-radius: 10px;
+  transition: all 0.25s ease;
 }
+.nav-user-name:hover { background: rgba(26,26,46,0.04); text-decoration: none; }
 .nav-logout-btn {
   font-size: 13px; font-weight: 600; color: var(--ink-muted);
-  background: none; border: 1px solid var(--border); padding: 6px 14px;
-  border-radius: 8px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
-  transition: all 0.2s;
+  background: none; border: 1.5px solid rgba(26,26,46,0.12);
+  padding: 6px 14px; border-radius: 10px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.25s ease;
 }
-.nav-logout-btn:hover { color: var(--ink); border-color: rgba(26,26,46,0.2); }
+.nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
 
 /* ── PAGE HEADER ── */
 .page-header {
@@ -593,17 +589,15 @@ body {
   .nav-links.open a:last-child { border-bottom: none; }
   .nav-right .nav-auth-btn { display: none; }
   .nav-right { gap: 4px; }
-  .nav-links.open .nav-auth-mobile-divider {
-    height: 1px; background: rgba(26,26,46,0.08); margin: 8px 0;
-  }
-  .nav-links.open .nav-auth-btn-mobile {
+  .nav-links.open .nav-auth-mobile {
+    display: flex !important;
     text-decoration: none; font-size: 14px; font-weight: 600;
     padding: 12px 14px; border-radius: 10px;
-    min-height: 44px; display: flex; align-items: center;
+    min-height: 44px; align-items: center;
     transition: all 0.2s ease; font-family: 'Noto Sans KR', sans-serif;
   }
-  .nav-links.open .nav-auth-btn-mobile.login { color: var(--ink-muted); }
-  .nav-links.open .nav-auth-btn-mobile.signup {
+  .nav-links.open .login-mobile { color: var(--ink-muted); }
+  .nav-links.open .signup-mobile {
     background: var(--ink); color: #fff;
     border-radius: 12px; margin-top: 4px; justify-content: center;
   }
@@ -709,19 +703,12 @@ body {
     <div class="nav-links" id="navLinks">
       <a href="pool.html">전문가 풀</a>
       <a href="community.html" class="active">커뮤니티</a>
-      <!-- Mobile auth links -->
-      <div class="nav-auth-mobile-divider"></div>
-      <a href="pages/auth/login.html" class="nav-auth-btn-mobile login">로그인</a>
-      <a href="pages/auth/signup.html" class="nav-auth-btn-mobile signup">회원가입</a>
+      <a href="pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-mobile signup-mobile">회원가입</a>
     </div>
     <div class="nav-right" id="navRight">
       <a href="pages/auth/login.html" class="nav-auth-btn nav-login" id="navLoginBtn">로그인</a>
       <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup" id="navSignupBtn">회원가입</a>
-      <div class="nav-user-info" id="navUserInfo" style="display:none;">
-        <div class="nav-user-avatar" id="navUserAvatar"></div>
-        <span class="nav-user-name" id="navUserName"></span>
-        <button class="nav-logout-btn" onclick="doLogout()">로그아웃</button>
-      </div>
       <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴">
         <span></span><span></span><span></span>
       </button>
@@ -736,8 +723,8 @@ body {
 <div class="page-header" id="pageHeader" style="display:none;">
   <div class="page-header-inner">
     <div class="page-title-wrap">
-      <div class="page-title">전문가 <span>커뮤니티</span></div>
-      <div class="page-subtitle">AX-On 전문가들의 지식 공유 공간</div>
+      <div class="page-title">AI 전문가 <span>커뮤니티</span></div>
+      <div class="page-subtitle">AI 전문가들의 지식 공유 · 프로젝트 협업 · 네트워킹 공간</div>
     </div>
     <div class="page-header-actions">
       <button class="btn-write" id="btnWrite" onclick="openWriteModal()">
@@ -772,13 +759,13 @@ body {
           <span><span class="cat-icon">📢</span>공지사항</span>
           <span class="cat-count" id="cnt-notice">0</span>
         </div>
-        <div class="cat-item" role="button" tabindex="0" data-cat="reference" onclick="filterCategory(this, 'reference')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'reference')}">
-          <span><span class="cat-icon">📚</span>참고자료</span>
-          <span class="cat-count" id="cnt-reference">0</span>
-        </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="discussion" onclick="filterCategory(this, 'discussion')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'discussion')}">
           <span><span class="cat-icon">💬</span>자유토론</span>
           <span class="cat-count" id="cnt-discussion">0</span>
+        </div>
+        <div class="cat-item" role="button" tabindex="0" data-cat="reference" onclick="filterCategory(this, 'reference')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'reference')}">
+          <span><span class="cat-icon">📚</span>참고자료</span>
+          <span class="cat-count" id="cnt-reference">0</span>
         </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="knowledge" onclick="filterCategory(this, 'knowledge')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'knowledge')}">
           <span><span class="cat-icon">💡</span>지식Hub</span>
@@ -805,19 +792,20 @@ body {
     <div class="form-group">
       <label class="form-label">카테고리</label>
       <div class="cat-radio-group" id="writeCatGroup">
-        <label class="cat-radio-item" data-cat="notice" onclick="selectWriteCat(this,'notice')">
-          <input type="radio" name="writeCategory" value="notice">
-          📢 공지사항
+        <label class="cat-radio-item" data-cat="discussion" onclick="selectWriteCat(this,'discussion')">
+          <input type="radio" name="writeCategory" value="discussion" checked>
+          💬 자유토론
         </label>
         <label class="cat-radio-item" data-cat="reference" onclick="selectWriteCat(this,'reference')">
           <input type="radio" name="writeCategory" value="reference">
           📚 참고자료
         </label>
-        <label class="cat-radio-item" data-cat="discussion" onclick="selectWriteCat(this,'discussion')">
-          <input type="radio" name="writeCategory" value="discussion" checked>
-          💬 자유토론
+        <!-- 관리자 전용 카테고리 (JS에서 admin일 때만 표시) -->
+        <label class="cat-radio-item admin-only-cat" data-cat="notice" onclick="selectWriteCat(this,'notice')" style="display:none;">
+          <input type="radio" name="writeCategory" value="notice">
+          📢 공지사항
         </label>
-        <label class="cat-radio-item" data-cat="knowledge" onclick="selectWriteCat(this,'knowledge')">
+        <label class="cat-radio-item admin-only-cat" data-cat="knowledge" onclick="selectWriteCat(this,'knowledge')" style="display:none;">
           <input type="radio" name="writeCategory" value="knowledge">
           💡 지식Hub
         </label>
@@ -1000,15 +988,32 @@ function showGate(type) {
 }
 
 function updateNavAuth(user, expertName) {
-  document.getElementById('navLoginBtn').style.display = 'none';
-  document.getElementById('navSignupBtn').style.display = 'none';
-  const info = document.getElementById('navUserInfo');
-  info.style.display = 'flex';
-  const name = expertName || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자';
-  document.getElementById('navUserName').textContent = name;
-  document.getElementById('navUserAvatar').textContent = name.charAt(0).toUpperCase();
+  const displayName = escapeHtml(expertName || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || '사용자');
+  // Desktop nav-right (index.html과 동일 패턴)
+  const navRight = document.getElementById('navRight');
+  const loginBtn = document.getElementById('navLoginBtn');
+  const signupBtn = document.getElementById('navSignupBtn');
+  if (loginBtn) loginBtn.remove();
+  if (signupBtn) signupBtn.remove();
+  const userWrap = document.createElement('div');
+  userWrap.className = 'nav-user-wrap';
+  userWrap.innerHTML = '<a href="pages/auth/profile.html" class="nav-user-name">' + displayName + '님</a><button class="nav-logout-btn" onclick="doLogout()">로그아웃</button>';
+  navRight.insertBefore(userWrap, navRight.querySelector('.mobile-toggle'));
   // 관리자 링크
   injectAdminLink(user);
+  // Mobile auth (index.html과 동일 패턴)
+  const mobileLogin = document.querySelector('.nav-auth-mobile.login-mobile');
+  const mobileSignup = document.querySelector('.nav-auth-mobile.signup-mobile');
+  if (mobileLogin) {
+    mobileLogin.textContent = displayName + '님';
+    mobileLogin.href = 'pages/auth/profile.html';
+    mobileLogin.classList.remove('login-mobile');
+  }
+  if (mobileSignup) {
+    mobileSignup.textContent = '로그아웃';
+    mobileSignup.href = '#';
+    mobileSignup.addEventListener('click', (e) => { e.preventDefault(); doLogout(); });
+  }
 }
 
 async function doLogout() {
@@ -1023,6 +1028,10 @@ function showCommunity() {
   // Show mobile category bar on small screens
   if (window.innerWidth <= 768) {
     document.getElementById('mobileCatBar').style.display = 'flex';
+  }
+  // 관리자면 공지사항/지식Hub 글쓰기 카테고리 표시
+  if (currentUser && currentUser.app_metadata?.role === 'admin') {
+    document.querySelectorAll('.admin-only-cat').forEach(el => el.style.display = '');
   }
   // Default select discussion category radio in write modal
   selectWriteCat(document.querySelector('.cat-radio-item[data-cat="discussion"]'), 'discussion');
