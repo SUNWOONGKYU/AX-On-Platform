@@ -430,10 +430,6 @@ footer a:hover { color: var(--amber); }
                 <option value="learning">학습 중</option>
               </select>
             </div>
-            <div class="form-group">
-              <label class="form-label">관심 분야</label>
-              <input class="form-input" id="fieldInterestAreas" type="text" placeholder="제조, 금융, 헬스케어 등 (쉼표 구분)">
-            </div>
             <div class="form-group full">
               <label class="form-label">하고 싶은 일</label>
               <textarea class="form-textarea" id="fieldWantToDo" placeholder="AI를 활용하여 하고 싶은 일"></textarea>
@@ -660,7 +656,6 @@ function renderProfileRead() {
   html += rowHtml('AI 도구', Array.isArray(e.ai_tools) && e.ai_tools.length ? e.ai_tools.join(', ') : null);
   html += rowHtml('전문 분야', Array.isArray(e.specialties) && e.specialties.length ? e.specialties.join(', ') : null);
   html += rowHtml('챗봇 구축', chatbotLabels[e.can_build_chatbot]);
-  html += rowHtml('관심 분야', Array.isArray(e.interest_areas) && e.interest_areas.length ? e.interest_areas.join(', ') : null);
   html += rowHtml('하고 싶은 일', e.want_to_do, true);
   html += rowHtml('비전', e.vision, true);
   html += rowHtml('저서', e.books, true);
@@ -714,7 +709,6 @@ function showEditMode() {
   document.getElementById('fieldAiProjects').value = expertData.ai_projects || '';
   document.getElementById('fieldAiTools').value = Array.isArray(expertData.ai_tools) ? expertData.ai_tools.join(', ') : '';
   document.getElementById('fieldChatbot').value = expertData.can_build_chatbot || '';
-  document.getElementById('fieldInterestAreas').value = Array.isArray(expertData.interest_areas) ? expertData.interest_areas.join(', ') : '';
   document.getElementById('fieldWantToDo').value = expertData.want_to_do || '';
   document.getElementById('fieldVision').value = expertData.vision || '';
 
@@ -777,8 +771,6 @@ async function handleProfileSave(event) {
   const ai_tools_raw = document.getElementById('fieldAiTools').value.trim();
   const ai_tools = ai_tools_raw ? ai_tools_raw.split(',').map(s => DOMPurify.sanitize(s.trim())).filter(Boolean) : [];
   const can_build_chatbot = document.getElementById('fieldChatbot').value || null;
-  const interest_raw = document.getElementById('fieldInterestAreas').value.trim();
-  const interest_areas = interest_raw ? interest_raw.split(',').map(s => DOMPurify.sanitize(s.trim())).filter(Boolean) : [];
   const want_to_do = DOMPurify.sanitize(document.getElementById('fieldWantToDo').value.trim()) || null;
   const vision = DOMPurify.sanitize(document.getElementById('fieldVision').value.trim()) || null;
 
@@ -829,7 +821,7 @@ async function handleProfileSave(event) {
     ai_experience, ai_projects,
     ai_tools: ai_tools.length ? ai_tools : [],
     specialties: specialties.length ? specialties : [],
-    can_build_chatbot, interest_areas: interest_areas.length ? interest_areas : [],
+    can_build_chatbot,
     want_to_do, vision,
     books, products, services,
     profile_image_url,
