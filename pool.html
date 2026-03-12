@@ -420,6 +420,33 @@ a:hover { text-decoration: underline; }
 }
 .detail-links a:hover { text-decoration: underline; }
 
+/* ── CHECKLIST ── */
+.checklist-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  cursor: pointer; padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.checklist-item:hover { border-color: var(--amber); background: var(--amber-glow); }
+.checklist-item input[type="checkbox"] { display: none; }
+.chk-box {
+  flex-shrink: 0; width: 22px; height: 22px; margin-top: 1px;
+  border: 2px solid var(--border); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.checklist-item input:checked ~ .chk-box {
+  background: var(--amber); border-color: var(--amber);
+}
+.checklist-item input:checked ~ .chk-box::after {
+  content: '✓'; color: white; font-size: 13px; font-weight: 700;
+}
+.checklist-item input:checked ~ .chk-label { color: var(--ink); font-weight: 500; }
+.chk-label { font-size: 14px; color: var(--ink-muted); line-height: 1.6; }
+.checklist-item.checked { border-color: var(--amber); background: var(--amber-glow); }
+
 /* ── REGISTRATION OVERLAY (Full-screen) ── */
 .reg-overlay {
   display: none; position: fixed; inset: 0; z-index: 300;
@@ -858,6 +885,54 @@ a:hover { text-decoration: underline; }
   <div class="detail-box" id="detailBox">
     <button class="detail-close" id="detailClose" aria-label="닫기">&times;</button>
     <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- CHECKLIST OVERLAY -->
+<div class="reg-overlay" id="checklistOverlay" role="dialog" aria-modal="true" aria-label="등록 사전 체크리스트">
+  <div class="reg-box" style="max-width:560px;">
+    <button class="reg-close" id="checklistClose" aria-label="닫기">&times;</button>
+    <div class="reg-title">등록 <span class="highlight">사전 체크리스트</span></div>
+    <div class="reg-desc">아래 5개 항목 중 <strong>3개 이상</strong> 해당되어야 등록 폼에 진입할 수 있습니다.</div>
+
+    <div id="checklistItems" style="margin: 28px 0; display: flex; flex-direction: column; gap: 14px;">
+      <label class="checklist-item">
+        <input type="checkbox" class="chk-item" value="1">
+        <span class="chk-box"></span>
+        <span class="chk-label">Claude Code를 자유자재로 다룰 수 있고, Claude Code로 무엇이든 만들 수 있는가?</span>
+      </label>
+      <label class="checklist-item">
+        <input type="checkbox" class="chk-item" value="2">
+        <span class="chk-box"></span>
+        <span class="chk-label">풀스택 웹사이트를 1개 이상 직접 개발한 경험이 있는가?</span>
+      </label>
+      <label class="checklist-item">
+        <input type="checkbox" class="chk-item" value="3">
+        <span class="chk-box"></span>
+        <span class="chk-label">AI를 활용하여 10만 원 이상 수익을 창출해 본 경험이 있는가?</span>
+      </label>
+      <label class="checklist-item">
+        <input type="checkbox" class="chk-item" value="4">
+        <span class="chk-box"></span>
+        <span class="chk-label">AI와 관련하여 다른 사람들을 가르칠 수 있는 실력을 보유하고 있는가?</span>
+      </label>
+      <label class="checklist-item">
+        <input type="checkbox" class="chk-item" value="5">
+        <span class="chk-box"></span>
+        <span class="chk-label">자기 자신만의 전문 도메인을 갖고 있는가?</span>
+      </label>
+    </div>
+
+    <div id="checklistCount" style="text-align:center; font-size:14px; color:var(--ink-muted); margin-bottom:20px;">
+      현재 <strong id="chkCountNum">0</strong> / 5 선택됨
+    </div>
+
+    <button id="chkProceedBtn" class="btn-submit" style="width:100%; padding:14px; font-size:16px; opacity:0.4; cursor:not-allowed;" disabled>
+      등록 폼 진입하기
+    </button>
+    <p id="chkWarning" style="text-align:center; font-size:13px; color:var(--coral); margin-top:12px; display:none;">
+      3개 이상 선택해야 진입할 수 있습니다.
+    </p>
   </div>
 </div>
 
@@ -1480,6 +1555,50 @@ document.getElementById('detailOverlay').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeDetailModal();
 });
 
+// ─── Checklist overlay ───
+function openChecklistOverlay() {
+  document.getElementById('checklistOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // reset
+  document.querySelectorAll('.chk-item').forEach(c => { c.checked = false; });
+  document.querySelectorAll('.checklist-item').forEach(el => el.classList.remove('checked'));
+  updateChkCount();
+}
+function closeChecklistOverlay() {
+  document.getElementById('checklistOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function updateChkCount() {
+  const checked = document.querySelectorAll('.chk-item:checked').length;
+  document.getElementById('chkCountNum').textContent = checked;
+  const btn = document.getElementById('chkProceedBtn');
+  const warn = document.getElementById('chkWarning');
+  if (checked >= 3) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    warn.style.display = 'none';
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.4';
+    btn.style.cursor = 'not-allowed';
+  }
+}
+document.querySelectorAll('.chk-item').forEach(chk => {
+  chk.addEventListener('change', function() {
+    this.closest('.checklist-item').classList.toggle('checked', this.checked);
+    updateChkCount();
+  });
+});
+document.getElementById('checklistClose').addEventListener('click', closeChecklistOverlay);
+document.getElementById('checklistOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeChecklistOverlay();
+});
+document.getElementById('chkProceedBtn').addEventListener('click', async () => {
+  closeChecklistOverlay();
+  await openRegOverlay();
+});
+
 // ─── Registration overlay ───
 async function openRegOverlay() {
   if (!currentUser) {
@@ -1502,7 +1621,17 @@ function closeRegOverlay() {
   document.getElementById('regOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.getElementById('openRegBtn').addEventListener('click', openRegOverlay);
+document.getElementById('openRegBtn').addEventListener('click', async () => {
+  if (!currentUser) {
+    window.location.href = 'pages/auth/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+    return;
+  }
+  if (sb) {
+    const { data: existing } = await sb.from('ax_experts').select('id').eq('user_id', currentUser.id).maybeSingle();
+    if (existing) { showToast('이미 전문가로 등록되어 있습니다.', true); return; }
+  }
+  openChecklistOverlay();
+});
 document.getElementById('regClose').addEventListener('click', closeRegOverlay);
 document.getElementById('regOverlay').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeRegOverlay();
