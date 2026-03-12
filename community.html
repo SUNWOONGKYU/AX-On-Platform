@@ -375,6 +375,40 @@ body {
   white-space: pre-wrap; word-break: break-word;
 }
 
+/* Reply (nested comment) */
+.reply-list {
+  margin-left: 38px; margin-top: 8px;
+}
+.reply-item {
+  display: flex; gap: 8px; margin-bottom: 8px;
+  padding: 8px 10px; background: rgba(26,26,46,0.03);
+  border-radius: 8px; border-left: 3px solid var(--violet);
+}
+.reply-item .comment-avatar {
+  width: 24px; height: 24px; font-size: 10px;
+  background: var(--violet);
+}
+.reply-item .comment-author { font-size: 12px; }
+.reply-item .comment-text { font-size: 13px; }
+.btn-reply-toggle {
+  background: none; border: none; cursor: pointer;
+  font-size: 12px; font-weight: 600; color: var(--violet);
+  padding: 2px 6px; margin-top: 4px;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: opacity 0.2s;
+}
+.btn-reply-toggle:hover { opacity: 0.7; }
+.reply-write {
+  display: flex; gap: 8px; margin-top: 8px; margin-left: 38px;
+  align-items: flex-start;
+}
+.reply-write .comment-textarea {
+  min-height: 44px; font-size: 13px; padding: 8px 10px;
+}
+.reply-write .btn-comment-submit {
+  padding: 8px 14px; font-size: 12px;
+}
+
 /* Comment write */
 .comment-write {
   display: flex; gap: 10px; margin-top: 16px;
@@ -1156,16 +1190,47 @@ function buildExpandContent(post, comments) {
   comments = comments || [];
   const sanitizedContent = sanitize(post.content || '');
 
+  // Separate top-level comments and replies
+  const topComments = comments.filter(c => !c.parent_id);
+  const repliesByParent = {};
+  comments.filter(c => c.parent_id).forEach(c => {
+    if (!repliesByParent[c.parent_id]) repliesByParent[c.parent_id] = [];
+    repliesByParent[c.parent_id].push(c);
+  });
+
   let html = `
     <div class="post-full-content">${sanitizedContent}</div>
     <button class="post-collapse-btn" onclick="event.stopPropagation(); togglePost('${post.id}')">▲ 접기</button>
     <div class="comments-section">
       <div class="comments-title">댓글 ${comments.length}개</div>`;
 
-  // Comment list
-  if (comments.length > 0) {
-    html += comments.map(c => {
+  // Comment list (top-level + nested replies)
+  if (topComments.length > 0) {
+    html += topComments.map(c => {
       const ci = (c.author_name || '?').charAt(0).toUpperCase();
+      const replies = repliesByParent[c.id] || [];
+      let replyHtml = '';
+
+      // Render replies
+      if (replies.length > 0) {
+        replyHtml += '<div class="reply-list">';
+        replyHtml += replies.map(r => {
+          const ri = (r.author_name || '?').charAt(0).toUpperCase();
+          return `
+            <div class="reply-item">
+              <div class="comment-avatar">${ri}</div>
+              <div class="comment-content-wrap">
+                <div class="comment-author-row">
+                  <span class="comment-author">${escapeHtml(r.author_name || '익명')}</span>
+                  <span class="comment-time">${timeAgo(r.created_at)}</span>
+                </div>
+                <div class="comment-text">${sanitize(r.content)}</div>
+              </div>
+            </div>`;
+        }).join('');
+        replyHtml += '</div>';
+      }
+
       return `
         <div class="comment-item">
           <div class="comment-avatar">${ci}</div>
@@ -1175,7 +1240,13 @@ function buildExpandContent(post, comments) {
               <span class="comment-time">${timeAgo(c.created_at)}</span>
             </div>
             <div class="comment-text">${sanitize(c.content)}</div>
+            <button class="btn-reply-toggle" onclick="event.stopPropagation(); toggleReplyInput('${post.id}', '${c.id}')">답글</button>
           </div>
+        </div>
+        ${replyHtml}
+        <div class="reply-write" id="replyWrite-${c.id}" style="display:none;">
+          <textarea class="comment-textarea" id="replyInput-${c.id}" placeholder="답글을 입력하세요..."></textarea>
+          <button class="btn-comment-submit" onclick="submitReply('${post.id}', '${c.id}')">답글 등록</button>
         </div>`;
     }).join('');
   }
@@ -1191,12 +1262,74 @@ function buildExpandContent(post, comments) {
   return html;
 }
 
+// ── Toggle reply input ──
+function toggleReplyInput(postId, commentId) {
+  const replyWrap = document.getElementById('replyWrite-' + commentId);
+  if (!replyWrap) return;
+  const isVisible = replyWrap.style.display !== 'none';
+  replyWrap.style.display = isVisible ? 'none' : 'flex';
+  if (!isVisible) {
+    const textarea = document.getElementById('replyInput-' + commentId);
+    if (textarea) textarea.focus();
+  }
+}
+
+// ── Submit reply (대댓글) ──
+async function submitReply(postId, parentId) {
+  if (!db || !currentUser || !currentExpert) {
+    showToast('로그인이 필요합니다.', true);
+    return;
+  }
+
+  const textarea = document.getElementById('replyInput-' + parentId);
+  if (!textarea) return;
+
+  const content = textarea.value.trim();
+  if (!content) {
+    showToast('답글 내용을 입력해주세요.', true);
+    return;
+  }
+
+  const sanitizedContent = sanitize(content);
+  if (!sanitizedContent) {
+    showToast('유효한 답글 내용을 입력해주세요.', true);
+    return;
+  }
+
+  const { error } = await db.from('ax_comments').insert({
+    post_id: postId,
+    parent_id: parentId,
+    content: sanitizedContent,
+    user_id: currentUser.id,
+    author_name: currentExpert.name || currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || '전문가'
+  });
+
+  if (error) {
+    console.error('submitReply error:', error);
+    showToast('답글 등록에 실패했습니다.', true);
+    return;
+  }
+
+  // Update comment count
+  const post = allPosts.find(p => p.id === postId);
+  if (post) post.comment_count = (post.comment_count || 0) + 1;
+
+  // Refresh
+  const comments = await fetchComments(postId);
+  const expandInner = document.getElementById('expand-' + postId);
+  if (expandInner && post) {
+    expandInner.innerHTML = buildExpandContent(post, comments);
+  }
+
+  showToast('답글이 등록되었습니다.');
+}
+
 // ── Fetch comments ──
 async function fetchComments(postId) {
   if (!db) return [];
   const { data, error } = await db
     .from('ax_comments')
-    .select('id, post_id, content, author_name, user_id, created_at')
+    .select('id, post_id, parent_id, content, author_name, user_id, created_at')
     .eq('post_id', postId)
     .order('created_at', { ascending: true });
 
