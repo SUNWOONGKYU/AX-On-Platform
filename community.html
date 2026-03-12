@@ -315,6 +315,24 @@ body {
 .post-stat { display: flex; align-items: center; gap: 4px; }
 .post-time { margin-left: auto; }
 
+/* ── VOTES ── */
+.vote-group {
+  display: flex; align-items: center; gap: 2px;
+}
+.vote-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; padding: 2px 6px; border-radius: 6px;
+  transition: all 0.15s; color: var(--ink-muted);
+  font-family: inherit; line-height: 1;
+}
+.vote-btn:hover { background: rgba(26,26,46,0.06); }
+.vote-btn.voted-up { color: var(--teal); font-weight: 700; }
+.vote-btn.voted-down { color: var(--coral); font-weight: 700; }
+.vote-count {
+  font-size: 12px; font-weight: 700; min-width: 18px;
+  text-align: center; color: var(--ink);
+}
+
 /* ── ACCORDION EXPAND ── */
 .post-expand {
   max-height: 0; overflow: hidden;
@@ -1091,10 +1109,103 @@ async function fetchAllPosts() {
   // Add comment_count from nested ax_comments
   allPosts = (data || []).map(p => ({
     ...p,
-    comment_count: (p.ax_comments || []).length
+    comment_count: (p.ax_comments || []).length,
+    voteScore: 0,
+    userVote: null
   }));
+
+  // Load votes for all posts
+  await loadVotes();
   updateCategoryCounts();
   renderPosts();
+}
+
+// ── Load votes for all posts ──
+async function loadVotes() {
+  if (!db || allPosts.length === 0) return;
+  const postIds = allPosts.map(p => p.id);
+
+  const { data: votes, error } = await db
+    .from('ax_votes')
+    .select('post_id, user_id, vote_type')
+    .in('post_id', postIds);
+
+  if (error) { console.error('loadVotes error:', error); return; }
+  if (!votes) return;
+
+  // Aggregate scores per post
+  const scoreMap = {};
+  const userVoteMap = {};
+  votes.forEach(v => {
+    if (!scoreMap[v.post_id]) scoreMap[v.post_id] = 0;
+    scoreMap[v.post_id] += v.vote_type === 'up' ? 1 : -1;
+    if (currentUser && v.user_id === currentUser.id) {
+      userVoteMap[v.post_id] = v.vote_type;
+    }
+  });
+
+  allPosts.forEach(p => {
+    p.voteScore = scoreMap[p.id] || 0;
+    p.userVote = userVoteMap[p.id] || null;
+  });
+}
+
+// ── Handle vote (toggle) ──
+async function handleVote(postId, voteType) {
+  if (!db || !currentUser) {
+    showToast('로그인이 필요합니다.', true);
+    return;
+  }
+
+  const post = allPosts.find(p => p.id === postId);
+  if (!post) return;
+
+  if (post.userVote === voteType) {
+    // Remove vote (toggle off)
+    const { error } = await db.from('ax_votes')
+      .delete()
+      .eq('post_id', postId)
+      .eq('user_id', currentUser.id);
+    if (error) { showToast('투표 취소 실패', true); return; }
+    post.voteScore += voteType === 'up' ? -1 : 1;
+    post.userVote = null;
+  } else if (post.userVote) {
+    // Change vote direction
+    const { error } = await db.from('ax_votes')
+      .update({ vote_type: voteType })
+      .eq('post_id', postId)
+      .eq('user_id', currentUser.id);
+    if (error) { showToast('투표 변경 실패', true); return; }
+    post.voteScore += voteType === 'up' ? 2 : -2;
+    post.userVote = voteType;
+  } else {
+    // New vote
+    const { error } = await db.from('ax_votes').insert({
+      post_id: postId, user_id: currentUser.id, vote_type: voteType
+    });
+    if (error) { showToast('투표 실패', true); return; }
+    post.voteScore += voteType === 'up' ? 1 : -1;
+    post.userVote = voteType;
+  }
+
+  renderPosts();
+}
+
+// ── Share post ──
+async function sharePost(postId, title) {
+  const url = window.location.origin + '/community.html?post=' + postId;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: title || 'AX-On 게시글', url: url });
+    } catch (e) { /* user cancelled */ }
+  } else {
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast('링크가 복사되었습니다.');
+    } catch (e) {
+      showToast('링크 복사에 실패했습니다.', true);
+    }
+  }
 }
 
 // ── Category counts ──
@@ -1140,7 +1251,13 @@ function renderPosts() {
               <div class="author-avatar">${authorInitial}</div>
               <span class="author-name">${escapeHtml(post.author_name || '익명')}</span>
             </div>
+            <div class="vote-group" onclick="event.stopPropagation();">
+              <button class="vote-btn${post.userVote === 'up' ? ' voted-up' : ''}" onclick="handleVote('${post.id}', 'up')" title="추천">▲</button>
+              <span class="vote-count" id="voteCount-${post.id}">${post.voteScore || 0}</span>
+              <button class="vote-btn${post.userVote === 'down' ? ' voted-down' : ''}" onclick="handleVote('${post.id}', 'down')" title="비추천">▼</button>
+            </div>
             <div class="post-stat">💬 ${post.comment_count || 0}</div>
+            <button class="vote-btn" onclick="event.stopPropagation(); sharePost('${post.id}', \`${escapeHtml(post.title)}\`)" title="공유">🔗</button>
             <span class="post-time">${timeAgo(post.created_at)}</span>
           </div>
         </div>
