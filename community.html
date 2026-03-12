@@ -328,6 +328,35 @@ body {
 /* ── MAIN FEED ── */
 .feed-main { min-width: 0; }
 
+/* ── NOTICE PIN ── */
+.notice-pin {
+  background: rgba(220,38,38,0.04);
+  border: 1px solid rgba(220,38,38,0.15);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.notice-pin-header {
+  font-size: 11px; font-weight: 700;
+  color: #DC2626; letter-spacing: 1px;
+  padding: 8px 16px 6px;
+  border-bottom: 1px solid rgba(220,38,38,0.1);
+}
+.notice-pin-item {
+  border-bottom: 1px solid rgba(220,38,38,0.08);
+  cursor: pointer;
+}
+.notice-pin-item:last-of-type { border-bottom: none; }
+.notice-pin-item .post-card-header { padding: 10px 16px; }
+.notice-pin-item .post-card-header:hover { background: rgba(220,38,38,0.04); }
+.notice-more-btn {
+  display: block; width: 100%;
+  background: none; border: none; border-top: 1px solid rgba(220,38,38,0.1);
+  color: #DC2626; font-size: 12px; font-weight: 600;
+  padding: 8px; cursor: pointer; text-align: center;
+}
+.notice-more-btn:hover { background: rgba(220,38,38,0.06); }
+
 /* ── POST CARD ── */
 .post-card {
   background: var(--surface-card);
@@ -1509,10 +1538,41 @@ function updateCategoryCounts() {
 }
 
 // ── Render posts ──
+let showAllNotices = false;
+
+function toggleAllNotices() {
+  showAllNotices = !showAllNotices;
+  renderPosts();
+}
+
+function renderNoticePin() {
+  const notices = allPosts.filter(p => p.category === 'notice');
+  if (!notices.length) return '';
+  const visible = showAllNotices ? notices : notices.slice(0, 3);
+  const hasMore = notices.length > 3;
+  return `<div class="notice-pin" id="noticePin">
+    <div class="notice-pin-header">📢 공지사항</div>
+    ${visible.map(post => {
+      const isExpanded = state.expandedPostId === post.id;
+      return `<div class="notice-pin-item${isExpanded ? ' expanded' : ''}" id="post-${post.id}">
+        <div class="post-card-header" onclick="togglePost('${post.id}')">
+          <div class="post-title" style="font-size:14px;">${escapeHtml(post.title)}</div>
+          <div class="post-footer">
+            <span class="author-name" style="font-size:12px;">${escapeHtml(post.author_name || '관리자')}</span>
+            <span class="post-time">${timeAgo(post.created_at)}</span>
+          </div>
+        </div>
+        <div class="post-expand"><div class="post-expand-inner" id="expand-${post.id}">${isExpanded ? buildExpandContent(post) : ''}</div></div>
+      </div>`;
+    }).join('')}
+    ${hasMore ? `<button class="notice-more-btn" onclick="toggleAllNotices()">${showAllNotices ? '▲ 접기' : '▼ 더 보기 (' + (notices.length - 3) + '개)'}</button>` : ''}
+  </div>`;
+}
+
 function renderPosts() {
   const list = document.getElementById('postList');
   let filtered = state.currentCat === 'all'
-    ? allPosts
+    ? allPosts.filter(p => p.category !== 'notice')
     : allPosts.filter(p => p.category === state.currentCat);
 
   // Filter by selected project
@@ -1520,12 +1580,15 @@ function renderPosts() {
     filtered = filtered.filter(p => p.project_id === selectedProjectId);
   }
 
-  if (filtered.length === 0) {
+  // Prepend pinned notices (except when already viewing notice category)
+  const noticeHtml = state.currentCat !== 'notice' ? renderNoticePin() : '';
+
+  if (filtered.length === 0 && !noticeHtml) {
     list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">아직 게시글이 없습니다. 첫 글을 작성해보세요!</div></div>';
     return;
   }
 
-  list.innerHTML = filtered.map(post => {
+  list.innerHTML = noticeHtml + filtered.map(post => {
     const cat = CATEGORY_META[post.category] || CATEGORY_META.discussion;
     const preview = (post.content || '').substring(0, 120).replace(/\n/g, ' ');
     const authorInitial = (post.author_name || '?').charAt(0).toUpperCase();
