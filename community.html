@@ -229,17 +229,17 @@ body {
 }
 .sidebar-section { margin-bottom: 24px; }
 .sidebar-title {
-  font-size: 11px; font-weight: 700;
-  color: var(--ink-muted); text-transform: uppercase;
-  letter-spacing: 1.5px; margin-bottom: 8px;
-  padding: 0 8px;
+  font-size: 15px; font-weight: 600;
+  color: var(--ink-muted);
+  margin-bottom: 8px;
+  padding: 4px 12px;
 }
 .cat-list { display: flex; flex-direction: column; gap: 2px; }
 .cat-item {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 12px; border-radius: 10px;
   cursor: pointer; transition: all 0.2s ease;
-  color: var(--ink-muted); font-size: 14px; font-weight: 500;
+  color: var(--ink-muted); font-size: 15px; font-weight: 600;
   border: 1px solid transparent;
 }
 .cat-item:hover { background: var(--surface-card); color: var(--ink); box-shadow: var(--shadow-soft); }
@@ -251,21 +251,24 @@ body {
 .cat-count {
   font-size: 11px; background: rgba(26,26,46,0.06);
   padding: 2px 7px; border-radius: 20px; color: var(--ink-muted);
+  min-width: 28px; text-align: center;
 }
 .cat-item.active .cat-count { background: rgba(124, 92, 224, 0.15); color: var(--violet); }
 
 /* ── GUIDE LIST (지식 허브 아코디언) ── */
 .cat-write-btn {
-  background: none; border: none; cursor: pointer;
-  font-size: 12px; padding: 0; opacity: 0.4;
-  transition: opacity 0.15s; line-height: 1;
+  background: rgba(124,92,224,0.1); border: 1px solid rgba(124,92,224,0.25);
+  cursor: pointer; font-size: 11px; font-weight: 700;
+  padding: 2px 7px; border-radius: 6px; color: var(--violet);
+  transition: all 0.15s; line-height: 1.6;
+  font-family: 'Noto Sans KR', sans-serif; white-space: nowrap;
 }
-.cat-item:hover .cat-write-btn, .cat-write-btn:hover { opacity: 1; }
+.cat-write-btn:hover { background: rgba(124,92,224,0.22); border-color: var(--violet); }
 .cat-knowledge {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 12px; border-radius: 10px;
   cursor: pointer; transition: all 0.2s ease;
-  color: var(--ink-muted); font-size: 14px; font-weight: 500;
+  color: var(--ink-muted); font-size: 15px; font-weight: 600;
   border: 1px solid transparent; user-select: none;
 }
 .cat-knowledge:hover { background: var(--surface-card); color: var(--ink); box-shadow: var(--shadow-soft); }
@@ -275,7 +278,7 @@ body {
 }
 .knowledge-chevron {
   background: none; border: none; cursor: pointer;
-  font-size: 13px; color: inherit; padding: 0 0 0 4px;
+  font-size: 18px; color: inherit; padding: 0 0 0 4px;
   transition: transform 0.2s; line-height: 1; flex-shrink: 0;
 }
 .knowledge-guides {
@@ -926,11 +929,7 @@ body {
       <div class="page-title">AI 전문가 <span>커뮤니티</span></div>
       <div class="page-subtitle">AI 전문가들의 지식 공유 · 프로젝트 협업 · 네트워킹 공간</div>
     </div>
-    <div class="page-header-actions">
-      <button class="btn-write" id="btnWrite" onclick="openWriteModal()">
-        ✏️ 글쓰기
-      </button>
-    </div>
+    <div class="page-header-actions"></div>
   </div>
 </div>
 
@@ -959,14 +958,14 @@ body {
           <span><span class="cat-icon">💬</span>자유토론</span>
           <span style="display:flex;align-items:center;gap:5px;">
             <span class="cat-count" id="cnt-discussion">0</span>
-            <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">✏️</button>
+            <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">글쓰기</button>
           </span>
         </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="reference" onclick="filterCategory(this,'reference')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'reference')}">
           <span><span class="cat-icon">📚</span>참고자료</span>
           <span style="display:flex;align-items:center;gap:5px;">
             <span class="cat-count" id="cnt-reference">0</span>
-            <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='reference';openWriteModal();" title="참고자료 올리기">✏️</button>
+            <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='reference';openWriteModal();" title="참고자료 올리기">글쓰기</button>
           </span>
         </div>
         <!-- 지식 허브 아코디언 -->
@@ -1012,7 +1011,7 @@ body {
   <!-- SIDEBAR RIGHT: 프로젝트 -->
   <aside class="sidebar-right" id="sidebarRight">
     <div class="sidebar-section">
-      <div class="sidebar-title">프로젝트</div>
+      <div class="sidebar-title">🏗 프로젝트</div>
       <div class="project-list" id="projectList">
         <div style="font-size:13px;color:var(--ink-muted);padding:8px;">불러오는 중...</div>
       </div>
@@ -1942,6 +1941,7 @@ function openProjectWriteModal() {
     showToast('로그인이 필요합니다.', true);
     return;
   }
+  selectedWriteCat = 'project';
   openWriteModal();
 }
 
@@ -2030,10 +2030,12 @@ function openWriteModal() {
     return;
   }
   // ensure valid write cat
-  if (selectedWriteCat !== 'discussion' && selectedWriteCat !== 'reference') {
+  if (!['discussion', 'reference', 'project'].includes(selectedWriteCat)) {
     selectedWriteCat = 'discussion';
   }
-  const catLabel = selectedWriteCat === 'reference' ? '📚 참고자료 글쓰기' : '💬 자유토론 글쓰기';
+  const catLabel = selectedWriteCat === 'reference' ? '📚 참고자료 글쓰기'
+    : selectedWriteCat === 'project' ? '🏗 프로젝트 글쓰기'
+    : '💬 자유토론 글쓰기';
   const titleEl = document.getElementById('writeModalTitle');
   if (titleEl) titleEl.textContent = catLabel;
   // sync file upload visibility
