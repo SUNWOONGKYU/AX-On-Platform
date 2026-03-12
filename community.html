@@ -254,15 +254,36 @@ body {
 }
 .cat-item.active .cat-count { background: rgba(124, 92, 224, 0.15); color: var(--violet); }
 
-/* ── GUIDE LIST (지식Hub 가이드) ── */
-.guide-list { display: flex; flex-direction: column; gap: 4px; }
+/* ── GUIDE LIST (지식 허브 아코디언) ── */
+.cat-knowledge {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; border-radius: 10px;
+  cursor: pointer; transition: all 0.2s ease;
+  color: var(--ink-muted); font-size: 14px; font-weight: 500;
+  border: 1px solid transparent; user-select: none;
+}
+.cat-knowledge:hover { background: var(--surface-card); color: var(--ink); box-shadow: var(--shadow-soft); }
+.cat-knowledge.active {
+  background: rgba(124, 92, 224, 0.12);
+  color: var(--violet); border-color: rgba(124, 92, 224, 0.2);
+}
+.knowledge-chevron {
+  background: none; border: none; cursor: pointer;
+  font-size: 13px; color: inherit; padding: 0 0 0 4px;
+  transition: transform 0.2s; line-height: 1; flex-shrink: 0;
+}
+.knowledge-guides {
+  display: none; flex-direction: column; gap: 3px;
+  padding: 4px 0 4px 8px;
+}
+.knowledge-guides.open { display: flex; }
 .guide-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 12px; border-radius: 10px;
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 10px; border-radius: 8px;
   text-decoration: none; color: var(--ink);
   border: 1px solid var(--border);
   transition: all 0.2s ease;
-  font-size: 13px;
+  font-size: 12px;
 }
 .guide-item:hover {
   background: rgba(232,146,13,0.08);
@@ -270,13 +291,8 @@ body {
   color: var(--ink);
   text-decoration: none;
 }
-.guide-icon { font-size: 16px; flex-shrink: 0; }
-.guide-label { flex: 1; font-weight: 500; line-height: 1.3; }
-.guide-badge {
-  font-size: 10px; font-weight: 700;
-  background: rgba(232,146,13,0.12); color: var(--amber);
-  padding: 2px 6px; border-radius: 4px; flex-shrink: 0;
-}
+.guide-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.guide-label { flex: 1; font-weight: 500; line-height: 1.4; }
 
 /* ── SIDEBAR RIGHT: 프로젝트 ── */
 .sidebar-right {
@@ -899,12 +915,7 @@ body {
   <!-- SIDEBAR LEFT: Categories -->
   <aside class="sidebar-left" id="sidebarLeft">
     <div class="sidebar-section">
-      <div class="sidebar-title">카테고리</div>
       <div class="cat-list" id="catList">
-        <div class="cat-item active" role="button" tabindex="0" data-cat="all" onclick="filterCategory(this, 'all')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'all')}">
-          <span>전체</span>
-          <span class="cat-count" id="cnt-all">0</span>
-        </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="notice" onclick="filterCategory(this, 'notice')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'notice')}">
           <span><span class="cat-icon">📢</span>공지사항</span>
           <span class="cat-count" id="cnt-notice">0</span>
@@ -917,36 +928,35 @@ body {
           <span><span class="cat-icon">📚</span>참고자료</span>
           <span class="cat-count" id="cnt-reference">0</span>
         </div>
-        <div class="cat-item" role="button" tabindex="0" data-cat="project" onclick="filterCategory(this, 'project')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'project')}">
-          <span><span class="cat-icon">🏗</span>프로젝트</span>
-          <span class="cat-count" id="cnt-project">0</span>
+        <!-- 지식 허브 아코디언 -->
+        <div class="cat-knowledge" id="catKnowledge" data-cat="knowledge" role="button" tabindex="0"
+          onclick="filterCategory(this,'knowledge')"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'knowledge')}">
+          <span><span class="cat-icon">💡</span>지식HUB</span>
+          <span style="display:flex;align-items:center;gap:6px;">
+            <span class="cat-count" id="cnt-knowledge">0</span>
+            <button type="button" class="knowledge-chevron" id="knowledgeChevron"
+              onclick="event.stopPropagation();toggleKnowledgeGuides()" aria-label="가이드 목록 펼치기">▾</button>
+          </span>
         </div>
-        <div class="cat-item" role="button" tabindex="0" data-cat="knowledge" onclick="filterCategory(this, 'knowledge')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'knowledge')}">
-          <span><span class="cat-icon">💡</span>지식Hub</span>
-          <span class="cat-count" id="cnt-knowledge">0</span>
+        <div class="knowledge-guides" id="knowledgeGuides">
+          <a href="guides/claude-code-guide.html" target="_blank" class="guide-item">
+            <span class="guide-icon">📘</span>
+            <span class="guide-label">Claude Code Master Guide</span>
+          </a>
+          <a href="guides/fullstack-guide.html" target="_blank" class="guide-item">
+            <span class="guide-icon">📗</span>
+            <span class="guide-label">풀스택 웹사이트 개발 기초지식</span>
+          </a>
+          <a href="guides/sal-grid-patent.html" target="_blank" class="guide-item">
+            <span class="guide-icon">📄</span>
+            <span class="guide-label">SAL Grid 개발 방법론 — 특허 소개서</span>
+          </a>
+          <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item">
+            <span class="guide-icon">📄</span>
+            <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
+          </a>
         </div>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-title">지식Hub 가이드</div>
-      <div class="guide-list">
-        <a href="guides/claude-code-guide.html" target="_blank" class="guide-item">
-          <span class="guide-icon">📘</span>
-          <span class="guide-label">Claude Code Master Guide</span>
-        </a>
-        <a href="guides/fullstack-guide.html" target="_blank" class="guide-item">
-          <span class="guide-icon">📗</span>
-          <span class="guide-label">풀스택 웹사이트 개발 기초지식</span>
-        </a>
-        <a href="guides/sal-grid-patent.html" target="_blank" class="guide-item">
-          <span class="guide-icon">📄</span>
-          <span class="guide-label">SAL Grid 개발 방법론 — 특허 소개서</span>
-        </a>
-        <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item">
-          <span class="guide-icon">📄</span>
-          <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
-        </a>
       </div>
     </div>
   </aside>
@@ -1872,14 +1882,11 @@ function selectProject(projectId) {
     // Deselect - show all
     selectedProjectId = null;
     state.currentCat = 'all';
-    document.querySelectorAll('#catList .cat-item').forEach(i => i.classList.remove('active'));
-    document.querySelector('#catList .cat-item[data-cat="all"]').classList.add('active');
+    document.querySelectorAll('#catList .cat-item, #catList .cat-knowledge').forEach(i => i.classList.remove('active'));
   } else {
     selectedProjectId = projectId;
     state.currentCat = 'project';
-    document.querySelectorAll('#catList .cat-item').forEach(i => i.classList.remove('active'));
-    const projCat = document.querySelector('#catList .cat-item[data-cat="project"]');
-    if (projCat) projCat.classList.add('active');
+    document.querySelectorAll('#catList .cat-item, #catList .cat-knowledge').forEach(i => i.classList.remove('active'));
   }
   renderProjectsSidebar();
   renderPosts();
@@ -1925,9 +1932,18 @@ function showNewProjectInput() {
   if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
+// ── Knowledge Hub accordion ──
+function toggleKnowledgeGuides() {
+  const guides = document.getElementById('knowledgeGuides');
+  const chevron = document.getElementById('knowledgeChevron');
+  const isOpen = guides.classList.contains('open');
+  guides.classList.toggle('open', !isOpen);
+  chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
 // ── Category filtering ──
 function filterCategory(el, cat) {
-  document.querySelectorAll('#catList .cat-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('#catList .cat-item, #catList .cat-knowledge').forEach(i => i.classList.remove('active'));
   el.classList.add('active');
   state.currentCat = cat;
   state.expandedPostId = null;
@@ -1945,7 +1961,7 @@ function mobileCatSelect(el, cat) {
   state.expandedPostId = null;
   renderPosts();
   // Sync sidebar
-  document.querySelectorAll('#catList .cat-item').forEach(i => {
+  document.querySelectorAll('#catList .cat-item, #catList .cat-knowledge').forEach(i => {
     i.classList.toggle('active', i.dataset.cat === cat);
   });
 }

@@ -1038,7 +1038,6 @@ a:hover { text-decoration: underline; }
             <span class="pill-option" data-value="에너지·환경">⚡ 에너지·환경</span>
             <span class="pill-option" data-value="물류·운송">🚚 물류·운송</span>
             <span class="pill-option" data-value="농업·식품">🌾 농업·식품</span>
-            <span class="pill-option" data-value="부동산(PropTech)">🏠 부동산(PropTech)</span>
             <span class="pill-option" data-value="관광·호텔·외식">🏨 관광·호텔·외식</span>
             <span class="pill-option" data-value="법률·법무서비스">⚖️ 법률·법무서비스</span>
             <span class="pill-option" data-value="공공·사회서비스">🏛️ 공공·사회서비스</span>
@@ -1047,21 +1046,21 @@ a:hover { text-decoration: underline; }
         <div class="form-group">
           <label class="form-label">전문 분야 — 기능 <span class="form-hint">(해당하는 기능 분야를 선택해주세요, 복수 선택 가능)</span></label>
           <div class="pill-select" id="functionPills">
-            <span class="pill-option" data-value="경영·재무">💰 경영·재무</span>
-            <span class="pill-option" data-value="마케팅·영업">📈 마케팅·영업</span>
-            <span class="pill-option" data-value="운영·관리">⚙️ 운영·관리</span>
-            <span class="pill-option" data-value="인사">👥 인사</span>
-            <span class="pill-option" data-value="IT·보안">🔐 IT·보안</span>
-            <span class="pill-option" data-value="전략·재무">💼 전략·재무</span>
-            <span class="pill-option" data-value="생산·운영">🏭 생산·운영</span>
-            <span class="pill-option" data-value="영업·마케팅">📊 영업·마케팅</span>
-            <span class="pill-option" data-value="경영·전략">🎯 경영·전략</span>
-            <span class="pill-option" data-value="재무·감사">📋 재무·감사</span>
-            <span class="pill-option" data-value="제조·운영">🏭 제조·운영</span>
-            <span class="pill-option" data-value="금융·투자">💹 금융·투자</span>
+            <span class="pill-option" data-value="경영전략">🎯 경영전략</span>
+            <span class="pill-option" data-value="재무·회계·감사">💰 재무·회계·감사</span>
+            <span class="pill-option" data-value="인사·조직">👥 인사·조직</span>
+            <span class="pill-option" data-value="영업·마케팅">📈 영업·마케팅</span>
+            <span class="pill-option" data-value="생산·제조">🏭 생산·제조</span>
             <span class="pill-option" data-value="법무·컴플라이언스">⚖️ 법무·컴플라이언스</span>
-            <span class="pill-option" data-value="AI 오케스트레이터">🤖 AI 오케스트레이터</span>
-            <span class="pill-option" data-value="연구·개발">🔬 연구·개발</span>
+            <span class="pill-option" data-value="IT·보안">🔐 IT·보안</span>
+            <span class="pill-option" data-value="R&amp;D·제품·품질">🔬 R&amp;D·제품·품질</span>
+            <span class="pill-option" data-value="금융·투자">💹 금융·투자</span>
+            <span class="pill-option" data-value="고객서비스">🎧 고객서비스</span>
+            <span class="pill-option" data-value="구매·조달">📦 구매·조달</span>
+            <span class="pill-option" data-value="물류·SCM">🚚 물류·SCM</span>
+            <span class="pill-option" data-value="총무·시설관리">🏢 총무·시설관리</span>
+            <span class="pill-option" data-value="환경·안전">🌿 환경·안전</span>
+            <span class="pill-option" data-value="홍보·커뮤니케이션">📢 홍보·커뮤니케이션</span>
           </div>
         </div>
 
@@ -1831,6 +1830,9 @@ function buildReview() {
     '<div class="review-section-header"><span class="review-section-title">2. AI 역량</span><button type="button" class="review-edit-btn" onclick="goStep(2)">수정하기</button></div>' +
     (data.ai_experience ? reviewRow('AI 경험', data.ai_experience) : reviewRow('AI 경험', '-')) +
     (data.ai_projects ? reviewRow('대표 프로젝트', data.ai_projects) : reviewRow('대표 프로젝트', '-')) +
+    '<div class="review-row"><span class="review-label">전문 분야</span><div class="review-pills">' +
+    (data.specialties && data.specialties.length > 0 ? data.specialties.map(s => '<span class="review-pill">' + escapeHtml(s) + '</span>').join('') : '<span style="color:var(--ink-muted);font-size:13px;">-</span>') +
+    '</div></div>' +
     '<div class="review-row"><span class="review-label">AI 도구</span><div class="review-pills">' +
     (data.ai_tools.length > 0 ? data.ai_tools.map(t => '<span class="review-pill">' + escapeHtml(t) + '</span>').join('') : '<span style="color:var(--ink-muted);font-size:13px;">-</span>') +
     '</div></div>' +
