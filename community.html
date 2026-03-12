@@ -453,6 +453,52 @@ body {
 }
 .btn-comment-submit:hover { background: #6a49d4; }
 
+/* ── WIKI EDIT (knowledge hub) ── */
+.wiki-toolbar {
+  display: flex; align-items: center; gap: 8px;
+  margin: 12px 0; padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+.btn-wiki {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid var(--border); background: var(--surface-card);
+  color: var(--ink-muted); font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.btn-wiki:hover { background: var(--surface-warm); color: var(--ink); }
+.btn-wiki.primary { background: var(--teal); color: #fff; border-color: transparent; }
+.btn-wiki.primary:hover { background: #0d8577; }
+.wiki-edit-area {
+  margin: 12px 0; padding: 16px;
+  background: var(--surface-card); border: 1.5px solid var(--border);
+  border-radius: 12px;
+}
+.wiki-edit-area textarea {
+  width: 100%; min-height: 200px; border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px; font-size: 14px; line-height: 1.7;
+  font-family: 'Noto Sans KR', sans-serif; color: var(--ink);
+  background: var(--surface); resize: vertical; outline: none;
+}
+.wiki-edit-area textarea:focus { border-color: var(--teal); }
+.wiki-edit-area input {
+  width: 100%; border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif; color: var(--ink);
+  background: var(--surface); outline: none; margin-bottom: 10px;
+}
+.wiki-edit-area input:focus { border-color: var(--teal); }
+.revision-list { margin-top: 12px; }
+.revision-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-bottom: 1px solid rgba(26,26,46,0.05);
+  font-size: 13px;
+}
+.revision-item:last-child { border-bottom: none; }
+.revision-editor { font-weight: 600; color: var(--ink); }
+.revision-time { color: var(--ink-muted); font-size: 12px; }
+.revision-summary { color: var(--ink-muted); font-style: italic; }
+
 /* ── WRITE MODAL ── */
 .write-modal-overlay {
   position: fixed; inset: 0; z-index: 600;
@@ -1199,6 +1245,137 @@ async function handleVote(postId, voteType) {
   renderPosts();
 }
 
+// ── Wiki Edit (Knowledge Hub) ──
+function showWikiEdit(postId) {
+  const container = document.getElementById('wikiEdit-' + postId);
+  if (!container) return;
+
+  // Hide revisions
+  const revContainer = document.getElementById('wikiRevisions-' + postId);
+  if (revContainer) revContainer.style.display = 'none';
+
+  if (container.style.display !== 'none') {
+    container.style.display = 'none';
+    return;
+  }
+
+  const post = allPosts.find(p => p.id === postId);
+  if (!post) return;
+
+  container.innerHTML = `
+    <div class="wiki-edit-area">
+      <input type="text" id="wikiSummary-${postId}" placeholder="편집 요약 (예: 오타 수정, 내용 추가)" maxlength="200">
+      <textarea id="wikiContent-${postId}">${escapeHtml(post.content || '')}</textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px;">
+        <button class="btn-wiki" onclick="document.getElementById('wikiEdit-${postId}').style.display='none'">취소</button>
+        <button class="btn-wiki primary" onclick="submitWikiEdit('${postId}')">저장</button>
+      </div>
+    </div>`;
+  container.style.display = 'block';
+}
+
+async function submitWikiEdit(postId) {
+  if (!db || !currentUser || !currentExpert) {
+    showToast('로그인이 필요합니다.', true);
+    return;
+  }
+
+  const contentEl = document.getElementById('wikiContent-' + postId);
+  const summaryEl = document.getElementById('wikiSummary-' + postId);
+  if (!contentEl) return;
+
+  const newContent = contentEl.value.trim();
+  const editSummary = summaryEl ? summaryEl.value.trim() : '';
+
+  if (!newContent || newContent.length < 10) {
+    showToast('내용을 10자 이상 입력해주세요.', true);
+    return;
+  }
+
+  const sanitizedContent = sanitize(newContent);
+  const post = allPosts.find(p => p.id === postId);
+  if (!post) return;
+
+  // Save current content as revision
+  const editorName = currentExpert.name || currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || '전문가';
+
+  const { error: revError } = await db.from('ax_knowledge_revisions').insert({
+    post_id: postId,
+    user_id: currentUser.id,
+    editor_name: editorName,
+    content: post.content,
+    edit_summary: editSummary || null
+  });
+
+  if (revError) {
+    console.error('revision save error:', revError);
+    showToast('편집 기록 저장에 실패했습니다.', true);
+    return;
+  }
+
+  // Update post content
+  const { error: updateError } = await db.from('ax_posts')
+    .update({ content: sanitizedContent })
+    .eq('id', postId);
+
+  if (updateError) {
+    console.error('wiki edit error:', updateError);
+    showToast('편집 저장에 실패했습니다.', true);
+    return;
+  }
+
+  // Update local state
+  post.content = sanitizedContent;
+
+  // Refresh expand area
+  const comments = await fetchComments(postId);
+  const expandInner = document.getElementById('expand-' + postId);
+  if (expandInner) {
+    expandInner.innerHTML = buildExpandContent(post, comments);
+  }
+
+  showToast('편집이 저장되었습니다.');
+}
+
+async function showRevisionHistory(postId) {
+  const container = document.getElementById('wikiRevisions-' + postId);
+  if (!container) return;
+
+  // Hide edit area
+  const editContainer = document.getElementById('wikiEdit-' + postId);
+  if (editContainer) editContainer.style.display = 'none';
+
+  if (container.style.display !== 'none') {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = '<div style="padding:12px;color:var(--ink-muted);font-size:13px;">편집 기록 불러오는 중...</div>';
+  container.style.display = 'block';
+
+  const { data: revisions, error } = await db
+    .from('ax_knowledge_revisions')
+    .select('id, editor_name, edit_summary, created_at')
+    .eq('post_id', postId)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  if (error || !revisions || revisions.length === 0) {
+    container.innerHTML = '<div style="padding:12px;color:var(--ink-muted);font-size:13px;">편집 기록이 없습니다.</div>';
+    return;
+  }
+
+  container.innerHTML = '<div class="revision-list">' +
+    '<div style="font-size:14px;font-weight:700;margin-bottom:8px;padding:8px 12px;">편집 기록 (' + revisions.length + '건)</div>' +
+    revisions.map(r => `
+      <div class="revision-item">
+        <span class="revision-editor">${escapeHtml(r.editor_name)}</span>
+        <span class="revision-summary">${r.edit_summary ? escapeHtml(r.edit_summary) : '(요약 없음)'}</span>
+        <span class="revision-time" style="margin-left:auto;">${timeAgo(r.created_at)}</span>
+      </div>`
+    ).join('') + '</div>';
+}
+
 // ── Share post ──
 async function sharePost(postId, title) {
   const url = window.location.origin + '/community.html?post=' + postId;
@@ -1333,9 +1510,22 @@ function buildExpandContent(post, comments) {
     </div>`;
   }
 
+  // Wiki edit toolbar for knowledge posts
+  let wikiHtml = '';
+  if (post.category === 'knowledge' && currentUser) {
+    wikiHtml = `
+      <div class="wiki-toolbar">
+        <button class="btn-wiki primary" onclick="event.stopPropagation(); showWikiEdit('${post.id}')">✏ 편집하기</button>
+        <button class="btn-wiki" onclick="event.stopPropagation(); showRevisionHistory('${post.id}')">📜 편집 기록</button>
+      </div>
+      <div id="wikiEdit-${post.id}" style="display:none;"></div>
+      <div id="wikiRevisions-${post.id}" style="display:none;"></div>`;
+  }
+
   let html = `
-    <div class="post-full-content">${sanitizedContent}</div>
+    <div class="post-full-content" id="postContent-${post.id}">${sanitizedContent}</div>
     ${fileHtml}
+    ${wikiHtml}
     <button class="post-collapse-btn" onclick="event.stopPropagation(); togglePost('${post.id}')">▲ 접기</button>
     <div class="comments-section">
       <div class="comments-title">댓글 ${comments.length}개</div>`;
