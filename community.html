@@ -218,7 +218,7 @@ body {
 /* ── LAYOUT ── */
 .community-layout {
   max-width: 1280px; margin: 0 auto; width: 100%;
-  display: grid; grid-template-columns: 240px 1fr;
+  display: grid; grid-template-columns: 200px 1fr 240px;
   gap: 24px; padding: 32px 40px 80px;
   flex: 1;
 }
@@ -254,6 +254,31 @@ body {
 }
 .cat-item.active .cat-count { background: rgba(124, 92, 224, 0.15); color: var(--violet); }
 
+/* ── SIDEBAR RIGHT: 프로젝트 ── */
+.sidebar-right {
+  position: sticky; top: 88px; height: fit-content;
+}
+.project-list { display: flex; flex-direction: column; gap: 6px; }
+.project-item {
+  padding: 10px 12px; border-radius: 10px;
+  cursor: pointer; transition: all 0.2s ease;
+  background: var(--surface-card); border: 1px solid var(--border);
+  font-size: 13px;
+}
+.project-item:hover { box-shadow: var(--shadow-soft); border-color: rgba(124,92,224,0.2); }
+.project-item.active { border-color: var(--violet); background: rgba(124,92,224,0.06); }
+.project-item-name { font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.project-item-desc { font-size: 12px; color: var(--ink-muted); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.project-item-meta { font-size: 11px; color: var(--ink-muted); margin-top: 4px; }
+.btn-project-write {
+  display: block; width: 100%; margin-top: 8px;
+  padding: 8px; border-radius: 8px; border: 1.5px dashed var(--violet);
+  background: none; color: var(--violet); font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.btn-project-write:hover { background: rgba(124,92,224,0.06); }
+
 /* ── MAIN FEED ── */
 .feed-main { min-width: 0; }
 
@@ -287,6 +312,7 @@ body {
 .badge-reference { background: rgba(37,99,235,0.1); color: #2563EB; }
 .badge-discussion { background: rgba(13,148,136,0.1); color: #0d9488; }
 .badge-knowledge { background: rgba(232,146,13,0.1); color: #e8920d; }
+.badge-project { background: rgba(124,92,224,0.1); color: #7c5ce0; }
 
 .post-title {
   font-size: 15px; font-weight: 700;
@@ -745,6 +771,7 @@ body {
     padding: 0 16px 60px; gap: 0;
   }
   .sidebar-left { display: none; }
+  .sidebar-right { display: none; }
   .feed-main { padding-top: 16px; }
 
   /* POST CARD */
@@ -838,6 +865,7 @@ body {
   <button class="mobile-cat-chip" data-cat="notice" onclick="mobileCatSelect(this,'notice')" role="tab" aria-selected="false">📢 공지사항</button>
   <button class="mobile-cat-chip" data-cat="reference" onclick="mobileCatSelect(this,'reference')" role="tab" aria-selected="false">📚 참고자료</button>
   <button class="mobile-cat-chip" data-cat="discussion" onclick="mobileCatSelect(this,'discussion')" role="tab" aria-selected="false">💬 자유토론</button>
+  <button class="mobile-cat-chip" data-cat="project" onclick="mobileCatSelect(this,'project')" role="tab" aria-selected="false">🏗 프로젝트</button>
   <button class="mobile-cat-chip" data-cat="knowledge" onclick="mobileCatSelect(this,'knowledge')" role="tab" aria-selected="false">💡 지식Hub</button>
 </div>
 
@@ -865,6 +893,10 @@ body {
           <span><span class="cat-icon">📚</span>참고자료</span>
           <span class="cat-count" id="cnt-reference">0</span>
         </div>
+        <div class="cat-item" role="button" tabindex="0" data-cat="project" onclick="filterCategory(this, 'project')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'project')}">
+          <span><span class="cat-icon">🏗</span>프로젝트</span>
+          <span class="cat-count" id="cnt-project">0</span>
+        </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="knowledge" onclick="filterCategory(this, 'knowledge')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'knowledge')}">
           <span><span class="cat-icon">💡</span>지식Hub</span>
           <span class="cat-count" id="cnt-knowledge">0</span>
@@ -879,6 +911,16 @@ body {
       <div class="loading-state">불러오는 중...</div>
     </div>
   </main>
+
+  <!-- SIDEBAR RIGHT: 프로젝트 -->
+  <aside class="sidebar-right" id="sidebarRight">
+    <div class="sidebar-section">
+      <div class="sidebar-title">프로젝트</div>
+      <div class="project-list" id="projectList">
+        <div style="font-size:13px;color:var(--ink-muted);padding:8px;">불러오는 중...</div>
+      </div>
+    </div>
+  </aside>
 
 </div>
 
@@ -897,6 +939,10 @@ body {
         <label class="cat-radio-item" data-cat="reference" onclick="selectWriteCat(this,'reference')">
           <input type="radio" name="writeCategory" value="reference">
           📚 참고자료
+        </label>
+        <label class="cat-radio-item" data-cat="project" onclick="selectWriteCat(this,'project')">
+          <input type="radio" name="writeCategory" value="project">
+          🏗 프로젝트
         </label>
         <!-- 관리자 전용 카테고리 (JS에서 admin일 때만 표시) -->
         <label class="cat-radio-item admin-only-cat" data-cat="notice" onclick="selectWriteCat(this,'notice')" style="display:none;">
@@ -924,6 +970,23 @@ body {
         <span style="font-size:12px;color:var(--ink-muted);">최대 20MB</span>
       </div>
       <div id="filePreview" style="margin-top:6px;font-size:12px;color:var(--ink-muted);"></div>
+    </div>
+    <div class="form-group" id="projectSelectGroup" style="display:none;">
+      <label class="form-label">프로젝트 선택 <span style="color:var(--coral);">*</span></label>
+      <div style="display:flex;gap:8px;">
+        <select class="form-input" id="writeProjectId" style="flex:1;">
+          <option value="">프로젝트를 선택하세요</option>
+        </select>
+        <button type="button" class="btn-submit" style="padding:8px 14px;font-size:13px;" onclick="showNewProjectInput()">+ 새 프로젝트</button>
+      </div>
+      <div id="newProjectInput" style="display:none;margin-top:8px;">
+        <input type="text" class="form-input" id="newProjectName" placeholder="새 프로젝트 이름" maxlength="100" style="margin-bottom:6px;">
+        <input type="text" class="form-input" id="newProjectDesc" placeholder="프로젝트 설명 (선택)" maxlength="300">
+      </div>
+    </div>
+    <div class="form-group" id="tagGroup" style="display:none;">
+      <label class="form-label">태그 (쉼표로 구분)</label>
+      <input type="text" class="form-input" id="writeTags" placeholder="AI, 제조, 교육 등" maxlength="200">
     </div>
     <div class="form-footer">
       <button class="btn-cancel" onclick="closeWriteModal()">취소</button>
@@ -982,8 +1045,9 @@ let state = {
 const CATEGORY_META = {
   all:        { label: '전체',     badge: '',                icon: '' },
   notice:     { label: '공지사항', badge: 'badge-notice',    icon: '📢' },
-  reference:  { label: '참고자료', badge: 'badge-reference',  icon: '📚' },
   discussion: { label: '자유토론', badge: 'badge-discussion', icon: '💬' },
+  reference:  { label: '참고자료', badge: 'badge-reference',  icon: '📚' },
+  project:    { label: '프로젝트', badge: 'badge-project',    icon: '🏗' },
   knowledge:  { label: '지식Hub',  badge: 'badge-knowledge',  icon: '💡' }
 };
 
@@ -1142,6 +1206,7 @@ function showCommunity() {
   // Default select discussion category radio in write modal
   selectWriteCat(document.querySelector('.cat-radio-item[data-cat="discussion"]'), 'discussion');
   fetchAllPosts();
+  loadProjectsSidebar();
 }
 
 // ── Fetch posts ──
@@ -1150,7 +1215,7 @@ async function fetchAllPosts() {
 
   const { data, error } = await db
     .from('ax_posts')
-    .select('id, title, content, category, user_id, author_name, created_at, file_url, file_name, ax_comments(id)')
+    .select('id, title, content, category, user_id, author_name, created_at, file_url, file_name, project_id, tags, ax_comments(id)')
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -1395,7 +1460,7 @@ async function sharePost(postId, title) {
 
 // ── Category counts ──
 function updateCategoryCounts() {
-  const counts = { all: allPosts.length, notice: 0, reference: 0, discussion: 0, knowledge: 0 };
+  const counts = { all: allPosts.length, notice: 0, discussion: 0, reference: 0, project: 0, knowledge: 0 };
   allPosts.forEach(p => {
     if (counts[p.category] !== undefined) counts[p.category]++;
   });
@@ -1408,9 +1473,14 @@ function updateCategoryCounts() {
 // ── Render posts ──
 function renderPosts() {
   const list = document.getElementById('postList');
-  const filtered = state.currentCat === 'all'
+  let filtered = state.currentCat === 'all'
     ? allPosts
     : allPosts.filter(p => p.category === state.currentCat);
+
+  // Filter by selected project
+  if (selectedProjectId) {
+    filtered = filtered.filter(p => p.project_id === selectedProjectId);
+  }
 
   if (filtered.length === 0) {
     list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">아직 게시글이 없습니다. 첫 글을 작성해보세요!</div></div>';
@@ -1428,6 +1498,7 @@ function renderPosts() {
         <div class="post-card-header" onclick="togglePost('${post.id}')">
           <div class="post-meta">
             <span class="post-category-badge ${cat.badge}">${escapeHtml(cat.label)}</span>
+            ${Array.isArray(post.tags) && post.tags.length ? post.tags.map(t => '<span style="font-size:11px;color:var(--teal);background:rgba(13,148,136,0.08);padding:2px 8px;border-radius:12px;">#' + escapeHtml(t) + '</span>').join('') : ''}
           </div>
           <div class="post-title">${escapeHtml(post.title)}</div>
           <div class="post-preview">${post.file_name ? '📎 ' + escapeHtml(post.file_name) + ' — ' : ''}${escapeHtml(preview)}</div>
@@ -1712,6 +1783,102 @@ async function submitComment(postId) {
   showToast('댓글이 등록되었습니다.');
 }
 
+// ── Projects sidebar ──
+let allProjects = [];
+let selectedProjectId = null;
+
+async function loadProjectsSidebar() {
+  if (!db) return;
+  const { data, error } = await db
+    .from('ax_projects')
+    .select('id, name, description, status, assigned_experts, created_at')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false });
+
+  if (error) { console.error('loadProjects error:', error); return; }
+  allProjects = data || [];
+  renderProjectsSidebar();
+}
+
+function renderProjectsSidebar() {
+  const container = document.getElementById('projectList');
+  if (!container) return;
+
+  if (allProjects.length === 0) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--ink-muted);padding:8px;">등록된 프로젝트가 없습니다.</div>';
+    return;
+  }
+
+  container.innerHTML = allProjects.map(p => {
+    const expertCount = Array.isArray(p.assigned_experts) ? p.assigned_experts.length : 0;
+    return `
+      <div class="project-item${selectedProjectId === p.id ? ' active' : ''}" onclick="selectProject('${p.id}')">
+        <div class="project-item-name">${escapeHtml(p.name)}</div>
+        ${p.description ? '<div class="project-item-desc">' + escapeHtml(p.description) + '</div>' : ''}
+        <div class="project-item-meta">${expertCount > 0 ? '전문가 ' + expertCount + '명' : ''} ${timeAgo(p.created_at)}</div>
+      </div>`;
+  }).join('') +
+  '<button class="btn-project-write" onclick="openProjectWriteModal()">+ 프로젝트 글쓰기</button>';
+}
+
+function selectProject(projectId) {
+  if (selectedProjectId === projectId) {
+    // Deselect - show all
+    selectedProjectId = null;
+    state.currentCat = 'all';
+    document.querySelectorAll('#catList .cat-item').forEach(i => i.classList.remove('active'));
+    document.querySelector('#catList .cat-item[data-cat="all"]').classList.add('active');
+  } else {
+    selectedProjectId = projectId;
+    state.currentCat = 'project';
+    document.querySelectorAll('#catList .cat-item').forEach(i => i.classList.remove('active'));
+    const projCat = document.querySelector('#catList .cat-item[data-cat="project"]');
+    if (projCat) projCat.classList.add('active');
+  }
+  renderProjectsSidebar();
+  renderPosts();
+}
+
+function openProjectWriteModal() {
+  if (!currentUser || !currentExpert) {
+    showToast('로그인이 필요합니다.', true);
+    return;
+  }
+  openWriteModal();
+  // Auto-select project category
+  const projRadio = document.querySelector('.cat-radio-item[data-cat="project"]');
+  if (projRadio) selectWriteCat(projRadio, 'project');
+  // Pre-select project if one is selected
+  if (selectedProjectId) {
+    setTimeout(() => {
+      const sel = document.getElementById('writeProjectId');
+      if (sel) sel.value = selectedProjectId;
+    }, 200);
+  }
+}
+
+async function loadProjectList() {
+  if (!db) return;
+  const select = document.getElementById('writeProjectId');
+  if (!select) return;
+
+  const { data, error } = await db
+    .from('ax_projects')
+    .select('id, name')
+    .eq('status', 'active')
+    .order('name', { ascending: true });
+
+  if (error) return;
+
+  select.innerHTML = '<option value="">프로젝트를 선택하세요</option>' +
+    (data || []).map(p => '<option value="' + p.id + '">' + escapeHtml(p.name) + '</option>').join('');
+}
+
+function showNewProjectInput() {
+  const el = document.getElementById('newProjectInput');
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
 // ── Category filtering ──
 function filterCategory(el, cat) {
   document.querySelectorAll('#catList .cat-item').forEach(i => i.classList.remove('active'));
@@ -1750,9 +1917,18 @@ function selectWriteCat(el, cat) {
   el.classList.add('selected-' + cat);
   selectedWriteCat = cat;
 
-  // Show file upload for reference category
+  // Show/hide conditional fields
   const fileGroup = document.getElementById('fileUploadGroup');
   if (fileGroup) fileGroup.style.display = cat === 'reference' ? 'flex' : 'none';
+
+  const projectGroup = document.getElementById('projectSelectGroup');
+  if (projectGroup) {
+    projectGroup.style.display = cat === 'project' ? 'block' : 'none';
+    if (cat === 'project') loadProjectList();
+  }
+
+  const tagGroup = document.getElementById('tagGroup');
+  if (tagGroup) tagGroup.style.display = cat === 'discussion' ? 'block' : 'none';
 }
 
 function openWriteModal() {
@@ -1768,6 +1944,12 @@ function openWriteModal() {
   if (fileInput) fileInput.value = '';
   const filePreview = document.getElementById('filePreview');
   if (filePreview) filePreview.textContent = '';
+  const tagsInput = document.getElementById('writeTags');
+  if (tagsInput) tagsInput.value = '';
+  const projectSelect = document.getElementById('writeProjectId');
+  if (projectSelect) projectSelect.value = '';
+  const newProjectInput = document.getElementById('newProjectInput');
+  if (newProjectInput) newProjectInput.style.display = 'none';
 }
 
 function closeWriteModal() {
@@ -1836,6 +2018,43 @@ async function submitPost() {
     }
   }
 
+  // Project handling
+  let project_id = null;
+  if (selectedWriteCat === 'project') {
+    const newProjName = document.getElementById('newProjectName');
+    const projSelect = document.getElementById('writeProjectId');
+    if (newProjName && newProjName.value.trim()) {
+      // Create new project
+      const newProjDesc = document.getElementById('newProjectDesc');
+      const { data: newProj, error: projErr } = await db.from('ax_projects').insert({
+        name: sanitize(newProjName.value.trim()),
+        description: newProjDesc ? sanitize(newProjDesc.value.trim()) : null,
+        created_by: currentUser.id
+      }).select().single();
+      if (projErr) {
+        showToast('프로젝트 생성 실패: ' + projErr.message, true);
+        btn.disabled = false; btn.textContent = '등록';
+        return;
+      }
+      project_id = newProj.id;
+    } else if (projSelect && projSelect.value) {
+      project_id = projSelect.value;
+    } else {
+      showToast('프로젝트를 선택하거나 새로 만들어주세요.', true);
+      btn.disabled = false; btn.textContent = '등록';
+      return;
+    }
+  }
+
+  // Tags handling (discussion)
+  let tags = [];
+  if (selectedWriteCat === 'discussion') {
+    const tagsInput = document.getElementById('writeTags');
+    if (tagsInput && tagsInput.value.trim()) {
+      tags = tagsInput.value.split(',').map(t => sanitize(t.trim())).filter(Boolean);
+    }
+  }
+
   const insertData = {
     title: sanitizedTitle,
     content: sanitizedContent,
@@ -1844,6 +2063,8 @@ async function submitPost() {
     author_name: currentExpert.name || currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || '전문가'
   };
   if (file_url) { insertData.file_url = file_url; insertData.file_name = file_name; }
+  if (project_id) insertData.project_id = project_id;
+  if (tags.length) insertData.tags = tags;
 
   const { data, error } = await db.from('ax_posts').insert(insertData).select().single();
 
@@ -1859,9 +2080,12 @@ async function submitPost() {
   // Prepend to local state
   if (data) {
     data.comment_count = 0;
+    data.voteScore = 0;
+    data.userVote = null;
     allPosts.unshift(data);
     updateCategoryCounts();
     renderPosts();
+    if (data.category === 'project') loadProjectsSidebar();
   }
 
   closeWriteModal();
