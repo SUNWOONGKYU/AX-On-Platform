@@ -317,6 +317,8 @@ body {
     <button class="tab-btn" data-tab="expert" onclick="switchTab('expert')">전문가신청<span class="tab-count" id="cnt-expert">0</span></button>
     <button class="tab-btn" data-tab="enrollment" onclick="switchTab('enrollment')">수강신청<span class="tab-count" id="cnt-enrollment">0</span></button>
     <button class="tab-btn" data-tab="report" onclick="switchTab('report')">신고관리<span class="tab-count" id="cnt-report">0</span></button>
+    <button class="tab-btn" data-tab="notice" onclick="switchTab('notice')">공지사항<span class="tab-count" id="cnt-notice">0</span></button>
+    <button class="tab-btn" data-tab="project" onclick="switchTab('project')">프로젝트<span class="tab-count" id="cnt-project">0</span></button>
   </div>
 
   <!-- Filter -->
@@ -355,7 +357,7 @@ body {
 let db = null;
 let currentUser = null;
 let currentTab = 'contact';
-let tabData = { contact: [], expert: [], enrollment: [], report: [] };
+let tabData = { contact: [], expert: [], enrollment: [], report: [], notice: [], project: [] };
 
 // Tab config
 const TAB_CONFIG = {
@@ -413,6 +415,31 @@ const TAB_CONFIG = {
       { key: 'description', label: '상세 설명', full: true, isMessage: true }
     ],
     nameKey: 'reason', subKey: 'target_type', typeColor: 'rgba(232,93,74,0.1)', typeTextColor: '#c0392b'
+  },
+  notice: {
+    table: 'ax_posts',
+    filter: { category: 'notice' },
+    statuses: [],
+    statusLabels: {},
+    fields: [
+      { key: 'title', label: '제목' },
+      { key: 'author_name', label: '작성자' },
+      { key: 'content', label: '내용', full: true, isMessage: true }
+    ],
+    nameKey: 'title', subKey: 'author_name', typeColor: 'rgba(220,38,38,0.1)', typeTextColor: '#dc2626',
+    hasCreate: true
+  },
+  project: {
+    table: 'ax_projects',
+    statuses: ['active', 'completed', 'archived'],
+    statusLabels: { active: '진행중', completed: '완료', archived: '보관' },
+    fields: [
+      { key: 'name', label: '프로젝트명' },
+      { key: 'description', label: '설명', full: true, isMessage: true },
+      { key: 'assigned_experts', label: '배정 전문가', isArray: true }
+    ],
+    nameKey: 'name', subKey: 'description', typeColor: 'rgba(124,92,224,0.1)', typeTextColor: '#7c5ce0',
+    hasCreate: true
   }
 };
 
@@ -471,7 +498,11 @@ async function doLogout() {
 // ── Data Loading ──
 async function loadAllData() {
   const promises = Object.entries(TAB_CONFIG).map(async ([tab, cfg]) => {
-    const { data, error } = await db.from(cfg.table).select('*').order('created_at', { ascending: false });
+    let query = db.from(cfg.table).select('*').order('created_at', { ascending: false });
+    if (cfg.filter) {
+      Object.entries(cfg.filter).forEach(([k, v]) => { query = query.eq(k, v); });
+    }
+    const { data, error } = await query;
     if (error) { console.error('Load error (' + tab + '):', error); tabData[tab] = []; }
     else tabData[tab] = data || [];
   });
@@ -482,7 +513,11 @@ async function loadAllData() {
 
 async function reloadTab(tab) {
   const cfg = TAB_CONFIG[tab];
-  const { data, error } = await db.from(cfg.table).select('*').order('created_at', { ascending: false });
+  let query = db.from(cfg.table).select('*').order('created_at', { ascending: false });
+  if (cfg.filter) {
+    Object.entries(cfg.filter).forEach(([k, v]) => { query = query.eq(k, v); });
+  }
+  const { data, error } = await query;
   if (!error) tabData[tab] = data || [];
   updateTabCounts();
   updateStats();
@@ -527,6 +562,24 @@ function switchTab(tab) {
   });
 
   document.getElementById('filterSearch').value = '';
+
+  // Show/hide create button
+  let createBtn = document.getElementById('createBtn');
+  if (!createBtn) {
+    createBtn = document.createElement('button');
+    createBtn.id = 'createBtn';
+    createBtn.className = 'tab-btn';
+    createBtn.style.cssText = 'background:var(--amber);color:white;border-color:var(--amber);margin-left:auto;';
+    document.getElementById('tabs').parentElement.querySelector('.filter-bar').prepend(createBtn);
+  }
+  if (cfg.hasCreate) {
+    createBtn.style.display = 'inline-flex';
+    createBtn.textContent = '+ 새로 작성';
+    createBtn.onclick = () => showCreateForm(tab);
+  } else {
+    createBtn.style.display = 'none';
+  }
+
   updateStats();
   renderItems();
 }
@@ -585,8 +638,9 @@ function renderDetail(item, cfg, statusField) {
   let html = '<div class="detail-grid">';
 
   cfg.fields.forEach(f => {
-    const val = item[f.key];
+    let val = item[f.key];
     const cls = f.full ? ' detail-full' : '';
+    if (f.isArray && Array.isArray(val)) val = val.join(', ');
     if (f.isMessage) {
       html += '<div class="detail-field' + cls + '"><div class="detail-label">' + escapeHtml(f.label) + '</div><div class="detail-message">' + escapeHtml(val || '-') + '</div></div>';
     } else {
@@ -603,22 +657,29 @@ function renderDetail(item, cfg, statusField) {
   html += '</div>'; // close detail-grid
 
   // Actions
-  const status = item[statusField] || 'pending';
-  html += '<div class="detail-actions">' +
-    '<div class="action-group">' +
-      '<div class="action-label">상태 변경</div>' +
-      '<select class="action-select" id="sel-' + item.id + '">' +
-        cfg.statuses.map(s =>
-          '<option value="' + s + '"' + (s === status ? ' selected' : '') + '>' + escapeHtml(cfg.statusLabels[s]) + '</option>'
-        ).join('') +
-      '</select>' +
-    '</div>' +
-    '<div class="action-group" style="flex:1;">' +
-      '<div class="action-label">관리자 메모</div>' +
-      '<textarea class="action-textarea" id="note-' + item.id + '" placeholder="관리자 메모를 입력하세요...">' + escapeHtml(item.admin_notes || '') + '</textarea>' +
-    '</div>' +
-    '<button class="save-btn" onclick="saveItem(\'' + item.id + '\')">저장</button>' +
-  '</div>';
+  if (cfg.statuses && cfg.statuses.length > 0) {
+    const status = item[statusField] || 'pending';
+    html += '<div class="detail-actions">' +
+      '<div class="action-group">' +
+        '<div class="action-label">상태 변경</div>' +
+        '<select class="action-select" id="sel-' + item.id + '">' +
+          cfg.statuses.map(s =>
+            '<option value="' + s + '"' + (s === status ? ' selected' : '') + '>' + escapeHtml(cfg.statusLabels[s]) + '</option>'
+          ).join('') +
+        '</select>' +
+      '</div>' +
+      '<div class="action-group" style="flex:1;">' +
+        '<div class="action-label">관리자 메모</div>' +
+        '<textarea class="action-textarea" id="note-' + item.id + '" placeholder="관리자 메모를 입력하세요...">' + escapeHtml(item.admin_notes || '') + '</textarea>' +
+      '</div>' +
+      '<button class="save-btn" onclick="saveItem(\'' + item.id + '\')">저장</button>' +
+    '</div>';
+  } else {
+    // No status management (e.g., notices) — just show delete option
+    html += '<div class="detail-actions">' +
+      '<button class="save-btn" style="background:var(--coral);" onclick="deleteItem(\'' + item.id + '\')">삭제</button>' +
+    '</div>';
+  }
 
   return html;
 }
@@ -652,6 +713,87 @@ async function saveItem(id) {
     showToast('저장 중 오류가 발생했습니다.', 'error');
     btn.disabled = false;
     btn.textContent = '저장';
+  }
+}
+
+// ── Delete item ──
+async function deleteItem(id) {
+  if (!confirm('정말 삭제하시겠습니까?')) return;
+  const cfg = TAB_CONFIG[currentTab];
+  const { error } = await db.from(cfg.table).delete().eq('id', id);
+  if (error) { showToast('삭제 실패: ' + error.message, 'error'); return; }
+  showToast('삭제되었습니다.', 'success');
+  await reloadTab(currentTab);
+}
+
+// ── Create (공지사항 / 프로젝트) ──
+function showCreateForm(tab) {
+  const list = document.getElementById('itemList');
+
+  if (tab === 'notice') {
+    list.innerHTML = '<div class="item-card" style="border:2px solid var(--amber);"><div class="item-detail open" style="padding:20px;">' +
+      '<h3 style="margin-bottom:16px;font-size:16px;font-weight:700;">공지사항 작성</h3>' +
+      '<div class="detail-grid">' +
+        '<div class="detail-field detail-full"><div class="detail-label">제목 *</div><input id="createTitle" class="action-textarea" style="min-height:auto;padding:8px 12px;" placeholder="공지 제목"></div>' +
+        '<div class="detail-field detail-full"><div class="detail-label">내용 *</div><textarea id="createContent" class="action-textarea" style="min-height:120px;" placeholder="공지 내용 (최소 10자)"></textarea></div>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;margin-top:12px;">' +
+        '<button class="save-btn" onclick="submitCreate(\'notice\')">등록</button>' +
+        '<button class="save-btn" style="background:var(--ink-muted);" onclick="renderItems()">취소</button>' +
+      '</div>' +
+    '</div></div>' + list.innerHTML;
+  } else if (tab === 'project') {
+    list.innerHTML = '<div class="item-card" style="border:2px solid var(--amber);"><div class="item-detail open" style="padding:20px;">' +
+      '<h3 style="margin-bottom:16px;font-size:16px;font-weight:700;">프로젝트 등록</h3>' +
+      '<div class="detail-grid">' +
+        '<div class="detail-field detail-full"><div class="detail-label">프로젝트명 *</div><input id="createName" class="action-textarea" style="min-height:auto;padding:8px 12px;" placeholder="프로젝트 이름"></div>' +
+        '<div class="detail-field detail-full"><div class="detail-label">설명</div><textarea id="createDesc" class="action-textarea" style="min-height:80px;" placeholder="프로젝트 설명"></textarea></div>' +
+        '<div class="detail-field detail-full"><div class="detail-label">배정 전문가 (쉼표 구분)</div><input id="createExperts" class="action-textarea" style="min-height:auto;padding:8px 12px;" placeholder="홍길동, 김철수"></div>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;margin-top:12px;">' +
+        '<button class="save-btn" onclick="submitCreate(\'project\')">등록</button>' +
+        '<button class="save-btn" style="background:var(--ink-muted);" onclick="renderItems()">취소</button>' +
+      '</div>' +
+    '</div></div>' + list.innerHTML;
+  }
+}
+
+async function submitCreate(tab) {
+  if (!db || !currentUser) return;
+
+  if (tab === 'notice') {
+    const title = (document.getElementById('createTitle').value || '').trim();
+    const content = (document.getElementById('createContent').value || '').trim();
+    if (!title) { showToast('제목을 입력해주세요.', 'error'); return; }
+    if (!content || content.length < 10) { showToast('내용을 10자 이상 입력해주세요.', 'error'); return; }
+
+    const adminName = currentUser.user_metadata?.display_name || currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || '관리자';
+    const { error } = await db.from('ax_posts').insert({
+      title: escapeHtml(title),
+      content: escapeHtml(content),
+      category: 'notice',
+      user_id: currentUser.id,
+      author_name: adminName
+    });
+    if (error) { showToast('등록 실패: ' + error.message, 'error'); return; }
+    showToast('공지사항이 등록되었습니다.', 'success');
+    await reloadTab('notice');
+  } else if (tab === 'project') {
+    const name = (document.getElementById('createName').value || '').trim();
+    const desc = (document.getElementById('createDesc').value || '').trim();
+    const expertsRaw = (document.getElementById('createExperts').value || '').trim();
+    if (!name) { showToast('프로젝트명을 입력해주세요.', 'error'); return; }
+
+    const assigned_experts = expertsRaw ? expertsRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const { error } = await db.from('ax_projects').insert({
+      name: escapeHtml(name),
+      description: desc ? escapeHtml(desc) : null,
+      created_by: currentUser.id,
+      assigned_experts: assigned_experts
+    });
+    if (error) { showToast('등록 실패: ' + error.message, 'error'); return; }
+    showToast('프로젝트가 등록되었습니다.', 'success');
+    await reloadTab('project');
   }
 }
 
