@@ -443,10 +443,34 @@ footer a:hover { color: var(--amber); }
               <textarea class="form-textarea" id="fieldVision" placeholder="AI 전문가로서의 비전"></textarea>
             </div>
             <div class="form-group full">
+              <label class="form-label">전문 분야 <span style="font-size:11px;color:var(--ink-muted);font-weight:400;">(쉼표 구분)</span></label>
+              <input class="form-input" id="fieldSpecialties" type="text" placeholder="경영전략, 고객서비스, 제조 등">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">저서</label>
+              <textarea class="form-textarea" id="fieldBooks" placeholder="저서명, 출판사 등"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">판매 상품</label>
+              <textarea class="form-textarea" id="fieldProducts" placeholder="판매 중인 상품이나 강의 등"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">제공 서비스</label>
+              <textarea class="form-textarea" id="fieldServices" placeholder="컨설팅, 강의, 코칭 등 제공 서비스"></textarea>
+            </div>
+            <div class="form-group full">
               <label class="form-label">SNS 링크</label>
               <input class="form-input" id="fieldSnsLinkedin" type="url" placeholder="LinkedIn URL" style="margin-bottom:8px;">
-              <input class="form-input" id="fieldSnsGithub" type="url" placeholder="GitHub URL" style="margin-bottom:8px;">
-              <input class="form-input" id="fieldSnsWebsite" type="url" placeholder="개인 웹사이트 URL">
+              <input class="form-input" id="fieldSnsYoutube" type="url" placeholder="YouTube URL" style="margin-bottom:8px;">
+              <input class="form-input" id="fieldSnsInstagram" type="url" placeholder="Instagram URL" style="margin-bottom:8px;">
+              <input class="form-input" id="fieldSnsBlog" type="url" placeholder="블로그 URL" style="margin-bottom:8px;">
+              <input class="form-input" id="fieldSnsTwitter" type="url" placeholder="X (Twitter) URL" style="margin-bottom:8px;">
+              <input class="form-input" id="fieldSnsOther" type="url" placeholder="기타 URL">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">프로필 사진</label>
+              <input class="form-input" id="fieldPhotoFile" type="file" accept="image/*" style="padding:8px;">
+              <div id="photoPreview" style="margin-top:8px;display:none;"><img id="photoPreviewImg" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--border);"></div>
             </div>
           </div>
           <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end;">
@@ -613,37 +637,47 @@ function renderProfileRead() {
   const genderLabels = { male: '남성', female: '여성' };
   const chatbotLabels = { possible: '가능', impossible: '불가능', learning: '학습 중' };
 
-  let html = '';
-  const rows = [
-    ['이름', e.name],
-    ['이메일', e.email],
-    ['연락처', e.phone],
-    ['성별', genderLabels[e.gender] || '-'],
-    ['한줄 소개', e.tagline],
-    ['학력', e.education],
-    ['경력', e.career],
-    ['AI 경험', e.ai_experience],
-    ['AI 프로젝트', e.ai_projects],
-    ['AI 도구', Array.isArray(e.ai_tools) && e.ai_tools.length ? e.ai_tools.join(', ') : '-'],
-    ['챗봇 구축', chatbotLabels[e.can_build_chatbot] || '-'],
-    ['관심 분야', Array.isArray(e.interest_areas) && e.interest_areas.length ? e.interest_areas.join(', ') : '-'],
-    ['하고 싶은 일', e.want_to_do],
-    ['비전', e.vision],
-  ];
+  const multiline = ['학력','경력','AI 경험','AI 프로젝트','하고 싶은 일','비전','저서','판매 상품','제공 서비스'];
 
-  rows.forEach(([label, value]) => {
-    const displayValue = value ? escapeHtml(String(value)) : '<span style="color:var(--ink-muted);">-</span>';
-    html += '<div class="info-row"><span class="info-label">' + escapeHtml(label) + '</span><span class="info-value">' + displayValue + '</span></div>';
-  });
+  function rowHtml(label, value, isMulti) {
+    const dv = value
+      ? (isMulti ? '<span style="white-space:pre-wrap;">' + escapeHtml(String(value)) + '</span>' : escapeHtml(String(value)))
+      : '<span style="color:var(--ink-muted);">-</span>';
+    return '<div class="info-row"><span class="info-label">' + escapeHtml(label) + '</span><span class="info-value">' + dv + '</span></div>';
+  }
+
+  let html = '';
+  html += rowHtml('이름', e.name);
+  html += rowHtml('이메일', e.email);
+  html += rowHtml('연락처', e.phone);
+  html += rowHtml('성별', genderLabels[e.gender]);
+  html += rowHtml('생년월일', e.birth_date);
+  html += rowHtml('한줄 소개', e.tagline);
+  html += rowHtml('학력', e.education, true);
+  html += rowHtml('경력', e.career, true);
+  html += rowHtml('AI 경험', e.ai_experience, true);
+  html += rowHtml('AI 프로젝트', e.ai_projects, true);
+  html += rowHtml('AI 도구', Array.isArray(e.ai_tools) && e.ai_tools.length ? e.ai_tools.join(', ') : null);
+  html += rowHtml('전문 분야', Array.isArray(e.specialties) && e.specialties.length ? e.specialties.join(', ') : null);
+  html += rowHtml('챗봇 구축', chatbotLabels[e.can_build_chatbot]);
+  html += rowHtml('관심 분야', Array.isArray(e.interest_areas) && e.interest_areas.length ? e.interest_areas.join(', ') : null);
+  html += rowHtml('하고 싶은 일', e.want_to_do, true);
+  html += rowHtml('비전', e.vision, true);
+  html += rowHtml('저서', e.books, true);
+  html += rowHtml('판매 상품', e.products, true);
+  html += rowHtml('제공 서비스', e.services, true);
 
   // SNS 링크
-  if (e.sns_links && typeof e.sns_links === 'object') {
-    const links = [];
-    if (e.sns_links.linkedin) links.push('LinkedIn');
-    if (e.sns_links.github) links.push('GitHub');
-    if (e.sns_links.website) links.push('Website');
-    html += '<div class="info-row"><span class="info-label">SNS</span><span class="info-value">' +
-      (links.length ? escapeHtml(links.join(', ')) : '<span style="color:var(--ink-muted);">-</span>') + '</span></div>';
+  const sns = e.sns_links || {};
+  const snsItems = [
+    ['LinkedIn', sns.linkedin], ['YouTube', sns.youtube], ['Instagram', sns.instagram],
+    ['블로그', sns.blog], ['X(Twitter)', sns.twitter], ['기타', sns.other]
+  ].filter(([, url]) => url);
+  if (snsItems.length) {
+    const snsHtml = snsItems.map(([n, url]) => '<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener" style="color:var(--amber);margin-right:12px;">' + escapeHtml(n) + '</a>').join('');
+    html += '<div class="info-row"><span class="info-label">SNS</span><span class="info-value">' + snsHtml + '</span></div>';
+  } else {
+    html += rowHtml('SNS', null);
   }
 
   document.getElementById('profileReadContent').innerHTML = html;
@@ -684,12 +718,38 @@ function showEditMode() {
   document.getElementById('fieldWantToDo').value = expertData.want_to_do || '';
   document.getElementById('fieldVision').value = expertData.vision || '';
 
+  document.getElementById('fieldSpecialties').value = Array.isArray(expertData.specialties) ? expertData.specialties.join(', ') : '';
+  document.getElementById('fieldBooks').value = expertData.books || '';
+  document.getElementById('fieldProducts').value = expertData.products || '';
+  document.getElementById('fieldServices').value = expertData.services || '';
+
   // SNS
   const sns = expertData.sns_links || {};
   document.getElementById('fieldSnsLinkedin').value = sns.linkedin || '';
-  document.getElementById('fieldSnsGithub').value = sns.github || '';
-  document.getElementById('fieldSnsWebsite').value = sns.website || '';
+  document.getElementById('fieldSnsYoutube').value = sns.youtube || '';
+  document.getElementById('fieldSnsInstagram').value = sns.instagram || '';
+  document.getElementById('fieldSnsBlog').value = sns.blog || '';
+  document.getElementById('fieldSnsTwitter').value = sns.twitter || '';
+  document.getElementById('fieldSnsOther').value = sns.other || '';
+
+  // 사진 미리보기
+  if (expertData.profile_image_url) {
+    document.getElementById('photoPreview').style.display = 'block';
+    document.getElementById('photoPreviewImg').src = expertData.profile_image_url;
+  }
 }
+
+// 사진 미리보기 이벤트
+document.getElementById('fieldPhotoFile').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('photoPreview').style.display = 'block';
+    document.getElementById('photoPreviewImg').src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+});
 
 function hideEditMode() {
   document.getElementById('profileEditCard').style.display = 'none';
@@ -722,13 +782,40 @@ async function handleProfileSave(event) {
   const want_to_do = DOMPurify.sanitize(document.getElementById('fieldWantToDo').value.trim()) || null;
   const vision = DOMPurify.sanitize(document.getElementById('fieldVision').value.trim()) || null;
 
+  const specialties_raw = document.getElementById('fieldSpecialties').value.trim();
+  const specialties = specialties_raw ? specialties_raw.split(',').map(s => DOMPurify.sanitize(s.trim())).filter(Boolean) : [];
+  const books = DOMPurify.sanitize(document.getElementById('fieldBooks').value.trim()) || null;
+  const products = DOMPurify.sanitize(document.getElementById('fieldProducts').value.trim()) || null;
+  const services = DOMPurify.sanitize(document.getElementById('fieldServices').value.trim()) || null;
+
   const sns_links = {};
   const linkedin = document.getElementById('fieldSnsLinkedin').value.trim();
-  const github = document.getElementById('fieldSnsGithub').value.trim();
-  const website = document.getElementById('fieldSnsWebsite').value.trim();
+  const youtube = document.getElementById('fieldSnsYoutube').value.trim();
+  const instagram = document.getElementById('fieldSnsInstagram').value.trim();
+  const blog = document.getElementById('fieldSnsBlog').value.trim();
+  const twitter = document.getElementById('fieldSnsTwitter').value.trim();
+  const other = document.getElementById('fieldSnsOther').value.trim();
   if (linkedin && isSafeUrl(linkedin)) sns_links.linkedin = linkedin;
-  if (github && isSafeUrl(github)) sns_links.github = github;
-  if (website && isSafeUrl(website)) sns_links.website = website;
+  if (youtube && isSafeUrl(youtube)) sns_links.youtube = youtube;
+  if (instagram && isSafeUrl(instagram)) sns_links.instagram = instagram;
+  if (blog && isSafeUrl(blog)) sns_links.blog = blog;
+  if (twitter && isSafeUrl(twitter)) sns_links.twitter = twitter;
+  if (other && isSafeUrl(other)) sns_links.other = other;
+
+  // 사진 업로드
+  let profile_image_url = expertData.profile_image_url || null;
+  const photoFile = document.getElementById('fieldPhotoFile').files[0];
+  if (photoFile && db) {
+    try {
+      const ext = photoFile.name.split('.').pop();
+      const path = 'profiles/' + currentUser.id + '.' + ext;
+      const { error: upErr } = await db.storage.from('expert-photos').upload(path, photoFile, { upsert: true });
+      if (!upErr) {
+        const { data: urlData } = db.storage.from('expert-photos').getPublicUrl(path);
+        if (urlData?.publicUrl) profile_image_url = urlData.publicUrl;
+      }
+    } catch(e) { console.error('사진 업로드 오류:', e); }
+  }
 
   if (!name || name.length < 2) {
     showAlert('profileAlert', '이름은 2자 이상 입력해주세요.', 'error');
@@ -741,8 +828,11 @@ async function handleProfileSave(event) {
     name, phone, gender, birth_date, tagline, education, career,
     ai_experience, ai_projects,
     ai_tools: ai_tools.length ? ai_tools : [],
+    specialties: specialties.length ? specialties : [],
     can_build_chatbot, interest_areas: interest_areas.length ? interest_areas : [],
     want_to_do, vision,
+    books, products, services,
+    profile_image_url,
     sns_links: Object.keys(sns_links).length ? sns_links : {}
   };
 
