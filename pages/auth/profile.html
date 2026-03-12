@@ -1,6 +1,6 @@
 <!--
 @task S5F1
-@description 마이페이지 — 프로필 확인/수정, 수강 내역, AX 프로젝트, 커뮤니티 활동
+@description 마이페이지 — 전문가 프로필 확인/수정, 수강 내역, AX 프로젝트, 커뮤니티 활동
 -->
 <!DOCTYPE html>
 <html lang="ko">
@@ -43,11 +43,13 @@ body {
   background: var(--surface);
   color: var(--ink);
   line-height: 1.7;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Navigation ── */
+/* ── Navigation (index.html 통일) ── */
 .nav {
   position: sticky; top: 0; z-index: 100;
   background: rgba(250,249,247,0.92);
@@ -60,7 +62,7 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   height: 64px;
 }
-.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
 .logo-mark {
   width: 36px; height: 36px; border-radius: 10px;
   background: linear-gradient(135deg, var(--amber), var(--amber-light));
@@ -69,25 +71,35 @@ body {
 }
 .logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; }
 .logo-text span { color: var(--amber); }
-.nav-links { display: flex; gap: 8px; align-items: center; }
+.nav-right { display: flex; gap: 8px; align-items: center; }
 .nav-link {
   padding: 8px 14px; border-radius: 10px;
   text-decoration: none; font-size: 14px; font-weight: 500; color: var(--ink-muted);
   transition: all 0.15s;
 }
 .nav-link:hover { background: var(--amber-glow); color: var(--amber); }
-.btn-nav {
-  padding: 8px 18px; border-radius: 10px; border: none; cursor: pointer;
-  font-size: 14px; font-weight: 600; font-family: inherit;
-  background: var(--amber); color: white; transition: all 0.15s;
+.nav-link.active { color: var(--amber); font-weight: 600; }
+.nav-user-wrap { display: flex; align-items: center; gap: 8px; }
+.nav-user-name {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  text-decoration: none; padding: 8px 12px; border-radius: 10px;
+  transition: all 0.25s ease;
 }
-.btn-nav:hover { background: var(--amber-light); }
+.nav-user-name:hover { background: rgba(26,26,46,0.04); }
+.nav-logout-btn {
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  background: none; border: 1.5px solid rgba(26,26,46,0.12);
+  padding: 6px 14px; border-radius: 10px; cursor: pointer;
+  font-family: inherit; transition: all 0.25s ease;
+}
+.nav-logout-btn:hover { background: rgba(26,26,46,0.04); color: var(--ink); }
 
 /* ── Layout ── */
 .page-wrap {
   max-width: 1200px; margin: 0 auto; padding: 40px 24px;
   display: grid; grid-template-columns: 240px 1fr; gap: 28px;
   align-items: start;
+  flex: 1;
 }
 
 /* ── Sidebar ── */
@@ -122,6 +134,7 @@ body {
   display: flex; align-items: center; justify-content: center;
 }
 .profile-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.profile-tagline { font-size: 13px; color: var(--ink-muted); margin-bottom: 8px; }
 .profile-role {
   display: inline-block; padding: 3px 10px; border-radius: 20px;
   font-size: 12px; font-weight: 600;
@@ -161,6 +174,11 @@ body {
   padding: 28px;
   margin-bottom: 20px;
 }
+.card-subtitle {
+  font-size: 15px; font-weight: 600; color: var(--ink);
+  margin-bottom: 16px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
 
 /* ── Form ── */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -181,6 +199,15 @@ body {
 .form-input[readonly] { background: var(--surface-warm); color: var(--ink-muted); cursor: not-allowed; }
 .form-textarea { resize: vertical; min-height: 80px; }
 
+/* Pill select for specialties/tools */
+.pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill-tag {
+  display: inline-block; padding: 4px 12px; border-radius: 20px;
+  font-size: 13px; font-weight: 500;
+  background: var(--surface-warm); color: var(--ink-muted);
+  border: 1px solid var(--border);
+}
+
 .btn-primary {
   padding: 12px 28px; border-radius: var(--radius-sm);
   background: var(--amber); color: white; border: none;
@@ -189,6 +216,14 @@ body {
 }
 .btn-primary:hover { background: var(--amber-light); transform: translateY(-1px); }
 .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  padding: 8px 18px; border-radius: var(--radius-sm);
+  background: none; color: var(--ink-muted); border: 1.5px solid var(--border);
+  font-size: 13px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-secondary:hover { background: var(--surface-warm); color: var(--ink); }
 
 /* ── Table ── */
 .data-table { width: 100%; border-collapse: collapse; }
@@ -233,6 +268,15 @@ body {
 .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
 .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
+/* ── Info Row ── */
+.info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid rgba(26,26,46,0.06);
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { font-size: 13px; font-weight: 600; color: var(--ink-muted); min-width: 100px; }
+.info-value { font-size: 14px; color: var(--ink); text-align: right; flex: 1; }
+
 /* ── Footer ── */
 footer {
   background: var(--ink); color: rgba(255,255,255,0.5);
@@ -252,6 +296,8 @@ footer a:hover { color: var(--amber); }
   .form-grid { grid-template-columns: 1fr; }
   .data-table { font-size: 13px; }
   .data-table th, .data-table td { padding: 10px 12px; }
+  .nav-user-wrap .nav-user-name { display: none; }
+  .nav-user-wrap .nav-logout-btn { display: none; }
 }
 </style>
 </head>
@@ -260,15 +306,14 @@ footer a:hover { color: var(--amber); }
 <!-- Navigation -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="../../index.html" class="logo">
+    <a href="../../index.html" class="nav-logo">
       <div class="logo-mark">AX</div>
       <span class="logo-text">AX-<span>On</span></span>
     </a>
-    <div class="nav-links">
-      <a href="../../index.html" class="nav-link">홈</a>
-      <a href="../../expert.html" class="nav-link">전문가</a>
+    <div class="nav-right" id="navRight">
+      <a href="../../pool.html" class="nav-link">전문가 풀</a>
       <a href="../../community.html" class="nav-link">커뮤니티</a>
-      <button class="btn-nav" id="logoutBtn" onclick="handleLogout()">로그아웃</button>
+      <!-- Auth state injected by JS -->
     </div>
   </div>
 </nav>
@@ -284,11 +329,12 @@ footer a:hover { color: var(--amber); }
           <span id="sidebarAvatarInitial">?</span>
           <img id="sidebarAvatarImg" src="" alt="" style="display:none;">
         </div>
-        <button class="avatar-edit-btn" onclick="document.getElementById('avatarFileInput').click()" title="아바타 변경">✏️</button>
+        <button class="avatar-edit-btn" onclick="document.getElementById('avatarFileInput').click()" title="프로필 사진 변경">✏</button>
         <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
       </div>
       <div class="profile-name" id="sidebarName">로딩 중...</div>
-      <span class="profile-role" id="sidebarRole">-</span>
+      <div class="profile-tagline" id="sidebarTagline"></div>
+      <span class="profile-role" id="sidebarRole">AI 전문가</span>
     </div>
     <nav class="sidebar-menu">
       <button class="menu-item active" data-section="profile" onclick="switchSection('profile', this)">
@@ -298,7 +344,7 @@ footer a:hover { color: var(--amber); }
         <span class="menu-icon">📚</span> 수강 내역
       </button>
       <button class="menu-item" data-section="projects" onclick="switchSection('projects', this)">
-        <span class="menu-icon">🏗️</span> AX 프로젝트
+        <span class="menu-icon">🏗</span> AX 프로젝트
       </button>
       <button class="menu-item" data-section="community" onclick="switchSection('community', this)">
         <span class="menu-icon">💬</span> 커뮤니티 활동
@@ -313,46 +359,108 @@ footer a:hover { color: var(--amber); }
     <div class="section active" id="section-profile">
       <h2 class="section-title"><span class="section-icon">👤</span> 내 프로필</h2>
       <div id="profileAlert" class="alert"></div>
-      <div class="card">
+
+      <!-- 기본 정보 (읽기 전용) -->
+      <div class="card" id="profileReadCard">
+        <h3 class="card-subtitle">기본 정보</h3>
+        <div id="profileReadContent">
+          <div class="empty-state"><div class="empty-msg">불러오는 중...</div></div>
+        </div>
+        <div style="margin-top: 16px; text-align: right;">
+          <button class="btn-secondary" onclick="showEditMode()">프로필 수정</button>
+        </div>
+      </div>
+
+      <!-- 수정 폼 (숨김) -->
+      <div class="card" id="profileEditCard" style="display:none;">
+        <h3 class="card-subtitle">프로필 수정</h3>
         <form id="profileForm" onsubmit="handleProfileSave(event)">
           <div class="form-grid">
             <div class="form-group">
-              <label class="form-label">이름 (표시명)</label>
-              <input class="form-input" id="fieldDisplayName" type="text" placeholder="표시될 이름">
-            </div>
-            <div class="form-group">
-              <label class="form-label">닉네임</label>
-              <input class="form-input" id="fieldUsername" type="text" placeholder="고유 닉네임">
+              <label class="form-label">이름 *</label>
+              <input class="form-input" id="fieldName" type="text" required minlength="2">
             </div>
             <div class="form-group">
               <label class="form-label">이메일</label>
               <input class="form-input" id="fieldEmail" type="email" readonly>
             </div>
             <div class="form-group">
-              <label class="form-label">역할</label>
-              <select class="form-select" id="fieldRole">
-                <option value="general">일반 사용자</option>
-                <option value="company">기업</option>
-                <option value="ai_expert">AI 전문가</option>
+              <label class="form-label">연락처 *</label>
+              <input class="form-input" id="fieldPhone" type="tel" placeholder="010-0000-0000" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">성별</label>
+              <select class="form-select" id="fieldGender">
+                <option value="">선택 안 함</option>
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">한줄 소개</label>
+              <input class="form-input" id="fieldTagline" type="text" placeholder="나를 한줄로 표현해주세요" maxlength="100">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">학력</label>
+              <textarea class="form-textarea" id="fieldEducation" placeholder="최종학력, 전공 등"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">경력</label>
+              <textarea class="form-textarea" id="fieldCareer" placeholder="주요 경력 사항"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">AI 경험</label>
+              <textarea class="form-textarea" id="fieldAiExperience" placeholder="AI 관련 경험을 자유롭게 작성해주세요"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">AI 프로젝트</label>
+              <textarea class="form-textarea" id="fieldAiProjects" placeholder="참여했거나 진행 중인 AI 프로젝트"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">AI 도구</label>
+              <input class="form-input" id="fieldAiTools" type="text" placeholder="ChatGPT, Claude, Copilot 등 (쉼표 구분)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">챗봇 구축 가능 여부</label>
+              <select class="form-select" id="fieldChatbot">
+                <option value="">선택 안 함</option>
+                <option value="possible">가능</option>
+                <option value="impossible">불가능</option>
+                <option value="learning">학습 중</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">전화번호</label>
-              <input class="form-input" id="fieldPhone" type="tel" placeholder="010-0000-0000">
-            </div>
-            <div class="form-group">
               <label class="form-label">관심 분야</label>
-              <input class="form-input" id="fieldInterests" type="text" placeholder="AI, 제조, 헬스케어 등 (쉼표 구분)">
+              <input class="form-input" id="fieldInterestAreas" type="text" placeholder="제조, 금융, 헬스케어 등 (쉼표 구분)">
             </div>
             <div class="form-group full">
-              <label class="form-label">소개글</label>
-              <textarea class="form-textarea" id="fieldBio" placeholder="간단한 자기소개를 입력하세요"></textarea>
+              <label class="form-label">하고 싶은 일</label>
+              <textarea class="form-textarea" id="fieldWantToDo" placeholder="AI를 활용하여 하고 싶은 일"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">비전</label>
+              <textarea class="form-textarea" id="fieldVision" placeholder="AI 전문가로서의 비전"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">SNS 링크</label>
+              <input class="form-input" id="fieldSnsLinkedin" type="url" placeholder="LinkedIn URL" style="margin-bottom:8px;">
+              <input class="form-input" id="fieldSnsGithub" type="url" placeholder="GitHub URL" style="margin-bottom:8px;">
+              <input class="form-input" id="fieldSnsWebsite" type="url" placeholder="개인 웹사이트 URL">
             </div>
           </div>
-          <div style="margin-top: 20px; text-align: right;">
+          <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end;">
+            <button type="button" class="btn-secondary" onclick="hideEditMode()">취소</button>
             <button type="submit" class="btn-primary" id="saveBtn">저장하기</button>
           </div>
         </form>
+      </div>
+
+      <!-- 전문분야 카드 (읽기 전용) -->
+      <div class="card" id="specialtiesCard">
+        <h3 class="card-subtitle">전문분야</h3>
+        <div class="pill-group" id="specialtiesList">
+          <span class="pill-tag" style="color:var(--ink-muted);">등록된 전문분야가 없습니다.</span>
+        </div>
       </div>
     </div>
 
@@ -361,23 +469,17 @@ footer a:hover { color: var(--amber); }
       <h2 class="section-title"><span class="section-icon">📚</span> 수강 내역</h2>
       <div class="card">
         <div id="enrollmentsContent">
-          <div class="empty-state">
-            <div class="empty-icon">⏳</div>
-            <div class="empty-msg">불러오는 중...</div>
-          </div>
+          <div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-msg">불러오는 중...</div></div>
         </div>
       </div>
     </div>
 
     <!-- Projects Section -->
     <div class="section" id="section-projects">
-      <h2 class="section-title"><span class="section-icon">🏗️</span> AX 프로젝트 접수 내역</h2>
+      <h2 class="section-title"><span class="section-icon">🏗</span> AX 프로젝트 접수 내역</h2>
       <div class="card">
         <div id="projectsContent">
-          <div class="empty-state">
-            <div class="empty-icon">⏳</div>
-            <div class="empty-msg">불러오는 중...</div>
-          </div>
+          <div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-msg">불러오는 중...</div></div>
         </div>
       </div>
     </div>
@@ -387,10 +489,7 @@ footer a:hover { color: var(--amber); }
       <h2 class="section-title"><span class="section-icon">💬</span> 커뮤니티 활동</h2>
       <div class="card">
         <div id="communityContent">
-          <div class="empty-state">
-            <div class="empty-icon">⏳</div>
-            <div class="empty-msg">불러오는 중...</div>
-          </div>
+          <div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-msg">불러오는 중...</div></div>
         </div>
       </div>
     </div>
@@ -401,20 +500,18 @@ footer a:hover { color: var(--amber); }
 <!-- Footer -->
 <footer>
   <div>
-    <a href="../../privacy.html">개인정보처리방침</a>
-    <a href="../../terms.html">이용약관</a>
     <a href="../../contact.html">문의하기</a>
   </div>
-  <div style="margin-top:8px;">© 2026 AX-On Platform. All rights reserved.</div>
+  <div style="margin-top:8px;">&copy; 2026 AX-On Platform. All rights reserved.</div>
 </footer>
 
 <script>
 // ── State ──
 let db = null;
 let currentUser = null;
-let currentProfile = null;
+let expertData = null;
 
-// ── Supabase 초기화 (_sbReady 패턴 통일) ──
+// ── Supabase 초기화 ──
 const _sbReady = AXON_CONFIG.init().then(() => {
   if (typeof window.supabase !== 'undefined') {
     const { createClient } = supabase;
@@ -434,91 +531,231 @@ const _sbReady = AXON_CONFIG.init().then(() => {
       return;
     }
     currentUser = session.user;
-    await loadProfile();
+    await loadExpertProfile();
+    updateNavAuth();
   } catch (err) {
     console.error('초기화 오류:', err);
-    if (!db) {
-      window.location.href = 'login.html';
-        return;
-      }
-      currentUser = session.user;
-      await loadProfile();
-    } else {
-      window.location.href = 'login.html';
-    }
+    window.location.href = 'login.html';
   }
 })();
 
-// ── Load Profile ──
-async function loadProfile() {
-  const { data: profile, error } = await db
-    .from('profiles')
-    .select('*')
-    .eq('id', currentUser.id)
-    .single();
+// ── Nav Auth (index.html 패턴 통일) ──
+function updateNavAuth() {
+  if (!currentUser) return;
+  const displayName = escapeHtml(
+    (expertData && expertData.name) ||
+    currentUser.user_metadata?.full_name ||
+    currentUser.user_metadata?.name ||
+    currentUser.email?.split('@')[0] || '사용자'
+  );
+  const navRight = document.getElementById('navRight');
+  const userWrap = document.createElement('div');
+  userWrap.className = 'nav-user-wrap';
+  userWrap.innerHTML = '<a href="profile.html" class="nav-user-name">' + displayName + '님</a>' +
+    '<button class="nav-logout-btn" id="navLogoutBtn">로그아웃</button>';
+  navRight.appendChild(userWrap);
 
-  if (error && error.code !== 'PGRST116') {
-    console.error('프로필 로드 오류:', error);
+  document.getElementById('navLogoutBtn').addEventListener('click', async () => {
+    await db.auth.signOut();
+    window.location.href = '../../index.html';
+  });
+
+  // 관리자 링크
+  injectAdminLink(currentUser);
+}
+
+// ── Load Expert Profile (ax_experts 테이블) ──
+async function loadExpertProfile() {
+  const { data: expert, error } = await db
+    .from('ax_experts')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .maybeSingle();
+
+  if (error) {
+    console.error('전문가 프로필 로드 오류:', error);
   }
 
-  currentProfile = profile || {};
+  expertData = expert;
 
-  // Sidebar
-  const name = currentProfile.display_name || currentProfile.username || currentUser.email?.split('@')[0] || '사용자';
-  document.getElementById('sidebarName').textContent = name;
+  // 전문가 미등록 시
+  if (!expertData) {
+    document.getElementById('sidebarName').textContent =
+      currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || '사용자';
+    document.getElementById('sidebarRole').textContent = '미등록';
+    document.getElementById('sidebarRole').style.background = 'rgba(90,95,125,0.1)';
+    document.getElementById('sidebarRole').style.color = 'var(--ink-muted)';
+    document.getElementById('profileReadContent').innerHTML =
+      '<div class="empty-state"><div class="empty-icon">📋</div>' +
+      '<div class="empty-msg">전문가로 등록되지 않았습니다.<br><a href="../../pool.html" style="color:var(--amber);font-weight:600;">전문가 등록하기</a></div></div>';
+    document.querySelector('#profileReadCard .btn-secondary').style.display = 'none';
+    document.getElementById('specialtiesCard').style.display = 'none';
+    return;
+  }
 
-  const roleLabels = { ai_expert: 'AI 전문가', company: '기업', general: '일반' };
-  document.getElementById('sidebarRole').textContent = roleLabels[currentProfile.role] || '일반';
+  // Sidebar 업데이트
+  document.getElementById('sidebarName').textContent = expertData.name || '전문가';
+  document.getElementById('sidebarTagline').textContent = expertData.tagline || '';
 
-  if (currentProfile.avatar_url) {
+  if (expertData.profile_image_url) {
     const img = document.getElementById('sidebarAvatarImg');
-    img.src = escapeHtml(currentProfile.avatar_url);
+    img.src = expertData.profile_image_url;
+    img.alt = expertData.name;
     img.style.display = 'block';
     document.getElementById('sidebarAvatarInitial').style.display = 'none';
   } else {
-    document.getElementById('sidebarAvatarInitial').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('sidebarAvatarInitial').textContent =
+      (expertData.name || '?').charAt(0).toUpperCase();
   }
 
-  // Form
-  document.getElementById('fieldDisplayName').value = currentProfile.display_name || '';
-  document.getElementById('fieldUsername').value = currentProfile.username || '';
-  document.getElementById('fieldEmail').value = currentUser.email || '';
-  document.getElementById('fieldRole').value = currentProfile.role || 'general';
-  document.getElementById('fieldPhone').value = currentProfile.phone || '';
-  document.getElementById('fieldBio').value = currentProfile.bio || '';
-  const interests = Array.isArray(currentProfile.interests) ? currentProfile.interests.join(', ') : (currentProfile.interests || '');
-  document.getElementById('fieldInterests').value = interests;
+  // 읽기 전용 프로필 카드
+  renderProfileRead();
+
+  // 전문분야 카드
+  renderSpecialties();
 }
 
-// ── Save Profile ──
+// ── Render Profile (Read Mode) ──
+function renderProfileRead() {
+  if (!expertData) return;
+  const e = expertData;
+  const genderLabels = { male: '남성', female: '여성' };
+  const chatbotLabels = { possible: '가능', impossible: '불가능', learning: '학습 중' };
+
+  let html = '';
+  const rows = [
+    ['이름', e.name],
+    ['이메일', e.email],
+    ['연락처', e.phone],
+    ['성별', genderLabels[e.gender] || '-'],
+    ['한줄 소개', e.tagline],
+    ['학력', e.education],
+    ['경력', e.career],
+    ['AI 경험', e.ai_experience],
+    ['AI 프로젝트', e.ai_projects],
+    ['AI 도구', Array.isArray(e.ai_tools) && e.ai_tools.length ? e.ai_tools.join(', ') : '-'],
+    ['챗봇 구축', chatbotLabels[e.can_build_chatbot] || '-'],
+    ['관심 분야', Array.isArray(e.interest_areas) && e.interest_areas.length ? e.interest_areas.join(', ') : '-'],
+    ['하고 싶은 일', e.want_to_do],
+    ['비전', e.vision],
+  ];
+
+  rows.forEach(([label, value]) => {
+    const displayValue = value ? escapeHtml(String(value)) : '<span style="color:var(--ink-muted);">-</span>';
+    html += '<div class="info-row"><span class="info-label">' + escapeHtml(label) + '</span><span class="info-value">' + displayValue + '</span></div>';
+  });
+
+  // SNS 링크
+  if (e.sns_links && typeof e.sns_links === 'object') {
+    const links = [];
+    if (e.sns_links.linkedin) links.push('LinkedIn');
+    if (e.sns_links.github) links.push('GitHub');
+    if (e.sns_links.website) links.push('Website');
+    html += '<div class="info-row"><span class="info-label">SNS</span><span class="info-value">' +
+      (links.length ? escapeHtml(links.join(', ')) : '<span style="color:var(--ink-muted);">-</span>') + '</span></div>';
+  }
+
+  document.getElementById('profileReadContent').innerHTML = html;
+}
+
+// ── Render Specialties ──
+function renderSpecialties() {
+  const container = document.getElementById('specialtiesList');
+  if (!expertData || !Array.isArray(expertData.specialties) || !expertData.specialties.length) {
+    container.innerHTML = '<span class="pill-tag" style="color:var(--ink-muted);">등록된 전문분야가 없습니다.</span>';
+    return;
+  }
+  container.innerHTML = expertData.specialties
+    .map(s => '<span class="pill-tag" style="background:var(--amber-glow);color:var(--amber);border-color:transparent;">' + escapeHtml(s) + '</span>')
+    .join('');
+}
+
+// ── Edit Mode Toggle ──
+function showEditMode() {
+  if (!expertData) return;
+  document.getElementById('profileReadCard').style.display = 'none';
+  document.getElementById('profileEditCard').style.display = 'block';
+
+  // 폼에 기존값 채우기
+  document.getElementById('fieldName').value = expertData.name || '';
+  document.getElementById('fieldEmail').value = expertData.email || '';
+  document.getElementById('fieldPhone').value = expertData.phone || '';
+  document.getElementById('fieldGender').value = expertData.gender || '';
+  document.getElementById('fieldTagline').value = expertData.tagline || '';
+  document.getElementById('fieldEducation').value = expertData.education || '';
+  document.getElementById('fieldCareer').value = expertData.career || '';
+  document.getElementById('fieldAiExperience').value = expertData.ai_experience || '';
+  document.getElementById('fieldAiProjects').value = expertData.ai_projects || '';
+  document.getElementById('fieldAiTools').value = Array.isArray(expertData.ai_tools) ? expertData.ai_tools.join(', ') : '';
+  document.getElementById('fieldChatbot').value = expertData.can_build_chatbot || '';
+  document.getElementById('fieldInterestAreas').value = Array.isArray(expertData.interest_areas) ? expertData.interest_areas.join(', ') : '';
+  document.getElementById('fieldWantToDo').value = expertData.want_to_do || '';
+  document.getElementById('fieldVision').value = expertData.vision || '';
+
+  // SNS
+  const sns = expertData.sns_links || {};
+  document.getElementById('fieldSnsLinkedin').value = sns.linkedin || '';
+  document.getElementById('fieldSnsGithub').value = sns.github || '';
+  document.getElementById('fieldSnsWebsite').value = sns.website || '';
+}
+
+function hideEditMode() {
+  document.getElementById('profileEditCard').style.display = 'none';
+  document.getElementById('profileReadCard').style.display = 'block';
+}
+
+// ── Save Profile (ax_experts UPDATE) ──
 async function handleProfileSave(event) {
   event.preventDefault();
-  if (!db || !currentUser) return;
+  if (!db || !currentUser || !expertData) return;
 
   const saveBtn = document.getElementById('saveBtn');
   saveBtn.disabled = true;
   saveBtn.textContent = '저장 중...';
 
-  const displayName = document.getElementById('fieldDisplayName').value.trim();
-  const username = document.getElementById('fieldUsername').value.trim();
-  const role = document.getElementById('fieldRole').value;
-  const phone = document.getElementById('fieldPhone').value.trim();
-  const bio = document.getElementById('fieldBio').value.trim();
-  const interestsRaw = document.getElementById('fieldInterests').value.trim();
-  const interests = interestsRaw ? interestsRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const name = DOMPurify.sanitize(document.getElementById('fieldName').value.trim());
+  const phone = DOMPurify.sanitize(document.getElementById('fieldPhone').value.trim());
+  const gender = document.getElementById('fieldGender').value || null;
+  const tagline = DOMPurify.sanitize(document.getElementById('fieldTagline').value.trim()) || null;
+  const education = DOMPurify.sanitize(document.getElementById('fieldEducation').value.trim()) || null;
+  const career = DOMPurify.sanitize(document.getElementById('fieldCareer').value.trim()) || null;
+  const ai_experience = DOMPurify.sanitize(document.getElementById('fieldAiExperience').value.trim()) || null;
+  const ai_projects = DOMPurify.sanitize(document.getElementById('fieldAiProjects').value.trim()) || null;
+  const ai_tools_raw = document.getElementById('fieldAiTools').value.trim();
+  const ai_tools = ai_tools_raw ? ai_tools_raw.split(',').map(s => DOMPurify.sanitize(s.trim())).filter(Boolean) : [];
+  const can_build_chatbot = document.getElementById('fieldChatbot').value || null;
+  const interest_raw = document.getElementById('fieldInterestAreas').value.trim();
+  const interest_areas = interest_raw ? interest_raw.split(',').map(s => DOMPurify.sanitize(s.trim())).filter(Boolean) : [];
+  const want_to_do = DOMPurify.sanitize(document.getElementById('fieldWantToDo').value.trim()) || null;
+  const vision = DOMPurify.sanitize(document.getElementById('fieldVision').value.trim()) || null;
+
+  const sns_links = {};
+  const linkedin = document.getElementById('fieldSnsLinkedin').value.trim();
+  const github = document.getElementById('fieldSnsGithub').value.trim();
+  const website = document.getElementById('fieldSnsWebsite').value.trim();
+  if (linkedin && isSafeUrl(linkedin)) sns_links.linkedin = linkedin;
+  if (github && isSafeUrl(github)) sns_links.github = github;
+  if (website && isSafeUrl(website)) sns_links.website = website;
+
+  if (!name || name.length < 2) {
+    showAlert('profileAlert', '이름은 2자 이상 입력해주세요.', 'error');
+    saveBtn.disabled = false;
+    saveBtn.textContent = '저장하기';
+    return;
+  }
 
   const updates = {
-    id: currentUser.id,
-    display_name: displayName,
-    username: username,
-    role: role,
-    phone: phone || null,
-    bio: bio || null,
-    interests: interests.length ? interests : null,
-    updated_at: new Date().toISOString()
+    name, phone, gender, tagline, education, career,
+    ai_experience, ai_projects,
+    ai_tools: ai_tools.length ? ai_tools : [],
+    can_build_chatbot, interest_areas: interest_areas.length ? interest_areas : [],
+    want_to_do, vision,
+    sns_links: Object.keys(sns_links).length ? sns_links : {}
   };
 
-  const { error } = await db.from('profiles').upsert(updates, { onConflict: 'id' });
+  const { error } = await db.from('ax_experts')
+    .update(updates)
+    .eq('user_id', currentUser.id);
 
   saveBtn.disabled = false;
   saveBtn.textContent = '저장하기';
@@ -527,11 +764,12 @@ async function handleProfileSave(event) {
     showAlert('profileAlert', '저장 중 오류가 발생했습니다: ' + error.message, 'error');
   } else {
     showAlert('profileAlert', '프로필이 저장되었습니다.', 'success');
-    await loadProfile();
+    await loadExpertProfile();
+    hideEditMode();
   }
 }
 
-// ── Avatar Upload ──
+// ── Avatar Upload (ax_experts.profile_image_url) ──
 async function handleAvatarUpload(event) {
   const file = event.target.files[0];
   if (!file || !db || !currentUser) return;
@@ -548,27 +786,30 @@ async function handleAvatarUpload(event) {
     return;
   }
 
-  const ext = file.name.split('.').pop();
-  const path = `avatars/${currentUser.id}/avatar.${ext}`;
+  const ext = file.name.split('.').pop().toLowerCase();
+  const path = 'avatars/' + currentUser.id + '/avatar.' + ext;
 
-  const { error: uploadError } = await db.storage.from('community-images').upload(path, file, { upsert: true });
+  const { error: uploadError } = await db.storage
+    .from('community-images')
+    .upload(path, file, { upsert: true });
+
   if (uploadError) {
-    alert('아바타 업로드 실패: ' + uploadError.message);
+    alert('사진 업로드 실패: ' + uploadError.message);
     return;
   }
 
   const { data: urlData } = db.storage.from('community-images').getPublicUrl(path);
   if (!urlData?.publicUrl) return;
 
-  const { error: updateError } = await db.from('profiles')
-    .update({ avatar_url: urlData.publicUrl })
-    .eq('id', currentUser.id);
+  const { error: updateError } = await db.from('ax_experts')
+    .update({ profile_image_url: urlData.publicUrl })
+    .eq('user_id', currentUser.id);
 
   if (updateError) {
-    alert('아바타 URL 저장 실패: ' + updateError.message);
+    alert('사진 URL 저장 실패: ' + updateError.message);
   } else {
-    showAlert('profileAlert', '아바타가 변경되었습니다.', 'success');
-    await loadProfile();
+    showAlert('profileAlert', '프로필 사진이 변경되었습니다.', 'success');
+    await loadExpertProfile();
   }
 }
 
@@ -584,31 +825,28 @@ async function loadEnrollments() {
     .order('created_at', { ascending: false });
 
   if (error) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">데이터를 불러오지 못했습니다.</div></div>`;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠</div><div class="empty-msg">데이터를 불러오지 못했습니다.</div></div>';
     return;
   }
 
   if (!data || !data.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📚</div><div class="empty-msg">수강 신청 내역이 없습니다.</div></div>`;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📚</div><div class="empty-msg">수강 신청 내역이 없습니다.</div></div>';
     return;
   }
 
   const statusBadge = (s) => {
-    const map = { pending: ['badge-pending', '대기 중'], confirmed: ['badge-confirmed', '확정'], cancelled: ['badge-cancelled', '취소'] };
+    const map = { pending: ['badge-pending', '대기 중'], paid: ['badge-confirmed', '결제 완료'], cancelled: ['badge-cancelled', '취소'] };
     const [cls, label] = map[s] || ['badge-pending', s];
-    return `<span class="badge ${cls}">${escapeHtml(label)}</span>`;
+    return '<span class="badge ' + cls + '">' + escapeHtml(label) + '</span>';
   };
 
-  container.innerHTML = `<table class="data-table">
-    <thead><tr>
-      <th>프로그램명</th><th>신청일</th><th>결제 상태</th>
-    </tr></thead>
-    <tbody>${data.map(r => `<tr>
-      <td>${escapeHtml(r.program_name || r.program_id || '-')}</td>
-      <td>${r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '-'}</td>
-      <td>${statusBadge(r.payment_status || r.status)}</td>
-    </tr>`).join('')}</tbody>
-  </table>`;
+  container.innerHTML = '<table class="data-table">' +
+    '<thead><tr><th>프로그램명</th><th>신청일</th><th>상태</th></tr></thead>' +
+    '<tbody>' + data.map(r =>
+      '<tr><td>' + escapeHtml(r.program_name || r.program_id || '-') + '</td>' +
+      '<td>' + (r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '-') + '</td>' +
+      '<td>' + statusBadge(r.status || r.payment_status) + '</td></tr>'
+    ).join('') + '</tbody></table>';
 }
 
 // ── Load Projects ──
@@ -623,74 +861,64 @@ async function loadProjects() {
     .order('created_at', { ascending: false });
 
   if (error) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">데이터를 불러오지 못했습니다.</div></div>`;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠</div><div class="empty-msg">데이터를 불러오지 못했습니다.</div></div>';
     return;
   }
 
   if (!data || !data.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🏗️</div><div class="empty-msg">AX 프로젝트 접수 내역이 없습니다.</div></div>`;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏗</div><div class="empty-msg">AX 프로젝트 접수 내역이 없습니다.</div></div>';
     return;
   }
 
   const statusBadge = (s) => {
     const map = { pending: ['badge-pending', '검토 중'], in_review: ['badge-review', '심사 중'], confirmed: ['badge-confirmed', '확정'], rejected: ['badge-cancelled', '반려'] };
     const [cls, label] = map[s] || ['badge-pending', s || '-'];
-    return `<span class="badge ${cls}">${escapeHtml(label)}</span>`;
+    return '<span class="badge ' + cls + '">' + escapeHtml(label) + '</span>';
   };
 
-  container.innerHTML = `<table class="data-table">
-    <thead><tr>
-      <th>프로젝트명</th><th>접수일</th><th>처리 상태</th>
-    </tr></thead>
-    <tbody>${data.map(r => `<tr>
-      <td>${escapeHtml(r.project_name || r.title || '-')}</td>
-      <td>${r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '-'}</td>
-      <td>${statusBadge(r.status)}</td>
-    </tr>`).join('')}</tbody>
-  </table>`;
+  container.innerHTML = '<table class="data-table">' +
+    '<thead><tr><th>프로젝트명</th><th>접수일</th><th>처리 상태</th></tr></thead>' +
+    '<tbody>' + data.map(r =>
+      '<tr><td>' + escapeHtml(r.project_name || r.title || '-') + '</td>' +
+      '<td>' + (r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '-') + '</td>' +
+      '<td>' + statusBadge(r.status) + '</td></tr>'
+    ).join('') + '</tbody></table>';
 }
 
-// ── Load Community Posts ──
+// ── Load Community Posts (ax_posts 테이블) ──
 async function loadCommunityPosts() {
   if (!db || !currentUser) return;
   const container = document.getElementById('communityContent');
 
-  // profiles.id로 author_id 조회
   const { data, error } = await db
-    .from('community_posts')
-    .select('id, title, category, upvotes, views, comment_count, created_at')
-    .eq('author_id', currentUser.id)
+    .from('ax_posts')
+    .select('id, title, category, created_at')
+    .eq('user_id', currentUser.id)
     .order('created_at', { ascending: false })
     .limit(50);
 
   if (error) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">데이터를 불러오지 못했습니다.</div></div>`;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠</div><div class="empty-msg">데이터를 불러오지 못했습니다.</div></div>';
     return;
   }
 
   if (!data || !data.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-msg">작성한 게시글이 없습니다.</div></div>`;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-msg">작성한 게시글이 없습니다.</div></div>';
     return;
   }
 
   const CATEGORY_LABELS = {
-    free: '자유 토론', ax_case: 'AX 사례', ai_tips: 'AI 활용법',
-    expert_column: '전문가 칼럼', company_qna: '기업 Q&A', recruit: '채용/협업'
+    notice: '공지사항', discussion: '자유토론',
+    reference: '참고자료', knowledge: '지식Hub'
   };
 
-  container.innerHTML = `<table class="data-table">
-    <thead><tr>
-      <th>제목</th><th>카테고리</th><th>작성일</th><th>조회</th><th>좋아요</th><th>댓글</th>
-    </tr></thead>
-    <tbody>${data.map(r => `<tr>
-      <td><a href="../../community.html" style="color:var(--ink);text-decoration:none;font-weight:500;">${escapeHtml(r.title || '-')}</a></td>
-      <td style="color:var(--ink-muted);font-size:13px;">${escapeHtml(CATEGORY_LABELS[r.category] || r.category || '-')}</td>
-      <td style="color:var(--ink-muted);font-size:13px;">${r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '-'}</td>
-      <td style="color:var(--ink-muted);font-size:13px;">${r.views || 0}</td>
-      <td style="color:var(--ink-muted);font-size:13px;">${r.upvotes || 0}</td>
-      <td style="color:var(--ink-muted);font-size:13px;">${r.comment_count || 0}</td>
-    </tr>`).join('')}</tbody>
-  </table>`;
+  container.innerHTML = '<table class="data-table">' +
+    '<thead><tr><th>제목</th><th>카테고리</th><th>작성일</th></tr></thead>' +
+    '<tbody>' + data.map(r =>
+      '<tr><td><a href="../../community.html" style="color:var(--ink);text-decoration:none;font-weight:500;">' + escapeHtml(r.title || '-') + '</a></td>' +
+      '<td style="color:var(--ink-muted);font-size:13px;">' + escapeHtml(CATEGORY_LABELS[r.category] || r.category || '-') + '</td>' +
+      '<td style="color:var(--ink-muted);font-size:13px;">' + (r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '-') + '</td></tr>'
+    ).join('') + '</tbody></table>';
 }
 
 // ── Section Switch ──
@@ -700,16 +928,9 @@ function switchSection(name, btn) {
   document.getElementById('section-' + name).classList.add('active');
   btn.classList.add('active');
 
-  // Lazy load
   if (name === 'enrollments') loadEnrollments();
   if (name === 'projects') loadProjects();
   if (name === 'community') loadCommunityPosts();
-}
-
-// ── Logout ──
-async function handleLogout() {
-  if (db) await db.auth.signOut();
-  window.location.href = '../../index.html';
 }
 
 // ── Utils ──
