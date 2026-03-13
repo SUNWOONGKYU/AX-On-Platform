@@ -1055,12 +1055,11 @@ body {
       <textarea class="form-textarea" id="writeContent" placeholder="내용을 입력하세요 (최소 10자)" required minlength="10"></textarea>
     </div>
     <div class="form-group" id="fileUploadGroup" style="display:none;">
-      <label class="form-label">파일 첨부</label>
+      <label class="form-label">파일 첨부 <span style="font-weight:400;color:var(--ink-muted);font-size:12px;">(최대 10개, 각 20MB 이하)</span></label>
       <div style="display:flex;align-items:center;gap:10px;">
-        <input type="file" id="writeFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.hwp,.txt,.zip,.png,.jpg,.jpeg,.gif" style="font-size:13px;font-family:inherit;">
-        <span style="font-size:12px;color:var(--ink-muted);">최대 20MB</span>
+        <input type="file" id="writeFile" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.hwp,.txt,.zip,.png,.jpg,.jpeg,.gif,.webp" style="font-size:13px;font-family:inherit;">
       </div>
-      <div id="filePreview" style="margin-top:6px;font-size:12px;color:var(--ink-muted);"></div>
+      <div id="fileListPreview" style="margin-top:8px;"></div>
     </div>
     <div class="form-group" id="projectSelectGroup" style="display:none;">
       <label class="form-label">프로젝트 선택 <span style="color:var(--coral);">*</span></label>
@@ -1309,7 +1308,7 @@ async function fetchAllPosts() {
 
   const { data, error } = await db
     .from('ax_posts')
-    .select('id, title, content, category, user_id, author_name, created_at, file_url, file_name, project_id, tags, ax_comments(id)')
+    .select('id, title, content, category, user_id, author_name, created_at, file_url, file_name, files, project_id, tags, ax_comments(id)')
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -1629,7 +1628,7 @@ function renderPosts() {
             ${Array.isArray(post.tags) && post.tags.length ? post.tags.map(t => '<span style="font-size:11px;color:var(--teal);background:rgba(13,148,136,0.08);padding:2px 8px;border-radius:12px;">#' + escapeHtml(t) + '</span>').join('') : ''}
           </div>
           <div class="post-title">${escapeHtml(post.title)}</div>
-          <div class="post-preview">${post.file_name ? '📎 ' + escapeHtml(post.file_name) + ' — ' : ''}${escapeHtml(preview)}</div>
+          <div class="post-preview">${(post.files && post.files.length > 1) ? '📎 파일 ' + post.files.length + '개 — ' : post.file_name ? '📎 ' + escapeHtml(post.file_name) + ' — ' : ''}${escapeHtml(preview)}</div>
           <div class="post-footer">
             <div class="author-info">
               <div class="author-avatar">${authorInitial}</div>
@@ -1699,14 +1698,19 @@ function buildExpandContent(post, comments) {
     repliesByParent[c.parent_id].push(c);
   });
 
-  // File attachment display
+  // File attachment display (복수 파일 지원)
   let fileHtml = '';
-  if (post.file_url && post.file_name) {
-    fileHtml = `<div style="margin:12px 0;padding:10px 14px;background:var(--surface-warm);border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;">
-      <span style="font-size:20px;">📎</span>
-      <a href="${escapeHtml(post.file_url)}" target="_blank" rel="noopener" download="${escapeHtml(post.file_name)}" style="color:var(--violet);font-weight:600;font-size:14px;text-decoration:none;">${escapeHtml(post.file_name)}</a>
-      <span style="font-size:12px;color:var(--ink-muted);margin-left:auto;">다운로드</span>
-    </div>`;
+  const fileList = (post.files && post.files.length > 0) ? post.files :
+    (post.file_url && post.file_name) ? [{ url: post.file_url, name: post.file_name }] : [];
+  if (fileList.length > 0) {
+    fileHtml = '<div style="margin:12px 0;">' + fileList.map(f => {
+      const isImg = /\.(png|jpg|jpeg|gif|webp)$/i.test(f.name);
+      return (isImg ? '<div style="margin-bottom:8px;"><img src="' + escapeHtml(f.url) + '" alt="' + escapeHtml(f.name) + '" style="max-width:100%;max-height:400px;border-radius:8px;border:1px solid var(--border);"></div>' : '') +
+        '<div style="padding:8px 14px;background:var(--surface-warm);border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;margin-bottom:6px;">' +
+        '<span style="font-size:18px;">' + (isImg ? '🖼' : '📎') + '</span>' +
+        '<a href="' + escapeHtml(f.url) + '" target="_blank" rel="noopener" download="' + escapeHtml(f.name) + '" style="color:var(--violet);font-weight:600;font-size:13px;text-decoration:none;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(f.name) + '</a>' +
+        '<span style="font-size:12px;color:var(--ink-muted);">다운로드</span></div>';
+    }).join('') + '</div>';
   }
 
   // Wiki edit toolbar for knowledge posts
@@ -2033,6 +2037,49 @@ function mobileCatSelect(el, cat) {
 
 // ── Write modal ──
 let selectedWriteCat = 'discussion';
+let pendingFiles = [];
+
+// 파일 선택 이벤트 — 최대 10개
+document.getElementById('writeFile').addEventListener('change', function() {
+  const newFiles = Array.from(this.files);
+  const maxFiles = 10;
+  const maxSize = 20 * 1024 * 1024;
+
+  for (const f of newFiles) {
+    if (pendingFiles.length >= maxFiles) {
+      showToast('파일은 최대 ' + maxFiles + '개까지 첨부할 수 있습니다.', true);
+      break;
+    }
+    if (f.size > maxSize) {
+      showToast(f.name + ' — 파일 크기가 20MB를 초과합니다.', true);
+      continue;
+    }
+    pendingFiles.push(f);
+  }
+  this.value = '';
+  renderFileList();
+});
+
+function renderFileList() {
+  const container = document.getElementById('fileListPreview');
+  if (!container) return;
+  if (pendingFiles.length === 0) { container.innerHTML = ''; return; }
+  container.innerHTML = pendingFiles.map((f, i) => {
+    const isImg = /\.(png|jpg|jpeg|gif|webp)$/i.test(f.name);
+    const icon = isImg ? '🖼' : '📎';
+    return '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;">' +
+      '<span>' + icon + '</span>' +
+      '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(f.name) + '</span>' +
+      '<span style="color:var(--ink-muted);font-size:11px;">' + (f.size / 1024 < 1024 ? Math.round(f.size / 1024) + 'KB' : (f.size / 1024 / 1024).toFixed(1) + 'MB') + '</span>' +
+      '<button type="button" onclick="removeFile(' + i + ')" style="background:none;border:none;color:var(--coral);cursor:pointer;font-size:16px;padding:2px 6px;">✕</button>' +
+    '</div>';
+  }).join('') + '<div style="font-size:11px;color:var(--ink-muted);margin-top:4px;">' + pendingFiles.length + '/10개 선택됨</div>';
+}
+
+function removeFile(idx) {
+  pendingFiles.splice(idx, 1);
+  renderFileList();
+}
 
 function selectWriteCat(el, cat) {
   if (!el) return;
@@ -2077,8 +2124,9 @@ function openWriteModal() {
   document.getElementById('writeContent').value = '';
   const fileInput = document.getElementById('writeFile');
   if (fileInput) fileInput.value = '';
-  const filePreview = document.getElementById('filePreview');
-  if (filePreview) filePreview.textContent = '';
+  const fileListPreview = document.getElementById('fileListPreview');
+  if (fileListPreview) fileListPreview.innerHTML = '';
+  pendingFiles = [];
   const tagsInput = document.getElementById('writeTags');
   if (tagsInput) tagsInput.value = '';
   const projectSelect = document.getElementById('writeProjectId');
@@ -2122,19 +2170,14 @@ async function submitPost() {
   btn.disabled = true;
   btn.textContent = '등록 중...';
 
-  // File upload for reference posts
+  // File upload for reference posts (최대 10개)
   let file_url = null;
   let file_name = null;
-  if (selectedWriteCat === 'reference') {
-    const fileInput = document.getElementById('writeFile');
-    const file = fileInput && fileInput.files[0];
-    if (file) {
-      const maxSize = 20 * 1024 * 1024;
-      if (file.size > maxSize) {
-        showToast('파일 크기는 20MB 이하여야 합니다.', true);
-        btn.disabled = false; btn.textContent = '등록';
-        return;
-      }
+  let uploadedFiles = [];
+  if (selectedWriteCat === 'reference' && pendingFiles.length > 0) {
+    btn.textContent = '파일 업로드 중...';
+    for (let i = 0; i < pendingFiles.length; i++) {
+      const file = pendingFiles[i];
       const ext = file.name.split('.').pop().toLowerCase();
       const safeName = Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + ext;
       const path = 'references/' + currentUser.id + '/' + safeName;
@@ -2143,14 +2186,20 @@ async function submitPost() {
         .from('community-images')
         .upload(path, file, { upsert: false });
       if (uploadErr) {
-        showToast('파일 업로드 실패: ' + uploadErr.message, true);
+        showToast((i + 1) + '번째 파일 업로드 실패: ' + uploadErr.message, true);
         btn.disabled = false; btn.textContent = '등록';
         return;
       }
       const { data: urlData } = db.storage.from('community-images').getPublicUrl(path);
-      file_url = urlData?.publicUrl || null;
-      file_name = file.name;
+      const url = urlData?.publicUrl || null;
+      if (url) uploadedFiles.push({ url: url, name: file.name });
     }
+    // 하위 호환: 첫 번째 파일을 file_url/file_name에도 저장
+    if (uploadedFiles.length > 0) {
+      file_url = uploadedFiles[0].url;
+      file_name = uploadedFiles[0].name;
+    }
+    btn.textContent = '등록 중...';
   }
 
   // Project handling
@@ -2198,6 +2247,7 @@ async function submitPost() {
     author_name: currentExpert.name || currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || '전문가'
   };
   if (file_url) { insertData.file_url = file_url; insertData.file_name = file_name; }
+  if (uploadedFiles.length > 0) { insertData.files = uploadedFiles; }
   if (project_id) insertData.project_id = project_id;
   if (tags.length) insertData.tags = tags;
 
