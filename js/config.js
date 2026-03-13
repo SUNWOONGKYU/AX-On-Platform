@@ -23,9 +23,12 @@ const AXON_CONFIG = {
         this._initialized = true;
         return this;
       })
-      .catch(err => {
-        console.error('[AXON_CONFIG] 설정 로드 실패:', err);
-        throw err;
+      .catch(() => {
+        // Fallback: anon key는 공개용이므로 클라이언트 fallback 허용
+        this.SUPABASE_URL = 'https://gifxpfdnnfwufzdncmor.supabase.co';
+        this.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZnhwZmRubmZ3dWZ6ZG5jbW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MTE0NjIsImV4cCI6MjA4ODA4NzQ2Mn0.OzhTlF_kroJVd6uxJO5YPT-OGU7gPuo3m17gHBE2kvY';
+        this._initialized = true;
+        return this;
       });
 
     return this._initPromise;
