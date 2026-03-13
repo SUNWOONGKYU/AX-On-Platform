@@ -446,7 +446,8 @@ body {
   max-height: 0; overflow: hidden;
   transition: max-height 0.4s ease;
 }
-.post-card.expanded .post-expand {
+.post-card.expanded .post-expand,
+.notice-pin-item.expanded .post-expand {
   max-height: 2000px;
 }
 .post-card.expanded {
@@ -1277,10 +1278,12 @@ async function doLogout() {
 function showCommunity() {
   document.getElementById('pageHeader').style.display = 'block';
   document.getElementById('communityLayout').style.display = 'grid';
-  // Show mobile category bar on small screens
-  if (window.innerWidth <= 768) {
-    document.getElementById('mobileCatBar').style.display = 'flex';
-  }
+  // Show mobile category bar on small screens only
+  const mcb = document.getElementById('mobileCatBar');
+  mcb.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+  window.addEventListener('resize', () => {
+    mcb.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+  });
   // Default select discussion category radio in write modal
   selectWriteCat(document.querySelector('.cat-radio-item[data-cat="discussion"]'), 'discussion');
   fetchAllPosts();
