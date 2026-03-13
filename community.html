@@ -1085,6 +1085,27 @@ body {
   </div>
 </div>
 
+<!-- EDIT MODAL -->
+<div class="write-modal-overlay" id="editModal" role="dialog" aria-modal="true" aria-label="게시글 수정">
+  <div class="write-modal">
+    <button class="modal-close" onclick="closeEditModal()" aria-label="닫기">✕</button>
+    <div class="write-modal-title">게시글 수정</div>
+    <input type="hidden" id="editPostId">
+    <div class="form-group">
+      <label class="form-label">제목 <span style="color:var(--coral);">*</span></label>
+      <input type="text" class="form-input" id="editTitle" placeholder="제목을 입력하세요" required maxlength="200">
+    </div>
+    <div class="form-group">
+      <label class="form-label">내용 <span style="color:var(--coral);">*</span></label>
+      <textarea class="form-textarea" id="editContent" placeholder="내용을 입력하세요 (최소 10자)" required minlength="10"></textarea>
+    </div>
+    <div class="form-footer">
+      <button class="btn-cancel" onclick="closeEditModal()">취소</button>
+      <button class="btn-submit" id="editSubmitBtn" onclick="saveEditPost()">저장</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
@@ -1736,7 +1757,6 @@ function buildExpandContent(post, comments) {
     <div class="post-full-content" id="postContent-${post.id}">${sanitizedContent}</div>
     ${fileHtml}
     ${wikiHtml}
-    ${currentUser && (post.user_id === currentUser.id || currentUser.app_metadata?.role === 'admin') ? '<div id="editForm-' + post.id + '" style="display:none;"></div>' : ''}
     <button class="post-collapse-btn" onclick="event.stopPropagation(); togglePost('${post.id}')">▲ 접기</button>
     <div class="comments-section">
       <div class="comments-title">댓글 ${comments.length}개</div>`;
@@ -2143,60 +2163,45 @@ function openWriteModal() {
   if (newProjectInput) newProjectInput.style.display = 'none';
 }
 
-// ── 게시글 수정 ──
-async function startEditPost(postId) {
-  try {
-    const post = allPosts.find(p => p.id === postId);
-    if (!post) { console.error('startEditPost: post not found', postId); return; }
-
-    // 게시글이 펼쳐져 있지 않으면 먼저 펼치기
-    if (state.expandedPostId !== postId) {
-      await togglePost(postId);
-    }
-
-    // editForm 컨테이너를 찾거나, 없으면 직접 생성
-    let container = document.getElementById('editForm-' + postId);
-    if (!container) {
-      const expandInner = document.getElementById('expand-' + postId);
-      if (!expandInner) { console.error('startEditPost: expand container not found'); return; }
-      container = document.createElement('div');
-      container.id = 'editForm-' + postId;
-      expandInner.insertBefore(container, expandInner.firstChild);
-    }
-
-    container.style.display = 'block';
-    container.innerHTML =
-      '<div style="border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;background:var(--surface-warm);">' +
-        '<div style="font-size:13px;font-weight:700;margin-bottom:8px;">게시글 수정</div>' +
-        '<input type="text" id="editTitle-' + postId + '" class="form-input" value="' + escapeHtml(post.title) + '" style="margin-bottom:8px;font-size:14px;">' +
-        '<textarea id="editContent-' + postId + '" class="form-textarea" style="min-height:120px;font-size:14px;">' + escapeHtml(post.content || '') + '</textarea>' +
-        '<div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end;">' +
-          '<button class="btn-wiki" onclick="event.stopPropagation(); document.getElementById(\'editForm-' + postId + '\').style.display=\'none\';">취소</button>' +
-          '<button class="btn-wiki primary" onclick="event.stopPropagation(); saveEditPost(\'' + postId + '\')">저장</button>' +
-        '</div>' +
-      '</div>';
-  } catch (e) {
-    console.error('startEditPost error:', e);
-    showToast('수정 폼을 여는 중 오류가 발생했습니다.', true);
-  }
+// ── 게시글 수정 (모달 방식) ──
+function startEditPost(postId) {
+  var post = allPosts.find(function(p) { return p.id === postId; });
+  if (!post) return;
+  document.getElementById('editPostId').value = postId;
+  document.getElementById('editTitle').value = post.title || '';
+  document.getElementById('editContent').value = post.content || '';
+  document.getElementById('editModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-async function saveEditPost(postId) {
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function saveEditPost() {
   if (!db || !currentUser) return;
-  const title = document.getElementById('editTitle-' + postId).value.trim();
-  const content = document.getElementById('editContent-' + postId).value.trim();
+  var postId = document.getElementById('editPostId').value;
+  var title = document.getElementById('editTitle').value.trim();
+  var content = document.getElementById('editContent').value.trim();
   if (!title) { showToast('제목을 입력해주세요.', true); return; }
   if (!content || content.length < 10) { showToast('내용을 10자 이상 입력해주세요.', true); return; }
 
-  const { error } = await db.from('ax_posts')
+  var btn = document.getElementById('editSubmitBtn');
+  btn.disabled = true; btn.textContent = '저장 중...';
+
+  var result = await db.from('ax_posts')
     .update({ title: sanitize(title), content: sanitize(content) })
     .eq('id', postId);
 
-  if (error) {
-    console.error('editPost error:', error);
-    showToast('수정에 실패했습니다: ' + error.message, true);
+  btn.disabled = false; btn.textContent = '저장';
+
+  if (result.error) {
+    console.error('editPost error:', result.error);
+    showToast('수정에 실패했습니다: ' + result.error.message, true);
     return;
   }
+  closeEditModal();
   showToast('게시글이 수정되었습니다.');
   await fetchAllPosts();
 }
@@ -2377,11 +2382,18 @@ document.getElementById('writeModal').addEventListener('click', function(e) {
   if (e.target === this) closeWriteModal();
 });
 
-// ── Close write modal on Escape ──
+// ── Edit modal overlay click ──
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if (e.target === this) closeEditModal();
+});
+
+// ── Close modals on Escape ──
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    const wm = document.getElementById('writeModal');
+    var wm = document.getElementById('writeModal');
     if (wm.classList.contains('open')) closeWriteModal();
+    var em = document.getElementById('editModal');
+    if (em.classList.contains('open')) closeEditModal();
   }
 });
 
