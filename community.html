@@ -89,12 +89,12 @@ body {
 .logo-text span { color: var(--amber); }
 .nav-links { display: flex; gap: 4px; align-items: center; }
 .nav-links a {
-  text-decoration: none; color: var(--ink-muted);
+  text-decoration: none; color: #1a1a2e;
   font-size: 17px; font-weight: 700;
   padding: 8px 16px; border-radius: 10px;
   transition: all 0.25s ease;
 }
-.nav-links a:hover { color: var(--ink); background: rgba(26, 26, 46, 0.04); }
+.nav-links a:hover { color: var(--violet); background: rgba(124, 92, 224, 0.06); }
 .nav-links a.active { color: var(--violet); font-weight: 700; }
 .nav-right { display: flex; align-items: center; gap: 8px; }
 .nav-auth-btn {
@@ -264,19 +264,16 @@ body {
 
 /* ── GUIDE LIST (지식 허브 아코디언) ── */
 .cat-write-btn {
-  background: rgba(124,92,224,0.1); border: 1px solid rgba(124,92,224,0.25);
   cursor: pointer; font-size: 11px; font-weight: 700;
-  padding: 2px 7px; border-radius: 6px; color: var(--violet);
-  transition: all 0.15s; line-height: 1.6;
+  padding: 3px 10px; border-radius: 20px; border: none;
+  color: #fff; transition: all 0.15s; line-height: 1.6;
   font-family: 'Noto Sans KR', sans-serif; white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-.cat-write-btn:hover { background: rgba(124,92,224,0.22); border-color: var(--violet); }
-.cat-write-discussion { background: rgba(13,148,136,0.1); border-color: rgba(13,148,136,0.25); color: #0d9488; }
-.cat-write-discussion:hover { background: rgba(13,148,136,0.22); border-color: #0d9488; }
-.cat-write-reference { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.25); color: #2563EB; }
-.cat-write-reference:hover { background: rgba(37,99,235,0.22); border-color: #2563EB; }
-.cat-write-project { background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.25); color: #D97706; }
-.cat-write-project:hover { background: rgba(217,119,6,0.22); border-color: #D97706; }
+.cat-write-btn:hover { opacity: 0.85; transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+.cat-write-discussion { background: #0d9488; }
+.cat-write-reference { background: #2563EB; }
+.cat-write-project { background: #D97706; }
 .cat-knowledge {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 12px; border-radius: 10px;
@@ -300,10 +297,9 @@ body {
   background: rgba(124,92,224,0.22); border-color: var(--violet);
 }
 .knowledge-guides {
-  display: none; flex-direction: column; gap: 3px;
+  display: flex; flex-direction: column; gap: 3px;
   padding: 4px 0 4px 8px;
 }
-.knowledge-guides.open { display: flex; }
 .guide-item {
   display: flex; align-items: flex-start; gap: 8px;
   padding: 8px 10px; border-radius: 8px;
@@ -1015,11 +1011,9 @@ body {
         <div class="cat-knowledge" id="catKnowledge" data-cat="knowledge" role="button" tabindex="0"
           onclick="filterCategory(this,'knowledge')"
           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'knowledge')}">
-          <span><span class="cat-icon">💡</span>지식HUB</span>
+          <span style="white-space:nowrap;"><span class="cat-icon">💡</span>지식HUB</span>
           <span class="cat-right">
             <span class="cat-count" id="cnt-knowledge">0</span>
-            <button type="button" class="knowledge-chevron" id="knowledgeChevron"
-              onclick="event.stopPropagation();toggleKnowledgeGuides()" aria-label="가이드 목록 펼치기">▾</button>
           </span>
         </div>
         <div class="knowledge-guides" id="knowledgeGuides">
@@ -1630,11 +1624,9 @@ function renderNoticePin() {
     ${visible.map(post => {
       const isExpanded = state.expandedPostId === post.id;
       return `<div class="notice-pin-item${isExpanded ? ' expanded' : ''}" id="post-${post.id}">
-        <div class="post-card-header" onclick="togglePost('${post.id}')">
-          <div class="post-title" style="font-size:14px;">${escapeHtml(post.title)}</div>
-          <div class="post-footer">
-            <span class="post-time">${timeAgo(post.created_at)}</span>
-          </div>
+        <div class="post-card-header" onclick="togglePost('${post.id}')" style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="post-title" style="font-size:14px;margin-bottom:0;flex:1;">${escapeHtml(post.title)}</div>
+          <span class="post-time" style="white-space:nowrap;margin-left:12px;">${timeAgo(post.created_at)}</span>
         </div>
         <div class="post-expand"><div class="post-expand-inner" id="expand-${post.id}">${isExpanded ? buildExpandContent(post) : ''}</div></div>
       </div>`;
