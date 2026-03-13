@@ -1159,10 +1159,12 @@ function timeAgo(dateStr) {
 
 function sanitize(str) {
   if (!str) return '';
-  if (typeof DOMPurify !== 'undefined') {
-    return DOMPurify.sanitize(str, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
-  }
   return escapeHtml(str);
+}
+
+function linkify(str) {
+  // URL을 클릭 가능한 링크로 변환
+  return str.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:var(--violet);text-decoration:underline;word-break:break-all;">$1</a>');
 }
 
 function showToast(msg, isError) {
@@ -1687,7 +1689,7 @@ async function togglePost(postId) {
 
 function buildExpandContent(post, comments) {
   comments = comments || [];
-  const sanitizedContent = sanitize(post.content || '');
+  const sanitizedContent = linkify(sanitize(post.content || ''));
 
   // Separate top-level comments and replies
   const topComments = comments.filter(c => !c.parent_id);
