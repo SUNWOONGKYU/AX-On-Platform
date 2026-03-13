@@ -1070,10 +1070,10 @@ body {
           <span class="guide-label">풀스택 웹사이트 개발 기초지식</span>
         </a>
         <a href="guides/sal-grid-patent.html" target="_blank" class="guide-item">
-          <span class="guide-label">SAL Grid 개발 방법론 — 특허 소개서</span>
+          <span class="guide-label">SAL Grid 개발 방법론 특허 소개서</span>
         </a>
         <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item">
-          <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
+          <span class="guide-label">소대 편제 작업팀 구성·운용 특허 소개서</span>
         </a>
       </div>
     </div>
@@ -2142,7 +2142,7 @@ async function loadProjectsSidebar() {
   try {
     const { data, error } = await db
       .from('ax_projects')
-      .select('id, name, description, status, assigned_experts, schedule, created_at')
+      .select('*')
       .order('created_at', { ascending: false });
 
     if (error) { console.error('loadProjects error:', error); return; }
