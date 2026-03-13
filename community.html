@@ -1471,7 +1471,6 @@ async function submitWikiEdit(postId) {
     return;
   }
 
-  const sanitizedContent = sanitize(newContent);
   const post = allPosts.find(p => p.id === postId);
   if (!post) return;
 
@@ -1494,7 +1493,7 @@ async function submitWikiEdit(postId) {
 
   // Update post content
   const { error: updateError } = await db.from('ax_posts')
-    .update({ content: sanitizedContent })
+    .update({ content: newContent })
     .eq('id', postId);
 
   if (updateError) {
@@ -1847,16 +1846,10 @@ async function submitReply(postId, parentId) {
     return;
   }
 
-  const sanitizedContent = sanitize(content);
-  if (!sanitizedContent) {
-    showToast('유효한 답글 내용을 입력해주세요.', true);
-    return;
-  }
-
   const { error } = await db.from('ax_comments').insert({
     post_id: postId,
     parent_id: parentId,
-    content: sanitizedContent,
+    content: content,
     user_id: currentUser.id,
     author_name: currentExpert.name || currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || '전문가'
   });
@@ -1910,15 +1903,9 @@ async function submitComment(postId) {
     return;
   }
 
-  const sanitizedContent = sanitize(content);
-  if (!sanitizedContent) {
-    showToast('유효한 댓글 내용을 입력해주세요.', true);
-    return;
-  }
-
   const { data, error } = await db.from('ax_comments').insert({
     post_id: postId,
-    content: sanitizedContent,
+    content: content,
     user_id: currentUser.id,
     author_name: currentExpert.name || currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || '전문가'
   }).select().single();
@@ -2191,7 +2178,7 @@ async function saveEditPost() {
   btn.disabled = true; btn.textContent = '저장 중...';
 
   var result = await db.from('ax_posts')
-    .update({ title: sanitize(title), content: sanitize(content) })
+    .update({ title: title, content: content })
     .eq('id', postId);
 
   btn.disabled = false; btn.textContent = '저장';
@@ -2258,10 +2245,7 @@ async function submitPost() {
     return;
   }
 
-  const sanitizedTitle = sanitize(title);
-  const sanitizedContent = sanitize(content);
-
-  if (!sanitizedTitle || !sanitizedContent) {
+  if (!title || !content) {
     showToast('유효한 내용을 입력해주세요.', true);
     return;
   }
@@ -2311,8 +2295,8 @@ async function submitPost() {
       // Create new project
       const newProjDesc = document.getElementById('newProjectDesc');
       const { data: newProj, error: projErr } = await db.from('ax_projects').insert({
-        name: sanitize(newProjName.value.trim()),
-        description: newProjDesc ? sanitize(newProjDesc.value.trim()) : null,
+        name: newProjName.value.trim(),
+        description: newProjDesc ? newProjDesc.value.trim() : null,
         created_by: currentUser.id
       }).select().single();
       if (projErr) {
@@ -2335,13 +2319,13 @@ async function submitPost() {
   if (selectedWriteCat === 'discussion') {
     const tagsInput = document.getElementById('writeTags');
     if (tagsInput && tagsInput.value.trim()) {
-      tags = tagsInput.value.split(',').map(t => sanitize(t.trim())).filter(Boolean);
+      tags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
     }
   }
 
   const insertData = {
-    title: sanitizedTitle,
-    content: sanitizedContent,
+    title: title,
+    content: content,
     category: selectedWriteCat,
     user_id: currentUser.id,
     author_name: currentExpert.name || currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || '전문가'
