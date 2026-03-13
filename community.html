@@ -992,13 +992,6 @@ body {
             <span class="cat-count" id="cnt-notice">0</span>
           </span>
         </div>
-        <div class="cat-item" role="button" tabindex="0" data-cat="discussion" onclick="filterCategory(this,'discussion')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'discussion')}">
-          <span><span class="cat-icon">💬</span>자유토론</span>
-          <span class="cat-right">
-            <span class="cat-count" id="cnt-discussion">0</span>
-            <button type="button" class="cat-write-btn cat-write-discussion" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">글쓰기</button>
-          </span>
-        </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="reference" onclick="filterCategory(this,'reference')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'reference')}">
           <span><span class="cat-icon">📚</span>참고자료</span>
           <span class="cat-right">
@@ -1006,7 +999,7 @@ body {
             <button type="button" class="cat-write-btn cat-write-reference" onclick="event.stopPropagation();selectedWriteCat='reference';openWriteModal();" title="참고자료 올리기">글쓰기</button>
           </span>
         </div>
-        <!-- 지식 허브 아코디언 -->
+        <!-- 지식 허브 -->
         <div class="cat-knowledge" id="catKnowledge" data-cat="knowledge" role="button" tabindex="0"
           onclick="filterCategory(this,'knowledge')"
           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'knowledge')}">
@@ -1029,6 +1022,13 @@ body {
             <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
           </a>
           <button class="btn-more-toggle" id="guideMoreBtn" onclick="toggleGuidesMore(this)">더보기 (1개)</button>
+        </div>
+        <div class="cat-item" role="button" tabindex="0" data-cat="discussion" onclick="filterCategory(this,'discussion')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'discussion')}">
+          <span><span class="cat-icon">💬</span>자유토론</span>
+          <span class="cat-right">
+            <span class="cat-count" id="cnt-discussion">0</span>
+            <button type="button" class="cat-write-btn cat-write-discussion" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">글쓰기</button>
+          </span>
         </div>
       </div>
     </div>
