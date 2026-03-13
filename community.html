@@ -90,12 +90,12 @@ body {
 .nav-links { display: flex; gap: 4px; align-items: center; }
 .nav-links a {
   text-decoration: none; color: var(--ink-muted);
-  font-size: 15px; font-weight: 500;
-  padding: 8px 14px; border-radius: 10px;
+  font-size: 17px; font-weight: 700;
+  padding: 8px 16px; border-radius: 10px;
   transition: all 0.25s ease;
 }
 .nav-links a:hover { color: var(--ink); background: rgba(26, 26, 46, 0.04); }
-.nav-links a.active { color: var(--violet); }
+.nav-links a.active { color: var(--violet); font-weight: 700; }
 .nav-right { display: flex; align-items: center; gap: 8px; }
 .nav-auth-btn {
   text-decoration: none; font-size: 14px; font-weight: 600;
@@ -250,13 +250,16 @@ body {
 .cat-icon { margin-right: 8px; font-size: 15px; }
 .cat-right {
   display: flex; align-items: center; gap: 6px;
-  min-width: 72px; justify-content: flex-end;
+  min-width: 90px; justify-content: flex-end;
 }
 .cat-count {
   font-size: 11px; background: rgba(26,26,46,0.06);
   padding: 2px 7px; border-radius: 20px; color: var(--ink-muted);
   min-width: 28px; text-align: center; flex-shrink: 0;
+  order: 2;
 }
+.cat-write-btn { order: 1; }
+.knowledge-chevron { order: 1; }
 .cat-item.active .cat-count { background: rgba(124, 92, 224, 0.15); color: var(--violet); }
 
 /* ── GUIDE LIST (지식 허브 아코디언) ── */
@@ -268,6 +271,12 @@ body {
   font-family: 'Noto Sans KR', sans-serif; white-space: nowrap;
 }
 .cat-write-btn:hover { background: rgba(124,92,224,0.22); border-color: var(--violet); }
+.cat-write-discussion { background: rgba(13,148,136,0.1); border-color: rgba(13,148,136,0.25); color: #0d9488; }
+.cat-write-discussion:hover { background: rgba(13,148,136,0.22); border-color: #0d9488; }
+.cat-write-reference { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.25); color: #2563EB; }
+.cat-write-reference:hover { background: rgba(37,99,235,0.22); border-color: #2563EB; }
+.cat-write-project { background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.25); color: #D97706; }
+.cat-write-project:hover { background: rgba(217,119,6,0.22); border-color: #D97706; }
 .cat-knowledge {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 12px; border-radius: 10px;
@@ -281,9 +290,14 @@ body {
   color: var(--violet); border-color: rgba(124, 92, 224, 0.2);
 }
 .knowledge-chevron {
-  background: none; border: none; cursor: pointer;
-  font-size: 18px; color: inherit; padding: 0 0 0 4px;
-  transition: transform 0.2s; line-height: 1; flex-shrink: 0;
+  background: rgba(124,92,224,0.1); border: 1px solid rgba(124,92,224,0.25);
+  cursor: pointer; border-radius: 6px;
+  font-size: 16px; color: var(--violet); padding: 2px 8px;
+  transition: transform 0.2s, background 0.15s; line-height: 1.4; flex-shrink: 0;
+  font-weight: 700;
+}
+.knowledge-chevron:hover {
+  background: rgba(124,92,224,0.22); border-color: var(--violet);
 }
 .knowledge-guides {
   display: none; flex-direction: column; gap: 3px;
@@ -331,6 +345,14 @@ body {
   transition: all 0.15s;
 }
 .btn-project-write:hover { background: rgba(124,92,224,0.06); }
+.btn-more-toggle {
+  display: block; width: 100%; margin-top: 6px;
+  padding: 6px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface-warm); color: var(--ink-muted); font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s; text-align: center;
+}
+.btn-more-toggle:hover { background: rgba(124,92,224,0.06); color: var(--violet); border-color: rgba(124,92,224,0.2); }
 
 /* ── MAIN FEED ── */
 .feed-main { min-width: 0; }
@@ -394,11 +416,11 @@ body {
 .badge-reference { background: rgba(37,99,235,0.1); color: #2563EB; }
 .badge-discussion { background: rgba(13,148,136,0.1); color: #0d9488; }
 .badge-knowledge { background: rgba(232,146,13,0.1); color: #e8920d; }
-.badge-project { background: rgba(124,92,224,0.1); color: #7c5ce0; }
+.badge-project { background: rgba(234,138,30,0.1); color: #D97706; }
 
 .post-title {
-  font-size: 15px; font-weight: 700;
-  color: var(--ink); margin-bottom: 6px;
+  font-size: 15px; font-weight: 600;
+  color: #2d2d3f; margin-bottom: 6px;
   line-height: 1.4;
 }
 .post-title:hover { color: var(--violet); }
@@ -979,14 +1001,14 @@ body {
           <span><span class="cat-icon">💬</span>자유토론</span>
           <span class="cat-right">
             <span class="cat-count" id="cnt-discussion">0</span>
-            <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">글쓰기</button>
+            <button type="button" class="cat-write-btn cat-write-discussion" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">글쓰기</button>
           </span>
         </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="reference" onclick="filterCategory(this,'reference')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'reference')}">
           <span><span class="cat-icon">📚</span>참고자료</span>
           <span class="cat-right">
             <span class="cat-count" id="cnt-reference">0</span>
-            <button type="button" class="cat-write-btn" onclick="event.stopPropagation();selectedWriteCat='reference';openWriteModal();" title="참고자료 올리기">글쓰기</button>
+            <button type="button" class="cat-write-btn cat-write-reference" onclick="event.stopPropagation();selectedWriteCat='reference';openWriteModal();" title="참고자료 올리기">글쓰기</button>
           </span>
         </div>
         <!-- 지식 허브 아코디언 -->
@@ -1013,10 +1035,11 @@ body {
             <span class="guide-icon">📄</span>
             <span class="guide-label">SAL Grid 개발 방법론 — 특허 소개서</span>
           </a>
-          <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item">
+          <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item guide-hidden" style="display:none;">
             <span class="guide-icon">📄</span>
             <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
           </a>
+          <button class="btn-more-toggle" id="guideMoreBtn" onclick="toggleGuidesMore(this)">더보기 (1개)</button>
         </div>
       </div>
     </div>
@@ -1032,7 +1055,10 @@ body {
   <!-- SIDEBAR RIGHT: 프로젝트 -->
   <aside class="sidebar-right" id="sidebarRight">
     <div class="sidebar-section">
-      <div class="sidebar-title">🏗 프로젝트</div>
+      <div class="sidebar-title" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>🏗 프로젝트</span>
+        <button type="button" class="cat-write-btn cat-write-project" onclick="openProjectWriteModal()" title="프로젝트 글쓰기">글쓰기</button>
+      </div>
       <div class="project-list" id="projectList">
         <div style="font-size:13px;color:var(--ink-muted);padding:8px;">불러오는 중...</div>
       </div>
@@ -1577,6 +1603,9 @@ function updateCategoryCounts() {
   allPosts.forEach(p => {
     if (counts[p.category] !== undefined) counts[p.category]++;
   });
+  // 지식HUB: DB 게시글 + 하드코딩된 가이드 수
+  const guideCount = document.querySelectorAll('#knowledgeGuides .guide-item').length;
+  counts.knowledge += guideCount;
   Object.keys(counts).forEach(key => {
     const el = document.getElementById('cnt-' + key);
     if (el) el.textContent = counts[key];
@@ -1604,7 +1633,6 @@ function renderNoticePin() {
         <div class="post-card-header" onclick="togglePost('${post.id}')">
           <div class="post-title" style="font-size:14px;">${escapeHtml(post.title)}</div>
           <div class="post-footer">
-            <span class="author-name" style="font-size:12px;">${escapeHtml(post.author_name || '관리자')}</span>
             <span class="post-time">${timeAgo(post.created_at)}</span>
           </div>
         </div>
@@ -1956,16 +1984,21 @@ function renderProjectsSidebar() {
     return;
   }
 
-  container.innerHTML = allProjects.map(p => {
+  const maxShow = 3;
+  const projectCards = allProjects.map((p, i) => {
     const expertCount = Array.isArray(p.assigned_experts) ? p.assigned_experts.length : 0;
     return `
-      <div class="project-item${selectedProjectId === p.id ? ' active' : ''}" onclick="selectProject('${p.id}')">
-        <div class="project-item-name">${escapeHtml(p.name)}</div>
-        ${p.description ? '<div class="project-item-desc">' + escapeHtml(p.description) + '</div>' : ''}
-        <div class="project-item-meta">${expertCount > 0 ? '전문가 ' + expertCount + '명' : ''} ${timeAgo(p.created_at)}</div>
+      <div class="project-item${selectedProjectId === p.id ? ' active' : ''}${i >= maxShow ? ' project-hidden' : ''}" onclick="selectProject('${p.id}')" ${i >= maxShow ? 'style="display:none;"' : ''}>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="project-item-name">${escapeHtml(p.name)}</div>
+          <span class="project-item-meta" style="margin:0;white-space:nowrap;">${timeAgo(p.created_at)}</span>
+        </div>
       </div>`;
-  }).join('') +
-  '<button class="btn-project-write" onclick="openProjectWriteModal()">+ 프로젝트 글쓰기</button>';
+  }).join('');
+  const moreBtn = allProjects.length > maxShow
+    ? '<button class="btn-more-toggle" onclick="toggleProjectsMore(this)">더보기 (' + (allProjects.length - maxShow) + '개)</button>'
+    : '';
+  container.innerHTML = projectCards + moreBtn;
 }
 
 function selectProject(projectId) {
@@ -2021,6 +2054,22 @@ function toggleKnowledgeGuides() {
   const isOpen = guides.classList.contains('open');
   guides.classList.toggle('open', !isOpen);
   chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+// ── 더보기 토글 (프로젝트) ──
+function toggleProjectsMore(btn) {
+  const hidden = document.querySelectorAll('#projectList .project-hidden');
+  const showing = hidden.length > 0 && hidden[0].style.display !== 'none';
+  hidden.forEach(el => el.style.display = showing ? 'none' : '');
+  btn.textContent = showing ? '더보기 (' + hidden.length + '개)' : '접기';
+}
+
+// ── 더보기 토글 (지식HUB 가이드) ──
+function toggleGuidesMore(btn) {
+  const hidden = document.querySelectorAll('#knowledgeGuides .guide-hidden');
+  const showing = hidden.length > 0 && hidden[0].style.display !== 'none';
+  hidden.forEach(el => el.style.display = showing ? 'none' : '');
+  btn.textContent = showing ? '더보기 (' + hidden.length + '개)' : '접기';
 }
 
 // ── Category filtering ──
