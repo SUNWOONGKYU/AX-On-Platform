@@ -1623,9 +1623,16 @@ function renderPosts() {
     return `
       <div class="post-card${isExpanded ? ' expanded' : ''}" id="post-${post.id}">
         <div class="post-card-header" onclick="togglePost('${post.id}')">
-          <div class="post-meta">
-            <span class="post-category-badge ${cat.badge}">${escapeHtml(cat.label)}</span>
-            ${Array.isArray(post.tags) && post.tags.length ? post.tags.map(t => '<span style="font-size:11px;color:var(--teal);background:rgba(13,148,136,0.08);padding:2px 8px;border-radius:12px;">#' + escapeHtml(t) + '</span>').join('') : ''}
+          <div class="post-meta" style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <span class="post-category-badge ${cat.badge}">${escapeHtml(cat.label)}</span>
+              ${Array.isArray(post.tags) && post.tags.length ? post.tags.map(t => '<span style="font-size:11px;color:var(--teal);background:rgba(13,148,136,0.08);padding:2px 8px;border-radius:12px;">#' + escapeHtml(t) + '</span>').join('') : ''}
+            </div>
+            ${currentUser && (post.user_id === currentUser.id || currentUser.app_metadata?.role === 'admin') ?
+              '<div onclick="event.stopPropagation();" style="display:flex;gap:4px;">' +
+                '<button onclick="startEditPost(\'' + post.id + '\')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--ink-muted);cursor:pointer;">수정</button>' +
+                '<button onclick="deletePost(\'' + post.id + '\')" style="background:none;border:1px solid rgba(220,38,38,0.2);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--coral);cursor:pointer;">삭제</button>' +
+              '</div>' : ''}
           </div>
           <div class="post-title">${escapeHtml(post.title)}</div>
           <div class="post-preview">${(post.files && post.files.length > 1) ? '📎 파일 ' + post.files.length + '개 — ' : post.file_name ? '📎 ' + escapeHtml(post.file_name) + ' — ' : ''}${escapeHtml(preview)}</div>
@@ -1729,6 +1736,7 @@ function buildExpandContent(post, comments) {
     <div class="post-full-content" id="postContent-${post.id}">${sanitizedContent}</div>
     ${fileHtml}
     ${wikiHtml}
+    ${currentUser && (post.user_id === currentUser.id || currentUser.app_metadata?.role === 'admin') ? '<div id="editForm-' + post.id + '" style="display:none;"></div>' : ''}
     <button class="post-collapse-btn" onclick="event.stopPropagation(); togglePost('${post.id}')">▲ 접기</button>
     <div class="comments-section">
       <div class="comments-title">댓글 ${comments.length}개</div>`;
@@ -2133,6 +2141,67 @@ function openWriteModal() {
   if (projectSelect) projectSelect.value = '';
   const newProjectInput = document.getElementById('newProjectInput');
   if (newProjectInput) newProjectInput.style.display = 'none';
+}
+
+// ── 게시글 수정 ──
+function startEditPost(postId) {
+  const post = allPosts.find(p => p.id === postId);
+  if (!post) return;
+  const container = document.getElementById('editForm-' + postId);
+  if (!container) return;
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div style="border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;background:var(--surface-warm);">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;">게시글 수정</div>
+      <input type="text" id="editTitle-${postId}" class="form-input" value="${escapeHtml(post.title)}" style="margin-bottom:8px;font-size:14px;">
+      <textarea id="editContent-${postId}" class="form-textarea" style="min-height:120px;font-size:14px;">${escapeHtml(post.content || '')}</textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end;">
+        <button class="btn-wiki" onclick="event.stopPropagation(); document.getElementById('editForm-${postId}').style.display='none';">취소</button>
+        <button class="btn-wiki primary" onclick="event.stopPropagation(); saveEditPost('${postId}')">저장</button>
+      </div>
+    </div>`;
+}
+
+async function saveEditPost(postId) {
+  if (!db || !currentUser) return;
+  const title = document.getElementById('editTitle-' + postId).value.trim();
+  const content = document.getElementById('editContent-' + postId).value.trim();
+  if (!title) { showToast('제목을 입력해주세요.', true); return; }
+  if (!content || content.length < 10) { showToast('내용을 10자 이상 입력해주세요.', true); return; }
+
+  const { error } = await db.from('ax_posts')
+    .update({ title: sanitize(title), content: sanitize(content) })
+    .eq('id', postId);
+
+  if (error) {
+    console.error('editPost error:', error);
+    showToast('수정에 실패했습니다: ' + error.message, true);
+    return;
+  }
+  showToast('게시글이 수정되었습니다.');
+  await fetchAllPosts();
+}
+
+// ── 게시글 삭제 ──
+async function deletePost(postId) {
+  if (!db || !currentUser) return;
+  if (!confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
+
+  // 댓글 먼저 삭제
+  await db.from('ax_comments').delete().eq('post_id', postId);
+  // 투표 삭제
+  await db.from('ax_votes').delete().eq('post_id', postId);
+  // 게시글 삭제
+  const { error } = await db.from('ax_posts').delete().eq('id', postId);
+
+  if (error) {
+    console.error('deletePost error:', error);
+    showToast('삭제에 실패했습니다: ' + error.message, true);
+    return;
+  }
+  showToast('게시글이 삭제되었습니다.');
+  state.expandedPostId = null;
+  await fetchAllPosts();
 }
 
 function closeWriteModal() {
