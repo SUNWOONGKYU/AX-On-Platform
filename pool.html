@@ -694,8 +694,11 @@ a:hover { text-decoration: underline; }
 .footer-logo {
   font-family: 'Outfit', sans-serif;
   font-weight: 800; font-size: 20px; color: #fff;
+  text-align: center;
 }
 .footer-logo span { color: var(--amber); }
+.footer-org-name { font-size: 15px; color: rgba(255,255,255,0.85); font-weight: 600; margin-top: 4px; text-align: center; letter-spacing: 0.5px; }
+.footer-org-person { font-size: 12px; color: var(--dark-text-muted); opacity: 0.75; margin-top: 2px; text-align: center; }
 .footer-links { display: flex; gap: 24px; }
 .footer-links a {
   color: var(--dark-text-muted); text-decoration: none;
@@ -1238,6 +1241,9 @@ a:hover { text-decoration: underline; }
   <div class="footer-inner">
     <div>
       <div class="footer-logo">AX-<span>On</span> Platform</div>
+      <div class="footer-org-name">선명회계법인 AX사업팀</div>
+      <div class="footer-org-person">서울특별시 강남구 테헤란로70길 16, 7층</div>
+      <div class="footer-org-person">책임자: 공인회계사 선웅규</div>
     </div>
     <div class="footer-links">
       <a href="terms.html">이용약관</a>
@@ -1425,6 +1431,11 @@ function renderExperts() {
   }
 
   grid.innerHTML = filtered.map(e => {
+    // Specialties (전문분야, max 3 + more)
+    const specs = e.specialties || [];
+    let specsHTML = specs.slice(0, 3).map(s => '<span class="interest-tag">' + escapeHtml(s) + '</span>').join('');
+    if (specs.length > 3) specsHTML += '<span class="interest-tag more">+' + (specs.length - 3) + '</span>';
+
     // AI tools pills (max 3 + more)
     const tools = e.ai_tools || [];
     let toolsHTML = tools.slice(0, 3).map(t => '<span class="pill-badge">' + escapeHtml(t) + '</span>').join('');
@@ -1432,11 +1443,6 @@ function renderExperts() {
 
     // Chatbot badge
     const cbHTML = chatbotBadgeHTML(e.can_build_chatbot);
-
-    // Interest tags (max 2 + more)
-    const interests = e.interest_areas || [];
-    let intHTML = interests.slice(0, 2).map(i => '<span class="interest-tag">' + escapeHtml(i) + '</span>').join('');
-    if (interests.length > 2) intHTML += '<span class="interest-tag more">+' + (interests.length - 2) + '</span>';
 
     return '<div class="expert-card" data-id="' + escapeHtml(e.id) + '" onclick="showExpertDetail(\'' + escapeHtml(e.id) + '\')" role="button" tabindex="0">' +
       '<div class="expert-card-top">' +
@@ -1446,8 +1452,8 @@ function renderExperts() {
           '<div class="expert-tagline">' + escapeHtml(e.tagline || '') + '</div>' +
         '</div>' +
       '</div>' +
+      (specsHTML ? '<div class="interest-tags">' + specsHTML + '</div>' : '') +
       '<div class="expert-pills">' + toolsHTML + cbHTML + '</div>' +
-      (intHTML ? '<div class="interest-tags">' + intHTML + '</div>' : '') +
     '</div>';
   }).join('');
 
@@ -1486,7 +1492,6 @@ function showExpertDetail(id) {
   if (!e) return;
 
   const tools = (e.ai_tools || []).map(t => '<span class="detail-pill">' + escapeHtml(t) + '</span>').join('');
-  const interests = (e.interest_areas || []).map(i => '<span class="detail-pill interest">' + escapeHtml(i) + '</span>').join('');
 
   let linksHTML = '';
   const snsLinks = e.sns_links || {};
@@ -1525,9 +1530,6 @@ function showExpertDetail(id) {
   }
   if (e.vision) {
     html += '<div class="detail-section"><div class="detail-section-title">미래 비전</div><div class="detail-text">' + escapeHtml(e.vision) + '</div></div>';
-  }
-  if (interests) {
-    html += '<div class="detail-section"><div class="detail-section-title">관심/협업 분야</div><div class="detail-pills">' + interests + '</div></div>';
   }
   if (e.books || e.products || e.services) {
     html += '<div class="detail-section"><div class="detail-section-title">상품 & 서비스</div>';

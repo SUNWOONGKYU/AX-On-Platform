@@ -51,8 +51,10 @@ a:hover { text-decoration: underline; }
 /* FOOTER */
 .footer { background: #002451; color: #7285b7; padding: 24px 40px 16px; margin-top: 80px; }
 .footer-inner { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.footer-logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: white; }
+.footer-logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: white; text-align: center; }
 .footer-logo span { color: var(--amber); }
+.footer-org-name { font-size: 15px; color: rgba(255,255,255,0.85); font-weight: 600; margin-top: 4px; text-align: center; letter-spacing: 0.5px; }
+.footer-org-person { font-size: 12px; color: var(--dark-text-muted); opacity: 0.75; margin-top: 2px; text-align: center; }
 .footer-links { display: flex; gap: 24px; }
 .footer-links a { color: #7285b7; text-decoration: none; font-size: 14px; transition: color 0.3s ease; }
 .footer-links a:hover { color: var(--amber); }
@@ -255,7 +257,12 @@ a:hover { text-decoration: underline; }
 
 <footer class="footer">
   <div class="footer-inner">
-    <div><div class="footer-logo">AX-<span>On</span> Platform</div></div>
+    <div>
+      <div class="footer-logo">AX-<span>On</span> Platform</div>
+      <div class="footer-org-name">선명회계법인 AX사업팀</div>
+      <div class="footer-org-person">서울특별시 강남구 테헤란로70길 16, 7층</div>
+      <div class="footer-org-person">책임자: 공인회계사 선웅규</div>
+    </div>
     <div class="footer-links">
       <a href="terms.html">이용약관</a>
       <a href="privacy.html">개인정보처리방침</a>
