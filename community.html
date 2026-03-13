@@ -218,7 +218,7 @@ body {
 /* ── LAYOUT ── */
 .community-layout {
   max-width: 1280px; margin: 0 auto; width: 100%;
-  display: grid; grid-template-columns: 200px 1fr 240px;
+  display: grid; grid-template-columns: 260px 1fr 240px;
   gap: 24px; padding: 32px 40px 80px;
   flex: 1;
 }
@@ -301,12 +301,11 @@ body {
   padding: 4px 0 4px 8px;
 }
 .guide-item {
-  display: flex; align-items: flex-start; gap: 8px;
-  padding: 8px 10px; border-radius: 8px;
+  display: block; padding: 6px 10px; border-radius: 8px;
   text-decoration: none; color: var(--ink);
   border: 1px solid var(--border);
   transition: all 0.2s ease;
-  font-size: 12px;
+  font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .guide-item:hover {
   background: rgba(232,146,13,0.08);
@@ -1018,19 +1017,15 @@ body {
         </div>
         <div class="knowledge-guides" id="knowledgeGuides">
           <a href="guides/claude-code-guide.html" target="_blank" class="guide-item">
-            <span class="guide-icon">📘</span>
             <span class="guide-label">Claude Code Master Guide</span>
           </a>
           <a href="guides/fullstack-guide.html" target="_blank" class="guide-item">
-            <span class="guide-icon">📗</span>
             <span class="guide-label">풀스택 웹사이트 개발 기초지식</span>
           </a>
           <a href="guides/sal-grid-patent.html" target="_blank" class="guide-item">
-            <span class="guide-icon">📄</span>
             <span class="guide-label">SAL Grid 개발 방법론 — 특허 소개서</span>
           </a>
           <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item guide-hidden" style="display:none;">
-            <span class="guide-icon">📄</span>
             <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
           </a>
           <button class="btn-more-toggle" id="guideMoreBtn" onclick="toggleGuidesMore(this)">더보기 (1개)</button>
@@ -1654,7 +1649,13 @@ function renderPosts() {
     return;
   }
 
-  list.innerHTML = noticeHtml + filtered.map(post => {
+  // 전체 보기일 때 기본 3개만 표시, 더보기로 나머지
+  const defaultShowCount = 3;
+  const showAll = state.currentCat !== 'all' || state.showAllPosts;
+  const visible = showAll ? filtered : filtered.slice(0, defaultShowCount);
+  const hasMorePosts = !showAll && filtered.length > defaultShowCount;
+
+  list.innerHTML = noticeHtml + visible.map(post => {
     const cat = CATEGORY_META[post.category] || CATEGORY_META.discussion;
     const preview = (post.content || '').substring(0, 120).replace(/\n/g, ' ');
     const authorInitial = (post.author_name || '?').charAt(0).toUpperCase();
