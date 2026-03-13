@@ -2142,7 +2142,7 @@ async function loadProjectsSidebar() {
   try {
     const { data, error } = await db
       .from('ax_projects')
-      .select('*')
+      .select('id, name, description, status, assigned_experts, created_at')
       .order('created_at', { ascending: false });
 
     if (error) { console.error('loadProjects error:', error); return; }
