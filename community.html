@@ -493,7 +493,8 @@ body {
   transition: max-height 0.4s ease;
 }
 .post-card.expanded .post-expand,
-.notice-pin-item.expanded .post-expand {
+.notice-pin-item.expanded .post-expand,
+.reference-pin-item.expanded .post-expand {
   max-height: 2000px;
 }
 .post-card.expanded {
@@ -1035,6 +1036,8 @@ body {
             <button type="button" class="cat-write-btn cat-write-discussion" onclick="event.stopPropagation();selectedWriteCat='discussion';openWriteModal();" title="자유토론 글쓰기">글쓰기</button>
           </span>
         </div>
+        <!-- 자유토론 최신글/인기글 -->
+        <div id="sidebarDiscussionPosts" style="padding:4px 0 0 8px;"></div>
       </div>
     </div>
   </aside>
@@ -1048,6 +1051,15 @@ body {
 
   <!-- SIDEBAR RIGHT -->
   <aside class="sidebar-right" id="sidebarRight">
+    <div class="sidebar-section">
+      <div class="sidebar-title" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>🏗 프로젝트</span>
+        <button type="button" class="cat-write-btn cat-write-project" onclick="openProjectWriteModal()" title="프로젝트 글쓰기">글쓰기</button>
+      </div>
+      <div class="project-list" id="projectList">
+        <div style="font-size:13px;color:var(--ink-muted);padding:8px;">불러오는 중...</div>
+      </div>
+    </div>
     <div class="sidebar-section">
       <div class="sidebar-title">💡 지식HUB</div>
       <div class="knowledge-guides" id="knowledgeGuides">
@@ -1063,15 +1075,6 @@ body {
         <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item">
           <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
         </a>
-      </div>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-title" style="display:flex;align-items:center;justify-content:space-between;">
-        <span>🏗 프로젝트</span>
-        <button type="button" class="cat-write-btn cat-write-project" onclick="openProjectWriteModal()" title="프로젝트 글쓰기">글쓰기</button>
-      </div>
-      <div class="project-list" id="projectList">
-        <div style="font-size:13px;color:var(--ink-muted);padding:8px;">불러오는 중...</div>
       </div>
     </div>
   </aside>
@@ -1140,6 +1143,14 @@ body {
       <button class="btn-cancel" onclick="closeEditModal()">취소</button>
       <button class="btn-submit" id="editSubmitBtn" onclick="saveEditPost()">저장</button>
     </div>
+  </div>
+</div>
+
+<!-- PROJECT DETAIL MODAL -->
+<div class="write-modal-overlay" id="projectDetailModal" role="dialog" aria-modal="true" aria-label="프로젝트 상세">
+  <div class="write-modal" style="max-width:600px;">
+    <button class="modal-close" onclick="closeProjectDetail()" aria-label="닫기">✕</button>
+    <div id="projectDetailContent"></div>
   </div>
 </div>
 
@@ -1387,6 +1398,7 @@ async function fetchAllPosts() {
   // Load votes for all posts
   await loadVotes();
   updateCategoryCounts();
+  renderSidebarDiscussion();
   renderPosts();
 }
 
@@ -1623,6 +1635,33 @@ function updateCategoryCounts() {
   });
 }
 
+// ── 좌측 사이드바: 자유토론 최신글/인기글 ──
+function renderSidebarDiscussion() {
+  const container = document.getElementById('sidebarDiscussionPosts');
+  if (!container) return;
+  const discussions = allPosts.filter(p => p.category === 'discussion');
+  if (!discussions.length) { container.innerHTML = ''; return; }
+
+  // 최신글 5개
+  const latest = discussions.slice(0, 5);
+  // 인기글 5개 (추천수 기준)
+  const popular = [...discussions].sort((a, b) => (b.voteScore || 0) - (a.voteScore || 0)).slice(0, 5);
+
+  const renderList = (items) => items.map(p =>
+    `<div style="padding:4px 10px;font-size:12px;cursor:pointer;border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);" onclick="filterCategory(document.querySelector('[data-cat=discussion]'),'discussion');setTimeout(()=>togglePost('${p.id}'),100)" onmouseover="this.style.background='rgba(26,26,46,0.04)'" onmouseout="this.style.background='none'" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>`
+  ).join('');
+
+  container.innerHTML = `
+    <div style="margin-top:6px;">
+      <div style="font-size:11px;font-weight:700;color:var(--teal);padding:4px 10px;letter-spacing:0.5px;">최신글</div>
+      ${renderList(latest)}
+    </div>
+    <div style="margin-top:8px;">
+      <div style="font-size:11px;font-weight:700;color:var(--coral);padding:4px 10px;letter-spacing:0.5px;">인기글</div>
+      ${renderList(popular)}
+    </div>`;
+}
+
 // ── Render posts ──
 let showAllNotices = false;
 
@@ -1648,7 +1687,7 @@ function renderNoticePin() {
         <div class="post-expand"><div class="post-expand-inner" id="expand-${post.id}">${isExpanded ? buildExpandContent(post) : ''}</div></div>
       </div>`;
     }).join('')}
-    ${hasMore ? `<button class="notice-more-btn" onclick="toggleAllNotices()">${showAllNotices ? '▲ 접기' : '▼ 더 보기 (' + (notices.length - 3) + '개)'}</button>` : ''}
+    ${hasMore ? `<button class="notice-more-btn" onclick="toggleAllNotices()">${showAllNotices ? '▲' : '▼'}</button>` : ''}
   </div>`;
 }
 
@@ -1670,16 +1709,24 @@ function renderReferencePin() {
       return `<div class="reference-pin-item${isExpanded ? ' expanded' : ''}" id="post-${post.id}">
         <div class="post-card-header" onclick="togglePost('${post.id}')" style="display:flex;justify-content:space-between;align-items:center;">
           <div class="post-title" style="font-size:14px;margin-bottom:0;flex:1;">${escapeHtml(post.title)}</div>
-          <span class="post-time" style="white-space:nowrap;margin-left:12px;font-size:12px;color:var(--ink-muted);">${timeAgo(post.created_at)}</span>
+          <div style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
+            ${currentUser && (post.user_id === currentUser.id || currentUser.app_metadata?.role === 'admin') ?
+              '<div onclick="event.stopPropagation();" style="display:flex;gap:4px;">' +
+                '<button onclick="startEditPost(\'' + post.id + '\')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 6px;font-size:10px;color:var(--ink-muted);cursor:pointer;">수정</button>' +
+                '<button onclick="deletePost(\'' + post.id + '\')" style="background:none;border:1px solid rgba(220,38,38,0.2);border-radius:6px;padding:2px 6px;font-size:10px;color:var(--coral);cursor:pointer;">삭제</button>' +
+              '</div>' : ''}
+            <span class="post-time" style="font-size:12px;color:var(--ink-muted);">${timeAgo(post.created_at)}</span>
+          </div>
         </div>
         <div class="post-expand"><div class="post-expand-inner" id="expand-${post.id}">${isExpanded ? buildExpandContent(post) : ''}</div></div>
       </div>`;
     }).join('')}
-    ${hasMore ? `<button class="reference-more-btn" onclick="toggleAllReferences()">${showAllReferences ? '▲ 접기' : '▼ 더 보기 (' + (refs.length - 3) + '개)'}</button>` : ''}
+    ${hasMore ? `<button class="reference-more-btn" onclick="toggleAllReferences()">${showAllReferences ? '▲' : '▼'}</button>` : ''}
   </div>`;
 }
 
 function renderPosts() {
+  renderSidebarDiscussion();
   const list = document.getElementById('postList');
   let filtered = state.currentCat === 'all'
     ? allPosts.filter(p => p.category !== 'notice' && p.category !== 'reference')
@@ -1709,7 +1756,8 @@ function renderPosts() {
       <div class="post-card${isExpanded ? ' expanded' : ''}" id="post-${post.id}">
         <div class="post-card-header" onclick="togglePost('${post.id}')">
           <div class="post-meta" style="display:flex;justify-content:space-between;align-items:center;">
-            <div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span class="post-category-badge ${cat.badge}">${cat.icon} ${cat.label}</span>
               ${Array.isArray(post.tags) && post.tags.length ? post.tags.map(t => '<span style="font-size:11px;color:var(--teal);background:rgba(13,148,136,0.08);padding:2px 8px;border-radius:12px;">#' + escapeHtml(t) + '</span>').join('') : ''}
             </div>
             ${currentUser && (post.user_id === currentUser.id || currentUser.app_metadata?.role === 'admin') ?
@@ -1998,17 +2046,112 @@ async function submitComment(postId) {
 let allProjects = [];
 let selectedProjectId = null;
 
-async function loadProjectsSidebar() {
-  if (!db) return;
-  const { data, error } = await db
-    .from('ax_projects')
-    .select('id, name, description, status, assigned_experts, created_at')
-    .eq('status', 'active')
-    .order('created_at', { ascending: false });
+const PROJECT_STATUS_META = {
+  '협의중':       { color: '#6366f1', bg: 'rgba(99,102,241,0.1)',  step: 1 },
+  '계약 체결 완료': { color: '#2563EB', bg: 'rgba(37,99,235,0.1)',  step: 2 },
+  'AI 전문가 배정': { color: '#D97706', bg: 'rgba(217,119,6,0.1)', step: 3 },
+  '진행 중':      { color: '#0d9488', bg: 'rgba(13,148,136,0.1)',  step: 4 },
+  '완료':         { color: '#16a34a', bg: 'rgba(22,163,74,0.1)',   step: 5 }
+};
 
-  if (error) { console.error('loadProjects error:', error); return; }
-  allProjects = data || [];
-  renderProjectsSidebar();
+function openProjectDetail(projectId) {
+  const proj = allProjects.find(p => p.id === projectId);
+  if (!proj) return;
+
+  const statusMeta = PROJECT_STATUS_META[proj.status] || PROJECT_STATUS_META['협의중'];
+  const steps = ['협의중', '계약 체결 완료', 'AI 전문가 배정', '진행 중', '완료'];
+  const currentStep = statusMeta.step;
+
+  // 진행 단계 바
+  const stepsHtml = steps.map((s, i) => {
+    const step = i + 1;
+    const done = step <= currentStep;
+    const active = step === currentStep;
+    return `<div style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative;">
+      <div style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+        background:${done ? statusMeta.color : 'rgba(26,26,46,0.08)'};color:${done ? '#fff' : 'var(--ink-muted)'};">${step}</div>
+      <div style="font-size:10px;margin-top:4px;color:${active ? statusMeta.color : 'var(--ink-muted)'};font-weight:${active ? '700' : '400'};text-align:center;line-height:1.3;">${s}</div>
+    </div>`;
+  }).join('');
+
+  // 배정 전문가
+  let expertsHtml = '<span style="color:var(--ink-muted);font-size:13px;">아직 배정된 전문가가 없습니다.</span>';
+  if (Array.isArray(proj.assigned_experts) && proj.assigned_experts.length > 0) {
+    expertsHtml = proj.assigned_experts.map(e => {
+      const name = typeof e === 'string' ? e : (e.name || '전문가');
+      const initial = name.charAt(0).toUpperCase();
+      return `<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--surface-warm);border-radius:8px;border:1px solid var(--border);">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--violet);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;">${initial}</div>
+        <span style="font-size:13px;font-weight:600;color:var(--ink);">${escapeHtml(name)}</span>
+      </div>`;
+    }).join('');
+  }
+
+  const content = document.getElementById('projectDetailContent');
+  content.innerHTML = `
+    <div style="margin-bottom:20px;">
+      <div style="font-size:20px;font-weight:900;color:var(--ink);margin-bottom:6px;">🏗 ${escapeHtml(proj.name)}</div>
+      ${proj.description ? '<div style="font-size:14px;color:var(--ink-muted);line-height:1.7;">' + escapeHtml(proj.description) + '</div>' : ''}
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <!-- 생성일 -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted);margin-bottom:4px;">📅 생성일</div>
+        <div style="font-size:14px;color:var(--ink);">${new Date(proj.created_at).toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' })}</div>
+      </div>
+
+      <!-- 진행 상태 -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted);margin-bottom:8px;">📊 진행 상태</div>
+        <div style="display:flex;gap:2px;padding:12px 8px;background:var(--surface-warm);border-radius:10px;border:1px solid var(--border);">
+          ${stepsHtml}
+        </div>
+      </div>
+
+      <!-- 배정 AI 전문가 -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted);margin-bottom:6px;">👤 배정 AI 전문가</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">${expertsHtml}</div>
+      </div>
+
+      <!-- 향후 추진 스케줄 -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-muted);margin-bottom:4px;">📋 향후 추진 스케줄</div>
+        <div style="font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap;padding:10px 12px;background:var(--surface-warm);border-radius:10px;border:1px solid var(--border);min-height:40px;">
+          ${proj.schedule ? escapeHtml(proj.schedule) : '<span style="color:var(--ink-muted);">등록된 스케줄이 없습니다.</span>'}
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;text-align:center;">
+      <button onclick="closeProjectDetail();selectProject('${proj.id}')" style="padding:10px 24px;border-radius:10px;background:var(--violet);color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;box-shadow:0 4px 16px rgba(124,92,224,0.3);">관련 게시글 보기</button>
+    </div>`;
+
+  document.getElementById('projectDetailModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProjectDetail() {
+  document.getElementById('projectDetailModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function loadProjectsSidebar() {
+  if (!db) { console.warn('loadProjectsSidebar: db not ready'); return; }
+  try {
+    const { data, error } = await db
+      .from('ax_projects')
+      .select('id, name, description, status, assigned_experts, schedule, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) { console.error('loadProjects error:', error); return; }
+    allProjects = data || [];
+    console.log('loadProjectsSidebar: loaded', allProjects.length, 'projects');
+    renderProjectsSidebar();
+  } catch (e) {
+    console.error('loadProjectsSidebar exception:', e);
+  }
 }
 
 function renderProjectsSidebar() {
@@ -2024,7 +2167,7 @@ function renderProjectsSidebar() {
   const projectCards = allProjects.map((p, i) => {
     const expertCount = Array.isArray(p.assigned_experts) ? p.assigned_experts.length : 0;
     return `
-      <div class="project-item${selectedProjectId === p.id ? ' active' : ''}${i >= maxShow ? ' project-hidden' : ''}" onclick="selectProject('${p.id}')" ${i >= maxShow ? 'style="display:none;"' : ''}>
+      <div class="project-item${selectedProjectId === p.id ? ' active' : ''}${i >= maxShow ? ' project-hidden' : ''}" onclick="openProjectDetail('${p.id}')" ${i >= maxShow ? 'style="display:none;"' : ''}>
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div class="project-item-name">${escapeHtml(p.name)}</div>
           <span class="project-item-meta" style="margin:0;white-space:nowrap;">${timeAgo(p.created_at)}</span>
@@ -2032,7 +2175,7 @@ function renderProjectsSidebar() {
       </div>`;
   }).join('');
   const moreBtn = allProjects.length > maxShow
-    ? '<button class="btn-more-toggle" onclick="toggleProjectsMore(this)">더보기 (' + (allProjects.length - maxShow) + '개)</button>'
+    ? '<button class="btn-more-toggle" onclick="toggleProjectsMore(this)">▼</button>'
     : '';
   container.innerHTML = projectCards + moreBtn;
 }
@@ -2052,6 +2195,25 @@ function selectProject(projectId) {
   renderPosts();
 }
 
+function renderProjectDetail() {
+  if (!selectedProjectId) return '';
+  const proj = allProjects.find(p => p.id === selectedProjectId);
+  if (!proj) return '';
+  const expertCount = Array.isArray(proj.assigned_experts) ? proj.assigned_experts.length : 0;
+  return `<div style="background:rgba(217,119,6,0.04);border:1px solid rgba(217,119,6,0.2);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+      <div style="font-size:16px;font-weight:700;color:var(--ink);">🏗 ${escapeHtml(proj.name)}</div>
+      <button onclick="selectProject('${proj.id}')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--ink-muted);cursor:pointer;font-family:inherit;">✕ 닫기</button>
+    </div>
+    ${proj.description ? '<div style="font-size:13px;color:var(--ink-muted);line-height:1.6;margin-bottom:8px;">' + escapeHtml(proj.description) + '</div>' : ''}
+    <div style="display:flex;gap:12px;font-size:12px;color:var(--ink-muted);">
+      <span>📅 ${timeAgo(proj.created_at)}</span>
+      <span>👤 전문가 ${expertCount}명</span>
+      <span style="padding:2px 8px;border-radius:10px;background:rgba(13,148,136,0.1);color:var(--teal);font-weight:600;">${proj.status === 'active' ? '진행중' : proj.status}</span>
+    </div>
+  </div>`;
+}
+
 function openProjectWriteModal() {
   if (!currentUser || !currentExpert) {
     showToast('로그인이 필요합니다.', true);
@@ -2069,7 +2231,7 @@ async function loadProjectList() {
   const { data, error } = await db
     .from('ax_projects')
     .select('id, name')
-    .eq('status', 'active')
+    .neq('status', '완료')
     .order('name', { ascending: true });
 
   if (error) return;
@@ -2097,7 +2259,7 @@ function toggleProjectsMore(btn) {
   const hidden = document.querySelectorAll('#projectList .project-hidden');
   const showing = hidden.length > 0 && hidden[0].style.display !== 'none';
   hidden.forEach(el => el.style.display = showing ? 'none' : '');
-  btn.textContent = showing ? '더보기 (' + hidden.length + '개)' : '접기';
+  btn.textContent = showing ? '▼' : '▲';
 }
 
 // ── 더보기 토글 (지식HUB 가이드) ──
@@ -2438,6 +2600,7 @@ async function submitPost() {
     data.userVote = null;
     allPosts.unshift(data);
     updateCategoryCounts();
+    renderSidebarDiscussion();
     renderPosts();
     if (data.category === 'project') loadProjectsSidebar();
   }
