@@ -381,6 +381,35 @@ body {
 }
 .notice-more-btn:hover { background: rgba(220,38,38,0.06); }
 
+/* ── REFERENCE PIN (참고자료 그룹) ── */
+.reference-pin {
+  background: rgba(37,99,235,0.04);
+  border: 1px solid rgba(37,99,235,0.15);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.reference-pin-header {
+  font-size: 11px; font-weight: 700;
+  color: #2563EB; letter-spacing: 1px;
+  padding: 8px 16px 6px;
+  border-bottom: 1px solid rgba(37,99,235,0.1);
+}
+.reference-pin-item {
+  border-bottom: 1px solid rgba(37,99,235,0.08);
+  cursor: pointer;
+}
+.reference-pin-item:last-of-type { border-bottom: none; }
+.reference-pin-item .post-card-header { padding: 10px 16px; }
+.reference-pin-item .post-card-header:hover { background: rgba(37,99,235,0.04); }
+.reference-more-btn {
+  display: block; width: 100%;
+  background: none; border: none; border-top: 1px solid rgba(37,99,235,0.1);
+  color: #2563EB; font-size: 12px; font-weight: 600;
+  padding: 8px; cursor: pointer; text-align: center;
+}
+.reference-more-btn:hover { background: rgba(37,99,235,0.06); }
+
 /* ── POST CARD ── */
 .post-card {
   background: var(--surface-card);
@@ -999,30 +1028,6 @@ body {
             <button type="button" class="cat-write-btn cat-write-reference" onclick="event.stopPropagation();selectedWriteCat='reference';openWriteModal();" title="참고자료 올리기">글쓰기</button>
           </span>
         </div>
-        <!-- 지식 허브 -->
-        <div class="cat-knowledge" id="catKnowledge" data-cat="knowledge" role="button" tabindex="0"
-          onclick="filterCategory(this,'knowledge')"
-          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'knowledge')}">
-          <span style="white-space:nowrap;"><span class="cat-icon">💡</span>지식HUB</span>
-          <span class="cat-right">
-            <span class="cat-count" id="cnt-knowledge">0</span>
-          </span>
-        </div>
-        <div class="knowledge-guides" id="knowledgeGuides">
-          <a href="guides/claude-code-guide.html" target="_blank" class="guide-item">
-            <span class="guide-label">Claude Code Master Guide</span>
-          </a>
-          <a href="guides/fullstack-guide.html" target="_blank" class="guide-item">
-            <span class="guide-label">풀스택 웹사이트 개발 기초지식</span>
-          </a>
-          <a href="guides/sal-grid-patent.html" target="_blank" class="guide-item">
-            <span class="guide-label">SAL Grid 개발 방법론 — 특허 소개서</span>
-          </a>
-          <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item guide-hidden" style="display:none;">
-            <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
-          </a>
-          <button class="btn-more-toggle" id="guideMoreBtn" onclick="toggleGuidesMore(this)">더보기 (1개)</button>
-        </div>
         <div class="cat-item" role="button" tabindex="0" data-cat="discussion" onclick="filterCategory(this,'discussion')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();filterCategory(this,'discussion')}">
           <span><span class="cat-icon">💬</span>자유토론</span>
           <span class="cat-right">
@@ -1041,8 +1046,25 @@ body {
     </div>
   </main>
 
-  <!-- SIDEBAR RIGHT: 프로젝트 -->
+  <!-- SIDEBAR RIGHT -->
   <aside class="sidebar-right" id="sidebarRight">
+    <div class="sidebar-section">
+      <div class="sidebar-title">💡 지식HUB</div>
+      <div class="knowledge-guides" id="knowledgeGuides">
+        <a href="guides/claude-code-guide.html" target="_blank" class="guide-item">
+          <span class="guide-label">Claude Code Master Guide</span>
+        </a>
+        <a href="guides/fullstack-guide.html" target="_blank" class="guide-item">
+          <span class="guide-label">풀스택 웹사이트 개발 기초지식</span>
+        </a>
+        <a href="guides/sal-grid-patent.html" target="_blank" class="guide-item">
+          <span class="guide-label">SAL Grid 개발 방법론 — 특허 소개서</span>
+        </a>
+        <a href="guides/platoon-formation-patent.html" target="_blank" class="guide-item">
+          <span class="guide-label">소대 편제 작업팀 구성·운용 — 특허 소개서</span>
+        </a>
+      </div>
+    </div>
     <div class="sidebar-section">
       <div class="sidebar-title" style="display:flex;align-items:center;justify-content:space-between;">
         <span>🏗 프로젝트</span>
@@ -1630,10 +1652,37 @@ function renderNoticePin() {
   </div>`;
 }
 
+let showAllReferences = false;
+function toggleAllReferences() {
+  showAllReferences = !showAllReferences;
+  renderPosts();
+}
+
+function renderReferencePin() {
+  const refs = allPosts.filter(p => p.category === 'reference');
+  if (!refs.length) return '';
+  const visible = showAllReferences ? refs : refs.slice(0, 3);
+  const hasMore = refs.length > 3;
+  return `<div class="reference-pin" id="referencePin">
+    <div class="reference-pin-header">📚 참고자료</div>
+    ${visible.map(post => {
+      const isExpanded = state.expandedPostId === post.id;
+      return `<div class="reference-pin-item${isExpanded ? ' expanded' : ''}" id="post-${post.id}">
+        <div class="post-card-header" onclick="togglePost('${post.id}')" style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="post-title" style="font-size:14px;margin-bottom:0;flex:1;">${escapeHtml(post.title)}</div>
+          <span class="post-time" style="white-space:nowrap;margin-left:12px;font-size:12px;color:var(--ink-muted);">${timeAgo(post.created_at)}</span>
+        </div>
+        <div class="post-expand"><div class="post-expand-inner" id="expand-${post.id}">${isExpanded ? buildExpandContent(post) : ''}</div></div>
+      </div>`;
+    }).join('')}
+    ${hasMore ? `<button class="reference-more-btn" onclick="toggleAllReferences()">${showAllReferences ? '▲ 접기' : '▼ 더 보기 (' + (refs.length - 3) + '개)'}</button>` : ''}
+  </div>`;
+}
+
 function renderPosts() {
   const list = document.getElementById('postList');
   let filtered = state.currentCat === 'all'
-    ? allPosts.filter(p => p.category !== 'notice')
+    ? allPosts.filter(p => p.category !== 'notice' && p.category !== 'reference')
     : allPosts.filter(p => p.category === state.currentCat);
 
   // Filter by selected project
@@ -1641,21 +1690,16 @@ function renderPosts() {
     filtered = filtered.filter(p => p.project_id === selectedProjectId);
   }
 
-  // Prepend pinned notices (except when already viewing notice category)
+  // Prepend pinned sections (except when viewing that specific category)
   const noticeHtml = state.currentCat !== 'notice' ? renderNoticePin() : '';
+  const referenceHtml = state.currentCat !== 'reference' ? renderReferencePin() : '';
 
-  if (filtered.length === 0 && !noticeHtml) {
+  if (filtered.length === 0 && !noticeHtml && !referenceHtml) {
     list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">아직 게시글이 없습니다. 첫 글을 작성해보세요!</div></div>';
     return;
   }
 
-  // 전체 보기일 때 기본 3개만 표시, 더보기로 나머지
-  const defaultShowCount = 3;
-  const showAll = state.currentCat !== 'all' || state.showAllPosts;
-  const visible = showAll ? filtered : filtered.slice(0, defaultShowCount);
-  const hasMorePosts = !showAll && filtered.length > defaultShowCount;
-
-  list.innerHTML = noticeHtml + visible.map(post => {
+  list.innerHTML = noticeHtml + referenceHtml + filtered.map(post => {
     const cat = CATEGORY_META[post.category] || CATEGORY_META.discussion;
     const preview = (post.content || '').substring(0, 120).replace(/\n/g, ' ');
     const authorInitial = (post.author_name || '?').charAt(0).toUpperCase();
@@ -1666,7 +1710,6 @@ function renderPosts() {
         <div class="post-card-header" onclick="togglePost('${post.id}')">
           <div class="post-meta" style="display:flex;justify-content:space-between;align-items:center;">
             <div>
-              <span class="post-category-badge ${cat.badge}">${cat.icon} ${escapeHtml(cat.label)}</span>
               ${Array.isArray(post.tags) && post.tags.length ? post.tags.map(t => '<span style="font-size:11px;color:var(--teal);background:rgba(13,148,136,0.08);padding:2px 8px;border-radius:12px;">#' + escapeHtml(t) + '</span>').join('') : ''}
             </div>
             ${currentUser && (post.user_id === currentUser.id || currentUser.app_metadata?.role === 'admin') ?
@@ -1977,7 +2020,7 @@ function renderProjectsSidebar() {
     return;
   }
 
-  const maxShow = 3;
+  const maxShow = 5;
   const projectCards = allProjects.map((p, i) => {
     const expertCount = Array.isArray(p.assigned_experts) ? p.assigned_experts.length : 0;
     return `
