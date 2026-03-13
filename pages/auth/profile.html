@@ -290,8 +290,8 @@ footer a:hover { color: var(--amber); }
 @media (max-width: 768px) {
   .page-wrap { grid-template-columns: 1fr; gap: 20px; }
   .sidebar { position: static; }
-  .sidebar-menu { display: flex; gap: 4px; overflow-x: auto; padding: 8px; }
-  .menu-item { white-space: nowrap; }
+  .sidebar-menu { display: flex; gap: 4px; overflow-x: auto; padding: 8px; -webkit-overflow-scrolling: touch; }
+  .menu-item { white-space: nowrap; min-height: 44px; display: flex; align-items: center; }
   .profile-summary { padding: 16px; }
   .form-grid { grid-template-columns: 1fr; }
   .data-table { font-size: 13px; }
