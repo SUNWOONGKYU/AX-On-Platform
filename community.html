@@ -2144,9 +2144,13 @@ function openWriteModal() {
 }
 
 // ── 게시글 수정 ──
-function startEditPost(postId) {
+async function startEditPost(postId) {
   const post = allPosts.find(p => p.id === postId);
   if (!post) return;
+  // 게시글이 펼쳐져 있지 않으면 먼저 펼치기
+  if (state.expandedPostId !== postId) {
+    await togglePost(postId);
+  }
   const container = document.getElementById('editForm-' + postId);
   if (!container) return;
   container.style.display = 'block';
@@ -2187,21 +2191,28 @@ async function deletePost(postId) {
   if (!db || !currentUser) return;
   if (!confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
 
-  // 댓글 먼저 삭제
-  await db.from('ax_comments').delete().eq('post_id', postId);
-  // 투표 삭제
-  await db.from('ax_votes').delete().eq('post_id', postId);
-  // 게시글 삭제
-  const { error } = await db.from('ax_posts').delete().eq('id', postId);
+  try {
+    // 댓글 먼저 삭제 (RLS: 본인 댓글 + 본인 게시글의 댓글)
+    const { error: ce } = await db.from('ax_comments').delete().eq('post_id', postId);
+    if (ce) console.warn('댓글 삭제 경고:', ce.message);
+    // 투표 삭제
+    const { error: ve } = await db.from('ax_votes').delete().eq('post_id', postId);
+    if (ve) console.warn('투표 삭제 경고:', ve.message);
+    // 게시글 삭제
+    const { error } = await db.from('ax_posts').delete().eq('id', postId);
 
-  if (error) {
-    console.error('deletePost error:', error);
-    showToast('삭제에 실패했습니다: ' + error.message, true);
-    return;
+    if (error) {
+      console.error('deletePost error:', error);
+      showToast('삭제에 실패했습니다: ' + error.message, true);
+      return;
+    }
+    showToast('게시글이 삭제되었습니다.');
+    state.expandedPostId = null;
+    await fetchAllPosts();
+  } catch (e) {
+    console.error('deletePost exception:', e);
+    showToast('삭제 중 오류가 발생했습니다.', true);
   }
-  showToast('게시글이 삭제되었습니다.');
-  state.expandedPostId = null;
-  await fetchAllPosts();
 }
 
 function closeWriteModal() {
