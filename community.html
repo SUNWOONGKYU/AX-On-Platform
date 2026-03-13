@@ -264,8 +264,8 @@ body {
 
 /* ── GUIDE LIST (지식 허브 아코디언) ── */
 .cat-write-btn {
-  cursor: pointer; font-size: 11px; font-weight: 700;
-  padding: 3px 10px; border-radius: 20px; border: none;
+  cursor: pointer; font-size: 10px; font-weight: 500;
+  padding: 2px 9px; border-radius: 20px; border: none;
   color: #fff; transition: all 0.15s; line-height: 1.6;
   font-family: 'Noto Sans KR', sans-serif; white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -404,15 +404,15 @@ body {
   margin-bottom: 6px; flex-wrap: wrap;
 }
 .post-category-badge {
-  font-size: 11px; font-weight: 700;
-  padding: 2px 8px; border-radius: 20px;
-  text-transform: uppercase; letter-spacing: 0.5px;
+  font-size: 12px; font-weight: 600;
+  padding: 3px 10px; border-radius: 6px;
+  letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 4px;
 }
-.badge-notice { background: rgba(220,38,38,0.1); color: #DC2626; }
-.badge-reference { background: rgba(37,99,235,0.1); color: #2563EB; }
-.badge-discussion { background: rgba(13,148,136,0.1); color: #0d9488; }
-.badge-knowledge { background: rgba(232,146,13,0.1); color: #e8920d; }
-.badge-project { background: rgba(234,138,30,0.1); color: #D97706; }
+.badge-notice { background: rgba(220,38,38,0.08); color: #DC2626; border: 1px solid rgba(220,38,38,0.15); }
+.badge-reference { background: rgba(37,99,235,0.08); color: #2563EB; border: 1px solid rgba(37,99,235,0.15); }
+.badge-discussion { background: rgba(13,148,136,0.08); color: #0d9488; border: 1px solid rgba(13,148,136,0.15); }
+.badge-knowledge { background: rgba(232,146,13,0.08); color: #e8920d; border: 1px solid rgba(232,146,13,0.15); }
+.badge-project { background: rgba(217,119,6,0.08); color: #D97706; border: 1px solid rgba(217,119,6,0.15); }
 
 .post-title {
   font-size: 15px; font-weight: 600;
@@ -1626,7 +1626,7 @@ function renderNoticePin() {
       return `<div class="notice-pin-item${isExpanded ? ' expanded' : ''}" id="post-${post.id}">
         <div class="post-card-header" onclick="togglePost('${post.id}')" style="display:flex;justify-content:space-between;align-items:center;">
           <div class="post-title" style="font-size:14px;margin-bottom:0;flex:1;">${escapeHtml(post.title)}</div>
-          <span class="post-time" style="white-space:nowrap;margin-left:12px;">${timeAgo(post.created_at)}</span>
+          <span class="post-time" style="white-space:nowrap;margin-left:12px;font-size:12px;color:var(--ink-muted);">${timeAgo(post.created_at)}</span>
         </div>
         <div class="post-expand"><div class="post-expand-inner" id="expand-${post.id}">${isExpanded ? buildExpandContent(post) : ''}</div></div>
       </div>`;
@@ -1665,7 +1665,7 @@ function renderPosts() {
         <div class="post-card-header" onclick="togglePost('${post.id}')">
           <div class="post-meta" style="display:flex;justify-content:space-between;align-items:center;">
             <div>
-              <span class="post-category-badge ${cat.badge}">${escapeHtml(cat.label)}</span>
+              <span class="post-category-badge ${cat.badge}">${cat.icon} ${escapeHtml(cat.label)}</span>
               ${Array.isArray(post.tags) && post.tags.length ? post.tags.map(t => '<span style="font-size:11px;color:var(--teal);background:rgba(13,148,136,0.08);padding:2px 8px;border-radius:12px;">#' + escapeHtml(t) + '</span>').join('') : ''}
             </div>
             ${currentUser && (post.user_id === currentUser.id || currentUser.app_metadata?.role === 'admin') ?
