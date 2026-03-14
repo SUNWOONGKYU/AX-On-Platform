@@ -1528,7 +1528,7 @@ function showExpertDetail(id) {
     '</div></div>';
 
   if (e.ai_experience) {
-    html += '<div class="detail-section"><div class="detail-section-title">AI 경험</div><div class="detail-text">' + escapeHtml(e.ai_experience) + '</div></div>';
+    html += '<div class="detail-section"><div class="detail-section-title">AI 경험</div><div class="detail-text">' + linkifyText(e.ai_experience) + '</div></div>';
   }
   if (e.ai_projects) {
     html += '<div class="detail-section"><div class="detail-section-title">대표 프로젝트</div><div class="detail-text">' + linkifyText(e.ai_projects) + '</div></div>';
@@ -1537,16 +1537,16 @@ function showExpertDetail(id) {
     html += '<div class="detail-section"><div class="detail-section-title">AI 도구</div><div class="detail-pills">' + tools + '</div></div>';
   }
   if (e.want_to_do) {
-    html += '<div class="detail-section"><div class="detail-section-title">하고 싶은 일</div><div class="detail-text">' + escapeHtml(e.want_to_do) + '</div></div>';
+    html += '<div class="detail-section"><div class="detail-section-title">하고 싶은 일</div><div class="detail-text">' + linkifyText(e.want_to_do) + '</div></div>';
   }
   if (e.vision) {
-    html += '<div class="detail-section"><div class="detail-section-title">미래 비전</div><div class="detail-text">' + escapeHtml(e.vision) + '</div></div>';
+    html += '<div class="detail-section"><div class="detail-section-title">미래 비전</div><div class="detail-text">' + linkifyText(e.vision) + '</div></div>';
   }
   if (e.books || e.products || e.services) {
     html += '<div class="detail-section"><div class="detail-section-title">상품 & 서비스</div>';
-    if (e.books) html += '<div class="detail-text" style="margin-bottom:8px;"><strong>저서:</strong> ' + escapeHtml(e.books) + '</div>';
-    if (e.products) html += '<div class="detail-text" style="margin-bottom:8px;"><strong>판매 상품:</strong> ' + escapeHtml(e.products) + '</div>';
-    if (e.services) html += '<div class="detail-text"><strong>제공 서비스:</strong> ' + escapeHtml(e.services) + '</div>';
+    if (e.books) html += '<div class="detail-text" style="margin-bottom:8px;"><strong>저서:</strong> ' + linkifyText(e.books) + '</div>';
+    if (e.products) html += '<div class="detail-text" style="margin-bottom:8px;"><strong>판매 상품:</strong> ' + linkifyText(e.products) + '</div>';
+    if (e.services) html += '<div class="detail-text"><strong>제공 서비스:</strong> ' + linkifyText(e.services) + '</div>';
     html += '</div>';
   }
   if (linksHTML) {
