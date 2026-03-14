@@ -283,6 +283,9 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 24px; margin-top: 48px;
 }
+@media (max-width: 1024px) and (min-width: 769px) {
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+}
 .why-card {
   background: var(--surface-card);
   border: 1px solid rgba(26, 26, 46, 0.06);

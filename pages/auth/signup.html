@@ -512,18 +512,33 @@ body {
     }
   }
 
+  // ── 인앱 브라우저(WebView) 감지 ──
+  function isInAppBrowser() {
+    const ua = navigator.userAgent || '';
+    return /KAKAOTALK|NAVER|Instagram|FB_IAB|FBAN|FBAV|Line|DaumApps|SamsungBrowser\/\d+.*SamsungBrowser/i.test(ua)
+      || (/wv|WebView/i.test(ua) && /Android/i.test(ua))
+      || (!/Safari/i.test(ua) && /iPhone|iPad|iPod/i.test(ua));
+  }
+
   // ── Google OAuth 회원가입 ──
   async function handleGoogleSignup() {
     if (window.location.protocol === 'file:') {
       showAlert('Google 회원가입은 웹 서버 환경에서만 사용 가능합니다. (file:// 프로토콜 미지원)');
       return;
     }
+    if (isInAppBrowser()) {
+      showAlert('인앱 브라우저에서는 Google 회원가입이 지원되지 않습니다.\n\n우측 상단 메뉴(⋮)에서 "외부 브라우저로 열기"를 선택하거나,\nChrome/Safari에서 직접 접속해 주세요.');
+      return;
+    }
     try {
       showLoading();
-      const redirectUrl = window.location.origin + '/index.html';
+      const redirectUrl = 'https://www.ax-on.net/index.html';
       const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: redirectUrl }
+        options: {
+          redirectTo: redirectUrl,
+          queryParams: { prompt: 'select_account' }
+        }
       });
       if (error) throw error;
     } catch (error) {

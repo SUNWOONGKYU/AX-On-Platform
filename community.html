@@ -2147,7 +2147,6 @@ async function loadProjectsSidebar() {
 
     if (error) { console.error('loadProjects error:', error); return; }
     allProjects = data || [];
-    console.log('loadProjectsSidebar: loaded', allProjects.length, 'projects');
     renderProjectsSidebar();
   } catch (e) {
     console.error('loadProjectsSidebar exception:', e);
@@ -2209,7 +2208,7 @@ function renderProjectDetail() {
     <div style="display:flex;gap:12px;font-size:12px;color:var(--ink-muted);">
       <span>📅 ${timeAgo(proj.created_at)}</span>
       <span>👤 전문가 ${expertCount}명</span>
-      <span style="padding:2px 8px;border-radius:10px;background:rgba(13,148,136,0.1);color:var(--teal);font-weight:600;">${proj.status === 'active' ? '진행중' : proj.status}</span>
+      <span style="padding:2px 8px;border-radius:10px;background:${(PROJECT_STATUS_META[proj.status] || PROJECT_STATUS_META['협의중']).bg};color:${(PROJECT_STATUS_META[proj.status] || PROJECT_STATUS_META['협의중']).color};font-weight:600;">${escapeHtml(proj.status || '협의중')}</span>
     </div>
   </div>`;
 }
@@ -2489,11 +2488,6 @@ async function submitPost() {
   }
   if (!content || content.length < 10) {
     showToast('내용을 10자 이상 입력해주세요.', true);
-    return;
-  }
-
-  if (!title || !content) {
-    showToast('유효한 내용을 입력해주세요.', true);
     return;
   }
 
