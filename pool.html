@@ -850,7 +850,7 @@ a:hover { text-decoration: underline; }
   <div class="page-header-inner fade-in">
     <div class="page-badge">EXPERT POOL</div>
     <h1>전문가 풀</h1>
-    <p>AI 전문가 네트워크에 등록된 전문가들을 만나보세요</p>
+    <p>기업 AX 프로젝트를 함께 수행할 전문가들입니다</p>
     <div class="page-header-actions">
       <button class="register-btn" id="openRegBtn">+ 전문가 등록</button>
       <span class="expert-counter">현재 <strong id="expertCount">0</strong>명 등록</span>
@@ -1290,6 +1290,16 @@ function sanitize(str) {
   return escapeHtml(str);
 }
 
+// ─── Linkify: URL을 클릭 가능한 링크로 변환 ───
+function linkifyText(str) {
+  if (!str) return '';
+  var safe = escapeHtml(str);
+  return safe.replace(/(https?:\/\/[^\s<,;]+)/g, function(url) {
+    if (!isSafeUrl(url)) return url;
+    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" style="color:var(--amber);word-break:break-all;">' + url + '</a>';
+  });
+}
+
 // ─── Nav scroll ───
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
@@ -1521,7 +1531,7 @@ function showExpertDetail(id) {
     html += '<div class="detail-section"><div class="detail-section-title">AI 경험</div><div class="detail-text">' + escapeHtml(e.ai_experience) + '</div></div>';
   }
   if (e.ai_projects) {
-    html += '<div class="detail-section"><div class="detail-section-title">대표 프로젝트</div><div class="detail-text">' + escapeHtml(e.ai_projects) + '</div></div>';
+    html += '<div class="detail-section"><div class="detail-section-title">대표 프로젝트</div><div class="detail-text">' + linkifyText(e.ai_projects) + '</div></div>';
   }
   if (tools) {
     html += '<div class="detail-section"><div class="detail-section-title">AI 도구</div><div class="detail-pills">' + tools + '</div></div>';
