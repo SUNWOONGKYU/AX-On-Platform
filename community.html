@@ -1771,9 +1771,9 @@ function renderPosts() {
     filtered = filtered.filter(p => p.project_id === selectedProjectId);
   }
 
-  // Prepend pinned sections (except when viewing that specific category)
-  const noticeHtml = state.currentCat !== 'notice' ? renderNoticePin() : '';
-  const referenceHtml = state.currentCat !== 'reference' ? renderReferencePin() : '';
+  // Prepend pinned sections only on 'all' view
+  const noticeHtml = state.currentCat === 'all' ? renderNoticePin() : '';
+  const referenceHtml = state.currentCat === 'all' ? renderReferencePin() : '';
 
   if (filtered.length === 0 && !noticeHtml && !referenceHtml) {
     list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">아직 게시글이 없습니다. 첫 글을 작성해보세요!</div></div>';
