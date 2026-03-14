@@ -2328,6 +2328,13 @@ function mobileCatSelect(el, cat) {
   document.querySelectorAll('#catList .cat-item, #catList .cat-knowledge').forEach(i => {
     i.classList.toggle('active', i.dataset.cat === cat);
   });
+  // 피드 상단으로 스크롤
+  var feed = document.getElementById('feedMain');
+  if (feed) {
+    var catBar = document.getElementById('mobileCatBar');
+    var offset = (catBar ? catBar.offsetHeight : 0) + 60;
+    window.scrollTo({ top: feed.offsetTop - offset, behavior: 'smooth' });
+  }
 }
 
 // ── Write modal ──
