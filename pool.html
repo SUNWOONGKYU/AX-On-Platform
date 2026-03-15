@@ -1124,28 +1124,6 @@ a:hover { text-decoration: underline; }
           <label class="form-label" for="regVision">미래 비전</label>
           <textarea class="form-textarea" id="regVision" placeholder="나의 미래 비전을 작성해주세요" maxlength="3000"></textarea>
         </div>
-        <div class="form-group">
-          <label class="form-label">관심/협업 분야 <span class="form-hint">(해당하는 분야를 선택해주세요)</span></label>
-          <div class="pill-select" id="interestPills">
-            <span class="pill-option" data-value="AI교육">AI교육</span>
-            <span class="pill-option" data-value="AI개발">AI개발</span>
-            <span class="pill-option" data-value="AI컨설팅">AI컨설팅</span>
-            <span class="pill-option" data-value="핀테크">핀테크</span>
-            <span class="pill-option" data-value="헬스케어">헬스케어</span>
-            <span class="pill-option" data-value="부동산">부동산</span>
-            <span class="pill-option" data-value="마케팅">마케팅</span>
-            <span class="pill-option" data-value="콘텐츠제작">콘텐츠제작</span>
-            <span class="pill-option" data-value="시니어창업">시니어창업</span>
-            <span class="pill-option" data-value="영상제작">영상제작</span>
-            <span class="pill-option" data-value="챗봇개발">챗봇개발</span>
-            <span class="pill-option" data-value="데이터분석">데이터분석</span>
-            <span class="pill-option" data-value="디자인">디자인</span>
-            <span class="pill-option" data-value="법률">법률</span>
-            <span class="pill-option" data-value="회계/세무">회계/세무</span>
-            <span class="pill-option" data-value="기타">기타</span>
-          </div>
-        </div>
-
         <div class="form-nav">
           <button type="button" class="btn-prev" onclick="goStep(2)">이전</button>
           <button type="button" class="btn-next" onclick="goStep(4)">다음</button>
@@ -1279,7 +1257,6 @@ let isSubmitting = false;
 let selectedGender = '';
 let selectedChatbot = '';
 let selectedAiTools = [];
-let selectedInterests = [];
 let selectedSpecialties = [];
 let currentView = 'grid'; // 'grid' or 'list'
 
@@ -1709,7 +1686,6 @@ document.querySelectorAll('.pill-select .pill-option').forEach(pill => {
     pill.classList.toggle('selected');
     // Sync state
     selectedAiTools = Array.from(document.querySelectorAll('#aiToolsPills .pill-option.selected')).map(p => p.dataset.value);
-    selectedInterests = Array.from(document.querySelectorAll('#interestPills .pill-option.selected')).map(p => p.dataset.value);
     selectedSpecialties = [
       ...Array.from(document.querySelectorAll('#specialtyPills .pill-option.selected')).map(p => p.dataset.value),
       ...Array.from(document.querySelectorAll('#functionPills .pill-option.selected')).map(p => p.dataset.value)
@@ -1870,9 +1846,6 @@ function buildReview() {
     '<div class="review-section-header"><span class="review-section-title">3. 비전 & 목표</span><button type="button" class="review-edit-btn" onclick="goStep(3)">수정하기</button></div>' +
     (data.want_to_do ? reviewRow('하고 싶은 일', data.want_to_do) : reviewRow('하고 싶은 일', '-')) +
     (data.vision ? reviewRow('미래 비전', data.vision) : reviewRow('미래 비전', '-')) +
-    '<div class="review-row"><span class="review-label">관심 분야</span><div class="review-pills">' +
-    (data.interest_areas.length > 0 ? data.interest_areas.map(i => '<span class="review-pill">' + escapeHtml(i) + '</span>').join('') : '<span style="color:var(--ink-muted);font-size:13px;">-</span>') +
-    '</div></div>' +
     '</div>';
 
   // Section 4: 상품 & 서비스
@@ -1920,7 +1893,6 @@ function gatherFormData() {
     can_build_chatbot: { '가능': 'possible', '불가능': 'impossible', '학습중': 'learning' }[selectedChatbot] || selectedChatbot,
     want_to_do: sanitize(document.getElementById('regWantToDo').value.trim()),
     vision: sanitize(document.getElementById('regVision').value.trim()),
-    interest_areas: selectedInterests,
     books: sanitize(document.getElementById('regBooks').value.trim()),
     products: sanitize(document.getElementById('regProducts').value.trim()),
     services: sanitize(document.getElementById('regServices').value.trim()),
@@ -1998,7 +1970,6 @@ async function submitRegistration() {
       can_build_chatbot: data.can_build_chatbot || null,
       want_to_do: data.want_to_do || null,
       vision: data.vision || null,
-      interest_areas: data.interest_areas.length > 0 ? data.interest_areas : null,
       books: data.books || null,
       products: data.products || null,
       services: data.services || null,
@@ -2015,7 +1986,7 @@ async function submitRegistration() {
     selectedGender = '';
     selectedChatbot = '';
     selectedAiTools = [];
-    selectedInterests = [];
+
     document.querySelectorAll('.pill-option.selected, .gender-btn.selected, .chatbot-opt.selected').forEach(el => el.classList.remove('selected'));
 
     // Refresh expert list
