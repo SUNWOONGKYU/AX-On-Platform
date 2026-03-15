@@ -50,22 +50,102 @@
 
   /* ── SCORE CARD ── */
   .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 32px; }
-  @media(max-width:768px) {
-    .score-grid { grid-template-columns: repeat(3, 1fr); }
+  /* 5열 인라인 그리드 오버라이드용 클래스 */
+  .score-5col { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
 
+  /* ══════ 768px 이하 ══════ */
+  @media(max-width:768px) {
+    body { overflow-x: hidden; }
+
+    /* 그리드 */
+    .score-grid { grid-template-columns: repeat(3, 1fr); }
+    .score-5col { grid-template-columns: repeat(3, 1fr); }
+
+    /* Hero */
     .hero { padding: 32px 16px; }
     .hero h1 { font-size: clamp(22px, 6vw, 36px); }
+    .hero p { font-size: 13px; }
+    .hero-meta { gap: 10px; }
 
+    /* Layout */
     .container { padding: 16px; }
-
+    .section { margin-bottom: 36px; }
     .section-title { font-size: 16px; }
 
-    .sal-table { font-size: 12px; overflow-x: auto; display: block; }
+    /* Overall */
+    .overall { flex-direction: column; gap: 12px; padding: 18px; }
+    .overall-num { font-size: 56px; }
+    .overall-info h2 { font-size: 16px; }
+    .overall-info p { font-size: 12px; }
+
+    /* Score cards */
+    .score-card { padding: 12px 8px; }
+    .score-num { font-size: 28px; }
+
+    /* Tables */
+    .sal-table { font-size: 12px; overflow-x: auto; display: block; -webkit-overflow-scrolling: touch; }
     .sal-table th, .sal-table td { padding: 8px 10px; }
-
-    .sal-grid-vis { overflow-x: auto; }
-
     table { font-size: 12px; }
+
+    /* SAL Grid visual */
+    .sal-grid-vis { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Score bar */
+    .score-bar-wrap { gap: 5px; }
+    .score-bar { min-width: 40px; }
+    .score-val { font-size: 11px; width: 28px; }
+
+    /* Issue cards */
+    .issue { padding: 12px 14px; }
+    .issue-header { gap: 6px; }
+    .issue-title { font-size: 13px; flex-basis: 100%; }
+    .issue-body { font-size: 12px; }
+    .issue-fix { font-size: 12px; }
+
+    /* Code */
+    .code { font-size: 10px; padding: 10px; }
+
+    /* Roadmap */
+    .rm-item { gap: 10px; }
+    .rm-badge { min-width: 68px; font-size: 10px; }
+    .rm-content h4 { font-size: 13px; }
+    .rm-content p { font-size: 12px; }
+
+    /* Footer */
+    footer { padding: 20px 16px; font-size: 11px; }
+  }
+
+  /* ══════ 480px 이하 ══════ */
+  @media(max-width:480px) {
+    .hero { padding: 24px 12px; }
+    .container { padding: 12px; }
+
+    /* 5열 → 2열 */
+    .score-5col { grid-template-columns: repeat(2, 1fr); }
+    .score-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Overall */
+    .overall-num { font-size: 44px; }
+
+    /* Score cards */
+    .score-num { font-size: 24px; }
+    .score-area { font-size: 10px; }
+
+    /* Step process circles */
+    .section-title { font-size: 14px; }
+
+    /* Issue header: SAL ID와 priority를 위로, 제목 아래로 */
+    .issue-header { flex-wrap: wrap; }
+    .issue-title { order: 3; flex-basis: 100%; margin-top: 4px; }
+
+    /* Roadmap badges */
+    .rm-badge { min-width: 56px; }
+
+    /* Code block */
+    .code { font-size: 9px; }
+
+    /* 인라인 스타일 오버라이드: STEP 설명 flex items */
+    .step-process-content { padding: 12px !important; }
   }
   .score-card {
     background: var(--surface); border: 1px solid var(--border);
@@ -212,6 +292,154 @@
 </div>
 
 <div class="container">
+
+  <!-- ══ 3단계 개선 프로세스 ══ -->
+  <div class="section">
+    <div class="section-title"><span class="sn" style="background:var(--accent4);color:#000;">PROCESS</span> 3단계 개선 프로세스 — Before → Issues → After</div>
+
+    <!-- STEP 1 -->
+    <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;">
+      <div style="min-width:36px;height:36px;background:rgba(255,123,114,0.2);border:1px solid rgba(255,123,114,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#ff7b72;font-weight:800;font-size:15px;flex-shrink:0;">1</div>
+      <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-left:3px solid #ff7b72;border-radius:0 8px 8px 0;padding:16px 20px;">
+        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px;">최초 진단 — SALSA 자동 감사 실행</div>
+        <div class="score-5col">
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:4px;">FE 코드구조</div>
+            <div style="font-size:28px;font-weight:800;color:#ff7b72;">32</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:4px;">PF 성능</div>
+            <div style="font-size:28px;font-weight:800;color:#ffa657;">58</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:4px;">SC 보안</div>
+            <div style="font-size:28px;font-weight:800;color:#e3b341;">68</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:4px;">QA 품질</div>
+            <div style="font-size:28px;font-weight:800;color:#ff7b72;">25</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:4px;">AR 아키텍처</div>
+            <div style="font-size:28px;font-weight:800;color:#ffa657;">55</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;text-align:center;padding:12px;background:rgba(255,123,114,0.08);border-radius:6px;">
+          <span style="font-size:13px;color:var(--text2);">종합 점수</span>
+          <span style="font-size:32px;font-weight:800;color:#ffa657;margin:0 8px;">54점</span>
+          <span style="font-size:13px;color:var(--text2);">/ 100</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;">
+      <div style="min-width:36px;height:36px;background:rgba(255,166,87,0.2);border:1px solid rgba(255,166,87,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#ffa657;font-weight:800;font-size:15px;flex-shrink:0;">2</div>
+      <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-left:3px solid #ffa657;border-radius:0 8px 8px 0;padding:16px 20px;">
+        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px;">지적사항 도출 — SAL ID별 문제 식별</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,123,114,0.08);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#58a6ff;background:rgba(88,166,255,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S2FE1</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">CSS 변수 선언 5개 파일 중복 — 브라우저 캐싱 불가, 수정 시 5곳 동기화 필요</span>
+            <span style="font-size:11px;font-weight:700;color:#ff7b72;flex-shrink:0;">🔴 즉시</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,123,114,0.08);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#58a6ff;background:rgba(88,166,255,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S2FE2</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">NAV HTML+CSS+JS 4개 파일 복사 — 수정 시 버그 위험, 동기화 오류</span>
+            <span style="font-size:11px;font-weight:700;color:#ff7b72;flex-shrink:0;">🔴 즉시</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,166,87,0.06);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#58a6ff;background:rgba(88,166,255,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S2FE3</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">OG 이미지 /images/og-default.png → 404 — 소셜 공유 시 미리보기 없음</span>
+            <span style="font-size:11px;font-weight:700;color:#ffa657;flex-shrink:0;">🟠 단기</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,166,87,0.06);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#58a6ff;background:rgba(88,166,255,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S2PF1</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">Google Fonts 렌더 블로킹 — Noto Sans KR 4 weights 로드로 LCP +300~500ms</span>
+            <span style="font-size:11px;font-weight:700;color:#ffa657;flex-shrink:0;">🟠 단기</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,166,87,0.06);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#58a6ff;background:rgba(88,166,255,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S2AU1</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">/api/config 매 페이지 호출 캐싱 없음 — 11페이지 방문 시 11번 동일 API 호출</span>
+            <span style="font-size:11px;font-weight:700;color:#ffa657;flex-shrink:0;">🟠 단기</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div style="display:flex;align-items:flex-start;gap:16px;">
+      <div style="min-width:36px;height:36px;background:rgba(63,185,80,0.2);border:1px solid rgba(63,185,80,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#3fb950;font-weight:800;font-size:15px;flex-shrink:0;">3</div>
+      <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-left:3px solid #3fb950;border-radius:0 8px 8px 0;padding:16px 20px;">
+        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px;">개선 결과 — 실제 코드 수정 후 재측정</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(63,185,80,0.06);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#3fb950;background:rgba(63,185,80,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S7FE1 ✅</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">css/common.css 생성 — CSS 변수, NAV, Footer, 버튼 공통화. 전송 -40KB+, 캐싱 적용</span>
+            <span style="font-size:11px;font-weight:700;color:#3fb950;flex-shrink:0;">FE 32→72</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(63,185,80,0.06);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#3fb950;background:rgba(63,185,80,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S7PF1 ✅</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">Fonts 비동기 로딩 + weight 2개로 축소 (400,700만) → LCP -300~500ms</span>
+            <span style="font-size:11px;font-weight:700;color:#3fb950;flex-shrink:0;">PF 58→72</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(63,185,80,0.06);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#3fb950;background:rgba(63,185,80,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S7FE3 ✅</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">images/og-default.svg 생성 배포 — 소셜 공유 미리보기 복구</span>
+            <span style="font-size:11px;font-weight:700;color:#3fb950;flex-shrink:0;">FE +5</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(63,185,80,0.06);border-radius:6px;">
+            <span style="font-family:monospace;font-size:11px;color:#3fb950;background:rgba(63,185,80,0.1);padding:2px 6px;border-radius:3px;flex-shrink:0;">S7SC1 ✅</span>
+            <span style="font-size:12px;color:var(--text3);flex:1;">config.js에 sessionStorage 캐싱 추가 — /api/config 호출 80% 감소</span>
+            <span style="font-size:11px;font-weight:700;color:#3fb950;flex-shrink:0;">SC 68→74</span>
+          </div>
+        </div>
+        <div class="score-5col" style="margin-bottom:12px;">
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:2px;">FE 코드구조</div>
+            <div style="font-size:11px;color:#ff7b72;text-decoration:line-through;">32</div>
+            <div style="font-size:22px;font-weight:800;color:#3fb950;">72</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:2px;">PF 성능</div>
+            <div style="font-size:11px;color:#ffa657;text-decoration:line-through;">58</div>
+            <div style="font-size:22px;font-weight:800;color:#3fb950;">72</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:2px;">SC 보안</div>
+            <div style="font-size:11px;color:#e3b341;text-decoration:line-through;">68</div>
+            <div style="font-size:22px;font-weight:800;color:#3fb950;">74</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:2px;">QA 품질</div>
+            <div style="font-size:11px;color:#ff7b72;text-decoration:line-through;">25</div>
+            <div style="font-size:22px;font-weight:800;color:#ffa657;">28</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:rgba(13,17,23,0.5);border-radius:6px;">
+            <div style="font-size:10px;color:var(--text2);margin-bottom:2px;">AR 아키텍처</div>
+            <div style="font-size:11px;color:#ffa657;text-decoration:line-through;">55</div>
+            <div style="font-size:22px;font-weight:800;color:#3fb950;">70</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:24px;padding:16px;background:rgba(63,185,80,0.08);border-radius:8px;border:1px solid rgba(63,185,80,0.2);flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:var(--text2);">예측 점수</div>
+            <div style="font-size:28px;font-weight:800;color:#ffa657;">76점</div>
+          </div>
+          <div style="font-size:24px;color:var(--text2);">→</div>
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:var(--text2);">실제 개선 후</div>
+            <div style="font-size:40px;font-weight:800;color:#3fb950;">74점</div>
+          </div>
+          <div style="text-align:center;padding:8px 16px;background:rgba(63,185,80,0.1);border-radius:8px;">
+            <div style="font-size:11px;color:var(--text2);">총 향상</div>
+            <div style="font-size:28px;font-weight:800;color:#3fb950;">+20점</div>
+            <div style="font-size:11px;color:var(--text2);">54 → 74</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ══ 종합 점수 ══ -->
   <div class="section">
