@@ -957,9 +957,11 @@ a:hover { text-decoration: underline; }
       <div class="step-line"></div>
       <div class="step" data-step="4"><span class="step-num">4</span><span class="step-label">상품</span></div>
       <div class="step-line"></div>
-      <div class="step" data-step="5"><span class="step-num">5</span><span class="step-label">소셜 미디어</span></div>
+      <div class="step" data-step="5"><span class="step-num">5</span><span class="step-label">소셜</span></div>
       <div class="step-line"></div>
-      <div class="step" data-step="6"><span class="step-num">6</span><span class="step-label">확인</span></div>
+      <div class="step" data-step="6"><span class="step-num">6</span><span class="step-label">첨부</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="7"><span class="step-num">7</span><span class="step-label">확인</span></div>
     </div>
 
     <form id="regForm" novalidate>
@@ -1196,15 +1198,47 @@ a:hover { text-decoration: underline; }
         </div>
       </div>
 
-      <!-- STEP 6: 확인 & 등록 -->
+      <!-- STEP 6: 첨부파일 -->
       <div class="form-step" data-step="6">
+        <div class="form-step-title">첨부파일</div>
+        <div class="form-step-desc">이력서, 자기소개서, 자격증 등을 첨부할 수 있습니다. (모두 선택사항, 파일당 최대 10MB)</div>
+
+        <div class="form-group">
+          <label class="form-label" for="regFileResume">이력서</label>
+          <input type="file" class="form-input" id="regFileResume" accept=".pdf,.doc,.docx,.hwp,.hwpx" style="padding:10px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regFileIntro">자기소개서</label>
+          <input type="file" class="form-input" id="regFileIntro" accept=".pdf,.doc,.docx,.hwp,.hwpx" style="padding:10px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regFileCert1">자격증 1</label>
+          <input type="file" class="form-input" id="regFileCert1" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="padding:10px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regFileCert2">자격증 2</label>
+          <input type="file" class="form-input" id="regFileCert2" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="padding:10px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regFileCert3">자격증 3</label>
+          <input type="file" class="form-input" id="regFileCert3" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="padding:10px;">
+        </div>
+
+        <div class="form-nav">
+          <button type="button" class="btn-prev" onclick="goStep(5)">이전</button>
+          <button type="button" class="btn-next" onclick="goStep(7)">다음</button>
+        </div>
+      </div>
+
+      <!-- STEP 7: 확인 & 등록 -->
+      <div class="form-step" data-step="7">
         <div class="form-step-title">확인 &amp; 등록</div>
         <div class="form-step-desc">입력하신 정보를 확인해주세요.</div>
 
         <div id="reviewContent"></div>
 
         <div class="form-nav">
-          <button type="button" class="btn-prev" onclick="goStep(5)">이전</button>
+          <button type="button" class="btn-prev" onclick="goStep(6)">이전</button>
           <button type="button" class="btn-submit" id="submitBtn" onclick="submitRegistration()">등록하기</button>
         </div>
       </div>
@@ -1542,6 +1576,19 @@ function showExpertDetail(id) {
   if (linksHTML) {
     html += '<div class="detail-section"><div class="detail-section-title">소셜 & 콘텐츠</div><div class="detail-links">' + linksHTML + '</div></div>';
   }
+  if (e.attachments && typeof e.attachments === 'object') {
+    var attLabels = { resume: '이력서', intro: '자기소개서', cert1: '자격증 1', cert2: '자격증 2', cert3: '자격증 3' };
+    var attHTML = '';
+    Object.keys(e.attachments).forEach(function(k) {
+      var att = e.attachments[k];
+      if (att && att.url) {
+        attHTML += '<a href="' + escapeHtml(att.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(attLabels[k] || k) + ' &#x2197;</a>';
+      }
+    });
+    if (attHTML) {
+      html += '<div class="detail-section"><div class="detail-section-title">첨부파일</div><div class="detail-links">' + attHTML + '</div></div>';
+    }
+  }
 
   document.getElementById('detailContent').innerHTML = html;
   document.getElementById('detailOverlay').classList.add('open');
@@ -1737,8 +1784,8 @@ function goStep(step) {
     fs.classList.toggle('active', parseInt(fs.dataset.step) === currentStep);
   });
 
-  // Build review for step 6
-  if (currentStep === 6) buildReview();
+  // Build review for step 7
+  if (currentStep === 7) buildReview();
 
   // Scroll reg-box to top
   document.querySelector('.reg-box').scrollTop = 0;
@@ -1867,6 +1914,24 @@ function buildReview() {
     reviewRow('기타', data.sns_other || '-') +
     '</div>';
 
+  // Section 6: 첨부파일
+  var fileNames = [];
+  var fileInputs = [
+    { id: 'regFileResume', label: '이력서' },
+    { id: 'regFileIntro', label: '자기소개서' },
+    { id: 'regFileCert1', label: '자격증 1' },
+    { id: 'regFileCert2', label: '자격증 2' },
+    { id: 'regFileCert3', label: '자격증 3' }
+  ];
+  html += '<div class="review-section">' +
+    '<div class="review-section-header"><span class="review-section-title">6. 첨부파일</span><button type="button" class="review-edit-btn" onclick="goStep(6)">수정하기</button></div>';
+  fileInputs.forEach(function(fi) {
+    var input = document.getElementById(fi.id);
+    var fname = (input && input.files && input.files[0]) ? input.files[0].name : '-';
+    html += reviewRow(fi.label, fname);
+  });
+  html += '</div>';
+
   document.getElementById('reviewContent').innerHTML = html;
 }
 
@@ -1952,6 +2017,33 @@ async function submitRegistration() {
       if (photoUrl) data.profile_image_url = photoUrl;
     }
 
+    // Upload attachment files
+    var attachments = {};
+    var fileInputs = [
+      { id: 'regFileResume', key: 'resume' },
+      { id: 'regFileIntro', key: 'intro' },
+      { id: 'regFileCert1', key: 'cert1' },
+      { id: 'regFileCert2', key: 'cert2' },
+      { id: 'regFileCert3', key: 'cert3' }
+    ];
+    for (var fi of fileInputs) {
+      var input = document.getElementById(fi.id);
+      if (input && input.files && input.files[0]) {
+        var file = input.files[0];
+        if (file.size > 10 * 1024 * 1024) {
+          showToast(fi.key + ' 파일이 10MB를 초과합니다.', false);
+          return;
+        }
+        var ext = file.name.split('.').pop();
+        var path = 'attachments/' + data.user_id + '/' + fi.key + '.' + ext;
+        var { error: upErr } = await sb.storage.from('expert-files').upload(path, file, { upsert: true });
+        if (!upErr) {
+          var { data: urlData } = sb.storage.from('expert-files').getPublicUrl(path);
+          if (urlData) attachments[fi.key] = { name: file.name, url: urlData.publicUrl };
+        }
+      }
+    }
+
     const { error } = await sb.from('ax_experts').insert([{
       user_id: data.user_id,
       name: data.name,
@@ -1973,7 +2065,8 @@ async function submitRegistration() {
       books: data.books || null,
       products: data.products || null,
       services: data.services || null,
-      sns_links: Object.keys(snsLinks).length > 0 ? snsLinks : {}
+      sns_links: Object.keys(snsLinks).length > 0 ? snsLinks : {},
+      attachments: Object.keys(attachments).length > 0 ? attachments : null
     }]);
 
     if (error) throw error;
