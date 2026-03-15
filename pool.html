@@ -1527,6 +1527,9 @@ function showExpertDetail(id) {
     chatbotBadgeHTML(e.can_build_chatbot) +
     '</div></div>';
 
+  if (e.email) {
+    html += '<div class="detail-section"><div class="detail-section-title">이메일</div><div class="detail-text"><a href="mailto:' + escapeHtml(e.email) + '" style="color:var(--amber);">' + escapeHtml(e.email) + '</a></div></div>';
+  }
   if (e.education) {
     html += '<div class="detail-section"><div class="detail-section-title">학력</div><div class="detail-text" style="white-space:pre-wrap;">' + linkifyText(e.education) + '</div></div>';
   }
@@ -1551,10 +1554,6 @@ function showExpertDetail(id) {
   }
   if (e.vision) {
     html += '<div class="detail-section"><div class="detail-section-title">미래 비전</div><div class="detail-text" style="white-space:pre-wrap;">' + linkifyText(e.vision) + '</div></div>';
-  }
-  var interests = e.interest_areas || [];
-  if (interests.length > 0) {
-    html += '<div class="detail-section"><div class="detail-section-title">관심/협업 분야</div><div class="detail-pills">' + interests.map(function(i) { return '<span class="detail-pill interest">' + escapeHtml(i) + '</span>'; }).join('') + '</div></div>';
   }
   if (e.books || e.products || e.services) {
     html += '<div class="detail-section"><div class="detail-section-title">상품 & 서비스</div>';
