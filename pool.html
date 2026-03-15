@@ -1116,7 +1116,7 @@ a:hover { text-decoration: underline; }
       <!-- STEP 3: 비전 & 목표 -->
       <div class="form-step" data-step="3">
         <div class="form-step-title">비전 &amp; 목표</div>
-        <div class="form-step-desc">앞으로의 계획과 관심 분야를 알려주세요.</div>
+        <div class="form-step-desc">앞으로의 계획과 비전을 알려주세요.</div>
 
         <div class="form-group">
           <label class="form-label" for="regWantToDo">하고 싶은 일</label>
@@ -2034,7 +2034,12 @@ async function submitRegistration() {
           showToast(fi.key + ' 파일이 10MB를 초과합니다.', false);
           return;
         }
-        var ext = file.name.split('.').pop();
+        var ext = file.name.split('.').pop().toLowerCase();
+        var allowedExts = ['pdf','doc','docx','hwp','hwpx','jpg','jpeg','png'];
+        if (!allowedExts.includes(ext)) {
+          showToast('지원하지 않는 파일 형식입니다. (PDF, DOC, HWP, JPG, PNG)', false);
+          return;
+        }
         var path = 'attachments/' + data.user_id + '/' + fi.key + '.' + ext;
         var { error: upErr } = await sb.storage.from('expert-files').upload(path, file, { upsert: true });
         if (!upErr) {
