@@ -15,3 +15,5 @@ AX-On Platform 도메인 정보.md
 # Supabase service role key — 절대 커밋 금지
 *.service_role*
 supabase/.temp/
+
+.env*.local

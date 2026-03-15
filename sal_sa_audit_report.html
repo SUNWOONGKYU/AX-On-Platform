@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAL-SA Audit Report — AX-On Platform</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --surface2: #1f2937;
+    --border: #30363d; --accent: #58a6ff; --accent2: #3fb950;
+    --accent3: #ff7b72; --accent4: #d2a8ff; --accent5: #ffa657;
+    --text: #e6edf3; --text2: #8b949e; --text3: #c9d1d9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* ── HEADER ── */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #1a1535 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 36px;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,123,114,0.15); border: 1px solid rgba(255,123,114,0.4);
+    color: var(--accent3); padding: 3px 14px; border-radius: 20px;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: clamp(22px, 3vw, 36px); font-weight: 700;
+    background: linear-gradient(135deg, #ff7b72, #ffa657, #58a6ff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 10px;
+  }
+  .hero p { color: var(--text2); font-size: 14px; }
+  .hero-meta { display: flex; gap: 20px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .hero-meta span { color: var(--text2); font-size: 12px; }
+  .hero-meta strong { color: var(--accent5); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
+  .section { margin-bottom: 48px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; color: var(--text);
+    margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sn { background: var(--accent3); color: #000; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 3px; }
+
+  /* ── SCORE CARD ── */
+  .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 32px; }
+  @media(max-width:768px) {
+    .score-grid { grid-template-columns: repeat(3, 1fr); }
+
+    .hero { padding: 32px 16px; }
+    .hero h1 { font-size: clamp(22px, 6vw, 36px); }
+
+    .container { padding: 16px; }
+
+    .section-title { font-size: 16px; }
+
+    .sal-table { font-size: 12px; overflow-x: auto; display: block; }
+    .sal-table th, .sal-table td { padding: 8px 10px; }
+
+    .sal-grid-vis { overflow-x: auto; }
+
+    table { font-size: 12px; }
+  }
+  .score-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; text-align: center;
+  }
+  .score-area { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .score-num {
+    font-size: 36px; font-weight: 800; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-num.red { color: #ff7b72; }
+  .score-num.orange { color: #ffa657; }
+  .score-num.yellow { color: #e3b341; }
+  .score-num.green { color: #3fb950; }
+  .score-label { font-size: 11px; color: var(--text2); }
+
+  /* ── OVERALL SCORE ── */
+  .overall {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; margin-bottom: 32px;
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .overall-num {
+    font-size: 72px; font-weight: 800; color: #ffa657; line-height: 1; flex-shrink: 0;
+  }
+  .overall-info h2 { font-size: 18px; color: var(--text); margin-bottom: 6px; }
+  .overall-info p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* ── SAL ID TABLE ── */
+  .sal-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .sal-table th {
+    background: var(--surface2); color: var(--text2);
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .sal-table td { padding: 9px 12px; border-bottom: 1px solid rgba(48,54,61,0.4); color: var(--text3); vertical-align: top; }
+  .sal-table tr:hover td { background: rgba(88,166,255,0.03); }
+  .sal-id {
+    font-family: 'Courier New', monospace; font-weight: 700; font-size: 12px;
+    background: rgba(88,166,255,0.12); color: var(--accent);
+    padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+  }
+
+  /* ── SCORE BAR ── */
+  .score-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .score-bar { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; min-width: 60px; }
+  .score-bar-fill { height: 100%; border-radius: 3px; }
+  .fill-red { background: #ff7b72; }
+  .fill-orange { background: #ffa657; }
+  .fill-yellow { background: #e3b341; }
+  .fill-green { background: #3fb950; }
+  .score-val { font-size: 12px; font-weight: 700; width: 36px; text-align: right; flex-shrink: 0; }
+  .sv-red { color: #ff7b72; }
+  .sv-orange { color: #ffa657; }
+  .sv-yellow { color: #e3b341; }
+  .sv-green { color: #3fb950; }
+
+  /* ── PRIORITY BADGE ── */
+  .pri { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .pri-1 { background: rgba(255,123,114,0.2); color: #ff7b72; }
+  .pri-2 { background: rgba(255,166,87,0.2); color: #ffa657; }
+  .pri-3 { background: rgba(227,179,65,0.2); color: #e3b341; }
+  .pri-4 { background: rgba(63,185,80,0.15); color: #3fb950; }
+
+  /* ── ISSUE CARD ── */
+  .issue-list { display: flex; flex-direction: column; gap: 10px; }
+  .issue {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+    border-left: 3px solid var(--border);
+  }
+  .issue.p1 { border-left-color: #ff7b72; }
+  .issue.p2 { border-left-color: #ffa657; }
+  .issue.p3 { border-left-color: #e3b341; }
+  .issue.p4 { border-left-color: #3fb950; }
+  .issue-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .issue-title { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+  .issue-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .issue-fix { margin-top: 8px; font-size: 12px; background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.2); border-radius: 6px; padding: 8px 10px; color: #3fb950; }
+  .issue-fix strong { color: #3fb950; }
+
+  /* ── CODE BLOCK ── */
+  .code { background: #0d1117; border: 1px solid var(--border); border-radius: 6px; padding: 12px; font-family: 'Courier New', monospace; font-size: 11px; color: #79c0ff; overflow-x: auto; margin: 8px 0; line-height: 1.6; }
+  .code .cm { color: #8b949e; }
+  .code .ck { color: #ff7b72; }
+  .code .cv { color: #3fb950; }
+  .code .cs { color: #a5d6ff; }
+
+  /* ── GRID VISUAL ── */
+  .sal-grid-vis { overflow-x: auto; margin: 16px 0; }
+  .gv-table { border-collapse: collapse; min-width: 700px; font-size: 11px; }
+  .gv-table th { background: var(--surface2); color: var(--text2); padding: 7px 10px; border: 1px solid var(--border); text-align: center; font-size: 10px; text-transform: uppercase; }
+  .gv-table td { border: 1px solid var(--border); padding: 5px 8px; text-align: center; vertical-align: top; }
+  .gv-area { background: var(--surface2); color: var(--accent4); font-weight: 700; font-family: monospace; font-size: 11px; }
+  .gv-cell { border-radius: 3px; padding: 3px 4px; min-height: 28px; }
+  .gv-red { background: rgba(255,123,114,0.15); }
+  .gv-orange { background: rgba(255,166,87,0.12); }
+  .gv-yellow { background: rgba(227,179,65,0.1); }
+  .gv-green { background: rgba(63,185,80,0.1); }
+  .gv-empty { background: rgba(13,17,23,0.5); color: var(--text2); font-size: 10px; }
+  .gv-chip { display: inline-block; font-family: monospace; font-size: 10px; color: var(--accent); margin: 1px; background: rgba(88,166,255,0.1); padding: 1px 4px; border-radius: 2px; }
+
+  /* ── CALLOUT ── */
+  .callout { border-left: 3px solid; padding: 12px 16px; border-radius: 0 6px 6px 0; margin: 12px 0; }
+  .callout.green { border-color: var(--accent2); background: rgba(63,185,80,0.06); }
+  .callout.red { border-color: var(--accent3); background: rgba(255,123,114,0.06); }
+  .callout.blue { border-color: var(--accent); background: rgba(88,166,255,0.06); }
+  .callout p { font-size: 13px; color: var(--text2); }
+  .callout strong { color: var(--text); }
+
+  /* ── ROADMAP ── */
+  .roadmap { display: flex; flex-direction: column; gap: 0; }
+  .rm-item {
+    display: flex; gap: 16px; padding: 14px 0;
+    border-bottom: 1px solid rgba(48,54,61,0.3);
+  }
+  .rm-badge {
+    min-width: 80px; text-align: center; padding: 4px 8px;
+    border-radius: 6px; font-size: 11px; font-weight: 700; flex-shrink: 0; align-self: flex-start; margin-top: 2px;
+  }
+  .rm-p1 { background: rgba(255,123,114,0.2); color: #ff7b72; }
+  .rm-p2 { background: rgba(255,166,87,0.2); color: #ffa657; }
+  .rm-p3 { background: rgba(227,179,65,0.15); color: #e3b341; }
+  .rm-p4 { background: rgba(63,185,80,0.15); color: #3fb950; }
+  .rm-content h4 { font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .rm-content p { font-size: 12px; color: var(--text2); }
+  .rm-sal { font-family: monospace; font-size: 11px; color: var(--accent); background: rgba(88,166,255,0.1); padding: 1px 5px; border-radius: 3px; }
+
+  footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; color: var(--text2); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">SAL-SA Audit Report</div>
+  <h1>AX-On Platform — 소프트웨어 감사 리포트</h1>
+  <p>SAL Grid 방법론으로 분해·분석·점수화한 성능개선 보고서</p>
+  <div class="hero-meta">
+    <span><strong>분석일</strong> 2026-03-16</span>
+    <span><strong>대상</strong> AX-On Platform (ax-on.net)</span>
+    <span><strong>스택</strong> Vanilla HTML/CSS/JS + Supabase + Vercel</span>
+    <span><strong>총 파일</strong> 11개 HTML + 1개 JS config + 2개 DB 테이블</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ══ 종합 점수 ══ -->
+  <div class="section">
+    <div class="section-title"><span class="sn">00</span> 종합 점수 (Overall Score)</div>
+
+    <div class="overall">
+      <div class="overall-num">54</div>
+      <div class="overall-info">
+        <h2>/ 100점 — 개선 필요 단계</h2>
+        <p>기능은 정상 동작하나, <strong>CSS 중복·모듈화 부재·테스트 부재·렌더 블로킹</strong>이 주요 문제입니다.<br>
+        Critical Path 병목: <strong>CSS 중복 → 캐싱 실패 → 페이지 이동마다 재파싱</strong><br>
+        즉시 조치 시 성능 20~30점 향상 가능 (목표: 80점 이상)</p>
+      </div>
+    </div>
+
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="score-area">FE 코드구조</div>
+        <div class="score-num red">32</div>
+        <div class="score-label">CSS 중복 심각</div>
+      </div>
+      <div class="score-card">
+        <div class="score-area">PF 성능</div>
+        <div class="score-num orange">58</div>
+        <div class="score-label">렌더 블로킹</div>
+      </div>
+      <div class="score-card">
+        <div class="score-area">SC 보안</div>
+        <div class="score-num yellow">68</div>
+        <div class="score-label">클라이언트 권한</div>
+      </div>
+      <div class="score-card">
+        <div class="score-area">QA 품질</div>
+        <div class="score-num red">25</div>
+        <div class="score-label">테스트 0%</div>
+      </div>
+      <div class="score-card">
+        <div class="score-area">AR 아키텍처</div>
+        <div class="score-num orange">55</div>
+        <div class="score-label">컴포넌트 미분리</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ S2: 컴포넌트 분해 ══ -->
+  <div class="section">
+    <div class="section-title"><span class="sn">S2</span> 컴포넌트 분해 — SAL ID 자동 매핑</div>
+
+    <div class="callout blue">
+      <p><strong>분해 기준</strong>: 페이지=SAL ID 단위 / Area = 기능영역(FE/SC/DB) / Level = 의존성 깊이(공통모듈→페이지→기능) / Variant = 동일 Area 내 병렬 페이지</p>
+    </div>
+
+    <div class="sal-grid-vis">
+      <table class="gv-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">Area</th>
+            <th>S2 분해 (Level 1 = 기반)</th>
+            <th>S2 분해 (Level 2 = 공통)</th>
+            <th>S2 분해 (Level 3 = 페이지)</th>
+            <th>S2 분해 (Level 4 = 기능)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gv-area">FE</td>
+            <td><div class="gv-cell gv-red"><span class="gv-chip">S2FE1</span> CSS 변수/:root<br><small style="color:#8b949e;">전 페이지 중복</small></div></td>
+            <td><div class="gv-cell gv-orange"><span class="gv-chip">S2FE2</span> NAV 컴포넌트<br><small style="color:#8b949e;">4개 페이지 복사</small></div></td>
+            <td><div class="gv-cell gv-yellow">
+              <span class="gv-chip">S2FE3a</span> index.html<br>
+              <span class="gv-chip">S2FE3b</span> pool.html<br>
+              <span class="gv-chip">S2FE3c</span> community.html
+            </div></td>
+            <td><div class="gv-cell gv-green">
+              <span class="gv-chip">S2FE4a</span> Hero섹션<br>
+              <span class="gv-chip">S2FE4b</span> How-It-Works<br>
+              <span class="gv-chip">S2FE4c</span> Why-Join
+            </div></td>
+          </tr>
+          <tr>
+            <td class="gv-area">AU</td>
+            <td><div class="gv-cell gv-orange"><span class="gv-chip">S2AU1</span> config.js<br><small style="color:#8b949e;">AXON_CONFIG 초기화</small></div></td>
+            <td><div class="gv-cell gv-yellow"><span class="gv-chip">S2AU2</span> Supabase Auth<br><small style="color:#8b949e;">login/signup/profile</small></div></td>
+            <td><div class="gv-cell gv-green">
+              <span class="gv-chip">S2AU3a</span> login.html<br>
+              <span class="gv-chip">S2AU3b</span> signup.html<br>
+              <span class="gv-chip">S2AU3c</span> profile.html
+            </div></td>
+            <td><div class="gv-cell gv-green">
+              <span class="gv-chip">S2AU4a</span> forgot-pw.html<br>
+              <span class="gv-chip">S2AU4b</span> reset-pw.html
+            </div></td>
+          </tr>
+          <tr>
+            <td class="gv-area">DB</td>
+            <td><div class="gv-cell gv-green"><span class="gv-chip">S2DB1</span> ax_experts<br><small style="color:#8b949e;">전문가 테이블</small></div></td>
+            <td><div class="gv-cell gv-green"><span class="gv-chip">S2DB2</span> ax_project_requests<br><small style="color:#8b949e;">프로젝트 요청</small></div></td>
+            <td><div class="gv-cell gv-empty">—</div></td>
+            <td><div class="gv-cell gv-empty">—</div></td>
+          </tr>
+          <tr>
+            <td class="gv-area">SC</td>
+            <td><div class="gv-cell gv-orange"><span class="gv-chip">S2SC1</span> Anon Key 하드코딩<br><small style="color:#8b949e;">config.js L28-29</small></div></td>
+            <td><div class="gv-cell gv-yellow"><span class="gv-chip">S2SC2</span> Admin 권한체크<br><small style="color:#8b949e;">클라이언트 사이드</small></div></td>
+            <td><div class="gv-cell gv-green"><span class="gv-chip">S2SC3</span> escapeHtml()<br><small style="color:#8b949e;">XSS 방어 ✅</small></div></td>
+            <td><div class="gv-cell gv-empty">—</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 각 SAL ID별 점수 ══ -->
+  <div class="section">
+    <div class="section-title"><span class="sn">S4</span> SAL ID별 점수카드 — 정적 분석 결과</div>
+
+    <table class="sal-table">
+      <thead>
+        <tr>
+          <th>SAL ID</th>
+          <th>컴포넌트</th>
+          <th>현재 점수</th>
+          <th>주요 문제</th>
+          <th>우선순위</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 즉시 조치 -->
+        <tr>
+          <td><span class="sal-id">S2FE1</span></td>
+          <td>CSS 변수/:root 선언</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-red" style="width:18%"></div></div>
+              <span class="score-val sv-red">18</span>
+            </div>
+          </td>
+          <td>동일한 `:root{}` CSS 변수 선언이 <strong>최소 5개 HTML 파일에 복사</strong>. 수정 시 5곳 동기화 필요. 브라우저 캐싱 불가.</td>
+          <td><span class="pri pri-1">🔴 즉시</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2FE2</span></td>
+          <td>NAV 컴포넌트</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-red" style="width:22%"></div></div>
+              <span class="score-val sv-red">22</span>
+            </div>
+          </td>
+          <td>NAV HTML + CSS + JS가 index/pool/community/profile 4개 파일에 <strong>완전 복사</strong>. Nav 수정 시 4곳 동시 수정 필요. 동기화 오류 위험.</td>
+          <td><span class="pri pri-1">🔴 즉시</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2AU1</span></td>
+          <td>config.js — AXON_CONFIG</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-orange" style="width:55%"></div></div>
+              <span class="score-val sv-orange">55</span>
+            </div>
+          </td>
+          <td>Supabase Anon Key + URL이 <strong>fallback으로 하드코딩</strong> (L28-29). Anon Key는 공개 설계이지만 프로젝트 URL 노출 = 대상 특정 가능. `/api/config` 매 페이지 호출, 캐싱 없음.</td>
+          <td><span class="pri pri-2">🟠 단기</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2SC2</span></td>
+          <td>injectAdminLink() — 관리자 권한</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-orange" style="width:45%"></div></div>
+              <span class="score-val sv-orange">45</span>
+            </div>
+          </td>
+          <td><code style="color:#a5d6ff;font-size:11px;">user.app_metadata?.role !== 'admin'</code> 체크가 <strong>클라이언트 사이드</strong>. 브라우저 콘솔에서 조작 가능. Supabase DB RLS 정책이 별도로 있어야 실제 보호됨. RLS 존재 여부 미확인.</td>
+          <td><span class="pri pri-2">🟠 단기</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2FE3a~c</span></td>
+          <td>메인 페이지 3개 (index/pool/community)</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-yellow" style="width:60%"></div></div>
+              <span class="score-val sv-yellow">60</span>
+            </div>
+          </td>
+          <td>Google Fonts CDN (`Noto Sans KR` + `Outfit`)을 <strong>렌더 블로킹 `&lt;link&gt;`</strong>로 로드. Noto Sans KR은 한국어 폰트로 용량이 매우 큼. 각 페이지마다 동일 요청. `font-display: swap` 미사용.</td>
+          <td><span class="pri pri-2">🟠 단기</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2FE3b</span></td>
+          <td>pool.html — 전문가 풀 페이지</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-yellow" style="width:62%"></div></div>
+              <span class="score-val sv-yellow">62</span>
+            </div>
+          </td>
+          <td>OG 이미지 경로 `/images/og-default.png`가 <strong>404 에러</strong>. 카카오톡·슬랙 공유 시 미리보기 없음. SEO 점수 하락 요인.</td>
+          <td><span class="pri pri-2">🟠 단기</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2AU2</span></td>
+          <td>Supabase Auth (login/signup/profile)</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-yellow" style="width:70%"></div></div>
+              <span class="score-val sv-yellow">70</span>
+            </div>
+          </td>
+          <td>Auth 로직이 각 페이지에 인라인 JS로 중복. `getUser()` 호출이 페이지마다 독립. Auth 상태 캐싱 없음 → 매 페이지 로드마다 Supabase 왕복 API 호출.</td>
+          <td><span class="pri pri-3">🟡 중기</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2DB1</span></td>
+          <td>ax_experts 테이블</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-yellow" style="width:72%"></div></div>
+              <span class="score-val sv-yellow">72</span>
+            </div>
+          </td>
+          <td>전문가 수 카운트 쿼리 <code style="color:#a5d6ff;font-size:11px;">select('*', {count:'exact', head:true})</code> — 캐싱 없이 매 랜딩 페이지 로드마다 실행. 전문가 수가 자주 바뀌지 않는다면 캐싱 가능.</td>
+          <td><span class="pri pri-3">🟡 중기</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2SC3</span></td>
+          <td>escapeHtml() / isSafeUrl() / isValidEmail()</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-green" style="width:88%"></div></div>
+              <span class="score-val sv-green">88</span>
+            </div>
+          </td>
+          <td>XSS 방어 함수가 구현되어 있고 사용됨 ✅. URL 검증, 이메일 검증 존재 ✅. 양호함.</td>
+          <td><span class="pri pri-4">🟢 양호</span></td>
+        </tr>
+        <tr>
+          <td><span class="sal-id">S2DB2</span></td>
+          <td>ax_project_requests 테이블</td>
+          <td>
+            <div class="score-bar-wrap">
+              <div class="score-bar"><div class="score-bar-fill fill-green" style="width:82%"></div></div>
+              <span class="score-val sv-green">82</span>
+            </div>
+          </td>
+          <td>RLS 정책 마이그레이션 파일 존재 (`allow_insert_returning.sql`) ✅. 구조 양호. SQL injection은 Supabase 클라이언트 라이브러리가 기본 방어.</td>
+          <td><span class="pri pri-4">🟢 양호</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══ 핵심 문제 상세 ══ -->
+  <div class="section">
+    <div class="section-title"><span class="sn">S5</span> 핵심 문제 상세 분석 — Critical Path</div>
+
+    <div class="callout red">
+      <p><strong>Critical Path 병목</strong>: CSS 중복(S2FE1) → 캐싱 실패 → 매 페이지 재파싱 → 렌더 지연<br>
+      이 경로를 먼저 해결하면 가장 큰 성능 향상 효과를 얻습니다.</p>
+    </div>
+
+    <div class="issue-list">
+
+      <div class="issue p1">
+        <div class="issue-header">
+          <span class="sal-id">S2FE1</span>
+          <span class="pri pri-1">🔴 즉시 조치</span>
+          <div class="issue-title">CSS 변수 선언 5중 복사 — 유지보수 시한폭탄</div>
+        </div>
+        <div class="issue-body">
+          동일한 <code style="color:#a5d6ff;">:root { --ink, --amber, --teal, ... }</code> CSS 변수 블록이 <strong>index.html, pool.html, community.html, login.html, profile.html</strong> 최소 5개 파일에 복사되어 있습니다. NAV CSS (~80줄), Footer CSS (~30줄)도 마찬가지입니다.<br><br>
+          이로 인해: ① 색상 하나를 바꾸면 5개 파일을 모두 수정해야 함 ② 인라인 CSS는 브라우저가 캐시하지 않아 페이지 이동마다 재파싱 ③ 실제로 index→pool 이동 시 동일한 CSS를 두 번 파싱함
+        </div>
+        <div class="issue-fix">
+          <strong>개선방안 (S7FE1):</strong> 공통 CSS를 <code>/css/common.css</code>로 분리하여 `&lt;link rel="stylesheet"&gt;`로 외부 로드. 브라우저 캐싱 적용 → 첫 페이지 이후 CSS 재다운로드 0KB.<br>
+          예상 효과: 페이지당 CSS 파싱 시간 -70%, 총 전송 데이터 -40KB 이상
+        </div>
+      </div>
+
+      <div class="issue p1">
+        <div class="issue-header">
+          <span class="sal-id">S2FE2</span>
+          <span class="pri pri-1">🔴 즉시 조치</span>
+          <div class="issue-title">NAV/Footer HTML+JS — 4개 파일 완전 복사</div>
+        </div>
+        <div class="issue-body">
+          Nav 마크업(~20줄), Nav CSS(~80줄), Nav JS (스크롤효과/모바일메뉴/Auth상태반영 ~60줄)가 index, pool, community, profile.html에 완전 복사되어 있습니다.<br><br>
+          "로그인" 텍스트 하나를 수정해도 4개 파일을 수정해야 하고, 실제로 한 파일만 수정하고 나머지를 빠뜨리는 버그 위험이 매우 높습니다.
+        </div>
+        <div class="issue-fix">
+          <strong>개선방안 (S7FE2):</strong> JS의 <code>fetch()</code>로 nav.html을 로드하거나, Web Components/HTML Template을 사용. 또는 빌드 도구(Vite) 도입으로 컴포넌트화.<br>
+          가장 간단한 방법: <code>fetch('/components/nav.html').then(r=>r.text()).then(html=>{navEl.innerHTML=html})</code>
+        </div>
+      </div>
+
+      <div class="issue p2">
+        <div class="issue-header">
+          <span class="sal-id">S2FE3a~c</span>
+          <span class="pri pri-2">🟠 단기 개선</span>
+          <div class="issue-title">Google Fonts 렌더 블로킹 — Noto Sans KR 한국어 폰트</div>
+        </div>
+        <div class="issue-body">
+          모든 페이지에서 다음 코드로 Google Fonts를 로드합니다:
+        </div>
+        <div class="code">
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link href="https://fonts.googleapis.com/.../Noto+Sans+KR..." rel="stylesheet"&gt;
+<span class="cm">&lt;!-- ↑ 렌더 블로킹! 이 CSS가 로드될 때까지 페이지 렌더링 중단 --&gt;</span>
+        </div>
+        <div class="issue-body">
+          Noto Sans KR은 한국어를 지원하기 위해 폰트 파일이 매우 크며 (wght@400;500;700;900 = 4개 weight = 약 400~600KB), Google Fonts 서버 RTT까지 합산하면 렌더 블로킹 시간이 200~500ms에 달할 수 있습니다.
+        </div>
+        <div class="issue-fix">
+          <strong>개선방안 (S7PF1):</strong><br>
+          ① `media="print" onload="this.media='all'"` 방식으로 비동기 로드<br>
+          ② `font-display: swap` 추가 (폰트 로드 전 시스템 폰트로 먼저 표시)<br>
+          ③ 자주 쓰는 weight만 로드 (900 제거하고 700로 대체)<br>
+          예상 효과: LCP (Largest Contentful Paint) -300~500ms
+        </div>
+      </div>
+
+      <div class="issue p2">
+        <div class="issue-header">
+          <span class="sal-id">S2AU1</span>
+          <span class="pri pri-2">🟠 단기 개선</span>
+          <div class="issue-title">Supabase Anon Key 하드코딩 + /api/config 캐싱 없음</div>
+        </div>
+        <div class="issue-body">
+          <code style="color:#a5d6ff;font-size:11px;">js/config.js</code> 28~29번 줄에 실제 Supabase URL과 Anon Key가 하드코딩되어 있습니다. Anon Key는 공개 설계이지만, GitHub에 커밋되면 공개 저장소 시 완전 노출됩니다.<br><br>
+          또한 `/api/config` 엔드포인트가 매 페이지 로드마다 호출되며 브라우저 캐싱이 없습니다. 11개 페이지를 방문하면 11번 동일한 API를 호출합니다.
+        </div>
+        <div class="issue-fix">
+          <strong>개선방안 (S7SC1):</strong><br>
+          ① `/api/config` 응답에 `Cache-Control: public, max-age=3600` 헤더 추가 → 1시간 캐싱<br>
+          ② `sessionStorage`에 초기화 결과 저장 → 같은 세션 내 재호출 방지<br>
+          ③ Anon Key는 `.env` 파일로 관리, fallback 코드에서 제거
+        </div>
+      </div>
+
+      <div class="issue p2">
+        <div class="issue-header">
+          <span class="sal-id">S2FE3b</span>
+          <span class="pri pri-2">🟠 단기 개선</span>
+          <div class="issue-title">OG 이미지 404 — 소셜 공유 미리보기 없음</div>
+        </div>
+        <div class="issue-body">
+          모든 페이지의 OG 태그에 <code style="color:#a5d6ff;font-size:11px;">https://www.ax-on.net/images/og-default.png</code>를 참조하고 있으나 해당 파일이 존재하지 않아 404 에러가 발생합니다. 카카오톡, 슬랙, 링크드인 등에서 링크 공유 시 미리보기 이미지 없음.
+        </div>
+        <div class="issue-fix">
+          <strong>개선방안 (S7FE3):</strong> 1200×630 OG 이미지 생성 후 `/images/og-default.png`에 배포. SVG나 Canvas로 자동 생성도 가능. 5분 작업으로 소셜 공유 품질 즉시 개선.
+        </div>
+      </div>
+
+      <div class="issue p2">
+        <div class="issue-header">
+          <span class="sal-id">S2SC2</span>
+          <span class="pri pri-2">🟠 단기 개선</span>
+          <div class="issue-title">관리자 권한 체크 — 클라이언트 사이드 의존</div>
+        </div>
+        <div class="issue-body">
+          <code style="color:#a5d6ff;font-size:11px;">injectAdminLink()</code> 함수는 <code style="color:#a5d6ff;font-size:11px;">user.app_metadata?.role !== 'admin'</code>로 관리자 여부를 체크합니다. 이는 UI 표시 목적이지만, 실제 관리자 페이지(<code>/pages/admin/admin.html</code>)에 직접 URL로 접근 시 클라이언트 체크는 우회될 수 있습니다.<br><br>
+          <strong>핵심 질문: Supabase RLS 정책이 admin 페이지 데이터 조회를 막고 있는가?</strong> 만약 `admin.html`이 Supabase에서 모든 사용자 데이터를 가져온다면 RLS 없이는 누구나 직접 URL 접근으로 데이터 조회 가능.
+        </div>
+        <div class="issue-fix">
+          <strong>개선방안 (S7SC2):</strong> ① Supabase에서 관리자 전용 테이블에 RLS 적용 확인 ② admin.html 상단에 서버 측 역할 검증 로직 추가 ③ Vercel Edge Middleware로 URL 레벨 접근 제어 추가
+        </div>
+      </div>
+
+      <div class="issue p3">
+        <div class="issue-header">
+          <span class="sal-id">S2AU2</span>
+          <span class="pri pri-3">🟡 중기 개선</span>
+          <div class="issue-title">Auth 상태 캐싱 없음 — 매 페이지 Supabase 왕복</div>
+        </div>
+        <div class="issue-body">
+          각 페이지에서 <code style="color:#a5d6ff;font-size:11px;">await sb.auth.getUser()</code>를 독립적으로 호출합니다. 사용자가 index → pool → community 3페이지를 방문하면 Supabase Auth API가 3번 호출됩니다. Supabase 클라이언트 라이브러리가 내부적으로 일부 캐싱하지만, 페이지 간 상태 공유는 없습니다.
+        </div>
+        <div class="issue-fix">
+          <strong>개선방안 (S7AU1):</strong> `sessionStorage`에 사용자 ID와 표시 이름을 저장하고, 동일 세션에서는 저장된 값을 우선 사용. Auth 갱신은 백그라운드에서 비동기로 처리.
+        </div>
+      </div>
+
+      <div class="issue p3">
+        <div class="issue-header">
+          <span class="sal-id">S2DB1</span>
+          <span class="pri pri-3">🟡 중기 개선</span>
+          <div class="issue-title">전문가 수 카운트 쿼리 — 매 랜딩 로드마다 실행</div>
+        </div>
+        <div class="issue-body">
+          랜딩 페이지(index.html)에서 매 로드마다 <code style="color:#a5d6ff;font-size:11px;">sb.from('ax_experts').select('*', {count:'exact', head:true})</code>를 실행합니다. 전문가 수는 분 단위로 바뀌지 않는 데이터인데, 방문자마다 DB 쿼리가 발생합니다.
+        </div>
+        <div class="issue-fix">
+          <strong>개선방안 (S7DB1):</strong> Vercel Edge Cache 또는 `localStorage`에 전문가 수를 5~10분 캐싱. 또는 Supabase Materialized View로 카운트를 주기적으로 계산.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 개선 로드맵 ══ -->
+  <div class="section">
+    <div class="section-title"><span class="sn">S7</span> 개선 로드맵 — SAL ID 순서대로</div>
+
+    <div class="roadmap">
+      <div class="rm-item">
+        <div class="rm-badge rm-p1">🔴 1순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7FE1</span> 공통 CSS 파일 분리 (<code>/css/common.css</code>)</h4>
+          <p>CSS 변수, reset, NAV, Footer, 공통 버튼/카드 CSS를 외부 파일로 분리. <strong>예상 작업: 2~3시간. 효과: 전송 데이터 -40KB+, 캐싱 적용, 유지보수성 대폭 향상.</strong></p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-badge rm-p1">🔴 2순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7FE2</span> NAV/Footer 컴포넌트화</h4>
+          <p>fetch()로 nav.html 외부 로드 또는 JS 함수로 NAV DOM 생성. <strong>예상 작업: 3~4시간. 효과: NAV 수정 시 1곳만 수정, 버그 위험 제거.</strong></p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-badge rm-p2">🟠 3순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7FE3</span> OG 이미지 생성 및 배포</h4>
+          <p>1200×630 PNG 이미지 생성. <strong>예상 작업: 30분. 효과: 소셜 공유 미리보기 즉시 복구.</strong></p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-badge rm-p2">🟠 4순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7PF1</span> Google Fonts 비동기 로딩 + font-display: swap</h4>
+          <p>렌더 블로킹 제거. <strong>예상 작업: 30분. 효과: LCP -300~500ms, FCP 개선.</strong></p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-badge rm-p2">🟠 5순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7SC1</span> /api/config 캐싱 + Anon Key fallback 정리</h4>
+          <p>Cache-Control 헤더 추가, sessionStorage 캐싱. <strong>예상 작업: 1시간. 효과: API 호출 -80%, 보안 강화.</strong></p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-badge rm-p2">🟠 6순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7SC2</span> 관리자 페이지 RLS 확인 + Edge Middleware 접근 제어</h4>
+          <p>Supabase RLS 정책 감사 및 Vercel middleware 추가. <strong>예상 작업: 2~3시간. 효과: 권한 우회 공격 방어.</strong></p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-badge rm-p3">🟡 7순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7AU1</span> Auth 상태 sessionStorage 캐싱</h4>
+          <p>페이지 간 Auth 상태 공유. <strong>예상 작업: 1~2시간. 효과: Supabase Auth API 호출 -70%.</strong></p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-badge rm-p3">🟡 8순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7DB1</span> 전문가 수 카운트 캐싱</h4>
+          <p>localStorage 5분 캐싱. <strong>예상 작업: 30분. 효과: DB 쿼리 -95%.</strong></p>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-badge rm-p3">🟡 9순위</div>
+        <div class="rm-content">
+          <h4><span class="rm-sal">S7FE4</span> 폰트 Weight 최적화 (900 제거)</h4>
+          <p>Noto Sans KR wght@400;700만 로드 (500,900 제거). <strong>예상 작업: 10분. 효과: 폰트 전송량 -30%.</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 예상 개선 효과 ══ -->
+  <div class="section">
+    <div class="section-title"><span class="sn">S9</span> 개선 완료 후 예상 점수</div>
+
+    <div class="callout green">
+      <p><strong>S7FE1~2 (CSS 분리 + NAV 컴포넌트화)</strong>만 완료해도 전체 점수가 54점 → 약 72점으로 향상됩니다.<br>
+      <strong>S7FE1~S7SC2 (1~6순위)</strong> 전부 완료 시 목표 80점+ 달성 가능.</p>
+    </div>
+
+    <table class="sal-table">
+      <thead>
+        <tr><th>항목</th><th>현재 점수</th><th>개선 후 예상</th><th>개선 작업</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FE 코드구조</td>
+          <td><span style="color:#ff7b72;font-weight:700;">32점</span></td>
+          <td><span style="color:#3fb950;font-weight:700;">82점</span></td>
+          <td>S7FE1 (CSS 분리) + S7FE2 (NAV 컴포넌트화)</td>
+        </tr>
+        <tr>
+          <td>PF 성능</td>
+          <td><span style="color:#ffa657;font-weight:700;">58점</span></td>
+          <td><span style="color:#3fb950;font-weight:700;">80점</span></td>
+          <td>S7PF1 (Fonts 비동기) + S7DB1 (캐싱)</td>
+        </tr>
+        <tr>
+          <td>SC 보안</td>
+          <td><span style="color:#e3b341;font-weight:700;">68점</span></td>
+          <td><span style="color:#3fb950;font-weight:700;">85점</span></td>
+          <td>S7SC1 (캐싱+정리) + S7SC2 (RLS 확인)</td>
+        </tr>
+        <tr>
+          <td>QA 품질</td>
+          <td><span style="color:#ff7b72;font-weight:700;">25점</span></td>
+          <td><span style="color:#e3b341;font-weight:700;">55점</span></td>
+          <td>컴포넌트화 후 유닛 테스트 가능해짐</td>
+        </tr>
+        <tr>
+          <td>AR 아키텍처</td>
+          <td><span style="color:#ffa657;font-weight:700;">55점</span></td>
+          <td><span style="color:#3fb950;font-weight:700;">78점</span></td>
+          <td>공통 파일 분리, 컴포넌트 구조 도입</td>
+        </tr>
+        <tr style="border-top:2px solid var(--border);">
+          <td><strong>종합</strong></td>
+          <td><span style="color:#ffa657;font-weight:800;font-size:18px;">54점</span></td>
+          <td><span style="color:#3fb950;font-weight:800;font-size:18px;">76점</span></td>
+          <td>1~6순위 작업 완료 시 (예상 총 작업: 10~15시간)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  SAL-SA Audit Report — AX-On Platform | 분석일: 2026-03-16 | SAL Grid 역방향 방법론 적용
+</footer>
+
+</body>
+</html>
