@@ -1538,9 +1538,6 @@ function showExpertDetail(id) {
     chatbotBadgeHTML(e.can_build_chatbot) +
     '</div></div>';
 
-  if (e.email) {
-    html += '<div class="detail-section"><div class="detail-section-title">이메일</div><div class="detail-text"><a href="mailto:' + escapeHtml(e.email) + '" style="color:var(--amber);">' + escapeHtml(e.email) + '</a></div></div>';
-  }
   if (e.education) {
     html += '<div class="detail-section"><div class="detail-section-title">학력</div><div class="detail-text" style="white-space:pre-wrap;">' + linkifyText(e.education) + '</div></div>';
   }
@@ -1588,6 +1585,9 @@ function showExpertDetail(id) {
     if (attHTML) {
       html += '<div class="detail-section"><div class="detail-section-title">첨부파일</div><div class="detail-links">' + attHTML + '</div></div>';
     }
+  }
+  if (e.email) {
+    html += '<div class="detail-section"><div class="detail-section-title">이메일</div><div class="detail-text"><a href="mailto:' + escapeHtml(e.email) + '" style="color:var(--amber);">' + escapeHtml(e.email) + '</a></div></div>';
   }
 
   document.getElementById('detailContent').innerHTML = html;
