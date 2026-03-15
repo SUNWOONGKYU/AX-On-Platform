@@ -1,0 +1,48 @@
+{
+  "project_id": "ax-on-mini",
+  "project_name": "AX-On Platform Mini Version",
+  "created_at": "2026-03-11",
+  "updated_at": "2026-03-14",
+  "methodology": "Vanilla",
+  "total_tasks": 15,
+  "completed_tasks": 15,
+  "overall_progress": 100,
+  "description": "전문가 풀 + 전문가 전용 커뮤니티 미니버전. 전문가 30명 이상 모집을 위한 MVP.",
+  "stage_names": {
+    "0": "Project SAL Grid 생성",
+    "1": "미니버전 준비",
+    "2": "미니버전 구현",
+    "3": "검증 및 배포"
+  },
+  "task_ids": [
+    "S1DB1", "S1DS1",
+    "S2FE1", "S2FE2", "S2FE3", "S2FE4",
+    "S3DB1", "S3DB2", "S3FE1", "S3FE2", "S3FE3", "S3FE4", "S3FE5", "S3TS1", "S3DV1"
+  ],
+  "stages": {
+    "S0": {
+      "name": "Project SAL Grid 생성",
+      "task_count": 0,
+      "completed_count": 0,
+      "progress": 0
+    },
+    "S1": {
+      "name": "미니버전 준비",
+      "task_count": 2,
+      "completed_count": 2,
+      "progress": 100
+    },
+    "S2": {
+      "name": "미니버전 구현",
+      "task_count": 4,
+      "completed_count": 4,
+      "progress": 100
+    },
+    "S3": {
+      "name": "검증 및 배포",
+      "task_count": 9,
+      "completed_count": 9,
+      "progress": 100
+    }
+  }
+}

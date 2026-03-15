@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform — 시니어 AI 창업자를 위한 바이브코딩 특별 과정. AI 플랫폼 1인 시니어 파운더 매직캠프. 120분 특강부터 2일 집중 과정까지 단계별 AI 창업 교육 프로그램.">
+<meta property="og:title" content="우리의 창업 — AX-On Platform">
+<meta property="og:image" content="https://axon-platform.com/images/og-default.png">
+<meta property="og:description" content="시니어 AI 창업자를 위한 바이브코딩 특별 과정 — AI 플랫폼 1인 시니어 파운더 매직캠프">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>우리의 창업 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --teal: #0d9488;
+  --teal-light: #2dd4bf;
+  --coral: #e85d4a;
+  --violet: #7c5ce0;
+  --sky: #3b82f6;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+  --dark-bg: #002451;
+  --dark-bg-deep: #001126;
+  --dark-bg-hover: #00346e;
+  --dark-text-muted: #7285b7;
+  --dark-border: rgba(114, 133, 183, 0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(250, 249, 247, 0.85);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(26, 26, 46, 0.06);
+  transition: all 0.4s ease;
+}
+.nav.scrolled {
+  background: rgba(250, 249, 247, 0.95);
+  box-shadow: 0 2px 20px rgba(26, 26, 46, 0.08);
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 72px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--ink);
+}
+.logo-mark {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 22px;
+  letter-spacing: -0.5px;
+}
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a {
+  text-decoration: none; color: var(--ink-muted);
+  font-size: 15px; font-weight: 500;
+  padding: 8px 14px; border-radius: 10px;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--ink); background: rgba(26, 26, 46, 0.04); }
+.nav-links a.active { color: var(--amber); font-weight: 700; }
+
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-auth-btn {
+  text-decoration: none;
+  font-size: 14px; font-weight: 600;
+  padding: 8px 18px; border-radius: 10px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.nav-login { color: var(--ink-muted); }
+.nav-login:hover { color: var(--ink); }
+.nav-signup {
+  background: var(--ink); color: #fff;
+  border-radius: 12px;
+}
+.nav-signup:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 26, 46, 0.2);
+}
+
+.mobile-toggle {
+  display: none; background: none; border: none;
+  width: 40px; height: 40px; cursor: pointer;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.mobile-toggle span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* ── SKIP LINK ── */
+.skip-link {
+  position: absolute; top: -100px; left: 16px;
+  background: var(--amber); color: #fff;
+  padding: 12px 24px; border-radius: 0 0 12px 12px;
+  font-weight: 700; font-size: 16px;
+  z-index: 999; text-decoration: none;
+  transition: top 0.3s ease;
+}
+.skip-link:focus { top: 0; }
+
+/* ── PAGE HERO ── */
+.page-hero {
+  padding: 120px 40px 80px;
+  background: linear-gradient(160deg, var(--surface) 0%, var(--surface-warm) 100%);
+  position: relative; overflow: hidden;
+}
+.page-hero::before {
+  content: ''; position: absolute; top: -200px; right: -200px;
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, var(--amber-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.page-hero-inner {
+  max-width: 860px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.page-hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(232, 146, 13, 0.1); border: 1px solid rgba(232, 146, 13, 0.25);
+  padding: 8px 18px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; color: var(--amber);
+  margin-bottom: 24px;
+  font-family: 'Outfit', sans-serif; letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.page-hero h1 {
+  font-size: clamp(30px, 4.5vw, 50px);
+  font-weight: 900; line-height: 1.25;
+  letter-spacing: -1px; margin-bottom: 20px;
+  word-break: keep-all;
+}
+.page-hero h1 .highlight {
+  background: linear-gradient(135deg, var(--amber), var(--coral));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.page-hero-desc {
+  font-size: 18px; color: var(--ink-muted); line-height: 1.85;
+  max-width: 700px; margin-bottom: 40px; word-break: keep-all;
+}
+.page-hero-tagline {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--ink); color: #fff;
+  padding: 14px 28px; border-radius: 14px;
+  font-size: 16px; font-weight: 700;
+  font-style: italic; letter-spacing: -0.3px;
+}
+
+/* ── SECTION COMMON ── */
+.section {
+  padding: 100px 40px;
+  max-width: 1280px; margin: 0 auto;
+}
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700; color: var(--amber);
+  text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 14px;
+  font-family: 'Outfit', sans-serif;
+}
+.section-title {
+  font-size: clamp(26px, 3.5vw, 38px);
+  font-weight: 900; line-height: 1.3;
+  margin-bottom: 16px; letter-spacing: -0.5px;
+  word-break: keep-all;
+}
+.section-desc {
+  font-size: 17px; color: var(--ink-muted);
+  max-width: 600px; line-height: 1.8;
+  word-break: keep-all;
+}
+
+/* ── PROGRAMS GRID ── */
+.programs-section {
+  padding: 100px 40px;
+}
+.programs-inner {
+  max-width: 1200px; margin: 0 auto;
+}
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+/* ── PROGRAM CARD ── */
+.program-card {
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.07);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+}
+.program-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(232, 146, 13, 0.25);
+}
+.program-card-header {
+  padding: 32px 28px 24px;
+  position: relative;
+}
+.program-card-header.p1 { background: linear-gradient(135deg, #fff8f0, #fff3e0); }
+.program-card-header.p2 { background: linear-gradient(135deg, #f0fdf9, #e6faf6); }
+.program-card-header.p3 { background: linear-gradient(135deg, #f5f0ff, #ede8ff); }
+
+.program-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.program-num.p1 { color: var(--amber); }
+.program-num.p2 { color: var(--teal); }
+.program-num.p3 { color: var(--violet); }
+
+.program-badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 700;
+  margin-bottom: 16px;
+}
+.program-badge.p1 { background: rgba(232, 146, 13, 0.12); color: var(--amber); }
+.program-badge.p2 { background: rgba(13, 148, 136, 0.1); color: var(--teal); }
+.program-badge.p3 { background: rgba(124, 92, 224, 0.1); color: var(--violet); }
+
+.program-card-title {
+  font-size: 19px; font-weight: 900;
+  line-height: 1.35; word-break: keep-all;
+  margin-bottom: 12px;
+}
+.program-card-subtitle {
+  font-size: 14px; color: var(--ink-muted);
+  line-height: 1.6; word-break: keep-all;
+}
+.program-card-meta {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 20px;
+}
+.meta-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  background: rgba(26, 26, 46, 0.05);
+  color: var(--ink-muted);
+}
+.meta-chip.accent-amber { background: rgba(232, 146, 13, 0.1); color: var(--amber); }
+.meta-chip.accent-teal { background: rgba(13, 148, 136, 0.1); color: var(--teal); }
+.meta-chip.accent-violet { background: rgba(124, 92, 224, 0.1); color: var(--violet); }
+
+.program-card-body {
+  padding: 0 28px;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              padding 0.3s ease;
+}
+.program-card.expanded .program-card-body {
+  max-height: 800px;
+  padding: 24px 28px 0;
+}
+.program-card-footer {
+  padding: 20px 28px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.expand-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 700;
+  color: var(--ink-muted);
+  transition: all 0.25s ease;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 0;
+}
+/* ── PRICING & SCHEDULE ── */
+.program-pricing {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 16px; flex-wrap: wrap;
+}
+.price-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 14px; border-radius: 10px;
+  font-size: 14px; font-weight: 800;
+  background: linear-gradient(135deg, rgba(232,146,13,0.12), rgba(232,146,13,0.06));
+  color: var(--amber);
+}
+.price-tag.free {
+  background: linear-gradient(135deg, rgba(13,148,136,0.12), rgba(13,148,136,0.06));
+  color: var(--teal);
+}
+.price-note {
+  font-size: 12px; color: var(--ink-muted); font-weight: 500;
+}
+.schedule-info {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-top: 14px; padding: 12px 16px;
+  background: var(--surface-warm); border-radius: 10px;
+}
+.schedule-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--ink-muted);
+}
+.schedule-row strong { color: var(--ink); font-weight: 700; }
+.schedule-icon { font-size: 14px; flex-shrink: 0; }
+
+/* ── APPLY BUTTON IN CARD ── */
+.card-apply-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 22px; border-radius: 10px;
+  font-size: 14px; font-weight: 700;
+  text-decoration: none; transition: all 0.3s ease;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+.card-apply-btn:hover { text-decoration: none; transform: translateY(-1px); }
+.card-apply-btn.p1 {
+  background: linear-gradient(135deg, var(--amber), #d4820b); color: #fff;
+  box-shadow: 0 4px 16px rgba(232,146,13,0.25);
+}
+.card-apply-btn.p2 {
+  background: linear-gradient(135deg, var(--teal), #0a7a70); color: #fff;
+  box-shadow: 0 4px 16px rgba(13,148,136,0.25);
+}
+.card-apply-btn.p3 {
+  background: linear-gradient(135deg, var(--violet), #6648c7); color: #fff;
+  box-shadow: 0 4px 16px rgba(124,92,224,0.25);
+}
+
+/* ── SUBSIDY NOTE ── */
+.subsidy-note {
+  margin-top: 48px; padding: 20px 24px;
+  background: rgba(13,148,136,0.06); border: 1px solid rgba(13,148,136,0.15);
+  border-radius: 14px; text-align: center;
+}
+.subsidy-note-text {
+  font-size: 14px; color: var(--ink-muted); line-height: 1.7;
+}
+.subsidy-note-text strong { color: var(--teal); font-weight: 700; }
+
+/* ── NAV USER ── */
+.nav-user { display: flex; align-items: center; gap: 10px; }
+.nav-user-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.nav-logout-btn {
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  background: none; border: 1.5px solid rgba(26,26,46,0.12);
+  padding: 6px 14px; border-radius: 8px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s;
+}
+.nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+.expand-btn:hover { color: var(--ink); }
+.expand-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(26, 26, 46, 0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  transition: transform 0.3s ease, background 0.2s ease;
+}
+.program-card.expanded .expand-icon { transform: rotate(180deg); }
+.program-card.p1-card.expanded .expand-icon { background: rgba(232, 146, 13, 0.12); color: var(--amber); }
+.program-card.p2-card.expanded .expand-icon { background: rgba(13, 148, 136, 0.1); color: var(--teal); }
+.program-card.p3-card.expanded .expand-icon { background: rgba(124, 92, 224, 0.1); color: var(--violet); }
+
+/* ── SESSION LIST ── */
+.session-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 4px;
+}
+.session-item {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.session-num {
+  flex-shrink: 0;
+  width: 26px; height: 26px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+}
+.session-num.amber { background: rgba(232, 146, 13, 0.12); color: var(--amber); }
+.session-num.teal { background: rgba(13, 148, 136, 0.1); color: var(--teal); }
+.session-num.violet { background: rgba(124, 92, 224, 0.1); color: var(--violet); }
+.session-text { font-size: 14px; color: var(--ink-muted); line-height: 1.6; padding-top: 3px; }
+.session-text strong { color: var(--ink); font-weight: 700; }
+
+.detail-divider {
+  height: 1px;
+  background: rgba(26, 26, 46, 0.06);
+  margin: 16px 0;
+}
+.detail-goal {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: var(--surface-warm);
+  border-radius: 12px; padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.detail-goal-icon { font-size: 20px; flex-shrink: 0; }
+.detail-goal-text { font-size: 14px; line-height: 1.65; word-break: keep-all; }
+.detail-goal-text strong { font-weight: 700; color: var(--ink); }
+
+/* ── STRATEGY SECTION ── */
+.strategy-section {
+  background: var(--surface-warm);
+  padding: 100px 40px;
+}
+.strategy-inner {
+  max-width: 1200px; margin: 0 auto;
+}
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+}
+.strategy-card {
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.06);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-soft);
+}
+.strategy-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(232, 146, 13, 0.2);
+}
+.strategy-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px; font-weight: 900;
+  background: linear-gradient(135deg, var(--amber), var(--coral));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+.strategy-title {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 10px; line-height: 1.4; word-break: keep-all;
+}
+.strategy-desc {
+  font-size: 13px; color: var(--ink-muted);
+  line-height: 1.7; word-break: keep-all;
+}
+
+/* ── KEYWORD SECTION ── */
+.keyword-section {
+  padding: 100px 40px;
+}
+.keyword-inner {
+  max-width: 860px; margin: 0 auto;
+}
+.keyword-card {
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 48px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  margin-top: 56px;
+}
+.keyword-card::before {
+  content: '';
+  position: absolute; top: -100px; right: -100px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 146, 13, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.keyword-quote {
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 900; line-height: 1.45;
+  letter-spacing: -0.5px; word-break: keep-all;
+  margin-bottom: 20px;
+  position: relative; z-index: 1;
+}
+.keyword-quote .hl { color: var(--amber-light); }
+.keyword-sub {
+  font-size: 16px; color: rgba(255,255,255,0.65);
+  line-height: 1.7; word-break: keep-all;
+  position: relative; z-index: 1;
+}
+
+/* ── CTA ── */
+.cta-section {
+  padding: 100px 40px;
+  background: var(--surface-warm);
+}
+.cta-inner {
+  max-width: 700px; margin: 0 auto;
+  text-align: center;
+}
+.cta-title {
+  font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 900; line-height: 1.3;
+  margin-bottom: 16px; letter-spacing: -0.5px;
+  word-break: keep-all;
+}
+.cta-desc {
+  font-size: 17px; color: var(--ink-muted);
+  margin-bottom: 36px; line-height: 1.8; word-break: keep-all;
+}
+.cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 32px; border-radius: 14px;
+  font-size: 16px; font-weight: 700;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.3s ease; border: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--amber), #d4820b);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(232, 146, 13, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(232, 146, 13, 0.4);
+}
+.btn-outline {
+  background: transparent; color: var(--ink);
+  border: 2px solid rgba(26, 26, 46, 0.15);
+}
+.btn-outline:hover {
+  border-color: var(--ink); background: rgba(26, 26, 46, 0.03);
+}
+
+/* ── FOOTER ── */
+.footer {
+  padding: 24px 40px 16px;
+  background: var(--dark-bg);
+  color: var(--dark-text-muted);
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px;
+}
+.footer-logo {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 20px; color: #fff;
+}
+.footer-logo span { color: var(--amber); }
+.footer-info { font-size: 14px; }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  color: var(--dark-text-muted);
+  text-decoration: none; font-size: 14px;
+  transition: color 0.3s ease;
+}
+.footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
+  border-top: 1px solid var(--dark-border);
+  text-align: center; font-size: 12px; color: var(--dark-text-muted); opacity: 0.7;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  opacity: 0; transform: translateY(24px);
+  transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+.hero-content { animation: fadeUp 0.9s ease 0.1s both; }
+
+/* ── ACCESSIBILITY ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .strategy-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .programs-grid { grid-template-columns: 1fr; }
+  .strategy-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  /* NAV */
+  .nav-inner { padding: 0 16px; }
+  .nav-links { display: none; }
+  .mobile-toggle { display: flex; min-width: 44px; min-height: 44px; }
+  .nav-login { display: none; }
+  .nav-signup { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 72px; left: 0; right: 0;
+    background: var(--surface);
+    padding: 12px 16px 20px;
+    border-bottom: 1px solid rgba(26,26,46,0.06);
+    box-shadow: 0 8px 24px rgba(26,26,46,0.08);
+    gap: 2px;
+  }
+  .nav-links.open a {
+    padding: 12px 16px;
+    min-height: 44px;
+    display: flex; align-items: center;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+  /* 햄버거 메뉴 안 auth 링크 */
+  .nav-links.open .nav-auth-mobile {
+    display: flex !important;
+  }
+  .nav-auth-mobile {
+    display: none;
+    text-decoration: none;
+    font-size: 16px; font-weight: 600;
+    padding: 12px 16px; border-radius: 10px;
+    min-height: 44px; align-items: center;
+    transition: all 0.25s ease;
+    font-family: 'Noto Sans KR', sans-serif;
+    white-space: nowrap;
+  }
+  .nav-auth-mobile.login-mobile {
+    color: var(--ink-muted);
+    margin-top: 8px;
+    border-top: 1px solid rgba(26,26,46,0.06);
+    padding-top: 16px;
+  }
+  .nav-auth-mobile.login-mobile:hover { color: var(--ink); background: rgba(26,26,46,0.04); }
+  .nav-auth-mobile.signup-mobile {
+    background: var(--ink); color: #fff;
+    margin-top: 6px;
+  }
+  .nav-auth-mobile.signup-mobile:hover { background: #2a2a4e; }
+
+  /* PAGE HERO */
+  .page-hero { padding: 96px 16px 56px; }
+  .page-hero h1 { letter-spacing: -0.5px; }
+  .page-hero-desc { font-size: 16px; }
+  .page-hero-tagline {
+    font-size: 14px; padding: 12px 20px;
+    text-align: center; justify-content: center;
+    width: 100%;
+  }
+
+  /* SECTIONS */
+  .programs-section, .strategy-section, .keyword-section, .cta-section {
+    padding: 64px 16px;
+  }
+  .section { padding: 64px 16px; }
+
+  /* NAV USER */
+  .nav-user { display: none; }
+
+  /* PROGRAM CARD */
+  .programs-grid { grid-template-columns: 1fr; gap: 16px; }
+  .program-card-header { padding: 24px 20px 20px; }
+  .program-card-body.expanded-body { padding: 20px 20px 0; }
+  .program-card.expanded .program-card-body { padding: 20px 20px 0; }
+  .program-card-footer { padding: 16px 20px 24px; }
+  .program-card-meta { flex-wrap: wrap; gap: 6px; }
+  .meta-chip { font-size: 12px; padding: 4px 10px; }
+  .expand-btn { min-height: 44px; padding: 8px 0; }
+
+  /* STRATEGY GRID */
+  .strategy-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .strategy-card { padding: 20px 16px; }
+
+  /* KEYWORD CARD */
+  .keyword-card { padding: 32px 20px; }
+  .keyword-quote { font-size: clamp(18px, 5vw, 26px); }
+  .keyword-sub { font-size: 15px; }
+
+  /* CTA */
+  .cta-actions {
+    flex-direction: column; align-items: stretch;
+    gap: 12px;
+  }
+  .cta-actions .btn { justify-content: center; min-height: 48px; }
+
+  /* FOOTER */
+  .footer { padding: 24px 16px 16px; }
+  .footer-inner { text-align: center; gap: 6px; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* OVERFLOW GUARD */
+  svg { max-width: 100%; }
+  img { max-width: 100%; height: auto; }
+}
+
+@media (max-width: 480px) {
+  .nav-inner { padding: 0 12px; }
+  .strategy-grid { grid-template-columns: 1fr; }
+  .programs-grid { grid-template-columns: 1fr; }
+  .program-card-title { font-size: 17px; }
+  .session-text { font-size: 13px; }
+  .detail-goal-text { font-size: 13px; }
+  .footer-links { gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SKIP NAVIGATION -->
+<a href="#main-content" class="skip-link">본문으로 바로가기</a>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="startup.html" class="active">우리의 창업</a>
+      <a href="ax-project.html">AX 프로젝트</a>
+      <a href="expert.html">AI 전문가</a>
+      <a href="community.html">커뮤니티</a>
+      <!-- 모바일 전용 auth 링크 (햄버거 메뉴 안에 표시) -->
+      <a href="pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-mobile signup-mobile">회원가입</a>
+    </div>
+    <div class="nav-right">
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<header class="page-hero" id="main-content">
+  <div class="page-hero-inner hero-content">
+    <div class="page-hero-badge">우리의 창업 · STARTUP</div>
+    <h1>
+      <span class="highlight">시니어 AI 창업자</span>를 위한<br>
+      바이브코딩 특별 과정
+    </h1>
+    <p class="page-hero-desc">
+      AI 플랫폼 1인 시니어 파운더 매직캠프 — 코딩 경험 없이도 AI와 함께 나만의 플랫폼을 만들고, 실제로 배포하고, 사업으로 연결합니다. 120분 특강부터 2일 집중 마스터 과정까지, 단계별로 선택하세요.
+    </p>
+    <div class="page-hero-tagline">
+      "코딩은 타이핑이 아니라 질문이다"
+    </div>
+  </div>
+</header>
+
+<!-- PROGRAMS -->
+<section class="programs-section" id="programs">
+  <div class="programs-inner">
+    <div class="fade-in">
+      <div class="section-label">PROGRAMS</div>
+      <h2 class="section-title">3단계 교육 프로그램</h2>
+      <p class="section-desc">나에게 맞는 시작점을 선택하세요. 각 프로그램 카드를 클릭하면 상세 커리큘럼을 확인할 수 있습니다.</p>
+    </div>
+    <div class="programs-grid fade-in">
+
+      <!-- PROGRAM 1 -->
+      <div class="program-card p1-card" id="card1" role="button" tabindex="0" aria-expanded="false" onclick="toggleCard('card1')">
+        <div class="program-card-header p1">
+          <div class="program-num p1">Program 01</div>
+          <div class="program-badge p1">120분 특강</div>
+          <h3 class="program-card-title">바이브 코딩:<br>2시간 만에 완성하는<br>AI 플랫폼 창업</h3>
+          <p class="program-card-subtitle">코딩 경험 없이 2시간 안에 index.html 파일 하나를 직접 만들어 실행하는 체험형 특강</p>
+          <div class="program-card-meta">
+            <span class="meta-chip accent-amber">120분</span>
+            <span class="meta-chip">8 세션</span>
+            <span class="meta-chip">입문</span>
+          </div>
+          <div class="program-pricing">
+            <span class="price-tag free">무료 (정부지원)</span>
+            <span class="price-note">* 중소벤처기업부 지원사업</span>
+          </div>
+          <div class="schedule-info">
+            <div class="schedule-row"><span class="schedule-icon">📅</span> <strong>다음 일정:</strong> 2026년 4월 12일 (토) 14:00 - 16:00</div>
+            <div class="schedule-row"><span class="schedule-icon">📍</span> <strong>장소:</strong> 서울 강남 AX-On 교육센터 / 온라인 동시 진행</div>
+            <div class="schedule-row"><span class="schedule-icon">👥</span> <strong>정원:</strong> 30명 (선착순)</div>
+          </div>
+        </div>
+        <div class="program-card-body" id="body1">
+          <ul class="session-list">
+            <li class="session-item">
+              <span class="session-num amber">01</span>
+              <span class="session-text"><strong>개요 (20분)</strong> — 바이브코딩이란 무엇인가, AI 시대의 창업 패러다임 전환</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num amber">02</span>
+              <span class="session-text"><strong>시연 (15분)</strong> — 강사의 실시간 플랫폼 제작 시연, AI 대화 흐름 공개</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num amber">03</span>
+              <span class="session-text"><strong>VIBE 공식 (15분)</strong> — Vision → Instruct → Build → Expand 4단계 공식</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num amber">04</span>
+              <span class="session-text"><strong>전환 (15분)</strong> — 시니어 창업자의 도메인 지식을 플랫폼 자산으로 전환하는 법</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num amber">05</span>
+              <span class="session-text"><strong>실행 공식 (10분)</strong> — 오늘 바로 시작할 수 있는 1페이지 PRD 작성법</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num amber">06</span>
+              <span class="session-text"><strong>문답 (10분)</strong> — "나는 할 수 있을까?" 실전 질의응답</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num amber">07</span>
+              <span class="session-text"><strong>인포 (10분)</strong> — 1일 캠프 & 2일 마스터 과정 소개 및 수강 안내</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num amber">08</span>
+              <span class="session-text"><strong>Q&A (25분)</strong> — 개인 아이디어 상담 및 자유 질의응답</span>
+            </li>
+          </ul>
+          <div class="detail-divider"></div>
+          <div class="detail-goal">
+            <span class="detail-goal-icon">🎯</span>
+            <span class="detail-goal-text"><strong>목표:</strong> 참가자가 직접 index.html 파일 하나를 만들고 브라우저에서 실행하는 경험을 체험합니다. "나도 할 수 있다"는 확신을 갖고 돌아갑니다.</span>
+          </div>
+        </div>
+        <div class="program-card-footer">
+          <button class="expand-btn" aria-label="세션 상세 보기">
+            <span id="btn1-text">세션 상세 보기</span>
+            <span class="expand-icon">▼</span>
+          </button>
+          <a href="enrollment.html?program=vibe-coding-special" class="card-apply-btn p1" onclick="event.stopPropagation();">신청하기</a>
+        </div>
+      </div>
+
+      <!-- PROGRAM 2 -->
+      <div class="program-card p2-card" id="card2" role="button" tabindex="0" aria-expanded="false" onclick="toggleCard('card2')">
+        <div class="program-card-header p2">
+          <div class="program-num p2">Program 02</div>
+          <div class="program-badge p2">1일 집중 실전 캠프</div>
+          <h3 class="program-card-title">6시간 집중으로<br>나만의 MVP<br>플랫폼 완성</h3>
+          <p class="program-card-subtitle">환경 세팅부터 개인 아이디어 MVP 구현까지, 하루 만에 작동하는 플랫폼을 완성</p>
+          <div class="program-card-meta">
+            <span class="meta-chip accent-teal">6시간</span>
+            <span class="meta-chip">4 교시</span>
+            <span class="meta-chip">실전</span>
+          </div>
+          <div class="program-pricing">
+            <span class="price-tag">자부담 10만원</span>
+            <span class="price-note">* 정부지원 시 무료 전환 가능</span>
+          </div>
+          <div class="schedule-info">
+            <div class="schedule-row"><span class="schedule-icon">📅</span> <strong>다음 일정:</strong> 2026년 4월 19일 (토) 09:30 - 16:30</div>
+            <div class="schedule-row"><span class="schedule-icon">📍</span> <strong>장소:</strong> 서울 강남 AX-On 교육센터</div>
+            <div class="schedule-row"><span class="schedule-icon">👥</span> <strong>정원:</strong> 20명 (선착순)</div>
+          </div>
+        </div>
+        <div class="program-card-body" id="body2">
+          <ul class="session-list">
+            <li class="session-item">
+              <span class="session-num teal">1교시</span>
+              <span class="session-text"><strong>바이브코딩 특강 핵심 마스터 (90분)</strong> — VIBE 공식 심화, 프롬프트 엔지니어링 실습, 나만의 도메인 자산 정의</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num teal">2교시</span>
+              <span class="session-text"><strong>환경 세팅 + 매뉴얼 플랫폼 제작 (120분)</strong> — Claude.ai / ChatGPT 연동, VS Code 설치, 교안 템플릿으로 첫 플랫폼 완성</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num teal">3교시</span>
+              <span class="session-text"><strong>개인 아이디어 MVP 구현 (120분)</strong> — 1페이지 PRD 기반 개인 프로젝트 실습, 강사 1:1 피드백</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num teal">4교시</span>
+              <span class="session-text"><strong>Q&A + 실행 선언 (30분)</strong> — 완성된 MVP 발표, 다음 30일 실행 계획 선언</span>
+            </li>
+          </ul>
+          <div class="detail-divider"></div>
+          <div class="detail-goal">
+            <span class="detail-goal-icon">🎯</span>
+            <span class="detail-goal-text"><strong>목표:</strong> 참가자 각자의 아이디어로 브라우저에서 실제로 작동하는 MVP 플랫폼을 완성합니다. 당일 결과물을 가지고 돌아갑니다.</span>
+          </div>
+        </div>
+        <div class="program-card-footer">
+          <button class="expand-btn" aria-label="교시 상세 보기">
+            <span id="btn2-text">교시 상세 보기</span>
+            <span class="expand-icon">▼</span>
+          </button>
+          <a href="enrollment.html?program=mvp-camp" class="card-apply-btn p2" onclick="event.stopPropagation();">신청하기</a>
+        </div>
+      </div>
+
+      <!-- PROGRAM 3 -->
+      <div class="program-card p3-card" id="card3" role="button" tabindex="0" aria-expanded="false" onclick="toggleCard('card3')">
+        <div class="program-card-header p3">
+          <div class="program-num p3">Program 03</div>
+          <div class="program-badge p3">2일 집중 마스터 과정</div>
+          <h3 class="program-card-title">살아있는 서비스를<br>직접 배포하는<br>창업 마스터 과정</h3>
+          <p class="program-card-subtitle">Git, GitHub, Vercel, Supabase 4대 인프라 체득. 로그인 + DB 연결된 실제 서비스 2개 배포</p>
+          <div class="program-card-meta">
+            <span class="meta-chip accent-violet">2일</span>
+            <span class="meta-chip">4대 인프라</span>
+            <span class="meta-chip">마스터</span>
+          </div>
+          <div class="program-pricing">
+            <span class="price-tag">자부담 20만원</span>
+            <span class="price-note">* 정부지원 시 자부담 5만원</span>
+          </div>
+          <div class="schedule-info">
+            <div class="schedule-row"><span class="schedule-icon">📅</span> <strong>다음 일정:</strong> 2026년 5월 10일 (토) ~ 11일 (일), 09:30 - 17:00</div>
+            <div class="schedule-row"><span class="schedule-icon">📍</span> <strong>장소:</strong> 서울 강남 AX-On 교육센터</div>
+            <div class="schedule-row"><span class="schedule-icon">👥</span> <strong>정원:</strong> 15명 (선착순)</div>
+          </div>
+        </div>
+        <div class="program-card-body" id="body3">
+          <ul class="session-list">
+            <li class="session-item">
+              <span class="session-num violet">Git</span>
+              <span class="session-text"><strong>버전 관리 체득</strong> — 변경 이력 관리, 협업의 기반, "되돌리기"의 안전망</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num violet">Hub</span>
+              <span class="session-text"><strong>GitHub 원격 저장소</strong> — 코드 공유, 포트폴리오 구성, 오픈소스 생태계 진입</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num violet">Ver</span>
+              <span class="session-text"><strong>Vercel 배포 자동화</strong> — Push 한 번으로 전 세계에 배포, 나만의 URL 확보</span>
+            </li>
+            <li class="session-item">
+              <span class="session-num violet">Sup</span>
+              <span class="session-text"><strong>Supabase DB 연결</strong> — 로그인 기능, 데이터베이스 연동, 진짜 서비스로의 진화</span>
+            </li>
+          </ul>
+          <div class="detail-divider"></div>
+          <div class="detail-goal">
+            <span class="detail-goal-icon">🎯</span>
+            <span class="detail-goal-text"><strong>목표:</strong> 살아있는 배포 URL 2개 제출 — 로그인 기능과 DB가 연결된 개인 아이디어 서비스 1개 + 과제 서비스 1개. 진짜 창업의 출발점을 확보합니다.</span>
+          </div>
+        </div>
+        <div class="program-card-footer">
+          <button class="expand-btn" aria-label="인프라 상세 보기">
+            <span id="btn3-text">인프라 상세 보기</span>
+            <span class="expand-icon">▼</span>
+          </button>
+          <a href="enrollment.html?program=master-course" class="card-apply-btn p3" onclick="event.stopPropagation();">신청하기</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 정부지원 안내 -->
+    <div class="subsidy-note fade-in">
+      <p class="subsidy-note-text">
+        <strong>정부지원 안내</strong> — 본 교육 프로그램은 중소벤처기업부 창업교육 지원사업으로 운영되며, 지원 대상자는 수강료 전액 또는 일부를 지원받을 수 있습니다. 지원 자격 및 상세 내용은 <a href="contact.html" style="color:var(--teal);font-weight:700;">문의하기</a>를 통해 확인해 주세요.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- KEYWORD -->
+<section class="keyword-section" id="keyword">
+  <div class="keyword-inner">
+    <div class="fade-in">
+      <div class="section-label">CORE PHILOSOPHY</div>
+      <h2 class="section-title">매직캠프의 철학</h2>
+    </div>
+    <div class="keyword-card fade-in">
+      <p class="keyword-quote">
+        "코딩은 <span class="hl">타이핑</span>이 아니라<br><span class="hl">질문</span>이다"
+      </p>
+      <p class="keyword-sub">
+        시니어 창업자의 진짜 무기는 수십 년 쌓아온 도메인 지식입니다.<br>
+        AI에게 올바른 질문을 던질 줄 아는 사람이 플랫폼을 만들고, 사업을 만들고, 미래를 만듭니다.<br>
+        바이브코딩은 그 질문의 기술을 가르칩니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGY -->
+<section class="strategy-section" id="strategy">
+  <div class="strategy-inner">
+    <div class="fade-in">
+      <div class="section-label">MAGIC CAMP STRATEGY</div>
+      <h2 class="section-title">매직캠프 추진 전략 5가지</h2>
+      <p class="section-desc">단순한 교육이 아닌, 실제 창업으로 이어지는 5가지 핵심 전략을 담았습니다.</p>
+    </div>
+    <div class="strategy-grid fade-in">
+      <div class="strategy-card">
+        <div class="strategy-num">01</div>
+        <div class="strategy-title">'2시간의 기적'<br>역순 학습</div>
+        <div class="strategy-desc">설명 없는 이해. Reverse Learning 커리큘럼으로 먼저 만들고, 나중에 이해하는 방식</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-num">02</div>
+        <div class="strategy-title">'플랫폼 가계도'<br>도메인 설계</div>
+        <div class="strategy-desc">도메인 자산을 PRD 1페이지로 정리 → Multi-Platforming 전략으로 확장</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-num">03</div>
+        <div class="strategy-title">'신뢰 부채' 제로화<br>Security-by-Design</div>
+        <div class="strategy-desc">Professional Engineering 기반으로 처음부터 보안을 내장한 신뢰받는 서비스 설계</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-num">04</div>
+        <div class="strategy-title">'비즈니스 오케스트레이션'<br>하이엔드 메이커</div>
+        <div class="strategy-desc">월 3만원 이하 인프라로 엔터프라이즈급 서비스 구축 + IR 매직으로 투자 유치</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-num">05</div>
+        <div class="strategy-title">'구조적 디자인 통제권'<br>비디자이너용</div>
+        <div class="strategy-desc">디자인 명령어 20개로 전문 디자이너 없이도 고품질 UI를 직접 통제하는 방법</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-inner fade-in">
+    <div class="section-label">JOIN US</div>
+    <h2 class="cta-title">지금 바로 시작하세요</h2>
+    <p class="cta-desc">
+      120분 특강으로 가능성을 확인하고, 1일 캠프로 실전을 경험하고, 2일 마스터 과정으로 진짜 창업을 시작하세요.
+    </p>
+    <div class="cta-actions">
+      <a href="enrollment.html" class="btn btn-primary">수강 신청하기</a>
+      <a href="index.html" class="btn btn-outline">메인으로 돌아가기</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">AX-<span>On</span> Platform</div>
+    </div>
+    <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    &copy; 2026 AX-On Platform. All rights reserved.
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── Supabase 초기화 ──
+const supabase = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+
+// ── 로그인 상태 확인 ──
+(async function checkAuth() {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const displayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0];
+      // 데스크톱 auth 버튼 교체
+      const navRight = document.querySelector('.nav-right');
+      const loginBtn = navRight.querySelector('.nav-login');
+      const signupBtn = navRight.querySelector('.nav-signup');
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (signupBtn) signupBtn.style.display = 'none';
+      const userEl = document.createElement('div');
+      userEl.className = 'nav-user';
+      userEl.innerHTML = '<span class="nav-user-name">' + escapeHtml(displayName) + '님</span><button class="nav-logout-btn" onclick="handleLogout()">로그아웃</button>';
+      navRight.insertBefore(userEl, navRight.querySelector('.mobile-toggle'));
+      // 모바일 auth 링크 교체
+      const mobileLogin = document.querySelector('.login-mobile');
+      const mobileSignup = document.querySelector('.signup-mobile');
+      if (mobileLogin) {
+        mobileLogin.textContent = displayName + '님';
+        mobileLogin.href = '#';
+        mobileLogin.style.cssText = 'font-weight:700;color:var(--ink);';
+        mobileLogin.onclick = (e) => e.preventDefault();
+      }
+      if (mobileSignup) {
+        mobileSignup.textContent = '로그아웃';
+        mobileSignup.href = '#';
+        mobileSignup.onclick = (e) => { e.preventDefault(); handleLogout(); };
+      }
+    }
+  } catch (e) { /* 미인증 상태 */ }
+})();
+
+async function handleLogout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+// ── 카드 토글 ──
+function toggleCard(cardId) {
+  const card = document.getElementById(cardId);
+  const isExpanded = card.classList.contains('expanded');
+
+  // 모든 카드 닫기
+  ['card1', 'card2', 'card3'].forEach(id => {
+    const c = document.getElementById(id);
+    c.classList.remove('expanded');
+    c.setAttribute('aria-expanded', 'false');
+    const num = id.replace('card', '');
+    const btnText = document.getElementById('btn' + num + '-text');
+    if (btnText) {
+      const labels = { '1': '세션 상세 보기', '2': '교시 상세 보기', '3': '인프라 상세 보기' };
+      btnText.textContent = labels[num];
+    }
+  });
+
+  // 클릭한 카드가 닫혀있었으면 열기
+  if (!isExpanded) {
+    card.classList.add('expanded');
+    card.setAttribute('aria-expanded', 'true');
+    const num = cardId.replace('card', '');
+    const btnText = document.getElementById('btn' + num + '-text');
+    if (btnText) btnText.textContent = '접기';
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+// 키보드 접근성
+document.querySelectorAll('.program-card').forEach(card => {
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      card.click();
+    }
+  });
+});
+
+// ── Nav scroll ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ── Mobile menu ──
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+
+function setMenuOpen(open) {
+  navLinks.classList.toggle('open', open);
+  mobileToggle.setAttribute('aria-expanded', String(open));
+  mobileToggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  // 햄버거 → X 애니메이션
+  const spans = mobileToggle.querySelectorAll('span');
+  if (open) {
+    spans[0].style.cssText = 'transform: translateY(7px) rotate(45deg)';
+    spans[1].style.cssText = 'opacity: 0; transform: scaleX(0)';
+    spans[2].style.cssText = 'transform: translateY(-7px) rotate(-45deg)';
+  } else {
+    spans[0].style.cssText = '';
+    spans[1].style.cssText = '';
+    spans[2].style.cssText = '';
+  }
+}
+
+mobileToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  setMenuOpen(!navLinks.classList.contains('open'));
+});
+document.addEventListener('click', (e) => {
+  if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
+    setMenuOpen(false);
+  }
+});
+// ESC 키로 메뉴 닫기
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+    setMenuOpen(false);
+    mobileToggle.focus();
+  }
+});
+
+// ── Scroll fade-in ──
+const fadeEls = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+fadeEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

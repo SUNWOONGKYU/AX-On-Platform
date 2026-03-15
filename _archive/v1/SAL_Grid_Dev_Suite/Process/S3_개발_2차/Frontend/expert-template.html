@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform AI 전문가 프로필">
+<meta property="og:title" content="AI 전문가 — AX-On Platform">
+<meta property="og:image" content="https://axon-platform.com/images/og-default.png">
+<meta property="og:description" content="AX-On Platform 등록 AI 전문가 프로필">
+<meta property="og:type" content="profile">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>AI 전문가 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --teal: #0d9488;
+  --teal-light: #2dd4bf;
+  --coral: #e85d4a;
+  --sky: #3b82f6;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+  --dark-bg: #002451;
+  --dark-text-muted: #7285b7;
+  --dark-border: rgba(114, 133, 183, 0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(250, 249, 247, 0.92);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(26, 26, 46, 0.06);
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 72px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--ink);
+}
+.logo-mark {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.logo-mark svg { width: 28px; height: 32px; }
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 22px;
+  letter-spacing: -0.5px;
+}
+.logo-text span { color: var(--amber); }
+.nav-back {
+  display: flex; align-items: center; gap: 6px;
+  text-decoration: none; color: var(--ink-muted);
+  font-size: 14px; font-weight: 500;
+  padding: 8px 14px; border-radius: 10px;
+  transition: all 0.25s ease;
+}
+.nav-back:hover { color: var(--ink); background: rgba(26, 26, 46, 0.04); }
+
+/* ── PROFILE HERO ── */
+.profile-hero {
+  padding: 120px 40px 60px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.profile-hero::before {
+  content: ''; position: absolute; top: -100px; right: -200px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, var(--amber-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.profile-hero-inner {
+  max-width: 640px; margin: 0 auto; position: relative; z-index: 1;
+}
+.profile-avatar-wrap {
+  position: relative; display: inline-block; margin-bottom: 24px;
+}
+.profile-avatar {
+  width: 120px; height: 120px; border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--amber);
+  box-shadow: 0 8px 32px rgba(232, 146, 13, 0.25);
+}
+.profile-badge {
+  position: absolute; bottom: 4px; right: 4px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--amber);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  border: 3px solid white;
+}
+.profile-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 900; letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+.profile-tagline {
+  font-size: 18px; color: var(--ink-muted);
+  margin-bottom: 24px; word-break: keep-all;
+}
+.profile-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin-bottom: 32px;
+}
+.profile-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 14px; border-radius: 50px;
+  font-size: 13px; font-weight: 600;
+}
+.profile-tag.industry {
+  background: rgba(232, 146, 13, 0.1);
+  color: var(--amber);
+  border: 1px solid rgba(232, 146, 13, 0.2);
+}
+.profile-tag.function {
+  background: rgba(13, 148, 136, 0.1);
+  color: var(--teal);
+  border: 1px solid rgba(13, 148, 136, 0.2);
+}
+.profile-actions {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; border-radius: 14px;
+  font-size: 15px; font-weight: 700;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.3s ease; border: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--sky), #2563eb);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(59, 130, 246, 0.4);
+}
+.btn-outline {
+  background: transparent; color: var(--ink);
+  border: 2px solid rgba(26, 26, 46, 0.15);
+}
+.btn-outline:hover {
+  border-color: var(--ink); background: rgba(26, 26, 46, 0.03);
+}
+
+/* ── SECTION COMMON ── */
+.section {
+  max-width: 800px; margin: 0 auto;
+  padding: 60px 40px;
+}
+.section-title {
+  font-size: 22px; font-weight: 900;
+  margin-bottom: 24px; letter-spacing: -0.3px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title::before {
+  content: ''; display: block;
+  width: 4px; height: 22px;
+  background: linear-gradient(135deg, var(--amber), var(--coral));
+  border-radius: 2px;
+}
+
+/* ── ABOUT ── */
+.about-text {
+  font-size: 17px; color: var(--ink);
+  line-height: 1.9; word-break: keep-all;
+}
+
+/* ── CAREER ── */
+.career-list { display: flex; flex-direction: column; gap: 16px; }
+.career-item {
+  display: flex; gap: 20px; align-items: flex-start;
+  padding: 20px 24px;
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.07);
+  border-radius: var(--radius-sm);
+}
+.career-period {
+  font-size: 13px; font-weight: 700; color: var(--amber);
+  white-space: nowrap; min-width: 80px;
+  padding-top: 2px;
+}
+.career-content {}
+.career-company { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.career-role { font-size: 14px; color: var(--ink-muted); }
+
+/* ── EXPERTISE ── */
+.expertise-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+.expertise-item {
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.07);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 600;
+}
+.expertise-icon { font-size: 20px; }
+
+/* ── PORTFOLIO ── */
+.portfolio-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.portfolio-card {
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.07);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+.portfolio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(232, 146, 13, 0.3);
+}
+.portfolio-emoji { font-size: 32px; margin-bottom: 14px; }
+.portfolio-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.portfolio-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.7; }
+.portfolio-tags {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px;
+}
+.portfolio-tag {
+  font-size: 11px; font-weight: 600;
+  background: var(--amber-glow); color: var(--amber);
+  padding: 3px 10px; border-radius: 50px;
+}
+
+/* ── CONTACT ── */
+.contact-box {
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.07);
+  border-radius: var(--radius);
+  padding: 32px;
+}
+.contact-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.contact-item { display: flex; align-items: center; gap: 12px; }
+.contact-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--surface-warm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.contact-label { font-size: 12px; color: var(--ink-muted); margin-bottom: 2px; }
+.contact-value { font-size: 14px; font-weight: 600; }
+.contact-value a { color: var(--ink); text-decoration: none; }
+.contact-value a:hover { color: var(--amber); }
+
+/* ── DIVIDER ── */
+.section-divider {
+  max-width: 800px; margin: 0 auto 0;
+  padding: 0 40px;
+  border: none;
+  border-top: 1px solid rgba(26, 26, 46, 0.06);
+}
+
+/* ── AX-ON BADGE ── */
+.axon-badge-section {
+  background: var(--surface-warm);
+  padding: 60px 40px;
+  text-align: center;
+}
+.axon-badge-inner { max-width: 560px; margin: 0 auto; }
+.axon-badge {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--surface-card);
+  border: 1px solid rgba(232, 146, 13, 0.2);
+  border-radius: 16px; padding: 20px 28px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-soft);
+}
+.axon-badge-logo {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+}
+.axon-badge-logo svg { width: 26px; height: 30px; }
+.axon-badge-text { text-align: left; }
+.axon-badge-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 16px; letter-spacing: -0.3px;
+}
+.axon-badge-title span { color: var(--amber); }
+.axon-badge-subtitle { font-size: 12px; color: var(--ink-muted); }
+.axon-badge-desc { font-size: 15px; color: var(--ink-muted); line-height: 1.8; }
+
+/* ── FOOTER ── */
+.footer {
+  padding: 24px 40px 16px;
+  background: var(--dark-bg);
+  color: var(--dark-text-muted);
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px;
+}
+.footer-logo {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 20px; color: #fff;
+}
+.footer-logo span { color: var(--amber); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  color: var(--dark-text-muted);
+  text-decoration: none; font-size: 14px;
+  transition: color 0.3s ease;
+}
+.footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
+  border-top: 1px solid var(--dark-border);
+  text-align: center; font-size: 12px; color: var(--dark-text-muted); opacity: 0.7;
+}
+
+/* ── NAV AUTH STATE ── */
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-auth-btn {
+  text-decoration: none; font-size: 14px; font-weight: 600;
+  padding: 8px 18px; border-radius: 10px; transition: all 0.3s ease;
+  white-space: nowrap; font-family: 'Noto Sans KR', sans-serif;
+}
+.nav-login { color: var(--ink-muted); }
+.nav-login:hover { color: var(--ink); }
+.nav-signup { background: var(--ink); color: #fff; border-radius: 12px; }
+.nav-signup:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,26,46,0.2); }
+.nav-user-name {
+  font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap;
+}
+.nav-logout-btn {
+  background: none; border: 1px solid rgba(26,26,46,0.15);
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  padding: 6px 14px; border-radius: 10px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.25s ease;
+}
+.nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ── ERROR / LOADING STATE ── */
+.page-error, .page-loading {
+  text-align: center; padding: 200px 40px 120px;
+}
+.page-error-icon, .page-loading-icon { font-size: 48px; margin-bottom: 16px; }
+.page-error-title, .page-loading-title {
+  font-size: 22px; font-weight: 900; margin-bottom: 8px;
+}
+.page-error-desc, .page-loading-desc {
+  font-size: 15px; color: var(--ink-muted); margin-bottom: 24px;
+}
+.page-error-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--sky); font-weight: 700; text-decoration: none;
+  font-size: 15px;
+}
+.page-error-link:hover { text-decoration: underline; }
+
+/* FOCUS */
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; border-radius: 4px; }
+
+/* ── MOBILE NAV ── */
+.mobile-toggle {
+  display: none; background: none; border: none;
+  width: 44px; height: 44px; cursor: pointer;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.mobile-toggle span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.mobile-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mobile-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.mobile-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-nav {
+  display: none; flex-direction: column;
+  background: var(--surface);
+  padding: 12px 20px 20px;
+  border-bottom: 1px solid rgba(26,26,46,0.06);
+  box-shadow: 0 8px 24px rgba(26,26,46,0.08);
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  text-decoration: none; color: var(--ink-muted);
+  font-size: 15px; font-weight: 500;
+  padding: 12px 14px; min-height: 44px;
+  display: flex; align-items: center;
+  border-bottom: 1px solid rgba(26,26,46,0.04);
+}
+.mobile-nav a:last-child { border-bottom: none; }
+.mobile-nav a:hover { color: var(--ink); }
+.mobile-nav-divider {
+  height: 1px; background: rgba(26,26,46,0.08); margin: 8px 0;
+}
+.mobile-auth-signup {
+  background: var(--ink); color: #fff !important;
+  border-radius: 12px; margin-top: 4px; justify-content: center;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .mobile-toggle { display: flex; }
+  .nav-back-desktop { display: none; }
+  .nav-auth-btn { display: none; }
+  .nav-inner { padding: 0 20px; }
+  .profile-hero { padding: 100px 20px 40px; }
+  .section { padding: 48px 20px; }
+  .section-divider { padding: 0 20px; }
+  .career-item { flex-direction: column; gap: 8px; }
+  .career-period { min-width: auto; }
+  .expertise-grid { grid-template-columns: repeat(2, 1fr); }
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer { padding: 24px 16px 16px; }
+  .footer-inner { text-align: center; gap: 6px; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-right">
+      <a href="expert.html" class="nav-back nav-back-desktop">← AI 전문가 목록</a>
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile nav menu -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="expert.html">← AI 전문가 목록</a>
+    <a href="index.html">홈</a>
+    <div class="mobile-nav-divider"></div>
+    <a href="pages/auth/login.html" class="mobile-auth-login">로그인</a>
+    <a href="pages/auth/signup.html" class="mobile-auth-signup">회원가입</a>
+  </div>
+</nav>
+
+<!-- DYNAMIC CONTENT CONTAINER -->
+<div id="pageContent">
+  <!-- Loading state shown initially -->
+  <div class="page-loading" id="loadingState">
+    <div class="page-loading-icon">⏳</div>
+    <div class="page-loading-title">전문가 정보를 불러오는 중...</div>
+  </div>
+</div>
+
+<!-- AX-ON BADGE -->
+<section class="axon-badge-section" id="badgeSection" style="display:none;">
+  <div class="axon-badge-inner">
+    <a href="https://www.ax-on.net/expert.html" style="text-decoration:none;">
+      <div class="axon-badge">
+        <div class="axon-badge-logo">
+          <svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg>
+        </div>
+        <div class="axon-badge-text">
+          <div class="axon-badge-title">AX-<span>On</span> Platform</div>
+          <div class="axon-badge-subtitle">공인 AI 전문가</div>
+        </div>
+      </div>
+    </a>
+    <p class="axon-badge-desc">이 페이지는 AX-On Platform에 등록된 AI 전문가의 개인 프로필입니다.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">AX-<span>On</span> Platform</div>
+    <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    &copy; 2026 AX-On Platform. All rights reserved.
+  </div>
+</footer>
+
+<!-- Supabase CDN -->
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+// ─── Supabase 설정 ───
+let supabaseClient = null;
+try {
+  if (typeof window.supabase !== 'undefined') {
+    supabaseClient = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+  }
+} catch(e) { console.error('Supabase init error:', e); }
+
+// ─── 카테고리 맵 ───
+let categoryMap = {};
+
+// ─── 에러 상태 표시 ───
+function showError(msg) {
+  const title = msg || '전문가를 찾을 수 없습니다';
+  const desc = msg ? '' : '요청하신 전문가 프로필이 존재하지 않거나 삭제되었을 수 있습니다.';
+  document.getElementById('pageContent').innerHTML = `
+    <div class="page-error">
+      <div class="page-error-icon">😥</div>
+      <div class="page-error-title">${escapeHtml(title)}</div>
+      ${desc ? `<div class="page-error-desc">${escapeHtml(desc)}</div>` : ''}
+      <a href="expert.html" class="page-error-link">← AI 전문가 목록으로 돌아가기</a>
+    </div>`;
+}
+
+// ─── 카테고리 레이블 헬퍼 ───
+function catLabel(id) {
+  const c = categoryMap[id];
+  return c ? c.label : id;
+}
+function catIcon(id) {
+  const c = categoryMap[id];
+  return c && c.icon ? c.icon : '';
+}
+
+// ─── 아바타 HTML ───
+function avatarHTML(expert) {
+  if (expert.photo_url && isSafeUrl(expert.photo_url)) {
+    return `<img class="profile-avatar" src="${escapeHtml(expert.photo_url)}" alt="${escapeHtml(expert.name)} 프로필">`;
+  }
+  const initial = expert.name ? escapeHtml(expert.name.charAt(0)) : '?';
+  return `<svg class="profile-avatar" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="background:linear-gradient(135deg,#e8920d,#f5b942);">
+    <text x="60" y="68" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="52" fill="white">${initial}</text>
+  </svg>`;
+}
+
+// ─── 프로필 렌더링 ───
+function renderProfile(expert) {
+  // Update page title
+  document.title = `${escapeHtml(expert.name)} — AX-On AI 전문가`;
+
+  // Industry & function tags
+  const industryTags = (expert.industry || []).map(i =>
+    `<span class="profile-tag industry">${escapeHtml(catIcon(i))} ${escapeHtml(catLabel(i))}</span>`).join('');
+  const functionTags = (expert.functions || []).map(f =>
+    `<span class="profile-tag function">${escapeHtml(catIcon(f))} ${escapeHtml(catLabel(f))}</span>`).join('');
+
+  // Skills / expertise
+  const skills = expert.skills || [];
+  const expertiseHTML = skills.length > 0 ? `
+    <hr class="section-divider">
+    <section class="section">
+      <h2 class="section-title">전문 분야</h2>
+      <div class="expertise-grid">
+        ${skills.map(s => `<div class="expertise-item"><span class="expertise-icon">⚡</span>${escapeHtml(s)}</div>`).join('')}
+      </div>
+    </section>` : '';
+
+  // Career history
+  const career = expert.career_history || [];
+  const careerHTML = career.length > 0 ? `
+    <hr class="section-divider">
+    <section class="section">
+      <h2 class="section-title">경력</h2>
+      <div class="career-list">
+        ${career.map(c => `
+          <div class="career-item">
+            <div class="career-period">${escapeHtml(c.period || '')}</div>
+            <div class="career-content">
+              <div class="career-company">${escapeHtml(c.company || '')}</div>
+              <div class="career-role">${escapeHtml(c.role || '')}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </section>` : '';
+
+  // Description / about
+  const aboutHTML = expert.description ? `
+    <hr class="section-divider">
+    <section class="section">
+      <h2 class="section-title">자기소개</h2>
+      <p class="about-text">${escapeHtml(expert.description)}</p>
+    </section>` : '';
+
+  // Portfolio
+  const portfolio = expert.portfolio || [];
+  const portfolioHTML = portfolio.length > 0 ? `
+    <hr class="section-divider">
+    <section class="section">
+      <h2 class="section-title">포트폴리오</h2>
+      <div class="portfolio-grid">
+        ${portfolio.map(p => `
+          <div class="portfolio-card">
+            <div class="portfolio-emoji">${escapeHtml(p.emoji || '📂')}</div>
+            <div class="portfolio-title">${escapeHtml(p.title || '')}</div>
+            <div class="portfolio-desc">${escapeHtml(p.description || '')}</div>
+            ${(p.tags || []).length > 0 ? `<div class="portfolio-tags">${p.tags.map(t => `<span class="portfolio-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+          </div>`).join('')}
+      </div>
+    </section>` : '';
+
+  // Contact section
+  const contactItems = [];
+  if (expert.email && isValidEmail(expert.email)) {
+    contactItems.push(`<div class="contact-item"><div class="contact-icon">✉️</div><div><div class="contact-label">이메일</div><div class="contact-value"><a href="mailto:${escapeHtml(expert.email)}">${escapeHtml(expert.email)}</a></div></div></div>`);
+  }
+  if (expert.website_url && isSafeUrl(expert.website_url)) {
+    contactItems.push(`<div class="contact-item"><div class="contact-icon">🌐</div><div><div class="contact-label">웹사이트</div><div class="contact-value"><a href="${escapeHtml(expert.website_url)}" target="_blank" rel="noopener">${escapeHtml(expert.website_url.replace(/^https?:\/\//, ''))}</a></div></div></div>`);
+  }
+  if (expert.github_url && isSafeUrl(expert.github_url)) {
+    contactItems.push(`<div class="contact-item"><div class="contact-icon">🐱</div><div><div class="contact-label">GitHub</div><div class="contact-value"><a href="${escapeHtml(expert.github_url)}" target="_blank" rel="noopener">${escapeHtml(expert.github_url.replace(/^https?:\/\//, ''))}</a></div></div></div>`);
+  }
+  if (expert.linkedin_url && isSafeUrl(expert.linkedin_url)) {
+    contactItems.push(`<div class="contact-item"><div class="contact-icon">💼</div><div><div class="contact-label">LinkedIn</div><div class="contact-value"><a href="${escapeHtml(expert.linkedin_url)}" target="_blank" rel="noopener">${escapeHtml(expert.linkedin_url.replace(/^https?:\/\//, ''))}</a></div></div></div>`);
+  }
+  if (expert.location) {
+    contactItems.push(`<div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-label">위치</div><div class="contact-value">${escapeHtml(expert.location)}</div></div></div>`);
+  }
+  const contactHTML = contactItems.length > 0 ? `
+    <hr class="section-divider">
+    <section class="section">
+      <h2 class="section-title">연락처</h2>
+      <div class="contact-box"><div class="contact-grid">${contactItems.join('')}</div></div>
+    </section>` : '';
+
+  // Action buttons
+  const actionBtns = [];
+  if (expert.email && isValidEmail(expert.email)) actionBtns.push(`<a href="mailto:${escapeHtml(expert.email)}" class="btn btn-primary">연락하기</a>`);
+  if (expert.website_url && isSafeUrl(expert.website_url)) actionBtns.push(`<a href="${escapeHtml(expert.website_url)}" class="btn btn-outline" target="_blank" rel="noopener">웹사이트</a>`);
+  if (expert.github_url && isSafeUrl(expert.github_url)) actionBtns.push(`<a href="${escapeHtml(expert.github_url)}" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>`);
+
+  document.getElementById('pageContent').innerHTML = `
+    <section class="profile-hero">
+      <div class="profile-hero-inner">
+        <div class="profile-avatar-wrap">
+          ${avatarHTML(expert)}
+          <div class="profile-badge">👤</div>
+        </div>
+        <h1 class="profile-name">${escapeHtml(expert.name)}</h1>
+        <p class="profile-tagline">${escapeHtml(expert.title || '')}</p>
+        <div class="profile-tags">${industryTags}${functionTags}</div>
+        ${actionBtns.length > 0 ? `<div class="profile-actions">${actionBtns.join('')}</div>` : ''}
+      </div>
+    </section>
+    ${aboutHTML}
+    ${careerHTML}
+    ${expertiseHTML}
+    ${portfolioHTML}
+    ${contactHTML}`;
+
+  // Show badge section
+  document.getElementById('badgeSection').style.display = '';
+}
+
+// ─── 초기화 ───
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const expertId = params.get('id');
+
+  if (!expertId) { showError(); return; }
+  if (!supabaseClient) { showError('서버에 연결할 수 없습니다. 페이지를 새로고침해 주세요.'); return; }
+
+  try {
+    // Fetch categories and expert in parallel
+    const [catResult, expertResult] = await Promise.all([
+      supabaseClient
+        .from('expert_categories')
+        .select('id, type, label, icon')
+        .order('sort_order', { ascending: true }),
+      supabaseClient
+        .from('experts')
+        .select('id, name, title, photo_url, description, industry, functions, skills, career_history, portfolio, email, website_url, github_url, linkedin_url, location')
+        .eq('id', expertId)
+        .single(),
+    ]);
+
+    // Build category map
+    if (!catResult.error && catResult.data) {
+      catResult.data.forEach(c => { categoryMap[c.id] = c; });
+    }
+
+    if (expertResult.error || !expertResult.data) {
+      showError();
+      return;
+    }
+
+    renderProfile(expertResult.data);
+  } catch (err) {
+    console.error('Expert load error:', err);
+    showError();
+  }
+}
+
+// ─── Task 5: Nav login state ───
+async function checkAuthState() {
+  if (!supabaseClient) return;
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (user) {
+      let displayName = user.email;
+      try {
+        const { data: profile } = await supabaseClient
+          .from('profiles')
+          .select('name')
+          .eq('id', user.id)
+          .single();
+        if (profile && profile.name) displayName = profile.name;
+      } catch(e) {}
+
+      const navRight = document.querySelector('.nav-right');
+      const authBtns = navRight.querySelectorAll('.nav-auth-btn');
+      authBtns.forEach(btn => btn.style.display = 'none');
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'nav-user-name';
+      nameSpan.textContent = displayName;
+      const logoutBtn = document.createElement('button');
+      logoutBtn.className = 'nav-logout-btn';
+      logoutBtn.textContent = '로그아웃';
+      logoutBtn.addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+        location.reload();
+      });
+      navRight.appendChild(nameSpan);
+      navRight.appendChild(logoutBtn);
+    }
+  } catch(e) { console.error('Auth check error:', e); }
+}
+
+init();
+checkAuthState();
+
+// ── 모바일 네비게이션 토글 ──
+const mobileToggle = document.getElementById('mobileToggle');
+const mobileNav = document.getElementById('mobileNav');
+mobileToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = mobileNav.classList.toggle('open');
+  mobileToggle.classList.toggle('open', isOpen);
+  mobileToggle.setAttribute('aria-label', isOpen ? '메뉴 닫기' : '메뉴 열기');
+});
+document.addEventListener('click', (e) => {
+  if (!mobileNav.contains(e.target) && !mobileToggle.contains(e.target)) {
+    mobileNav.classList.remove('open');
+    mobileToggle.classList.remove('open');
+    mobileToggle.setAttribute('aria-label', '메뉴 열기');
+  }
+});
+</script>
+
+</body>
+</html>

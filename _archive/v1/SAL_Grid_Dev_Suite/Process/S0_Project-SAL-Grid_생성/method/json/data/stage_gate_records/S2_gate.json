@@ -1,0 +1,23 @@
+{
+  "stage": 2,
+  "stage_name": "개발 1차",
+  "stage_name_en": "Core Development",
+  "total_tasks": 7,
+  "completed_tasks": 7,
+  "verification_status": "Verified",
+  "ai_verification_note": "SAL Grid 인프라 소급 적용 완료",
+  "ai_verification_date": "2026-03-05",
+  "verification_report_path": "",
+  "stage_gate_status": "Approved",
+  "po_approval_status": "Approved",
+  "po_approval_note": "소급 적용",
+  "po_approval_date": "2026-03-05",
+  "checklist": {
+    "all_tasks_completed": true,
+    "all_verifications_passed": true,
+    "no_blockers": true,
+    "build_success": true,
+    "test_success": true
+  },
+  "remarks": "SAL Grid Dev Suite 소급 적용"
+}

@@ -1,0 +1,1306 @@
+<!-- @task S7F12 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사용자 관리 — AX-On Admin</title>
+
+  <!-- Supabase JS Client (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- admin-common (S7F11에서 생성) -->
+  <link rel="stylesheet" href="../../css/admin-common.css">
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       Users Page — 인라인 스타일
+    ═══════════════════════════════════════════════ */
+
+    /* ── 검색/필터 영역 ── */
+    .filter-bar {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 160px;
+      flex: 1;
+    }
+    .filter-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .filter-group input,
+    .filter-group select {
+      height: 38px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #111827;
+      background: #f9fafb;
+      outline: none;
+      transition: border .2s;
+    }
+    .filter-group input:focus,
+    .filter-group select:focus {
+      border-color: #6366f1;
+      background: #fff;
+    }
+    .filter-group.date-group {
+      min-width: 140px;
+    }
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .btn-filter {
+      height: 38px;
+      padding: 0 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    .btn-filter.primary {
+      background: #6366f1;
+      color: #fff;
+    }
+    .btn-filter.primary:hover { background: #4f46e5; }
+    .btn-filter.secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    .btn-filter.secondary:hover { background: #e5e7eb; }
+
+    /* ── 테이블 ── */
+    .table-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .table-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .table-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+    }
+    .table-meta {
+      font-size: 13px;
+      color: #6b7280;
+    }
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .users-table th {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #6b7280;
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .users-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+      color: #374151;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: middle;
+    }
+    .users-table tbody tr:last-child td { border-bottom: none; }
+    .users-table tbody tr:hover td { background: #f9fafb; }
+
+    /* 사용자 셀 */
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #e0e7ff;
+      color: #4f46e5;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .user-info-cell .user-name {
+      font-weight: 600;
+      color: #111827;
+      font-size: 14px;
+    }
+    .user-info-cell .user-email {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    /* 뱃지 */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .badge-admin    { background: #ede9fe; color: #6d28d9; }
+    .badge-moderator { background: #dbeafe; color: #1d4ed8; }
+    .badge-user      { background: #f3f4f6; color: #6b7280; }
+    .badge-active    { background: #d1fae5; color: #065f46; }
+    .badge-blocked   { background: #fee2e2; color: #991b1b; }
+
+    /* 액션 버튼 */
+    .action-btns {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-action {
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-action.view {
+      background: #f0f9ff;
+      color: #0369a1;
+      border-color: #bae6fd;
+    }
+    .btn-action.view:hover { background: #e0f2fe; }
+    .btn-action.block {
+      background: #fff7ed;
+      color: #c2410c;
+      border-color: #fed7aa;
+    }
+    .btn-action.block:hover { background: #ffedd5; }
+    .btn-action.unblock {
+      background: #f0fdf4;
+      color: #15803d;
+      border-color: #bbf7d0;
+    }
+    .btn-action.unblock:hover { background: #dcfce7; }
+
+    /* ── 페이지네이션 ── */
+    .pagination-wrap {
+      padding: 16px 24px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pagination-info {
+      font-size: 13px;
+      color: #6b7280;
+    }
+    .pagination {
+      display: flex;
+      gap: 4px;
+    }
+    .page-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+    }
+    .page-btn:hover { background: #f3f4f6; }
+    .page-btn.active {
+      background: #6366f1;
+      color: #fff;
+      border-color: #6366f1;
+    }
+    .page-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    /* ── 로딩 / 빈 상태 ── */
+    .table-loader {
+      padding: 48px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+    .spinner {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin-bottom: 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ═══════════════════════════════════════════════
+       모달 공통
+    ═══════════════════════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.18);
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modal-in .25s ease;
+    }
+    @keyframes modal-in {
+      from { transform: translateY(16px); opacity: 0; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    .modal-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-head h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f3f4f6;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover { background: #e5e7eb; }
+    .modal-body { padding: 24px; }
+    .modal-foot {
+      padding: 16px 24px;
+      border-top: 1px solid #f3f4f6;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* ── 사용자 상세 모달 ── */
+    .detail-profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .detail-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #e0e7ff;
+      color: #4f46e5;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .detail-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .detail-profile-info .detail-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+    }
+    .detail-profile-info .detail-email {
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .detail-profile-info .detail-badges {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+    }
+    .detail-section {
+      margin-bottom: 20px;
+    }
+    .detail-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .detail-item {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .detail-item-label {
+      font-size: 11px;
+      color: #9ca3af;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .detail-item-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+      margin-top: 2px;
+    }
+    .stat-item .detail-item-value { font-size: 24px; }
+
+    /* 역할 변경 셀렉트 */
+    .role-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .role-select-wrap select {
+      flex: 1;
+      height: 38px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #111827;
+      background: #f9fafb;
+      outline: none;
+    }
+    .role-select-wrap select:focus { border-color: #6366f1; }
+    .btn-save-role {
+      height: 38px;
+      padding: 0 16px;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+    .btn-save-role:hover { background: #4f46e5; }
+
+    /* 경고 이력 */
+    .warning-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .warning-item {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .warning-item .warn-reason {
+      font-size: 14px;
+      color: #92400e;
+      font-weight: 500;
+    }
+    .warning-item .warn-date {
+      font-size: 12px;
+      color: #b45309;
+      margin-top: 4px;
+    }
+    .warn-empty {
+      font-size: 14px;
+      color: #9ca3af;
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    /* ── 정지 사유 모달 ── */
+    .block-reason-wrap textarea {
+      width: 100%;
+      min-height: 100px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      resize: vertical;
+      outline: none;
+      font-family: inherit;
+    }
+    .block-reason-wrap textarea:focus { border-color: #6366f1; }
+    .block-target-info {
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: #374151;
+      margin-bottom: 14px;
+    }
+    .block-target-info strong { color: #111827; }
+
+    /* 버튼 공통 */
+    .btn-primary {
+      padding: 9px 20px;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #4f46e5; }
+    .btn-danger {
+      padding: 9px 20px;
+      background: #dc2626;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-ghost {
+      padding: 9px 20px;
+      background: #f3f4f6;
+      color: #374151;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-ghost:hover { background: #e5e7eb; }
+
+    /* 토스트 */
+    #usersToast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 8px 32px rgba(0,0,0,.15);
+      transition: opacity .3s;
+      opacity: 0;
+      pointer-events: none;
+      max-width: 320px;
+    }
+    #usersToast.show { opacity: 1; }
+    #usersToast.success { background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; }
+    #usersToast.error   { background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
+    #usersToast.info    { background:#dbeafe; color:#1e40af; border:1px solid #93c5fd; }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .filter-bar { flex-direction: column; }
+      .filter-group { min-width: unset; }
+      .users-table th:nth-child(4),
+      .users-table td:nth-child(4),
+      .users-table th:nth-child(5),
+      .users-table td:nth-child(5) { display: none; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ■■■ 관리자 레이아웃 래퍼 (admin-common.css에서 정의) ■■■ -->
+  <div class="admin-layout" id="adminLayout">
+
+    <!-- ▶ Sidebar (admin-common.js가 주입) -->
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+
+    <!-- ▶ Main -->
+    <main class="admin-main">
+
+      <!-- 상단 헤더 -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebarToggle" aria-label="메뉴 열기">&#9776;</button>
+          <nav class="breadcrumb" aria-label="breadcrumb">
+            <span>관리자</span>
+            <span class="sep">›</span>
+            <span class="current">사용자 관리</span>
+          </nav>
+        </div>
+        <div class="topbar-right">
+          <span class="admin-user-name" id="adminUserName">로딩 중...</span>
+        </div>
+      </header>
+
+      <!-- 콘텐츠 영역 -->
+      <div class="admin-content">
+
+        <!-- 페이지 타이틀 -->
+        <div class="page-title-row">
+          <h1 class="page-title">사용자 관리</h1>
+          <p class="page-subtitle">전체 사용자 목록을 조회하고 역할·정지 상태를 관리합니다.</p>
+        </div>
+
+        <!-- ════ 검색 / 필터 바 ════ -->
+        <div class="filter-bar" id="filterBar">
+          <div class="filter-group" style="flex:2; min-width:200px;">
+            <label for="searchInput">이름 / 이메일 검색</label>
+            <input type="text" id="searchInput" placeholder="이름 또는 이메일 입력…" autocomplete="off">
+          </div>
+          <div class="filter-group">
+            <label for="roleFilter">역할</label>
+            <select id="roleFilter">
+              <option value="">전체</option>
+              <option value="admin">admin</option>
+              <option value="moderator">moderator</option>
+              <option value="user">user</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="statusFilter">상태</label>
+            <select id="statusFilter">
+              <option value="">전체</option>
+              <option value="active">활성</option>
+              <option value="blocked">정지</option>
+            </select>
+          </div>
+          <div class="filter-group date-group">
+            <label for="dateFrom">가입일 시작</label>
+            <input type="date" id="dateFrom">
+          </div>
+          <div class="filter-group date-group">
+            <label for="dateTo">가입일 종료</label>
+            <input type="date" id="dateTo">
+          </div>
+          <div class="filter-actions">
+            <button class="btn-filter primary" id="btnSearch">검색</button>
+            <button class="btn-filter secondary" id="btnReset">초기화</button>
+          </div>
+        </div>
+
+        <!-- ════ 사용자 테이블 ════ -->
+        <div class="table-card">
+          <div class="table-header">
+            <h3>사용자 목록</h3>
+            <span class="table-meta" id="tableMeta">로딩 중…</span>
+          </div>
+
+          <div id="tableBody">
+            <div class="table-loader">
+              <div class="spinner"></div><br>목록을 불러오는 중…
+            </div>
+          </div>
+
+          <!-- 페이지네이션 -->
+          <div class="pagination-wrap" id="paginationWrap" style="display:none;">
+            <span class="pagination-info" id="paginationInfo"></span>
+            <div class="pagination" id="paginationNav"></div>
+          </div>
+        </div>
+
+      </div><!-- /admin-content -->
+    </main>
+  </div><!-- /admin-layout -->
+
+  <!-- ════════════════════════════════════════════════
+       모달 1: 사용자 상세
+  ════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2 id="detailModalTitle">사용자 상세</h2>
+        <button class="modal-close" onclick="closeDetailModal()" aria-label="닫기">&#215;</button>
+      </div>
+      <div class="modal-body" id="detailModalBody">
+        <div class="table-loader"><div class="spinner"></div></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-ghost" onclick="closeDetailModal()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       모달 2: 계정 정지 사유 입력
+  ════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="blockModal" role="dialog" aria-modal="true" aria-labelledby="blockModalTitle">
+    <div class="modal-box" style="max-width:440px;">
+      <div class="modal-head">
+        <h2 id="blockModalTitle">계정 정지</h2>
+        <button class="modal-close" onclick="closeBlockModal()" aria-label="닫기">&#215;</button>
+      </div>
+      <div class="modal-body">
+        <div class="block-target-info" id="blockTargetInfo"></div>
+        <div class="block-reason-wrap">
+          <label for="blockReasonInput" style="font-size:14px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">
+            정지 사유 <span style="color:#dc2626;">*</span>
+          </label>
+          <textarea id="blockReasonInput" placeholder="정지 사유를 입력하세요…"></textarea>
+        </div>
+        <p id="blockError" style="color:#dc2626;font-size:13px;margin-top:8px;display:none;"></p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-ghost" onclick="closeBlockModal()">취소</button>
+        <button class="btn-danger" id="btnConfirmBlock" onclick="confirmBlock()">정지 확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 토스트 -->
+  <div id="usersToast" role="status" aria-live="polite"></div>
+
+  <!-- admin-common.js (S7F11에서 생성) -->
+  <script src="../../js/admin-common.js"></script>
+
+  <script>
+    'use strict';
+
+    /* ══════════════════════════════════════════════
+       State
+    ══════════════════════════════════════════════ */
+    let db       = null;
+    let adminUid = null;
+
+    const PAGE_SIZE = 20;
+    let currentPage  = 1;
+    let totalCount   = 0;
+    let currentFilters = {};
+    let blockTargetUser = null;   // 정지 대상 사용자 캐시
+
+    /* ══════════════════════════════════════════════
+       Init — admin-common.js checkAdminAuth() 사용
+    ══════════════════════════════════════════════ */
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // checkAdminAuth()는 admin-common.js에서 정의.
+        // 비관리자라면 내부에서 리다이렉트 처리.
+        const result = await checkAdminAuth();
+        db       = result.db;
+        adminUid = result.user.id;
+
+        // 관리자 이름 표시
+        const adminNameEl = document.getElementById('adminUserName');
+        if (adminNameEl) adminNameEl.textContent = result.profile?.display_name || result.user.email;
+
+        // 사이드바 렌더링 (admin-common.js 제공)
+        if (typeof renderAdminSidebar === 'function') renderAdminSidebar('users');
+
+        // 이벤트 바인딩
+        bindEvents();
+
+        // 첫 목록 로드
+        await fetchUsers();
+      } catch (err) {
+        console.error('[users] 초기화 오류:', err);
+        showToast('초기화 중 오류가 발생했습니다.', 'error');
+      }
+    });
+
+    /* ══════════════════════════════════════════════
+       이벤트 바인딩
+    ══════════════════════════════════════════════ */
+    function bindEvents() {
+      document.getElementById('btnSearch').addEventListener('click', () => {
+        currentPage = 1;
+        fetchUsers();
+      });
+      document.getElementById('btnReset').addEventListener('click', resetFilters);
+      document.getElementById('searchInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { currentPage = 1; fetchUsers(); }
+      });
+      // 모달 오버레이 클릭 시 닫기
+      document.getElementById('detailModal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeDetailModal();
+      });
+      document.getElementById('blockModal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeBlockModal();
+      });
+    }
+
+    /* ══════════════════════════════════════════════
+       필터 수집
+    ══════════════════════════════════════════════ */
+    function collectFilters() {
+      return {
+        keyword:  document.getElementById('searchInput').value.trim(),
+        role:     document.getElementById('roleFilter').value,
+        status:   document.getElementById('statusFilter').value,
+        dateFrom: document.getElementById('dateFrom').value,
+        dateTo:   document.getElementById('dateTo').value
+      };
+    }
+
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('roleFilter').value  = '';
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('dateFrom').value    = '';
+      document.getElementById('dateTo').value      = '';
+      currentPage = 1;
+      fetchUsers();
+    }
+
+    /* ══════════════════════════════════════════════
+       사용자 목록 조회 (Supabase)
+       profiles + user_roles LEFT JOIN + user_blocks 활성 여부
+    ══════════════════════════════════════════════ */
+    async function fetchUsers() {
+      renderLoading();
+      currentFilters = collectFilters();
+
+      try {
+        const from = (currentPage - 1) * PAGE_SIZE;
+        const to   = from + PAGE_SIZE - 1;
+
+        // profiles에서 기본 데이터 + user_roles 조인 (Supabase 내포 select)
+        let query = db
+          .from('profiles')
+          .select(`
+            id,
+            display_name,
+            username,
+            avatar_url,
+            created_at,
+            is_deleted,
+            user_roles ( role, assigned_at ),
+            user_blocks!user_blocks_user_id_fkey ( id, reason, created_at, is_active )
+          `, { count: 'exact' })
+          .eq('is_deleted', false)
+          .order('created_at', { ascending: false })
+          .range(from, to);
+
+        // 키워드 검색 — display_name 또는 username (email은 auth.users에 있으므로 프로필 필드 사용)
+        if (currentFilters.keyword) {
+          const kw = currentFilters.keyword;
+          query = query.or(`display_name.ilike.%${kw}%,username.ilike.%${kw}%`);
+        }
+
+        // 역할 필터 (user_roles 내포 필드 직접 필터는 어렵기 때문에 클라이언트 후처리)
+        // 가입일 필터
+        if (currentFilters.dateFrom) {
+          query = query.gte('created_at', currentFilters.dateFrom + 'T00:00:00Z');
+        }
+        if (currentFilters.dateTo) {
+          query = query.lte('created_at', currentFilters.dateTo + 'T23:59:59Z');
+        }
+
+        const { data, error, count } = await query;
+
+        if (error) throw error;
+
+        // 역할/상태 클라이언트 후처리 필터
+        let rows = (data || []).map(normalizeUser);
+        if (currentFilters.role) {
+          rows = rows.filter(u => u.role === currentFilters.role);
+        }
+        if (currentFilters.status === 'active') {
+          rows = rows.filter(u => !u.isBlocked);
+        } else if (currentFilters.status === 'blocked') {
+          rows = rows.filter(u => u.isBlocked);
+        }
+
+        totalCount = count || rows.length;
+        renderTable(rows);
+        renderPagination(count || 0);
+      } catch (err) {
+        console.error('[users] 목록 조회 오류:', err);
+        renderError('사용자 목록을 불러오는 중 오류가 발생했습니다.');
+      }
+    }
+
+    /* 데이터 정규화 */
+    function normalizeUser(row) {
+      const roleRow    = Array.isArray(row.user_roles) ? row.user_roles[0] : row.user_roles;
+      const blockRow   = Array.isArray(row.user_blocks)
+        ? row.user_blocks.find(b => b.is_active)
+        : (row.user_blocks?.is_active ? row.user_blocks : null);
+
+      return {
+        id:          row.id,
+        displayName: row.display_name || row.username || '(이름 없음)',
+        username:    row.username || '',
+        avatarUrl:   row.avatar_url || '',
+        createdAt:   row.created_at,
+        role:        roleRow?.role || 'user',
+        isBlocked:   !!blockRow,
+        blockReason: blockRow?.reason || '',
+        blockId:     blockRow?.id || null
+      };
+    }
+
+    /* ══════════════════════════════════════════════
+       렌더링 — 테이블
+    ══════════════════════════════════════════════ */
+    function renderLoading() {
+      document.getElementById('tableBody').innerHTML =
+        '<div class="table-loader"><div class="spinner"></div><br>목록을 불러오는 중…</div>';
+      document.getElementById('paginationWrap').style.display = 'none';
+      document.getElementById('tableMeta').textContent = '로딩 중…';
+    }
+
+    function renderError(msg) {
+      document.getElementById('tableBody').innerHTML =
+        `<div class="table-loader" style="color:#dc2626;">&#9888; ${escapeHtml(msg)}</div>`;
+    }
+
+    function renderTable(rows) {
+      const metaEl = document.getElementById('tableMeta');
+      metaEl.textContent = `총 ${totalCount.toLocaleString()}명`;
+
+      if (!rows.length) {
+        document.getElementById('tableBody').innerHTML =
+          '<div class="table-loader">검색 결과가 없습니다.</div>';
+        document.getElementById('paginationWrap').style.display = 'none';
+        return;
+      }
+
+      const rowsHtml = rows.map((u, idx) => {
+        const num        = (currentPage - 1) * PAGE_SIZE + idx + 1;
+        const avatarHtml = u.avatarUrl
+          ? `<img src="${escapeHtml(u.avatarUrl)}" alt="">`
+          : escapeHtml(u.displayName.charAt(0).toUpperCase());
+        const roleBadge  = `<span class="badge badge-${u.role}">${u.role}</span>`;
+        const statusBadge = u.isBlocked
+          ? '<span class="badge badge-blocked">정지</span>'
+          : '<span class="badge badge-active">활성</span>';
+        const blockBtn = u.isBlocked
+          ? `<button class="btn-action unblock" onclick="unblockUser('${u.id}','${u.blockId}')">복구</button>`
+          : `<button class="btn-action block" onclick="openBlockModal('${u.id}')">정지</button>`;
+
+        return `
+          <tr>
+            <td style="text-align:center;color:#9ca3af;">${num}</td>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar">${avatarHtml}</div>
+                <div class="user-info-cell">
+                  <div class="user-name">${escapeHtml(u.displayName)}</div>
+                  ${u.username ? `<div class="user-email">@${escapeHtml(u.username)}</div>` : ''}
+                </div>
+              </div>
+            </td>
+            <td>${roleBadge}</td>
+            <td style="color:#6b7280;font-size:13px;">${formatDate(u.createdAt)}</td>
+            <td>${statusBadge}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-action view" onclick="openDetailModal('${u.id}')">상세</button>
+                ${blockBtn}
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      document.getElementById('tableBody').innerHTML = `
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th style="width:52px;text-align:center;">번호</th>
+              <th>이름</th>
+              <th style="width:110px;">역할</th>
+              <th style="width:120px;">가입일</th>
+              <th style="width:90px;">상태</th>
+              <th style="width:140px;">액션</th>
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>`;
+    }
+
+    /* ══════════════════════════════════════════════
+       페이지네이션 렌더링
+    ══════════════════════════════════════════════ */
+    function renderPagination(total) {
+      const totalPages = Math.ceil(total / PAGE_SIZE);
+      const wrap = document.getElementById('paginationWrap');
+
+      if (totalPages <= 1) { wrap.style.display = 'none'; return; }
+      wrap.style.display = 'flex';
+
+      document.getElementById('paginationInfo').textContent =
+        `${((currentPage - 1) * PAGE_SIZE + 1).toLocaleString()}–${Math.min(currentPage * PAGE_SIZE, total).toLocaleString()} / ${total.toLocaleString()}`;
+
+      const start = Math.max(1, currentPage - 3);
+      const end   = Math.min(totalPages, start + 6);
+      let btns    = '';
+
+      if (currentPage > 1) {
+        btns += `<button class="page-btn" onclick="goPage(${currentPage - 1})">&#8249;</button>`;
+      }
+      for (let i = start; i <= end; i++) {
+        btns += `<button class="page-btn${i === currentPage ? ' active' : ''}" onclick="goPage(${i})">${i}</button>`;
+      }
+      if (currentPage < totalPages) {
+        btns += `<button class="page-btn" onclick="goPage(${currentPage + 1})">&#8250;</button>`;
+      }
+
+      document.getElementById('paginationNav').innerHTML = btns;
+    }
+
+    function goPage(page) {
+      currentPage = page;
+      fetchUsers();
+    }
+
+    /* ══════════════════════════════════════════════
+       모달 1 — 사용자 상세
+    ══════════════════════════════════════════════ */
+    async function openDetailModal(userId) {
+      document.getElementById('detailModal').classList.add('open');
+      document.getElementById('detailModalBody').innerHTML =
+        '<div class="table-loader"><div class="spinner"></div></div>';
+
+      try {
+        // 프로필 + 역할
+        const { data: profile, error: pErr } = await db
+          .from('profiles')
+          .select('*, user_roles ( role, assigned_at )')
+          .eq('id', userId)
+          .single();
+        if (pErr) throw pErr;
+
+        // 활동 통계 (병렬 조회)
+        const [postsRes, commentsRes, axRes, warningsRes, blockRes] = await Promise.all([
+          db.from('community_posts').select('id', { count: 'exact', head: true })
+            .eq('author_id', userId).eq('is_deleted', false),
+          db.from('community_comments').select('id', { count: 'exact', head: true })
+            .eq('author_id', userId).eq('is_deleted', false),
+          db.from('ax_project_requests').select('id', { count: 'exact', head: true })
+            .eq('user_id', userId),
+          db.from('warning_logs').select('id, reason, created_at, warned_by')
+            .eq('user_id', userId).order('created_at', { ascending: false }),
+          db.from('user_blocks').select('id, reason, created_at, is_active')
+            .eq('user_id', userId).order('created_at', { ascending: false })
+        ]);
+
+        const roleInfo = Array.isArray(profile.user_roles)
+          ? profile.user_roles[0]
+          : profile.user_roles;
+        const role     = roleInfo?.role || 'user';
+        const activeBlock = (blockRes.data || []).find(b => b.is_active);
+        const name     = profile.display_name || profile.username || '(이름 없음)';
+        const avatarHtml = profile.avatar_url
+          ? `<img src="${escapeHtml(profile.avatar_url)}" alt="">`
+          : `<span>${escapeHtml(name.charAt(0).toUpperCase())}</span>`;
+
+        // 경고 이력 렌더
+        const warnLogs = warningsRes.data || [];
+        const warnHtml = warnLogs.length
+          ? `<ul class="warning-list">${warnLogs.map(w => `
+              <li class="warning-item">
+                <div class="warn-reason">${escapeHtml(w.reason || '-')}</div>
+                <div class="warn-date">${formatDate(w.created_at)}</div>
+              </li>`).join('')}</ul>`
+          : '<p class="warn-empty">경고 이력이 없습니다.</p>';
+
+        document.getElementById('detailModalBody').innerHTML = `
+          <div class="detail-profile">
+            <div class="detail-avatar">${avatarHtml}</div>
+            <div class="detail-profile-info">
+              <div class="detail-name">${escapeHtml(name)}</div>
+              ${profile.username ? `<div class="detail-email">@${escapeHtml(profile.username)}</div>` : ''}
+              <div class="detail-badges">
+                <span class="badge badge-${role}">${role}</span>
+                ${activeBlock
+                  ? '<span class="badge badge-blocked">정지 중</span>'
+                  : '<span class="badge badge-active">활성</span>'}
+              </div>
+            </div>
+          </div>
+
+          <!-- 기본 정보 -->
+          <div class="detail-section">
+            <div class="detail-section-title">기본 정보</div>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="detail-item-label">가입일</div>
+                <div class="detail-item-value" style="font-size:14px;font-weight:600;">${formatDate(profile.created_at)}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-item-label">역할 부여일</div>
+                <div class="detail-item-value" style="font-size:14px;font-weight:600;">${roleInfo?.assigned_at ? formatDate(roleInfo.assigned_at) : '-'}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 활동 통계 -->
+          <div class="detail-section">
+            <div class="detail-section-title">활동 통계</div>
+            <div class="detail-grid">
+              <div class="detail-item stat-item">
+                <div class="detail-item-label">게시글</div>
+                <div class="detail-item-value">${(postsRes.count || 0).toLocaleString()}</div>
+              </div>
+              <div class="detail-item stat-item">
+                <div class="detail-item-label">댓글</div>
+                <div class="detail-item-value">${(commentsRes.count || 0).toLocaleString()}</div>
+              </div>
+              <div class="detail-item stat-item" style="grid-column:1/-1;">
+                <div class="detail-item-label">AX 프로젝트 접수</div>
+                <div class="detail-item-value">${(axRes.count || 0).toLocaleString()}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 역할 변경 -->
+          <div class="detail-section">
+            <div class="detail-section-title">역할 변경</div>
+            <div class="role-select-wrap">
+              <select id="roleChangeSelect">
+                <option value="user"      ${role === 'user'      ? 'selected' : ''}>user</option>
+                <option value="moderator" ${role === 'moderator' ? 'selected' : ''}>moderator</option>
+                <option value="admin"     ${role === 'admin'     ? 'selected' : ''}>admin</option>
+              </select>
+              <button class="btn-save-role" onclick="changeRole('${userId}')">저장</button>
+            </div>
+          </div>
+
+          <!-- 경고 이력 -->
+          <div class="detail-section">
+            <div class="detail-section-title">경고 이력 (${warnLogs.length}건)</div>
+            ${warnHtml}
+          </div>`;
+
+      } catch (err) {
+        console.error('[users] 상세 조회 오류:', err);
+        document.getElementById('detailModalBody').innerHTML =
+          '<div class="table-loader" style="color:#dc2626;">상세 정보를 불러오지 못했습니다.</div>';
+      }
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.remove('open');
+    }
+
+    /* ══════════════════════════════════════════════
+       역할 변경
+    ══════════════════════════════════════════════ */
+    async function changeRole(userId) {
+      const select  = document.getElementById('roleChangeSelect');
+      if (!select) return;
+      const newRole = select.value;
+
+      try {
+        // user_roles UPSERT (있으면 UPDATE, 없으면 INSERT)
+        const { error } = await db
+          .from('user_roles')
+          .upsert({
+            user_id:     userId,
+            role:        newRole,
+            assigned_by: adminUid,
+            assigned_at: new Date().toISOString(),
+            updated_at:  new Date().toISOString()
+          }, { onConflict: 'user_id' });
+
+        if (error) throw error;
+
+        showToast(`역할이 "${newRole}"로 변경되었습니다.`, 'success');
+        closeDetailModal();
+        fetchUsers();
+      } catch (err) {
+        console.error('[users] 역할 변경 오류:', err);
+        showToast('역할 변경 중 오류가 발생했습니다.', 'error');
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       모달 2 — 계정 정지
+    ══════════════════════════════════════════════ */
+    async function openBlockModal(userId) {
+      // 사용자 정보 캐시
+      try {
+        const { data: profile } = await db
+          .from('profiles')
+          .select('id, display_name, username')
+          .eq('id', userId)
+          .single();
+        blockTargetUser = profile || { id: userId };
+      } catch (_) {
+        blockTargetUser = { id: userId };
+      }
+
+      const name = blockTargetUser?.display_name || blockTargetUser?.username || userId;
+      document.getElementById('blockTargetInfo').innerHTML =
+        `대상 사용자: <strong>${escapeHtml(name)}</strong>`;
+      document.getElementById('blockReasonInput').value = '';
+      document.getElementById('blockError').style.display = 'none';
+      document.getElementById('blockModal').classList.add('open');
+    }
+
+    function closeBlockModal() {
+      document.getElementById('blockModal').classList.remove('open');
+      blockTargetUser = null;
+    }
+
+    async function confirmBlock() {
+      const reason = document.getElementById('blockReasonInput').value.trim();
+      const errEl  = document.getElementById('blockError');
+
+      if (!reason) {
+        errEl.textContent = '정지 사유를 입력해주세요.';
+        errEl.style.display = 'block';
+        return;
+      }
+      errEl.style.display = 'none';
+
+      const btn = document.getElementById('btnConfirmBlock');
+      btn.disabled = true;
+      btn.textContent = '처리 중…';
+
+      try {
+        const { error } = await db
+          .from('user_blocks')
+          .insert({
+            user_id:    blockTargetUser.id,
+            reason:     reason,
+            blocked_by: adminUid,
+            is_active:  true,
+            created_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+
+        showToast('계정이 정지되었습니다.', 'success');
+        closeBlockModal();
+        fetchUsers();
+      } catch (err) {
+        console.error('[users] 정지 오류:', err);
+        errEl.textContent = '정지 처리 중 오류가 발생했습니다: ' + (err.message || '');
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '정지 확인';
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       계정 복구
+    ══════════════════════════════════════════════ */
+    async function unblockUser(userId, blockId) {
+      if (!confirm('이 사용자의 정지를 해제하시겠습니까?')) return;
+
+      try {
+        const { error } = await db
+          .from('user_blocks')
+          .update({ is_active: false, updated_at: new Date().toISOString() })
+          .eq('id', blockId)
+          .eq('user_id', userId);
+
+        if (error) throw error;
+
+        showToast('계정 정지가 해제되었습니다.', 'success');
+        fetchUsers();
+      } catch (err) {
+        console.error('[users] 복구 오류:', err);
+        showToast('정지 해제 중 오류가 발생했습니다.', 'error');
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       유틸
+    ══════════════════════════════════════════════ */
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('usersToast');
+      toast.textContent = message;
+      toast.className   = `show ${type}`;
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.remove('show'), 4500);
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return '-';
+      return d.toLocaleDateString('ko-KR', {
+        year: 'numeric', month: '2-digit', day: '2-digit'
+      });
+    }
+
+    function escapeHtml(s) {
+      if (s === null || s === undefined) return '';
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!-- @task S7E1 -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>수강 신청 승인 안내</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    /* Reset */
+    * { box-sizing: border-box; }
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+    a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
+
+    /* Base */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f9;
+      font-family: Helvetica, Arial, sans-serif;
+    }
+
+    .email-wrapper {
+      width: 100%;
+      background-color: #f4f6f9;
+      padding: 32px 16px;
+    }
+
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 36px 40px;
+      text-align: center;
+    }
+
+    .logo-text {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 2px;
+      margin: 0;
+    }
+
+    .logo-accent {
+      color: #4fc3f7;
+    }
+
+    .header-tagline {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      margin: 8px 0 0 0;
+      letter-spacing: 1px;
+    }
+
+    /* Body */
+    .body-content {
+      padding: 40px 40px 32px;
+    }
+
+    .greeting {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 0 0 8px 0;
+    }
+
+    .approval-badge {
+      display: inline-block;
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #c8e6c9;
+    }
+
+    .intro-text {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #444;
+      margin: 0 0 28px 0;
+    }
+
+    /* Course Info Card */
+    .course-card {
+      background-color: #f8f9fc;
+      border: 1px solid #e2e6ea;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+
+    .course-card-title {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin: 0 0 16px 0;
+    }
+
+    .course-name {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 0 0 20px 0;
+      line-height: 1.3;
+    }
+
+    .course-info-grid {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .course-info-row td {
+      padding: 10px 0;
+      border-bottom: 1px solid #e9ecef;
+      vertical-align: top;
+    }
+
+    .course-info-row:last-child td {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      width: 100px;
+      padding-right: 12px;
+    }
+
+    .info-value {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #1a1a2e;
+      font-weight: 500;
+    }
+
+    .difficulty-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .difficulty-beginner { background-color: #e3f2fd; color: #1565c0; }
+    .difficulty-intermediate { background-color: #fff3e0; color: #e65100; }
+    .difficulty-advanced { background-color: #fce4ec; color: #c62828; }
+
+    /* CTA Button */
+    .cta-section {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #0f3460 0%, #1a5276 100%);
+      color: #ffffff !important;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 16px 40px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(15, 52, 96, 0.3);
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #e9ecef;
+      margin: 0 0 28px 0;
+    }
+
+    /* Notice */
+    .notice-box {
+      background-color: #fff8e1;
+      border-left: 4px solid #ffc107;
+      border-radius: 0 6px 6px 0;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+    }
+
+    .notice-box p {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #5d4037;
+      margin: 0;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: #1a1a2e;
+      padding: 28px 40px;
+      text-align: center;
+    }
+
+    .footer p {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      margin: 0 0 6px 0;
+      line-height: 1.6;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: underline;
+    }
+
+    .footer .unsubscribe {
+      margin-top: 12px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 480px) {
+      .email-wrapper {
+        padding: 16px 8px;
+      }
+
+      .header {
+        padding: 28px 24px;
+      }
+
+      .logo-text {
+        font-size: 22px;
+      }
+
+      .body-content {
+        padding: 28px 24px 24px;
+      }
+
+      .greeting {
+        font-size: 18px;
+      }
+
+      .course-card {
+        padding: 18px 20px;
+      }
+
+      .course-name {
+        font-size: 16px;
+      }
+
+      .info-label {
+        width: 85px;
+        font-size: 12px;
+      }
+
+      .info-value {
+        font-size: 13px;
+      }
+
+      .cta-button {
+        display: block;
+        padding: 14px 24px;
+        font-size: 15px;
+      }
+
+      .footer {
+        padding: 24px 24px;
+      }
+    }
+
+    @media screen and (max-width: 320px) {
+      .body-content {
+        padding: 20px 16px;
+      }
+
+      .course-card {
+        padding: 14px 16px;
+      }
+
+      .info-label {
+        display: block;
+        width: 100%;
+        margin-bottom: 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-container">
+
+      <!-- Header -->
+      <div class="header">
+        <p class="logo-text">AX<span class="logo-accent">-On</span></p>
+        <p class="header-tagline">AI TRANSFORMATION PLATFORM</p>
+      </div>
+
+      <!-- Body -->
+      <div class="body-content">
+
+        <!-- Greeting -->
+        <h1 class="greeting">{user_name}님!</h1>
+        <p class="approval-badge">수강 신청이 승인되었습니다</p>
+
+        <p class="intro-text">
+          안녕하세요! AX-On Platform에서 신청하신 강의가 정식 승인되었습니다.<br>
+          아래 강의 정보를 확인하시고, 지금 바로 학습을 시작해 보세요.
+        </p>
+
+        <!-- Course Info Card -->
+        <div class="course-card">
+          <p class="course-card-title">강의 정보</p>
+          <p class="course-name">{course_name}</p>
+
+          <table class="course-info-grid" role="presentation">
+            <tr class="course-info-row">
+              <td class="info-label">강사</td>
+              <td class="info-value">{instructor_name}</td>
+            </tr>
+            <tr class="course-info-row">
+              <td class="info-label">시작일</td>
+              <td class="info-value">{start_date}</td>
+            </tr>
+            <tr class="course-info-row">
+              <td class="info-label">수강 기간</td>
+              <td class="info-value">{duration}</td>
+            </tr>
+            <tr class="course-info-row">
+              <td class="info-label">난이도</td>
+              <td class="info-value">
+                <span class="difficulty-badge difficulty-beginner">{difficulty}</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="cta-section">
+          <a href="https://ax-on.platform/courses/{course_id}" class="cta-button">
+            강의 시작하기
+          </a>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Notice -->
+        <div class="notice-box">
+          <p>
+            강의 접근에 문제가 있으시거나 추가 문의사항이 있으시면<br>
+            고객 지원팀(<a href="mailto:support@ax-on.platform" style="color: #5d4037;">support@ax-on.platform</a>)으로 연락해 주세요.
+          </p>
+        </div>
+
+        <p style="font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: #666; margin: 0; line-height: 1.6;">
+          학습 여정을 함께하게 되어 기쁩니다. 최선을 다해 지원하겠습니다.<br>
+          <strong style="color: #1a1a2e;">AX-On Platform 팀 드림</strong>
+        </p>
+
+      </div><!-- /body-content -->
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>AX-On Platform | AI Transformation for Business</p>
+        <p>
+          <a href="https://ax-on.platform/privacy">개인정보 처리방침</a>
+          &nbsp;&middot;&nbsp;
+          <a href="https://ax-on.platform/terms">이용약관</a>
+          &nbsp;&middot;&nbsp;
+          <a href="https://ax-on.platform/support">고객 지원</a>
+        </p>
+        <p class="unsubscribe">
+          이 이메일은 AX-On Platform 수강 신청 승인에 따라 자동 발송되었습니다.<br>
+          수신을 원하지 않으시면 <a href="https://ax-on.platform/unsubscribe">수신 거부</a>를 클릭하세요.
+        </p>
+      </div>
+
+    </div><!-- /email-container -->
+  </div><!-- /email-wrapper -->
+</body>
+</html>

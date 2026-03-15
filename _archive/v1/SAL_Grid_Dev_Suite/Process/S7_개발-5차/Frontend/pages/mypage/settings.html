@@ -1,0 +1,595 @@
+<!-- @task S7F2 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 설정">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>설정 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="../../../../js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/mypage.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --success: #10b981;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --border: rgba(26, 26, 46, 0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,249,247,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.logo-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 14px; color: white;
+}
+.logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; }
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 6px; align-items: center; }
+.nav-link {
+  padding: 8px 14px; border-radius: 10px;
+  text-decoration: none; font-size: 14px; font-weight: 500; color: var(--ink-muted);
+  transition: all 0.15s;
+}
+.nav-link:hover { background: var(--amber-glow); color: var(--amber); }
+.btn-nav {
+  padding: 8px 18px; border-radius: 10px; border: none; cursor: pointer;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  background: var(--ink); color: white; transition: all 0.15s;
+}
+.btn-nav:hover { background: #2d2d4a; }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 1200px; margin: 0 auto; padding: 40px 24px;
+  display: grid; grid-template-columns: 240px 1fr; gap: 28px;
+  align-items: start;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: sticky; top: 88px;
+}
+.profile-summary {
+  padding: 28px 20px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 700; color: white;
+  overflow: hidden; margin: 0 auto 12px;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.profile-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.profile-role {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  background: var(--amber-glow); color: var(--amber);
+}
+.sidebar-menu { padding: 8px; }
+.menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  text-decoration: none; font-size: 14px; font-weight: 500;
+  color: var(--ink-muted); transition: all 0.15s;
+  border: none; background: none; width: 100%;
+  text-align: left; font-family: inherit; cursor: pointer;
+}
+.menu-item:hover { background: var(--surface-warm); color: var(--ink); }
+.menu-item.active { background: var(--amber-glow); color: var(--amber); font-weight: 600; }
+.menu-icon { font-size: 16px; }
+
+/* ── Main ── */
+.main-content { min-width: 0; }
+.page-header { margin-bottom: 24px; }
+.page-title { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.page-desc { font-size: 14px; color: var(--ink-muted); margin-top: 4px; }
+
+/* ── Card ── */
+.card {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-size: 16px; font-weight: 700; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-desc {
+  font-size: 13px; color: var(--ink-muted);
+  margin-bottom: 20px; padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Toggle Row ── */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.toggle-row:last-of-type { border-bottom: none; }
+.toggle-info {}
+.toggle-label { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+.toggle-desc { font-size: 13px; color: var(--ink-muted); }
+
+/* ── Toggle Switch ── */
+.toggle-switch {
+  position: relative; display: inline-block;
+  width: 50px; height: 28px; flex-shrink: 0;
+}
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--border);
+  border-radius: 28px;
+  transition: background 0.25s ease;
+  border: 1.5px solid var(--border);
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute; height: 20px; width: 20px;
+  left: 3px; bottom: 3px;
+  background: white; border-radius: 50%;
+  transition: transform 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.toggle-switch input:checked + .toggle-slider { background: var(--amber); border-color: var(--amber); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(22px); }
+.toggle-switch input:focus + .toggle-slider { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+/* ── Save Button ── */
+.btn-save {
+  margin-top: 20px;
+  padding: 12px 28px; border-radius: var(--radius-sm);
+  background: var(--amber); color: white; border: none;
+  font-size: 15px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-save:hover { background: var(--amber-light); transform: translateY(-1px); }
+.btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ── Danger Zone ── */
+.danger-card {
+  border-color: rgba(239, 68, 68, 0.2);
+}
+.danger-card .card-title { color: var(--danger); }
+.danger-zone-content {
+  display: flex; align-items: flex-start; gap: 20px;
+  flex-wrap: wrap;
+}
+.danger-zone-info { flex: 1; min-width: 240px; }
+.danger-zone-info p { font-size: 14px; color: var(--ink-muted); margin-bottom: 8px; }
+.danger-zone-info ul {
+  font-size: 13px; color: var(--ink-muted);
+  list-style: none; padding: 0;
+}
+.danger-zone-info ul li::before { content: '• '; color: var(--danger); }
+.btn-danger {
+  padding: 12px 24px; border-radius: var(--radius-sm);
+  background: transparent; color: var(--danger);
+  border: 1.5px solid var(--danger);
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+}
+.btn-danger:hover { background: var(--danger); color: white; }
+
+/* ── Alert ── */
+.alert {
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  font-size: 14px; margin-bottom: 16px; display: none;
+}
+.alert.show { display: block; }
+.alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  max-width: 440px; width: 100%;
+  padding: 32px;
+  transform: translateY(20px);
+  transition: transform 0.2s ease;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-icon { font-size: 40px; text-align: center; margin-bottom: 12px; }
+.modal-title {
+  font-size: 20px; font-weight: 700; text-align: center;
+  margin-bottom: 8px; color: var(--danger);
+}
+.modal-desc {
+  font-size: 14px; color: var(--ink-muted);
+  text-align: center; line-height: 1.6; margin-bottom: 24px;
+}
+.modal-confirm-input {
+  width: 100%; padding: 10px 14px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); background: var(--surface);
+  font-size: 14px; font-family: inherit; margin-bottom: 16px;
+  transition: border-color 0.15s;
+}
+.modal-confirm-input:focus { outline: none; border-color: var(--danger); }
+.modal-confirm-input.valid { border-color: var(--success); }
+.modal-hint { font-size: 12px; color: var(--ink-muted); text-align: center; margin-bottom: 20px; }
+.modal-actions {
+  display: flex; gap: 12px;
+}
+.modal-btn-cancel {
+  flex: 1; padding: 12px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); background: transparent;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  cursor: pointer; color: var(--ink-muted); transition: all 0.15s;
+}
+.modal-btn-cancel:hover { border-color: var(--ink-muted); color: var(--ink); }
+.modal-btn-delete {
+  flex: 1; padding: 12px; border-radius: var(--radius-sm);
+  border: none; background: var(--danger); color: white;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+}
+.modal-btn-delete:hover:not(:disabled) { background: #dc2626; }
+.modal-btn-delete:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Footer ── */
+footer {
+  background: var(--ink); color: rgba(255,255,255,0.5);
+  text-align: center; padding: 32px 24px;
+  font-size: 13px; margin-top: 60px;
+}
+footer a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 8px; }
+footer a:hover { color: var(--amber); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-wrap { grid-template-columns: 1fr; gap: 16px; }
+  .sidebar { position: static; }
+  .sidebar-menu { display: flex; gap: 4px; overflow-x: auto; padding: 8px; }
+  .menu-item { white-space: nowrap; }
+  .danger-zone-content { flex-direction: column; }
+}
+@media (max-width: 480px) {
+  .page-wrap { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../../../index.html" class="logo">
+      <div class="logo-mark">AX</div>
+      <span class="logo-text">AX-<span>On</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="../../../../index.html" class="nav-link">홈</a>
+      <a href="../../../../community.html" class="nav-link">커뮤니티</a>
+      <button class="btn-nav" onclick="handleLogout()">로그아웃</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="profile-summary">
+      <div class="avatar">
+        <span id="mpAvatarInitial">?</span>
+        <img id="mpAvatarImg" src="" alt="프로필 사진">
+      </div>
+      <div class="profile-name" id="mpUserName">로딩 중...</div>
+      <span class="profile-role" id="mpUserRole">-</span>
+    </div>
+    <nav class="sidebar-menu">
+      <a class="menu-item" href="index.html">
+        <span class="menu-icon">🏠</span> 마이페이지
+      </a>
+      <a class="menu-item" href="profile-edit.html">
+        <span class="menu-icon">✏️</span> 프로필 편집
+      </a>
+      <a class="menu-item" href="activity.html">
+        <span class="menu-icon">📊</span> 활동 내역
+      </a>
+      <a class="menu-item active" href="settings.html">
+        <span class="menu-icon">⚙️</span> 설정
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div class="page-header">
+      <h1 class="page-title">⚙️ 설정</h1>
+      <p class="page-desc">알림 설정, 계정 관리 등을 변경할 수 있습니다.</p>
+    </div>
+
+    <div id="settingsAlert" class="alert"></div>
+
+    <!-- 알림 설정 -->
+    <div class="card">
+      <div class="card-title">🔔 알림 설정</div>
+      <div class="card-desc">원하는 알림 방식을 선택하세요. 변경 사항은 즉시 적용됩니다.</div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">이메일 알림</div>
+          <div class="toggle-desc">강좌 업데이트, 댓글 알림 등을 이메일로 받습니다.</div>
+        </div>
+        <label class="toggle-switch" aria-label="이메일 알림 토글">
+          <input type="checkbox" id="toggleEmail">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">푸시 알림</div>
+          <div class="toggle-desc">브라우저 푸시 알림으로 실시간 소식을 받습니다.</div>
+        </div>
+        <label class="toggle-switch" aria-label="푸시 알림 토글">
+          <input type="checkbox" id="togglePush">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">마케팅 수신</div>
+          <div class="toggle-desc">이벤트, 프로모션, 새 강좌 안내를 수신합니다.</div>
+        </div>
+        <label class="toggle-switch" aria-label="마케팅 수신 토글">
+          <input type="checkbox" id="toggleMarketing">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <button class="btn-save" id="saveSettingsBtn" onclick="handleSaveSettings()">알림 설정 저장</button>
+    </div>
+
+    <!-- 계정 설정 -->
+    <div class="card">
+      <div class="card-title">🔑 계정 보안</div>
+      <div class="card-desc">비밀번호 변경 및 계정 보안 관련 설정입니다.</div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">비밀번호 변경</div>
+          <div class="toggle-desc">이메일로 비밀번호 재설정 링크를 전송합니다.</div>
+        </div>
+        <button
+          style="padding:8px 16px;border-radius:var(--radius-sm);border:1.5px solid var(--border);
+                 background:transparent;font-size:14px;font-weight:600;font-family:inherit;
+                 cursor:pointer;color:var(--ink);transition:all 0.15s;"
+          onclick="handlePasswordReset()">
+          재설정 메일 전송
+        </button>
+      </div>
+    </div>
+
+    <!-- 위험 영역 — 계정 탈퇴 -->
+    <div class="card danger-card">
+      <div class="card-title">⚠️ 위험 영역</div>
+      <div class="card-desc">아래 작업은 되돌릴 수 없습니다. 신중하게 진행하세요.</div>
+      <div class="danger-zone-content">
+        <div class="danger-zone-info">
+          <p>계정을 탈퇴하면 다음 데이터가 처리됩니다:</p>
+          <ul>
+            <li>프로필 정보가 익명화됩니다</li>
+            <li>작성한 게시글·댓글은 유지됩니다</li>
+            <li>수강 내역은 보관됩니다</li>
+            <li>재가입 시 이전 데이터 복구 불가</li>
+          </ul>
+        </div>
+        <button class="btn-danger" onclick="openDeleteModal()">계정 탈퇴</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <a href="../../../../privacy.html">개인정보처리방침</a>
+    <a href="../../../../terms.html">이용약관</a>
+    <a href="../../../../contact.html">문의하기</a>
+  </div>
+  <div style="margin-top:8px;">© 2026 AX-On Platform. All rights reserved.</div>
+</footer>
+
+<!-- 계정 탈퇴 확인 모달 -->
+<div class="modal-overlay" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+  <div class="modal">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title" id="deleteModalTitle">정말 탈퇴하시겠습니까?</div>
+    <div class="modal-desc">
+      이 작업은 되돌릴 수 없습니다.<br>
+      계속하려면 아래에 <strong>"계정삭제"</strong>를 입력해주세요.
+    </div>
+    <input
+      type="text"
+      class="modal-confirm-input"
+      id="deleteConfirmInput"
+      placeholder="계정삭제"
+      autocomplete="off"
+      oninput="checkDeleteInput()"
+    >
+    <div class="modal-hint">정확히 "계정삭제"라고 입력해야 버튼이 활성화됩니다.</div>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeDeleteModal()">취소</button>
+      <button class="modal-btn-delete" id="confirmDeleteBtn" disabled onclick="handleDeleteAccount()">
+        계정 탈퇴
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CONFIRM_PHRASE = '계정삭제';
+
+(async function() {
+  await mypageInit({
+    onReady: async () => {
+      await loadAndRenderSettings();
+    }
+  });
+})();
+
+// ── Settings Load ──
+async function loadAndRenderSettings() {
+  try {
+    const settings = await loadUserSettings();
+    if (!settings) return;
+    document.getElementById('toggleEmail').checked = !!settings.email_notifications;
+    document.getElementById('togglePush').checked = !!settings.push_notifications;
+    document.getElementById('toggleMarketing').checked = !!settings.marketing_consent;
+  } catch(e) {
+    console.error('설정 로드 오류:', e);
+  }
+}
+
+// ── Settings Save ──
+async function handleSaveSettings() {
+  setLoading('saveSettingsBtn', true, '알림 설정 저장');
+  try {
+    await saveUserSettings({
+      email_notifications: document.getElementById('toggleEmail').checked,
+      push_notifications: document.getElementById('togglePush').checked,
+      marketing_consent: document.getElementById('toggleMarketing').checked
+    });
+    showAlert('settingsAlert', '알림 설정이 저장되었습니다.', 'success');
+  } catch(e) {
+    showAlert('settingsAlert', '저장 중 오류가 발생했습니다: ' + e.message, 'error');
+  } finally {
+    setLoading('saveSettingsBtn', false, '알림 설정 저장');
+  }
+}
+
+// ── Password Reset ──
+async function handlePasswordReset() {
+  if (!currentUser?.email) return;
+  try {
+    const { error } = await db.auth.resetPasswordForEmail(currentUser.email, {
+      redirectTo: window.location.origin + '/pages/auth/reset-password.html'
+    });
+    if (error) throw error;
+    showAlert('settingsAlert', '비밀번호 재설정 이메일을 전송했습니다. 받은 편지함을 확인하세요.', 'success');
+  } catch(e) {
+    showAlert('settingsAlert', '메일 전송 실패: ' + e.message, 'error');
+  }
+}
+
+// ── Delete Modal ──
+function openDeleteModal() {
+  document.getElementById('deleteModal').classList.add('open');
+  document.getElementById('deleteConfirmInput').value = '';
+  document.getElementById('confirmDeleteBtn').disabled = true;
+  document.getElementById('deleteConfirmInput').classList.remove('valid');
+  setTimeout(() => document.getElementById('deleteConfirmInput').focus(), 200);
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('open');
+}
+
+function checkDeleteInput() {
+  const val = document.getElementById('deleteConfirmInput').value;
+  const isMatch = val === CONFIRM_PHRASE;
+  document.getElementById('confirmDeleteBtn').disabled = !isMatch;
+  document.getElementById('deleteConfirmInput').classList.toggle('valid', isMatch);
+}
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeDeleteModal();
+});
+
+// 모달 바깥 클릭으로 닫기
+document.getElementById('deleteModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
+});
+
+// ── Account Deletion ──
+async function handleDeleteAccount() {
+  const btn = document.getElementById('confirmDeleteBtn');
+  btn.disabled = true;
+  btn.textContent = '탈퇴 처리 중...';
+
+  try {
+    await softDeleteAccount();
+    // 탈퇴 완료 후 홈으로 이동
+    alert('계정이 탈퇴 처리되었습니다. 이용해 주셔서 감사합니다.');
+    window.location.href = '../../../../index.html';
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '계정 탈퇴';
+    showAlert('settingsAlert', '탈퇴 처리 중 오류가 발생했습니다: ' + e.message, 'error');
+    closeDeleteModal();
+  }
+}
+</script>
+</body>
+</html>

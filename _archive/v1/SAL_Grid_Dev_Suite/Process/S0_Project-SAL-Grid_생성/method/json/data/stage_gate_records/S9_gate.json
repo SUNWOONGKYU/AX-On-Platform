@@ -1,0 +1,24 @@
+{
+  "stage": 9,
+  "stage_name": "개발 7차 (Deferred)",
+  "stage_name_en": "Development Phase 7 (Deferred)",
+  "total_tasks": 6,
+  "completed_tasks": 0,
+  "verification_status": "Not Verified",
+  "ai_verification_note": "",
+  "ai_verification_date": "",
+  "verification_report_path": "sal-grid/stage-gates/S9GATE_verification_report.md",
+  "stage_gate_status": "Not Started",
+  "po_approval_status": "Not Started",
+  "po_approval_user": "",
+  "po_approval_note": "",
+  "po_approval_date": "",
+  "checklist": {
+    "all_tasks_completed": false,
+    "all_verifications_passed": false,
+    "no_blockers": false,
+    "build_success": false,
+    "test_success": false
+  },
+  "remarks": "S7/S8에서 의존성 미해결로 보류된 Task를 모아둔 Stage"
+}

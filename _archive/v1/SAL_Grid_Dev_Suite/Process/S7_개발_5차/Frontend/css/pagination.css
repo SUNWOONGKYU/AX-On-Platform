@@ -1,0 +1,478 @@
+/* @task S7F4 */
+/* AX-On Platform — 게시판 페이지네이션 스타일 */
+
+/* ──────────────────────────────────────────
+   CSS 변수 (index.html 색상 체계 기반)
+   --amber: #e8920d  (primary)
+   --ink:   #1a1a2e
+   --ink-muted: #5a5f7d
+   --surface: #faf9f7
+   --radius-sm: 12px
+   ────────────────────────────────────────── */
+
+:root {
+  --pag-primary: var(--amber, #e8920d);
+  --pag-primary-light: var(--amber-light, #f5b942);
+  --pag-primary-glow: var(--amber-glow, rgba(232, 146, 13, 0.12));
+  --pag-ink: var(--ink, #1a1a2e);
+  --pag-ink-muted: var(--ink-muted, #5a5f7d);
+  --pag-surface: var(--surface, #faf9f7);
+  --pag-surface-card: var(--surface-card, #ffffff);
+  --pag-border: rgba(26, 26, 46, 0.1);
+  --pag-radius: 10px;
+  --pag-btn-size: 40px;
+  --pag-gap: 6px;
+  --pag-font: 'Noto Sans KR', sans-serif;
+  --pag-transition: 0.2s ease;
+}
+
+/* ──────────────────────────────────────────
+   루트 컨테이너
+   ────────────────────────────────────────── */
+.pag-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0 12px;
+  font-family: var(--pag-font);
+  color: var(--pag-ink);
+  user-select: none;
+}
+
+/* ──────────────────────────────────────────
+   메타 행 (건수 + 페이지 크기 셀렉터)
+   ────────────────────────────────────────── */
+.pag-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pag-info {
+  font-size: 13px;
+  color: var(--pag-ink-muted);
+  letter-spacing: -0.2px;
+}
+
+/* ── 페이지 크기 셀렉터 ── */
+.pag-size-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pag-size-label {
+  font-size: 13px;
+  color: var(--pag-ink-muted);
+  cursor: default;
+}
+
+.pag-size-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--pag-surface-card)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a5f7d' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  border: 1px solid var(--pag-border);
+  border-radius: var(--pag-radius);
+  padding: 6px 30px 6px 12px;
+  font-size: 13px;
+  font-family: var(--pag-font);
+  color: var(--pag-ink);
+  cursor: pointer;
+  transition: border-color var(--pag-transition), box-shadow var(--pag-transition);
+  outline: none;
+}
+
+.pag-size-select:hover {
+  border-color: var(--pag-primary);
+}
+
+.pag-size-select:focus {
+  border-color: var(--pag-primary);
+  box-shadow: 0 0 0 3px var(--pag-primary-glow);
+}
+
+.pag-size-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ──────────────────────────────────────────
+   번호 방식 — 버튼 행
+   ────────────────────────────────────────── */
+.pag-btn-row {
+  display: flex;
+  align-items: center;
+  gap: var(--pag-gap);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── 공통 버튼 기반 ── */
+.pag-nav-btn,
+.pag-num-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--pag-btn-size);
+  height: var(--pag-btn-size);
+  padding: 0 10px;
+  border: 1px solid var(--pag-border);
+  border-radius: var(--pag-radius);
+  background: var(--pag-surface-card);
+  color: var(--pag-ink);
+  font-family: var(--pag-font);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--pag-transition),
+    border-color var(--pag-transition),
+    color var(--pag-transition),
+    box-shadow var(--pag-transition),
+    transform var(--pag-transition);
+  outline: none;
+  white-space: nowrap;
+}
+
+.pag-nav-btn:hover:not(:disabled),
+.pag-num-btn:hover:not(:disabled):not(.pag-num-btn--active) {
+  border-color: var(--pag-primary);
+  color: var(--pag-primary);
+  background: var(--pag-primary-glow);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(232, 146, 13, 0.15);
+}
+
+.pag-nav-btn:active:not(:disabled),
+.pag-num-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.pag-nav-btn:focus-visible,
+.pag-num-btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--pag-primary-glow);
+  border-color: var(--pag-primary);
+}
+
+/* 비활성(disabled) */
+.pag-nav-btn:disabled,
+.pag-num-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 내비게이션 버튼 (화살표) — 폰트 크기 약간 크게 */
+.pag-nav-btn {
+  font-size: 18px;
+  line-height: 1;
+  color: var(--pag-ink-muted);
+}
+
+/* ── 활성 페이지 번호 ── */
+.pag-num-btn--active {
+  background: var(--pag-primary);
+  border-color: var(--pag-primary);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(232, 146, 13, 0.35);
+  cursor: default;
+  transform: none;
+}
+
+/* ── 줄임표 ── */
+.pag-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--pag-btn-size);
+  height: var(--pag-btn-size);
+  color: var(--pag-ink-muted);
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+/* ──────────────────────────────────────────
+   무한 스크롤 — 더보기 버튼 영역
+   ────────────────────────────────────────── */
+.pag-loadmore-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.pag-loadmore-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 36px;
+  border: 2px solid var(--pag-primary);
+  border-radius: 50px;
+  background: transparent;
+  color: var(--pag-primary);
+  font-family: var(--pag-font);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--pag-transition);
+  outline: none;
+}
+
+.pag-loadmore-btn:hover:not(:disabled) {
+  background: var(--pag-primary);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(232, 146, 13, 0.3);
+  transform: translateY(-2px);
+}
+
+.pag-loadmore-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.pag-loadmore-btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--pag-primary-glow);
+}
+
+.pag-loadmore-btn:disabled,
+.pag-loadmore-btn--loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 자동 로드 토글 버튼 */
+.pag-autoload-toggle {
+  background: none;
+  border: 1px solid var(--pag-border);
+  border-radius: 8px;
+  padding: 5px 14px;
+  font-family: var(--pag-font);
+  font-size: 12px;
+  color: var(--pag-ink-muted);
+  cursor: pointer;
+  transition: all var(--pag-transition);
+  outline: none;
+}
+
+.pag-autoload-toggle:hover {
+  border-color: var(--pag-primary);
+  color: var(--pag-primary);
+}
+
+.pag-autoload-toggle--on {
+  border-color: var(--pag-primary);
+  background: var(--pag-primary-glow);
+  color: var(--pag-primary);
+  font-weight: 600;
+}
+
+/* IntersectionObserver 감시 더미 */
+.pag-sentinel {
+  width: 100%;
+  height: 1px;
+  visibility: hidden;
+}
+
+/* ──────────────────────────────────────────
+   스피너
+   ────────────────────────────────────────── */
+.pag-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: pag-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pag-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 전체 페이지 로딩 스피너 (독립 사용) */
+.pag-loader {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.pag-loader .pag-spinner {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+  color: var(--pag-primary);
+}
+
+/* ──────────────────────────────────────────
+   스켈레톤 로딩
+   ────────────────────────────────────────── */
+.pag-skeleton-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pag-skeleton-item {
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--pag-surface-card);
+  border: 1px solid var(--pag-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pag-skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(26, 26, 46, 0.06) 0%,
+    rgba(26, 26, 46, 0.12) 50%,
+    rgba(26, 26, 46, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: pag-shimmer 1.4s ease-in-out infinite;
+}
+
+.pag-skeleton-line--title {
+  height: 18px;
+  width: 60%;
+}
+
+.pag-skeleton-line--text {
+  width: 90%;
+}
+
+.pag-skeleton-line--short {
+  width: 40%;
+}
+
+@keyframes pag-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ──────────────────────────────────────────
+   반응형 — 태블릿 (768px 이하)
+   ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .pag-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .pag-btn-row {
+    gap: 4px;
+  }
+
+  .pag-nav-btn,
+  .pag-num-btn {
+    --pag-btn-size: 36px;
+    font-size: 13px;
+  }
+
+  .pag-nav-btn {
+    font-size: 16px;
+  }
+
+  .pag-loadmore-btn {
+    padding: 10px 28px;
+    font-size: 14px;
+  }
+}
+
+/* ──────────────────────────────────────────
+   반응형 — 모바일 (480px 이하)
+   번호 버튼 숨기고 이전/다음만 표시
+   ────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* 번호 버튼 및 줄임표 숨김 */
+  .pag-num-btn:not(.pag-num-btn--active),
+  .pag-ellipsis {
+    display: none;
+  }
+
+  /* 활성 페이지만 표시 (현재 위치 표시용) */
+  .pag-num-btn--active {
+    display: inline-flex;
+  }
+
+  .pag-btn-row {
+    gap: 8px;
+  }
+
+  .pag-nav-btn {
+    --pag-btn-size: 40px;
+    min-width: 40px;
+    font-size: 20px;
+  }
+
+  .pag-meta {
+    align-items: center;
+    text-align: center;
+  }
+
+  .pag-info {
+    font-size: 12px;
+  }
+
+  /* 더보기 버튼 — 풀 너비 */
+  .pag-loadmore-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* ──────────────────────────────────────────
+   다크 모드 대응 (Tomorrow Night Blue 체계)
+   ────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  .pag-root {
+    --pag-ink: #e8e6e1;
+    --pag-ink-muted: #7285b7;
+    --pag-surface-card: #002451;
+    --pag-border: rgba(114, 133, 183, 0.2);
+    --pag-primary-glow: rgba(232, 146, 13, 0.2);
+  }
+
+  .pag-nav-btn,
+  .pag-num-btn {
+    background: #001126;
+  }
+
+  .pag-size-select {
+    background-color: #001126;
+    color: #e8e6e1;
+  }
+
+  .pag-skeleton-line {
+    background: linear-gradient(
+      90deg,
+      rgba(114, 133, 183, 0.08) 0%,
+      rgba(114, 133, 183, 0.18) 50%,
+      rgba(114, 133, 183, 0.08) 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  .pag-skeleton-item {
+    background: #001126;
+    border-color: rgba(114, 133, 183, 0.15);
+  }
+}

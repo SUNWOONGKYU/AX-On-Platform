@@ -1,0 +1,491 @@
+<!-- @task S7F9 -->
+<!-- 카테고리별 게시글 목록 — URL 파라미터로 카테고리 필터링 -->
+<!-- URL 예시: category.html?cat=programming 또는 category.html?sub=javascript -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 지식허브 카테고리별 게시글 목록">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (JS로 동적 업데이트) -->
+<meta property="og:title" content="카테고리 — 지식허브 — AX-On Platform" id="og-title">
+<meta property="og:description" content="AX-On Platform 지식허브 카테고리별 게시글을 탐색하세요." id="og-desc">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AX-On Platform">
+<meta property="og:locale" content="ko_KR">
+
+<link rel="canonical" href="https://ax-on.vercel.app/pages/knowledge-hub/category.html" id="canonical-link">
+
+<!-- Favicon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+
+<title id="page-title">카테고리 — 지식허브 — AX-On Platform</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* ══ Reset & Base ══════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #faf9f7;
+  color: #1a1a2e;
+  line-height: 1.6;
+}
+a { color: inherit; }
+
+/* ══ Navigation ════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(250,249,247,0.96);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(26,26,46,0.08);
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 24px; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark {
+  width: 32px; height: 32px; background: #1a1a2e;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: #e8920d;
+}
+.logo-text { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  text-decoration: none; font-size: 15px; color: #5a5f7d;
+  font-weight: 500; transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: #1a1a2e; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-btn {
+  padding: 8px 18px; border-radius: 10px; font-size: 14px;
+  font-weight: 600; text-decoration: none; transition: all 0.2s;
+  border: none; cursor: pointer;
+}
+.nav-login { color: #1a1a2e; background: transparent; }
+.nav-login:hover { background: rgba(26,26,46,0.05); }
+.nav-signup { background: #1a1a2e; color: #fff; }
+.nav-signup:hover { background: #2d2d4e; }
+.mobile-toggle {
+  display: none; background: none; border: none;
+  font-size: 24px; cursor: pointer; color: #1a1a2e;
+}
+
+/* ══ 카테고리 헤더 ═════════════════════════════════ */
+.cat-header {
+  padding: 100px 24px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.cat-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 32px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(26,26,46,0.08);
+  box-shadow: 0 2px 12px rgba(26,26,46,0.06);
+}
+.cat-header-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+}
+.cat-header-info h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+.cat-header-info p {
+  font-size: 14px;
+  color: #5a5f7d;
+}
+.cat-back-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 1px solid rgba(26,26,46,0.12);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5a5f7d;
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.cat-back-btn:hover {
+  border-color: #6c5ce7;
+  color: #6c5ce7;
+  background: #f8f7ff;
+}
+
+/* ══ 소분류 탭 네비게이션 ═══════════════════════════ */
+.cat-sub-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px 0;
+}
+.cat-sub-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.cat-sub-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(26,26,46,0.1);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5a5f7d;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.cat-sub-tab:hover {
+  border-color: #a29bfe;
+  color: #6c5ce7;
+  background: #f8f7ff;
+}
+.cat-sub-tab.active {
+  background: #6c5ce7;
+  border-color: #6c5ce7;
+  color: #fff;
+}
+.cat-sub-tab-count {
+  font-size: 11px;
+  opacity: 0.75;
+  font-weight: 700;
+}
+
+/* ══ Footer ════════════════════════════════════════ */
+.footer {
+  border-top: 1px solid rgba(26,26,46,0.08);
+  padding: 40px 0; margin-top: 60px;
+  background: #faf9f7;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-size: 13px; color: #5a5f7d; }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 13px; color: #5a5f7d; text-decoration: none; }
+.footer-links a:hover { color: #1a1a2e; }
+
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .mobile-toggle { display: block; }
+  .cat-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .cat-back-btn { margin-left: 0; }
+}
+@media (max-width: 600px) {
+  .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+
+<!-- 지식허브 CSS -->
+<link rel="stylesheet" href="../../css/knowledge-hub.css">
+</head>
+<body>
+
+<!-- ══ Navigation ══════════════════════════════════ -->
+<nav class="nav" role="navigation" aria-label="메인 네비게이션">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/" aria-label="AX-On 홈">
+      <div class="logo-mark">AX</div>
+      <span class="logo-text">AX-On</span>
+    </a>
+    <div class="nav-links">
+      <a href="/pages/community.html">커뮤니티</a>
+      <a href="/pages/knowledge-hub/" class="active">지식허브</a>
+      <a href="/pages/experts/">전문가</a>
+      <a href="/pages/enrollment.html">수강신청</a>
+    </div>
+    <div class="nav-right">
+      <a class="nav-btn nav-login" href="/pages/auth/login.html">로그인</a>
+      <a class="nav-btn nav-signup" href="/pages/auth/signup.html">시작하기</a>
+    </div>
+    <button class="mobile-toggle" aria-label="메뉴 열기" aria-expanded="false">&#9776;</button>
+  </div>
+</nav>
+
+<!-- ══ 카테고리 헤더 (JS로 채워짐) ═══════════════════ -->
+<div class="cat-header">
+  <div class="cat-header-inner">
+    <span class="cat-header-icon" id="cat-icon">&#128193;</span>
+    <div class="cat-header-info">
+      <h1 id="cat-title">카테고리</h1>
+      <p id="cat-desc">해당 카테고리의 게시글을 탐색하세요.</p>
+    </div>
+    <a class="cat-back-btn" href="./index.html">&#8592; 전체 목록</a>
+  </div>
+</div>
+
+<!-- ══ 소분류 탭 (대분류 선택 시 표시) ═══════════════ -->
+<div class="cat-sub-nav">
+  <div class="cat-sub-tabs" id="cat-sub-tabs" role="tablist" aria-label="소분류 필터">
+    <!-- JS로 렌더링 -->
+  </div>
+</div>
+
+<!-- ══ Main Layout ══════════════════════════════════ -->
+<div class="kh-layout" style="padding-top: 24px;">
+
+  <!-- ── 좌측 사이드바 ──────────────────────────── -->
+  <aside id="kh-sidebar" class="kh-sidebar" aria-label="카테고리 필터">
+    <div class="kh-sidebar-header">
+      <span class="kh-sidebar-title">&#128193; 카테고리</span>
+    </div>
+    <div class="kh-sidebar-body" id="kh-sidebar-body">
+      <div style="padding:20px;text-align:center;color:var(--ink-muted);font-size:13px;">로딩 중...</div>
+    </div>
+  </aside>
+
+  <!-- 모바일 오버레이 -->
+  <div class="kh-sidebar-overlay" id="kh-sidebar-overlay" aria-hidden="true"></div>
+
+  <!-- ── 메인 콘텐츠 ─────────────────────────────── -->
+  <main class="kh-main" role="main">
+
+    <!-- 모바일 카테고리 버튼 -->
+    <button class="kh-mobile-cat-btn" id="kh-mobile-cat-btn" aria-label="카테고리 필터 열기">
+      &#128193; 카테고리
+    </button>
+
+    <!-- 검색 바 -->
+    <div class="kh-search-wrap">
+      <input
+        id="kh-search"
+        class="kh-search-input"
+        type="search"
+        placeholder="이 카테고리에서 검색..."
+        autocomplete="off"
+        aria-label="게시글 검색"
+      >
+      <span class="kh-search-icon" aria-hidden="true">&#128269;</span>
+    </div>
+
+    <!-- 태그 클라우드 -->
+    <div class="kh-tag-section" aria-label="인기 태그">
+      <div class="kh-tag-section-title">&#127991; 인기 태그</div>
+      <div class="kh-tag-cloud" id="kh-tag-cloud" role="group" aria-label="태그 선택">
+        <!-- JS로 렌더링 -->
+      </div>
+    </div>
+
+    <!-- 활성 필터 -->
+    <div class="kh-active-filters" id="kh-active-filters" style="display:none;" aria-live="polite"></div>
+
+    <!-- 상단 컨트롤 바 -->
+    <div class="kh-topbar">
+      <nav class="kh-breadcrumb" id="kh-breadcrumb" aria-label="위치 경로"></nav>
+      <div class="kh-controls">
+        <select id="kh-sort" class="kh-sort-select" aria-label="정렬 방식">
+          <option value="latest">최신순</option>
+          <option value="views">인기순 (조회수)</option>
+          <option value="likes">좋아요순</option>
+        </select>
+        <div class="kh-view-toggle" role="group" aria-label="보기 방식">
+          <button class="kh-view-btn active" data-view="card" aria-label="카드 보기" title="카드 보기">&#9783;</button>
+          <button class="kh-view-btn" data-view="list" aria-label="목록 보기" title="목록 보기">&#9776;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 결과 요약 -->
+    <div class="kh-result-info" id="kh-result-info" aria-live="polite">게시글 불러오는 중...</div>
+
+    <!-- 게시글 컨테이너 -->
+    <div id="kh-post-container" class="kh-post-grid" role="list" aria-label="게시글 목록">
+      <div class="kh-loading">
+        <div class="kh-spinner"></div>
+        <span>게시글 불러오는 중...</span>
+      </div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <nav id="kh-pagination" class="kh-pagination" aria-label="페이지 네비게이션"></nav>
+
+    <!-- 관련 콘텐츠 추천 -->
+    <section id="kh-related" class="kh-related" style="display:none;" aria-label="관련 콘텐츠">
+      <h2 class="kh-related-title">&#9889; 관련 콘텐츠 추천</h2>
+      <div class="kh-related-grid"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══ Footer ══════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-copy">&copy; 2026 AX-On Platform. All rights reserved.</span>
+    <nav class="footer-links" aria-label="푸터 링크">
+      <a href="/pages/terms.html">이용약관</a>
+      <a href="/pages/privacy.html">개인정보처리방침</a>
+      <a href="/pages/contact.html">문의하기</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- ══ Scripts ══════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+  window.SUPABASE_URL = window.SUPABASE_URL || 'https://your-project.supabase.co';
+  window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'your-anon-key';
+</script>
+
+<script src="../../js/knowledge-hub.js"></script>
+
+<!-- 카테고리 헤더 & 소분류 탭 동적 업데이트 -->
+<script>
+(function() {
+  // CATEGORIES 정의는 knowledge-hub.js에 있으므로 DOMContentLoaded 이후 참조
+  var CAT_ICONS = {
+    'programming': '&#128187;',
+    'data-science': '&#128202;',
+    'web-dev': '&#127760;',
+    'devops': '&#128295;',
+    'cloud': '&#9729;&#65039;'
+  };
+
+  var CAT_DESCS = {
+    'programming': 'JavaScript, Python, Java, C++ 등 다양한 프로그래밍 언어 학습 자료',
+    'data-science': '머신러닝, 딥러닝, 데이터 분석 기술과 실습 가이드',
+    'web-dev': '프론트엔드, 백엔드, DevOps 웹 개발 기술 자료',
+    'devops': 'Docker, Kubernetes, CI/CD 파이프라인 구성 가이드',
+    'cloud': 'AWS, GCP, Azure 클라우드 플랫폼 활용 튜토리얼'
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var params = new URLSearchParams(window.location.search);
+    var catSlug = params.get('cat') || params.get('sub') || '';
+
+    // 카테고리 헤더 업데이트
+    function updateHeader() {
+      if (!catSlug) return;
+      var iconEl = document.getElementById('cat-icon');
+      var titleEl = document.getElementById('cat-title');
+      var descEl = document.getElementById('cat-desc');
+      var pageTitle = document.getElementById('page-title');
+      var ogTitle = document.getElementById('og-title');
+
+      // knowledge-hub.js의 CATEGORIES 참조
+      var CATS = (window.KnowledgeHubApp && window.KnowledgeHubApp.getState) ? [] : [];
+      // fallback: 고정 데이터
+      var catNames = {
+        'programming': 'Programming', 'data-science': 'Data Science',
+        'web-dev': 'Web Development', 'devops': 'DevOps', 'cloud': 'Cloud',
+        'javascript': 'JavaScript', 'python': 'Python', 'java': 'Java', 'cpp': 'C++',
+        'ml': 'ML', 'deep-learning': 'Deep Learning', 'data-analysis': 'Data Analysis',
+        'frontend': 'Frontend', 'backend': 'Backend', 'devops-w': 'DevOps',
+        'docker': 'Docker', 'k8s': 'K8s', 'cicd': 'CI/CD',
+        'aws': 'AWS', 'gcp': 'GCP', 'azure': 'Azure'
+      };
+
+      var parentSlugs = Object.keys(CAT_ICONS);
+      var isParent = parentSlugs.includes(catSlug);
+      var name = catNames[catSlug] || catSlug;
+
+      if (iconEl) iconEl.innerHTML = CAT_ICONS[catSlug] || (isParent ? '&#128193;' : '&#128196;');
+      if (titleEl) titleEl.textContent = name;
+      if (descEl) descEl.textContent = CAT_DESCS[catSlug] || (name + ' 관련 게시글 목록');
+      if (pageTitle) pageTitle.textContent = name + ' — 지식허브 — AX-On Platform';
+      if (ogTitle) ogTitle.setAttribute('content', name + ' — 지식허브 — AX-On Platform');
+
+      // Canonical URL 업데이트
+      var canonical = document.getElementById('canonical-link');
+      if (canonical) {
+        canonical.setAttribute('href', 'https://ax-on.vercel.app/pages/knowledge-hub/category.html?cat=' + encodeURIComponent(catSlug));
+      }
+    }
+
+    updateHeader();
+
+    // 소분류 탭 렌더링 (대분류 선택 시만)
+    function renderSubTabs() {
+      var tabContainer = document.getElementById('cat-sub-tabs');
+      if (!tabContainer) return;
+
+      var parentCatDefs = {
+        'programming': [
+          { slug: 'javascript', name: 'JavaScript' }, { slug: 'python', name: 'Python' },
+          { slug: 'java', name: 'Java' }, { slug: 'cpp', name: 'C++' }
+        ],
+        'data-science': [
+          { slug: 'ml', name: 'ML' }, { slug: 'deep-learning', name: 'Deep Learning' },
+          { slug: 'data-analysis', name: 'Data Analysis' }
+        ],
+        'web-dev': [
+          { slug: 'frontend', name: 'Frontend' }, { slug: 'backend', name: 'Backend' },
+          { slug: 'devops-w', name: 'DevOps' }
+        ],
+        'devops': [
+          { slug: 'docker', name: 'Docker' }, { slug: 'k8s', name: 'K8s' }, { slug: 'cicd', name: 'CI/CD' }
+        ],
+        'cloud': [
+          { slug: 'aws', name: 'AWS' }, { slug: 'gcp', name: 'GCP' }, { slug: 'azure', name: 'Azure' }
+        ]
+      };
+
+      var currentCat = params.get('cat');
+      var currentSub = params.get('sub');
+      var targetParent = currentCat || (function() {
+        // sub에서 부모 카테고리 찾기
+        for (var p in parentCatDefs) {
+          if (parentCatDefs[p].some(function(s) { return s.slug === currentSub; })) return p;
+        }
+        return null;
+      })();
+
+      if (!targetParent || !parentCatDefs[targetParent]) {
+        tabContainer.parentElement.style.display = 'none';
+        return;
+      }
+
+      var subs = parentCatDefs[targetParent];
+      var html = '<a class="cat-sub-tab ' + (!currentSub ? 'active' : '') + '" href="?cat=' + targetParent + '">전체</a>';
+      subs.forEach(function(sub) {
+        html += '<a class="cat-sub-tab ' + (currentSub === sub.slug ? 'active' : '') + '" href="?cat=' + targetParent + '&sub=' + sub.slug + '">' + sub.name + '</a>';
+      });
+
+      tabContainer.innerHTML = html;
+    }
+
+    renderSubTabs();
+
+    // KnowledgeHubApp 초기화 후 상태 반영 (300ms 대기)
+    setTimeout(function() {
+      var app = window.KnowledgeHubApp;
+      if (app) {
+        var st = app.getState();
+        // 소분류 탭에 게시글 수 추가 가능 (categoryCounts 활용)
+      }
+    }, 500);
+  });
+})();
+</script>
+</body>
+</html>

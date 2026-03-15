@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /auth/
+
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+Sitemap: https://ax-on.vercel.app/sitemap.xml

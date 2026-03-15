@@ -1,0 +1,19 @@
+# @task S8O1 | _redirects (Netlify/일반 호스팅 호환) | Stage S8 Area O | 2026-03-07
+# vercel.json의 redirects 규칙과 동일한 리다이렉트 정책 (Netlify 형식)
+# 형식: source  destination  HTTP_STATUS_CODE
+
+# 홈 별칭 (301 Permanent)
+/home                   /                               301
+
+# 인증 관련 단축 경로 (302 Temporary — 경로 구조 변경 가능성 있음)
+/login                  /pages/auth/login.html          302
+/signup                 /pages/auth/signup.html         302
+/forgot-password        /pages/auth/forgot-password.html 302
+
+# 영구 별칭 (301 Permanent)
+/register               /pages/auth/signup.html         301
+/experts                /expert.html                    301
+/courses                /enrollment.html                301
+
+# 404 폴백: 루트 인덱스로 SPA 스타일 폴백 (필요 시 주석 해제)
+# /*                    /index.html                     200

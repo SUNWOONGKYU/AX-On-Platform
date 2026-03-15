@@ -1,0 +1,168 @@
+/* @task S8F5 — 이미지 Lazy Loading 최적화 */
+/* Stage: S8 | Area: F (Frontend)           */
+/* Lazy Loading 상태별 스타일 및 애니메이션  */
+
+/* ─────────────────────────────────────────
+   Shimmer 키프레임 (placeholder 로딩 효과)
+───────────────────────────────────────── */
+@keyframes lazy-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes lazy-fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ─────────────────────────────────────────
+   .lazy-image — 초기(로드 전) 상태
+   data-src / data-srcset / data-bg 요소에 적용
+───────────────────────────────────────── */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+  filter: blur(4px);
+  will-change: opacity, filter;
+}
+
+/* ─────────────────────────────────────────
+   .lazy-image.loaded — 로드 완료 상태
+───────────────────────────────────────── */
+.lazy-image.loaded {
+  opacity: 1;
+  filter: none;
+  animation: lazy-fadein 0.4s ease forwards;
+}
+
+/* ─────────────────────────────────────────
+   .lazy-placeholder — 로딩 중 shimmer 효과
+   JS에서 로드 전 임시로 추가되는 클래스
+───────────────────────────────────────── */
+.lazy-placeholder {
+  display: block;
+  background-color: #e2e8f0;
+  background-image: linear-gradient(
+    90deg,
+    #e2e8f0 0px,
+    #f1f5f9 40px,
+    #e2e8f0 80px
+  );
+  background-size: 400px 100%;
+  animation: lazy-shimmer 1.4s ease-in-out infinite;
+  border-radius: 4px;
+  /* 최소 크기 보장 (높이가 0이면 shimmer 안 보임) */
+  min-height: 4px;
+}
+
+/* IMG 태그 전용 placeholder 처리 */
+img.lazy-placeholder {
+  /* 이미지가 src 없을 때 alt 텍스트 숨김 */
+  color: transparent;
+  font-size: 0;
+}
+
+/* ─────────────────────────────────────────
+   .lazy-error — 로드 실패 상태
+───────────────────────────────────────── */
+.lazy-error {
+  opacity: 1 !important;
+  filter: none !important;
+  background-color: #f1f5f9;
+  border: 1px dashed #cbd5e1;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-family: sans-serif;
+  /* placeholder shimmer 중단 */
+  animation: none;
+  background-image: none;
+}
+
+/* ─────────────────────────────────────────
+   반응형 이미지 컨테이너
+   aspect-ratio 유지를 위한 래퍼 클래스
+───────────────────────────────────────── */
+
+/* 기본 비율: 16:9 */
+.lazy-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: #e2e8f0;
+  /* aspect-ratio 미지원 브라우저 대비 padding-top fallback */
+  aspect-ratio: 16 / 9;
+}
+
+/* aspect-ratio 미지원 브라우저 (구형 Safari 등) */
+@supports not (aspect-ratio: 16 / 9) {
+  .lazy-container::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%; /* 9/16 * 100 */
+  }
+
+  .lazy-container > img,
+  .lazy-container > .lazy-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* 일반 환경: 컨테이너 내 이미지 */
+.lazy-container > img,
+.lazy-container > .lazy-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─────────────────────────────────────────
+   비율 변형 유틸리티
+───────────────────────────────────────── */
+.lazy-container--1x1  { aspect-ratio: 1 / 1; }
+.lazy-container--4x3  { aspect-ratio: 4 / 3; }
+.lazy-container--3x2  { aspect-ratio: 3 / 2; }
+.lazy-container--21x9 { aspect-ratio: 21 / 9; }
+
+@supports not (aspect-ratio: 1 / 1) {
+  .lazy-container--1x1::before  { padding-top: 100%; }
+  .lazy-container--4x3::before  { padding-top: 75%; }
+  .lazy-container--3x2::before  { padding-top: 66.67%; }
+  .lazy-container--21x9::before { padding-top: 42.86%; }
+}
+
+/* ─────────────────────────────────────────
+   접근성: prefers-reduced-motion
+───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .lazy-image {
+    transition: none;
+    filter: none;
+  }
+
+  .lazy-image.loaded {
+    animation: none;
+  }
+
+  .lazy-placeholder {
+    animation: none;
+    background-image: none;
+  }
+}

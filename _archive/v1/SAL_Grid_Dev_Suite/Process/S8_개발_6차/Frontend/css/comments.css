@@ -1,0 +1,510 @@
+/* @task S8F2 — 댓글 대댓글 depth 확장 (3단계) */
+/* Stage: S8 | Area: F | File: css/comments.css */
+/* 댓글 시스템 스타일 — 다크 테마, depth별 보더, 반응형, 애니메이션 */
+
+/* ─────────────────────────────────────────────
+   CSS 변수
+───────────────────────────────────────────── */
+:root {
+  --comment-bg: #1a1a2e;
+  --comment-card-bg: #16213e;
+  --comment-card-hover: #1a2547;
+  --comment-border: #2a2a4a;
+  --comment-text: #e0e0f0;
+  --comment-text-muted: #8888aa;
+  --comment-text-deleted: #555577;
+
+  /* depth별 왼쪽 보더 색상 */
+  --depth-1-color: #6c5ce7;
+  --depth-2-color: #a29bfe;
+  --depth-3-color: #dddddd;
+
+  --comment-input-bg: #0f0f23;
+  --comment-input-border: #3a3a5a;
+  --comment-input-focus: #6c5ce7;
+
+  --btn-primary-bg: #6c5ce7;
+  --btn-primary-hover: #5a4cd4;
+  --btn-danger-bg: transparent;
+  --btn-danger-color: #e17055;
+  --btn-muted-color: #8888aa;
+
+  --like-active-color: #e84393;
+  --like-inactive-color: #8888aa;
+
+  --pagination-active-bg: #6c5ce7;
+  --pagination-btn-bg: #1a1a2e;
+  --pagination-btn-border: #3a3a5a;
+
+  --avatar-bg: #6c5ce7;
+  --avatar-text: #ffffff;
+
+  --transition-speed: 0.2s;
+}
+
+/* ─────────────────────────────────────────────
+   기본 리셋
+───────────────────────────────────────────── */
+.comment-list,
+.comment-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─────────────────────────────────────────────
+   섹션 컨테이너
+───────────────────────────────────────────── */
+.comments-section {
+  background: var(--comment-bg);
+  padding: 24px 0;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  color: var(--comment-text);
+}
+
+.comments-section h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--comment-text);
+  margin: 0 0 16px;
+}
+
+/* ─────────────────────────────────────────────
+   댓글 아이템 (depth별 들여쓰기는 JS에서 처리)
+───────────────────────────────────────────── */
+.comment-item {
+  margin-bottom: 8px;
+  border-radius: 8px;
+  transition: transform var(--transition-speed);
+}
+
+.comment-children {
+  margin-top: 8px;
+}
+
+/* ─────────────────────────────────────────────
+   댓글 카드
+───────────────────────────────────────────── */
+.comment-card {
+  background: var(--comment-card-bg);
+  border: 1px solid var(--comment-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  transition: background var(--transition-speed);
+}
+
+.comment-card:hover {
+  background: var(--comment-card-hover);
+}
+
+/* ─────────────────────────────────────────────
+   헤더 (아바타 + 닉네임 + 시간)
+───────────────────────────────────────────── */
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* 아바타 */
+.comment-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.comment-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-avatar-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--avatar-bg);
+  color: var(--avatar-text);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* 메타 정보 */
+.comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.comment-nickname {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--comment-text);
+}
+
+.comment-time {
+  font-size: 0.78rem;
+  color: var(--comment-text-muted);
+  cursor: default;
+}
+
+.comment-edited-badge {
+  font-size: 0.72rem;
+  color: var(--comment-text-muted);
+  font-style: italic;
+}
+
+/* ─────────────────────────────────────────────
+   본문
+───────────────────────────────────────────── */
+.comment-body {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--comment-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 10px;
+}
+
+.comment-body.comment-deleted {
+  color: var(--comment-text-deleted);
+  font-style: italic;
+}
+
+/* ─────────────────────────────────────────────
+   액션 바
+───────────────────────────────────────────── */
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.comment-actions button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background var(--transition-speed), color var(--transition-speed);
+}
+
+/* 좋아요 버튼 */
+.comment-like-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--like-inactive-color);
+}
+
+.comment-like-btn:hover:not(:disabled) {
+  color: var(--like-active-color);
+  background: rgba(232, 67, 147, 0.1);
+}
+
+.comment-like-btn.liked {
+  color: var(--like-active-color);
+}
+
+.comment-like-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.like-icon {
+  font-size: 0.85rem;
+}
+
+/* 답글 버튼 */
+.comment-reply-btn {
+  color: var(--depth-1-color);
+}
+
+.comment-reply-btn:hover {
+  background: rgba(108, 92, 231, 0.15);
+}
+
+/* 수정 버튼 */
+.comment-edit-btn {
+  color: var(--comment-text-muted);
+}
+
+.comment-edit-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--comment-text);
+}
+
+/* 삭제 버튼 */
+.comment-delete-btn {
+  color: var(--btn-danger-color);
+}
+
+.comment-delete-btn:hover {
+  background: rgba(225, 112, 85, 0.12);
+}
+
+/* 접기/펼치기 버튼 */
+.comment-toggle-btn {
+  font-size: 0.78rem;
+  color: var(--depth-2-color);
+  padding: 2px 6px;
+}
+
+.comment-toggle-btn:hover {
+  background: rgba(162, 155, 254, 0.12);
+}
+
+/* ─────────────────────────────────────────────
+   인라인 입력폼 (답글, 최상위)
+───────────────────────────────────────────── */
+.comment-inline-form,
+.comment-top-form {
+  margin-top: 10px;
+  background: var(--comment-card-bg);
+  border: 1px solid var(--comment-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.comment-textarea,
+.comment-edit-textarea {
+  width: 100%;
+  background: var(--comment-input-bg);
+  border: 1px solid var(--comment-input-border);
+  border-radius: 6px;
+  color: var(--comment-text);
+  font-size: 0.9rem;
+  font-family: inherit;
+  line-height: 1.6;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 72px;
+  box-sizing: border-box;
+  transition: border-color var(--transition-speed);
+}
+
+.comment-textarea:focus,
+.comment-edit-textarea:focus {
+  outline: none;
+  border-color: var(--comment-input-focus);
+  box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+}
+
+.comment-textarea::placeholder {
+  color: var(--comment-text-muted);
+}
+
+.comment-form-actions,
+.comment-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.comment-submit-btn,
+.comment-save-btn {
+  background: var(--btn-primary-bg);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-speed);
+}
+
+.comment-submit-btn:hover,
+.comment-save-btn:hover {
+  background: var(--btn-primary-hover);
+}
+
+.comment-cancel-btn {
+  background: transparent;
+  color: var(--comment-text-muted);
+  border: 1px solid var(--comment-input-border);
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background var(--transition-speed), color var(--transition-speed);
+}
+
+.comment-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--comment-text);
+}
+
+/* 오류 메시지 */
+.comment-form-error {
+  color: #e17055;
+  font-size: 0.82rem;
+  margin: 6px 0 0;
+}
+
+/* ─────────────────────────────────────────────
+   빈 댓글 / 로그인 안내
+───────────────────────────────────────────── */
+.comment-empty,
+.comment-login-notice {
+  text-align: center;
+  color: var(--comment-text-muted);
+  font-size: 0.9rem;
+  padding: 24px 0;
+}
+
+/* ─────────────────────────────────────────────
+   페이지네이션
+───────────────────────────────────────────── */
+.comment-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  background: var(--pagination-btn-bg);
+  color: var(--comment-text-muted);
+  border: 1px solid var(--pagination-btn-border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: background var(--transition-speed), color var(--transition-speed),
+    border-color var(--transition-speed);
+  min-width: 36px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: rgba(108, 92, 231, 0.15);
+  border-color: var(--depth-1-color);
+  color: var(--comment-text);
+}
+
+.pagination-btn.active,
+.pagination-btn:disabled {
+  cursor: default;
+}
+
+.pagination-btn.active {
+  background: var(--pagination-active-bg);
+  border-color: var(--pagination-active-bg);
+  color: #fff;
+  font-weight: 700;
+}
+
+.pagination-btn:disabled:not(.active) {
+  opacity: 0.4;
+}
+
+/* ─────────────────────────────────────────────
+   애니메이션 — 댓글 추가 시 fade-in
+───────────────────────────────────────────── */
+@keyframes commentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.comment-fade-in {
+  animation: commentFadeIn 0.25s ease forwards;
+}
+
+/* ─────────────────────────────────────────────
+   depth별 왼쪽 보더 (JS와 연동, fallback용)
+───────────────────────────────────────────── */
+.comment-depth-1 {
+  border-left: 3px solid var(--depth-1-color);
+  padding-left: 12px;
+  margin-left: 20px;
+}
+
+.comment-depth-2 {
+  border-left: 3px solid var(--depth-2-color);
+  padding-left: 12px;
+  margin-left: 40px;
+}
+
+.comment-depth-3 {
+  border-left: 3px solid var(--depth-3-color);
+  padding-left: 12px;
+  margin-left: 60px;
+}
+
+/* ─────────────────────────────────────────────
+   반응형 — 모바일 (max-width: 640px)
+───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .comment-avatar,
+  .comment-avatar-initial {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+
+  .comment-card {
+    padding: 10px 12px;
+  }
+
+  .comment-depth-1 {
+    margin-left: 12px;
+  }
+
+  .comment-depth-2 {
+    margin-left: 24px;
+  }
+
+  .comment-depth-3 {
+    margin-left: 36px;
+  }
+
+  .comment-actions {
+    gap: 4px;
+  }
+
+  .comment-actions button {
+    font-size: 0.78rem;
+    padding: 3px 6px;
+  }
+
+  .comment-pagination {
+    gap: 4px;
+  }
+
+  .pagination-btn {
+    padding: 5px 9px;
+    font-size: 0.8rem;
+    min-width: 30px;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   반응형 — 태블릿 (max-width: 900px)
+───────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .comment-depth-2 {
+    margin-left: 32px;
+  }
+
+  .comment-depth-3 {
+    margin-left: 48px;
+  }
+}

@@ -1,0 +1,1353 @@
+<!-- @task S8F9 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AX-On 관리자 - 활동 로그</title>
+  <meta name="robots" content="noindex,nofollow" />
+
+  <!-- Supabase 환경변수 주입 (Vercel meta 방식) -->
+  <meta name="supabase-url" content="" />
+  <meta name="supabase-anon-key" content="" />
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:   #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card:      #0f3460;
+      --bg-surface:   #1e2a4a;
+      --accent:       #6c5ce7;
+      --accent-light: #a29bfe;
+      --accent-hover: #7d6ff0;
+      --text-primary: #e8e8f0;
+      --text-secondary: #9da8c7;
+      --text-muted:   #6b7a99;
+      --border:       #2a3a5c;
+      --border-light: #3a4a6c;
+
+      /* Status colors */
+      --c-login:    #00b894;
+      --c-post:     #0984e3;
+      --c-comment:  #fdcb6e;
+      --c-enroll:   #a29bfe;
+      --c-setting:  #fd79a8;
+      --c-usermgmt: #55efc4;
+      --c-error:    #d63031;
+      --c-warning:  #e17055;
+      --c-success:  #00b894;
+      --c-info:     #74b9ff;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --transition: 0.2s ease;
+    }
+
+    html { font-size: 15px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 24px 20px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      gap: 16px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .brand-text span {
+      color: var(--accent-light);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .realtime-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 12px;
+    }
+
+    .realtime-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--c-success);
+      animation: pulse-dot 1.8s infinite;
+      flex-shrink: 0;
+    }
+
+    .realtime-dot.disconnected {
+      background: var(--c-error);
+      animation: none;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    /* ── Page Title ── */
+    .page-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .page-title span { color: var(--accent-light); }
+
+    .btn-csv {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent-light);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-csv:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ── Stats Cards ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-1px);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.activities { background: rgba(108,92,231,0.2); }
+    .stat-icon.users      { background: rgba(0,184,148,0.2); }
+    .stat-icon.errors     { background: rgba(214,48,49,0.2); }
+
+    .stat-info { flex: 1; min-width: 0; }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text-primary);
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .stat-delta {
+      font-size: 0.75rem;
+      margin-top: 2px;
+    }
+
+    .stat-delta.up   { color: var(--c-success); }
+    .stat-delta.down { color: var(--c-error); }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+    }
+
+    .filter-group.grow { flex: 1; min-width: 200px; }
+
+    .filter-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .filter-control {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      outline: none;
+      transition: var(--transition);
+      width: 100%;
+    }
+
+    .filter-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(108,92,231,0.2);
+    }
+
+    select.filter-control option { background: var(--bg-secondary); }
+
+    .period-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .period-tab {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .period-tab.active,
+    .period-tab:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .custom-date-range {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .custom-date-range.visible { display: flex; }
+
+    .btn-search {
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      height: 36px;
+    }
+
+    .btn-search:hover { background: var(--accent-hover); }
+
+    /* ── Table Container ── */
+    .table-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .table-info {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .table-info strong { color: var(--text-secondary); }
+
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent-light);
+    }
+
+    .table-scroll { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    thead th {
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    thead th.sortable {
+      cursor: pointer;
+      position: relative;
+    }
+
+    thead th.sortable:hover { color: var(--accent-light); }
+
+    thead th.sort-asc::after  { content: ' ▲'; font-size: 0.65rem; }
+    thead th.sort-desc::after { content: ' ▼'; font-size: 0.65rem; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(108,92,231,0.06); }
+    tbody tr.new-entry { animation: row-flash 1.5s ease; }
+
+    @keyframes row-flash {
+      0%   { background: rgba(108,92,231,0.25); }
+      100% { background: transparent; }
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+
+    .td-time {
+      white-space: nowrap;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    .td-time .time-date { display: block; color: var(--text-muted); font-size: 0.72rem; }
+
+    .td-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-info .user-name  { font-weight: 500; font-size: 0.85rem; }
+    .user-info .user-email { font-size: 0.72rem; color: var(--text-muted); }
+
+    .badge-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-login   { background: rgba(0,184,148,0.15);  color: var(--c-login);   border: 1px solid rgba(0,184,148,0.3); }
+    .badge-post    { background: rgba(9,132,227,0.15);  color: var(--c-post);    border: 1px solid rgba(9,132,227,0.3); }
+    .badge-comment { background: rgba(253,203,110,0.15);color: var(--c-comment); border: 1px solid rgba(253,203,110,0.3); }
+    .badge-enroll  { background: rgba(162,155,254,0.15);color: var(--c-enroll);  border: 1px solid rgba(162,155,254,0.3); }
+    .badge-setting { background: rgba(253,121,168,0.15);color: var(--c-setting); border: 1px solid rgba(253,121,168,0.3); }
+    .badge-usermgmt{ background: rgba(85,239,196,0.15); color: var(--c-usermgmt);border: 1px solid rgba(85,239,196,0.3); }
+    .badge-error   { background: rgba(214,48,49,0.15);  color: var(--c-error);   border: 1px solid rgba(214,48,49,0.3); }
+
+    .td-detail {
+      max-width: 280px;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .td-ip {
+      font-family: 'Courier New', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .status-success { background: var(--c-success); }
+    .status-error   { background: var(--c-error); }
+    .status-warning { background: var(--c-warning); }
+    .status-info    { background: var(--c-info); }
+
+    .td-status { white-space: nowrap; font-size: 0.82rem; }
+
+    /* ── Pagination ── */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pagination-info {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 4px;
+    }
+
+    .page-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      transition: var(--transition);
+    }
+
+    .page-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent-light);
+    }
+
+    .page-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .per-page-select {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      gap: 12px;
+    }
+
+    .empty-state.visible { display: flex; }
+    .empty-state svg { opacity: 0.3; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── Loading Overlay ── */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,26,46,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-overlay.visible { display: flex; }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Toast ── */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10000;
+    }
+
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      color: var(--text-primary);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      max-width: 320px;
+      animation: toast-in 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .toast.success { border-left-color: var(--c-success); }
+    .toast.error   { border-left-color: var(--c-error); }
+
+    @keyframes toast-in {
+      from { transform: translateX(40px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .header-right .realtime-indicator .realtime-label { display: none; }
+      .page-title { font-size: 1.2rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .filter-bar { flex-direction: column; }
+      .filter-group { min-width: 100%; }
+      .period-tabs { flex-wrap: wrap; }
+      .table-toolbar { flex-direction: column; align-items: flex-start; }
+      .td-detail { max-width: 160px; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .pagination-bar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="page-wrapper">
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="header-brand">
+        <div class="brand-icon">AX</div>
+        <span class="brand-text">AX-On <span>관리자</span></span>
+      </a>
+      <div class="header-right">
+        <div class="realtime-indicator" id="realtimeIndicator" title="실시간 연결 상태">
+          <span class="realtime-dot" id="realtimeDot"></span>
+          <span class="realtime-label" id="realtimeLabel">실시간 연결됨</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main ── -->
+  <main class="main-content">
+
+    <!-- Page Title -->
+    <div class="page-title-bar">
+      <h1 class="page-title">활동 로그 <span>뷰어</span></h1>
+      <button class="btn-csv" id="btnCsv" onclick="downloadCSV()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        CSV 다운로드
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon activities">📊</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">오늘 총 활동</div>
+          <div class="stat-delta up" id="statTotalDelta">+12% 어제 대비</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon users">👥</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statUsers">0</div>
+          <div class="stat-label">활성 사용자</div>
+          <div class="stat-delta up" id="statUsersDelta">+3명 증가</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon errors">⚠️</div>
+        <div class="stat-info">
+          <div class="stat-value" id="statErrors">0</div>
+          <div class="stat-label">에러 / 경고</div>
+          <div class="stat-delta" id="statErrorsDelta" style="color:var(--text-muted)">변동 없음</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <!-- Period -->
+      <div class="filter-group">
+        <label class="filter-label">기간</label>
+        <div class="period-tabs">
+          <button class="period-tab active" data-period="today" onclick="setPeriod(this,'today')">오늘</button>
+          <button class="period-tab" data-period="7d" onclick="setPeriod(this,'7d')">7일</button>
+          <button class="period-tab" data-period="30d" onclick="setPeriod(this,'30d')">30일</button>
+          <button class="period-tab" data-period="custom" onclick="setPeriod(this,'custom')">커스텀</button>
+        </div>
+      </div>
+
+      <!-- Custom Date Range -->
+      <div class="custom-date-range" id="customDateRange">
+        <input type="date" id="dateFrom" class="filter-control" style="width:auto;" />
+        <span style="color:var(--text-muted);font-size:0.85rem;">~</span>
+        <input type="date" id="dateTo" class="filter-control" style="width:auto;" />
+      </div>
+
+      <!-- Activity Type -->
+      <div class="filter-group">
+        <label class="filter-label">활동 유형</label>
+        <select class="filter-control" id="filterType">
+          <option value="">전체</option>
+          <option value="login">로그인</option>
+          <option value="post">게시글</option>
+          <option value="comment">댓글</option>
+          <option value="enroll">수강신청</option>
+          <option value="setting">설정변경</option>
+          <option value="usermgmt">사용자관리</option>
+          <option value="error">에러</option>
+        </select>
+      </div>
+
+      <!-- User Search -->
+      <div class="filter-group grow">
+        <label class="filter-label">사용자 검색</label>
+        <input type="text" class="filter-control" id="filterUser"
+               placeholder="이름 또는 이메일 입력..."
+               onkeydown="if(event.key==='Enter') applyFilters()" />
+      </div>
+
+      <button class="btn-search" onclick="applyFilters()">검색</button>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-container">
+      <div class="table-toolbar">
+        <div class="table-info">
+          총 <strong id="filteredCount">0</strong>건의 활동 로그
+        </div>
+        <div class="table-actions">
+          <button class="btn-icon" title="새로고침" onclick="refreshLogs()">↻</button>
+          <button class="btn-icon" title="컬럼 설정">⚙</button>
+          <select class="per-page-select" id="perPageSelect" onchange="changePerPage(this.value)">
+            <option value="10">10개</option>
+            <option value="20" selected>20개</option>
+            <option value="50">50개</option>
+            <option value="100">100개</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table id="logTable">
+          <thead>
+            <tr>
+              <th class="sortable sort-desc" data-col="time" onclick="sortBy('time')">시간</th>
+              <th>사용자</th>
+              <th>활동 유형</th>
+              <th>상세 내용</th>
+              <th>IP 주소</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody id="logTableBody">
+          </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <path d="M9 12h6M9 16h4"/>
+          </svg>
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-bar" id="paginationBar">
+        <div class="pagination-info" id="paginationInfo"></div>
+        <div class="pagination-controls" id="paginationControls"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Supabase + App Script ── -->
+<script>
+(function() {
+  'use strict';
+
+  /* ================================================================
+   * Supabase 초기화
+   * ================================================================ */
+  let supabase = null;
+
+  function getConfig() {
+    const urlMeta = document.querySelector('meta[name="supabase-url"]');
+    const keyMeta = document.querySelector('meta[name="supabase-anon-key"]');
+    const url = urlMeta?.content || '';
+    const key = keyMeta?.content || '';
+    if (!url && window.APP_CONFIG) {
+      return { url: window.APP_CONFIG.SUPABASE_URL, key: window.APP_CONFIG.SUPABASE_ANON_KEY };
+    }
+    return { url, key };
+  }
+
+  function initSupabase() {
+    try {
+      const cfg = getConfig();
+      if (cfg.url && cfg.key && window.supabase) {
+        supabase = window.supabase.createClient(cfg.url, cfg.key);
+      }
+    } catch (e) {
+      console.warn('[activity-log] Supabase 초기화 실패, 샘플 데이터 사용:', e.message);
+    }
+  }
+
+  initSupabase();
+
+  /* ================================================================
+   * 샘플 데이터
+   * ================================================================ */
+  const SAMPLE_LOGS = [
+    { id:1,  time:'2026-03-07 09:02:14', user:'김민준', email:'minjun@ax-on.io',   type:'login',    detail:'로그인 성공 (Chrome/Windows)',             ip:'203.0.113.12',  status:'success', color:'#5a8f7f' },
+    { id:2,  time:'2026-03-07 09:05:33', user:'이서연', email:'seoyeon@ax-on.io',  type:'post',     detail:'강의 게시글 등록 — "React 심화 강의 3강"',  ip:'198.51.100.44', status:'success', color:'#4a7fa0' },
+    { id:3,  time:'2026-03-07 09:11:08', user:'박지훈', email:'jihoon@ax-on.io',   type:'comment',  detail:'댓글 작성 — "질문입니다: 배열 메서드..."',  ip:'192.0.2.77',    status:'success', color:'#8a6f3f' },
+    { id:4,  time:'2026-03-07 09:18:45', user:'최수아', email:'sua@ax-on.io',      type:'enroll',   detail:'수강신청 — Python 데이터분석 기초 과정',    ip:'203.0.113.88',  status:'success', color:'#6a5a8f' },
+    { id:5,  time:'2026-03-07 09:23:01', user:'SYSTEM', email:'system@ax-on.io',   type:'error',    detail:'DB 연결 타임아웃 — pool exhausted (5s)',    ip:'127.0.0.1',     status:'error',   color:'#8f3a3a' },
+    { id:6,  time:'2026-03-07 09:31:20', user:'정현우', email:'hyunwoo@ax-on.io',  type:'setting',  detail:'알림 설정 변경 — 이메일 수신 비활성화',     ip:'198.51.100.9',  status:'success', color:'#8f4a6a' },
+    { id:7,  time:'2026-03-07 09:44:55', user:'관리자', email:'admin@ax-on.io',    type:'usermgmt', detail:'사용자 권한 변경 — 강사 → 관리자 (ID: 042)',ip:'10.0.0.5',      status:'success', color:'#3a8f7a' },
+    { id:8,  time:'2026-03-07 09:52:17', user:'강예린', email:'yerin@ax-on.io',    type:'login',    detail:'로그인 실패 — 비밀번호 오류 (3회차)',        ip:'203.0.113.55',  status:'error',   color:'#5a8f7f' },
+    { id:9,  time:'2026-03-07 10:03:44', user:'윤도현', email:'dohyun@ax-on.io',   type:'post',     detail:'강의 게시글 수정 — "JavaScript 기초 2강"',   ip:'192.0.2.31',    status:'success', color:'#4a7fa0' },
+    { id:10, time:'2026-03-07 10:15:29', user:'임소희', email:'sohee@ax-on.io',    type:'comment',  detail:'댓글 삭제 (본인 요청) — ID: #8821',         ip:'198.51.100.11', status:'success', color:'#8a6f3f' },
+    { id:11, time:'2026-03-07 10:22:08', user:'한승준', email:'seungjun@ax-on.io', type:'enroll',   detail:'수강신청 취소 — UI/UX 디자인 심화',          ip:'203.0.113.102', status:'success', color:'#6a5a8f' },
+    { id:12, time:'2026-03-07 10:35:53', user:'SYSTEM', email:'system@ax-on.io',   type:'error',    detail:'파일 업로드 실패 — 최대 용량 초과 (512MB)', ip:'127.0.0.1',     status:'error',   color:'#8f3a3a' },
+    { id:13, time:'2026-03-07 10:41:00', user:'오지은', email:'jieun@ax-on.io',    type:'login',    detail:'로그인 성공 (Safari/iOS)',                   ip:'192.0.2.200',   status:'success', color:'#5a8f7f' },
+    { id:14, time:'2026-03-07 10:48:37', user:'관리자', email:'admin@ax-on.io',    type:'setting',  detail:'사이트 공지 내용 수정 — 2026-03 공지',       ip:'10.0.0.5',      status:'success', color:'#8f4a6a' },
+    { id:15, time:'2026-03-07 11:01:12', user:'신재원', email:'jaewon@ax-on.io',   type:'usermgmt', detail:'계정 정지 처리 — 스팸 활동 감지 (ID: 103)',  ip:'10.0.0.5',      status:'success', color:'#3a8f7a' },
+    { id:16, time:'2026-03-07 11:09:44', user:'황나연', email:'nayeon@ax-on.io',   type:'post',     detail:'강의 게시글 등록 — "Vue.js 입문 1강"',       ip:'198.51.100.77', status:'success', color:'#4a7fa0' },
+    { id:17, time:'2026-03-07 11:18:30', user:'배준혁', email:'junhyuk@ax-on.io',  type:'comment',  detail:'댓글 신고 접수 — 부적절한 내용 (ID: #9102)',ip:'203.0.113.44',  status:'warning', color:'#8a6f3f' },
+    { id:18, time:'2026-03-07 11:25:00', user:'류민아', email:'mina@ax-on.io',     type:'enroll',   detail:'수강신청 — Node.js 백엔드 개발 실무',        ip:'192.0.2.55',    status:'success', color:'#6a5a8f' },
+    { id:19, time:'2026-03-07 11:37:19', user:'관리자', email:'admin@ax-on.io',    type:'usermgmt', detail:'강사 계정 생성 — 홍길동 (hong@ax-on.io)',    ip:'10.0.0.5',      status:'success', color:'#3a8f7a' },
+    { id:20, time:'2026-03-07 11:44:05', user:'SYSTEM', email:'system@ax-on.io',   type:'error',    detail:'CDN 응답 지연 — 정적 리소스 503 오류',       ip:'127.0.0.1',     status:'error',   color:'#8f3a3a' },
+    { id:21, time:'2026-03-07 11:52:41', user:'전민경', email:'minkyung@ax-on.io', type:'login',    detail:'로그인 성공 (Firefox/Linux)',                ip:'198.51.100.33', status:'success', color:'#5a8f7f' },
+    { id:22, time:'2026-03-07 12:05:08', user:'조성현', email:'sunghyun@ax-on.io', type:'post',     detail:'게시글 임시저장 — "TypeScript 제네릭"',      ip:'192.0.2.88',    status:'info',    color:'#4a7fa0' },
+  ];
+
+  /* ================================================================
+   * State
+   * ================================================================ */
+  let allLogs      = [...SAMPLE_LOGS];
+  let filteredLogs = [...allLogs];
+  let currentPage  = 1;
+  let perPage      = 20;
+  let sortCol      = 'time';
+  let sortDir      = 'desc';
+  let currentPeriod = 'today';
+  let realtimeConnected = true;
+
+  /* ================================================================
+   * Init
+   * ================================================================ */
+  async function checkAdminAuth() {
+    if (!supabase) return;
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { window.location.href = '/pages/auth/login.html'; return false; }
+      const { data: profile } = await supabase
+        .from('profiles').select('role').eq('id', session.user.id).single();
+      if (!profile || profile.role !== 'admin') { window.location.href = '/'; return false; }
+      return true;
+    } catch { return true; }
+  }
+
+  async function init() {
+    const isAdmin = await checkAdminAuth();
+    if (isAdmin === false) return;
+    updateStats();
+    applyFilters();
+    setupRealtimeSimulation();
+    setDefaultDates();
+  }
+
+  function setDefaultDates() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('dateFrom').value = today;
+    document.getElementById('dateTo').value   = today;
+  }
+
+  /* ================================================================
+   * Stats
+   * ================================================================ */
+  function updateStats() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayLogs = allLogs.filter(l => l.time.startsWith(todayStr));
+    const totalAct  = todayLogs.length;
+    const activeUsrs= new Set(todayLogs.filter(l => l.user !== 'SYSTEM').map(l => l.email)).size;
+    const errWarn   = todayLogs.filter(l => l.status === 'error' || l.status === 'warning').length;
+
+    animateCount('statTotal',  totalAct);
+    animateCount('statUsers',  activeUsrs);
+    animateCount('statErrors', errWarn);
+
+    const errEl = document.getElementById('statErrorsDelta');
+    if (errWarn > 0) {
+      errEl.textContent = `${errWarn}건 주의 필요`;
+      errEl.style.color = 'var(--c-warning)';
+    } else {
+      errEl.textContent = '정상';
+      errEl.style.color = 'var(--c-success)';
+    }
+  }
+
+  function animateCount(id, target) {
+    const el = document.getElementById(id);
+    let cur = 0;
+    const step = Math.ceil(target / 20);
+    const timer = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = cur.toLocaleString();
+      if (cur >= target) clearInterval(timer);
+    }, 40);
+  }
+
+  /* ================================================================
+   * Filters
+   * ================================================================ */
+  window.setPeriod = function(btn, period) {
+    document.querySelectorAll('.period-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentPeriod = period;
+    const cdr = document.getElementById('customDateRange');
+    period === 'custom' ? cdr.classList.add('visible') : cdr.classList.remove('visible');
+  };
+
+  function getDateRange() {
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    if (currentPeriod === 'today') return { from: todayStr, to: todayStr };
+    if (currentPeriod === '7d') {
+      const d = new Date(now); d.setDate(d.getDate() - 7);
+      return { from: d.toISOString().split('T')[0], to: todayStr };
+    }
+    if (currentPeriod === '30d') {
+      const d = new Date(now); d.setDate(d.getDate() - 30);
+      return { from: d.toISOString().split('T')[0], to: todayStr };
+    }
+    if (currentPeriod === 'custom') {
+      return {
+        from: document.getElementById('dateFrom').value || '1970-01-01',
+        to: document.getElementById('dateTo').value || todayStr
+      };
+    }
+    return { from: '1970-01-01', to: todayStr };
+  }
+
+  window.applyFilters = function() {
+    const typeFilter = document.getElementById('filterType').value.toLowerCase();
+    const userFilter = document.getElementById('filterUser').value.toLowerCase();
+    const { from, to } = getDateRange();
+
+    filteredLogs = allLogs.filter(log => {
+      const matchType = !typeFilter || log.type === typeFilter;
+      const matchUser = !userFilter ||
+        log.user.toLowerCase().includes(userFilter) ||
+        log.email.toLowerCase().includes(userFilter);
+      const logDate = log.time.split('T')[0];
+      const matchDate = logDate >= from && logDate <= to;
+      return matchType && matchUser && matchDate;
+    });
+
+    sortLogs();
+    currentPage = 1;
+    renderTable();
+    document.getElementById('filteredCount').textContent = filteredLogs.length.toLocaleString();
+  };
+
+  /* ================================================================
+   * Sort
+   * ================================================================ */
+  window.sortBy = function(col) {
+    if (sortCol === col) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortCol = col;
+      sortDir = 'desc';
+    }
+    document.querySelectorAll('thead th').forEach(th => {
+      th.classList.remove('sort-asc', 'sort-desc');
+      if (th.dataset.col === col) th.classList.add(sortDir === 'asc' ? 'sort-asc' : 'sort-desc');
+    });
+    sortLogs();
+    renderTable();
+  };
+
+  function sortLogs() {
+    filteredLogs.sort((a, b) => {
+      let va = a[sortCol] ?? '';
+      let vb = b[sortCol] ?? '';
+      const cmp = va < vb ? -1 : va > vb ? 1 : 0;
+      return sortDir === 'asc' ? cmp : -cmp;
+    });
+  }
+
+  /* ================================================================
+   * Render
+   * ================================================================ */
+  function renderTable() {
+    const tbody = document.getElementById('logTableBody');
+    const emptyState = document.getElementById('emptyState');
+
+    if (!filteredLogs.length) {
+      tbody.innerHTML = '';
+      emptyState.classList.add('visible');
+      document.getElementById('paginationBar').style.display = 'none';
+      return;
+    }
+
+    emptyState.classList.remove('visible');
+    document.getElementById('paginationBar').style.display = '';
+
+    const start = (currentPage - 1) * perPage;
+    const pageData = filteredLogs.slice(start, start + perPage);
+
+    tbody.innerHTML = pageData.map(log => `
+      <tr data-id="${log.id}">
+        <td class="td-time">
+          ${formatTime(log.time)}
+          <span class="time-date">${formatDate(log.time)}</span>
+        </td>
+        <td>
+          <div class="td-user">
+            <div class="user-avatar" style="background:${log.color};">${log.user.charAt(0)}</div>
+            <div class="user-info">
+              <div class="user-name">${esc(log.user)}</div>
+              <div class="user-email">${esc(log.email)}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge-type badge-${log.type}">${typeName(log.type)}</span></td>
+        <td class="td-detail">${esc(log.detail)}</td>
+        <td class="td-ip">${esc(log.ip)}</td>
+        <td class="td-status">
+          <span class="status-dot status-${log.status}"></span>${statusName(log.status)}
+        </td>
+      </tr>
+    `).join('');
+
+    renderPagination();
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredLogs.length / perPage);
+    const start = (currentPage - 1) * perPage + 1;
+    const end   = Math.min(currentPage * perPage, filteredLogs.length);
+
+    document.getElementById('paginationInfo').textContent =
+      `${start}–${end} / 전체 ${filteredLogs.length.toLocaleString()}건`;
+
+    const ctrl = document.getElementById('paginationControls');
+    let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+
+    const range = pageRange(currentPage, totalPages);
+    range.forEach(p => {
+      if (p === '...') {
+        html += `<button class="page-btn" disabled>…</button>`;
+      } else {
+        html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
+      }
+    });
+
+    html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+    ctrl.innerHTML = html;
+  }
+
+  function pageRange(cur, total) {
+    if (total <= 7) return Array.from({length: total}, (_, i) => i + 1);
+    const pages = [];
+    pages.push(1);
+    if (cur > 3) pages.push('...');
+    for (let i = Math.max(2, cur-1); i <= Math.min(total-1, cur+1); i++) pages.push(i);
+    if (cur < total - 2) pages.push('...');
+    pages.push(total);
+    return pages;
+  }
+
+  window.goPage = function(p) {
+    const totalPages = Math.ceil(filteredLogs.length / perPage);
+    if (p < 1 || p > totalPages) return;
+    currentPage = p;
+    renderTable();
+    document.querySelector('.table-scroll').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  window.changePerPage = function(val) {
+    perPage = parseInt(val);
+    currentPage = 1;
+    renderTable();
+  };
+
+  /* ================================================================
+   * Realtime Simulation (Supabase Realtime 연동 준비)
+   * ================================================================
+   * 실제 구현 시:
+   *   const channel = supabase.channel('activity_logs')
+   *     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'activity_logs' },
+   *         payload => handleNewLog(payload.new))
+   *     .subscribe(status => updateRealtimeIndicator(status));
+   * ================================================================ */
+  function setupRealtimeSimulation() {
+    // 20초마다 새 로그 항목 시뮬레이션
+    setInterval(() => {
+      if (!realtimeConnected) return;
+      const newLog = generateRandomLog();
+      allLogs.unshift(newLog);
+      if (filteredLogs.length < 9999) filteredLogs.unshift(newLog);
+      updateStats();
+      applyFiltersQuiet();
+      showToast(`새 활동: ${newLog.user} — ${typeName(newLog.type)}`, 'info');
+    }, 20000);
+
+    // 연결 상태 표시 유지
+    setInterval(() => {
+      const dot   = document.getElementById('realtimeDot');
+      const label = document.getElementById('realtimeLabel');
+      if (realtimeConnected) {
+        dot.classList.remove('disconnected');
+        label.textContent = '실시간 연결됨';
+      } else {
+        dot.classList.add('disconnected');
+        label.textContent = '연결 끊김';
+      }
+    }, 2000);
+  }
+
+  let autoId = 100;
+  function generateRandomLog() {
+    const users  = [
+      { user:'김민준', email:'minjun@ax-on.io',   color:'#5a8f7f' },
+      { user:'이서연', email:'seoyeon@ax-on.io',  color:'#4a7fa0' },
+      { user:'박지훈', email:'jihoon@ax-on.io',   color:'#8a6f3f' },
+      { user:'최수아', email:'sua@ax-on.io',       color:'#6a5a8f' },
+      { user:'관리자', email:'admin@ax-on.io',     color:'#3a8f7a' },
+    ];
+    const types   = ['login','post','comment','enroll','setting','usermgmt','error'];
+    const details = {
+      login:    '로그인 성공',
+      post:     '게시글 등록 — 새 강의 콘텐츠',
+      comment:  '댓글 작성',
+      enroll:   '수강신청 완료',
+      setting:  '환경설정 업데이트',
+      usermgmt: '사용자 정보 수정',
+      error:    '예기치 않은 서버 오류 발생',
+    };
+    const u = users[Math.floor(Math.random() * users.length)];
+    const t = types[Math.floor(Math.random() * types.length)];
+    const s = t === 'error' ? 'error' : 'success';
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const timeStr = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    return { id: ++autoId, time: timeStr, ...u, type: t, detail: details[t], ip: `203.0.113.${Math.floor(Math.random()*200)+10}`, status: s };
+  }
+
+  function applyFiltersQuiet() {
+    const typeFilter = document.getElementById('filterType').value.toLowerCase();
+    const userFilter = document.getElementById('filterUser').value.toLowerCase();
+    filteredLogs = allLogs.filter(log => {
+      const matchType = !typeFilter || log.type === typeFilter;
+      const matchUser = !userFilter || log.user.toLowerCase().includes(userFilter) || log.email.toLowerCase().includes(userFilter);
+      return matchType && matchUser;
+    });
+    sortLogs();
+    renderTable();
+    document.getElementById('filteredCount').textContent = filteredLogs.length.toLocaleString();
+
+    // 첫 번째 행 하이라이트
+    const firstRow = document.querySelector('#logTableBody tr:first-child');
+    if (firstRow) { firstRow.classList.remove('new-entry'); void firstRow.offsetWidth; firstRow.classList.add('new-entry'); }
+  }
+
+  /* ================================================================
+   * Refresh
+   * ================================================================ */
+  window.refreshLogs = function() {
+    document.getElementById('loadingOverlay').classList.add('visible');
+    setTimeout(() => {
+      applyFilters();
+      updateStats();
+      document.getElementById('loadingOverlay').classList.remove('visible');
+      showToast('로그 목록을 새로고침했습니다.', 'success');
+    }, 800);
+  };
+
+  /* ================================================================
+   * CSV Download
+   * ================================================================ */
+  window.downloadCSV = function() {
+    const headers = ['시간','사용자','이메일','활동유형','상세내용','IP주소','상태'];
+    const rows = filteredLogs.map(l => [
+      l.time, l.user, l.email, typeName(l.type), l.detail, l.ip, statusName(l.status)
+    ].map(v => `"${String(v).replace(/"/g,'""')}"`));
+
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+    const bom = '\uFEFF';
+    const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `activity-log-${new Date().toISOString().split('T')[0]}.csv`
+    });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(`CSV 다운로드 완료 (${filteredLogs.length}건)`, 'success');
+  };
+
+  /* ================================================================
+   * Helpers
+   * ================================================================ */
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function formatTime(dt) {
+    return dt.split(' ')[1] ?? dt;
+  }
+
+  function formatDate(dt) {
+    return dt.split(' ')[0] ?? '';
+  }
+
+  function typeName(t) {
+    const map = { login:'로그인', post:'게시글', comment:'댓글', enroll:'수강신청', setting:'설정변경', usermgmt:'사용자관리', error:'에러' };
+    return map[t] ?? t;
+  }
+
+  function statusName(s) {
+    const map = { success:'성공', error:'에러', warning:'경고', info:'정보' };
+    return map[s] ?? s;
+  }
+
+  function showToast(msg, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    container.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.4s'; }, 3000);
+    setTimeout(() => toast.remove(), 3500);
+  }
+
+  /* ================================================================
+   * Expose globals (for inline onclick handlers)
+   * ================================================================ */
+  window.sortBy       = sortBy;
+  window.goPage       = goPage;
+  window.changePerPage = changePerPage;
+  window.refreshLogs  = refreshLogs;
+  window.downloadCSV  = downloadCSV;
+  window.setPeriod    = setPeriod;
+  window.applyFilters = applyFilters;
+
+  /* ── Start ── */
+  init();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+{
+  "project_id": "ax-on-platform",
+  "project_name": "AX-On Platform",
+  "created_at": "2026-03-05",
+  "updated_at": "2026-03-07",
+  "total_tasks": 76,
+  "completed_tasks": 70,
+  "overall_progress": 92,
+  "description": "분야별 AI 전문가들이 시니어 AI 창업 교육과 기업 AX 프로젝트를 추진하고, 모든 참여자가 커뮤니티에서 만나는 AI 활용 플랫폼",
+  "stage_names": {
+    "0": "Project SAL Grid 생성",
+    "1": "개발 준비",
+    "2": "개발 1차",
+    "3": "개발 2차",
+    "4": "1차 배포 검증",
+    "5": "개발 3차",
+    "6": "개발 4차",
+    "7": "개발 5차",
+    "8": "개발 6차",
+    "9": "개발 7차 (Deferred)"
+  },
+  "task_ids": [
+    "S1BI1", "S1D1", "S1M1",
+    "S2D1", "S2S1", "S2F1", "S2F2", "S2F3", "S2F4", "S2F5",
+    "S3F1", "S3F2", "S3F3", "S3F4", "S3S1",
+    "S4O1", "S4T1",
+    "S5D1", "S5D2", "S5D3", "S5D4", "S5D5", "S5S1", "S5S2", "S5BI1", "S5F1", "S5F2", "S5F3", "S5E1",
+    "S6F1", "S6F2", "S6F3", "S6F4", "S6F5", "S6F6", "S6F7", "S6F8", "S6F9", "S6F10", "S6F11", "S6F12", "S6D1", "S6D2", "S6E1", "S6E2", "S6S1",
+    "S7F1", "S7F2", "S7F4", "S7F5", "S7F6", "S7F7", "S7F8", "S7F9", "S7F10", "S7F11", "S7F12", "S7F13", "S7S1", "S7E1",
+    "S8F1", "S8F2", "S8F3", "S8F4", "S8F5", "S8F7", "S8F9", "S8D1", "S8O1", "S8O2",
+    "S9F1", "S9F2", "S9F3", "S9BI1", "S9T1", "S9M1"
+  ],
+  "stages": {
+    "S0": {
+      "name": "Project SAL Grid 생성",
+      "task_count": 0,
+      "completed_count": 0,
+      "progress": 0
+    },
+    "S1": {
+      "name": "개발 준비",
+      "task_count": 3,
+      "completed_count": 3,
+      "progress": 100
+    },
+    "S2": {
+      "name": "개발 1차",
+      "task_count": 7,
+      "completed_count": 7,
+      "progress": 100
+    },
+    "S3": {
+      "name": "개발 2차",
+      "task_count": 5,
+      "completed_count": 5,
+      "progress": 100
+    },
+    "S4": {
+      "name": "1차 배포 검증",
+      "task_count": 2,
+      "completed_count": 2,
+      "progress": 100
+    },
+    "S5": {
+      "name": "개발 3차",
+      "task_count": 12,
+      "completed_count": 12,
+      "progress": 100
+    },
+    "S6": {
+      "name": "개발 4차",
+      "task_count": 17,
+      "completed_count": 17,
+      "progress": 100
+    },
+    "S7": {
+      "name": "개발 5차",
+      "task_count": 14,
+      "completed_count": 14,
+      "progress": 100
+    },
+    "S8": {
+      "name": "개발 6차",
+      "task_count": 10,
+      "completed_count": 10,
+      "progress": 100
+    },
+    "S9": {
+      "name": "개발 7차 (Deferred)",
+      "task_count": 6,
+      "completed_count": 0,
+      "progress": 0
+    }
+  }
+}

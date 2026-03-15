@@ -1,0 +1,591 @@
+<!-- @task S7F2 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 활동 내역">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>활동 내역 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="../../../../js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/mypage.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --teal: #0d9488;
+  --success: #10b981;
+  --danger: #ef4444;
+  --border: rgba(26, 26, 46, 0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,249,247,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.logo-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 14px; color: white;
+}
+.logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; }
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 6px; align-items: center; }
+.nav-link {
+  padding: 8px 14px; border-radius: 10px;
+  text-decoration: none; font-size: 14px; font-weight: 500; color: var(--ink-muted);
+  transition: all 0.15s;
+}
+.nav-link:hover { background: var(--amber-glow); color: var(--amber); }
+.btn-nav {
+  padding: 8px 18px; border-radius: 10px; border: none; cursor: pointer;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  background: var(--ink); color: white; transition: all 0.15s;
+}
+.btn-nav:hover { background: #2d2d4a; }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 1200px; margin: 0 auto; padding: 40px 24px;
+  display: grid; grid-template-columns: 240px 1fr; gap: 28px;
+  align-items: start;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: sticky; top: 88px;
+}
+.profile-summary {
+  padding: 28px 20px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 700; color: white;
+  overflow: hidden; margin: 0 auto 12px;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.profile-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.profile-role {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  background: var(--amber-glow); color: var(--amber);
+}
+.sidebar-menu { padding: 8px; }
+.menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  text-decoration: none; font-size: 14px; font-weight: 500;
+  color: var(--ink-muted); transition: all 0.15s;
+  border: none; background: none; width: 100%;
+  text-align: left; font-family: inherit; cursor: pointer;
+}
+.menu-item:hover { background: var(--surface-warm); color: var(--ink); }
+.menu-item.active { background: var(--amber-glow); color: var(--amber); font-weight: 600; }
+.menu-icon { font-size: 16px; }
+
+/* ── Main ── */
+.main-content { min-width: 0; }
+.page-header { margin-bottom: 24px; }
+.page-title { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.page-desc { font-size: 14px; color: var(--ink-muted); margin-top: 4px; }
+
+/* ── Card ── */
+.card {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── Tab Nav ── */
+.tab-nav {
+  display: flex; border-bottom: 1px solid var(--border);
+  background: var(--surface-warm);
+}
+.tab-btn {
+  flex: 1; padding: 14px 12px;
+  border: none; background: none; cursor: pointer;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  color: var(--ink-muted);
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.tab-btn:hover { color: var(--ink); background: rgba(26,26,46,0.03); }
+.tab-btn.active {
+  color: var(--amber);
+  border-bottom-color: var(--amber);
+  background: var(--surface-card);
+}
+.tab-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--amber-glow); color: var(--amber);
+  border-radius: 20px; font-size: 11px; font-weight: 700;
+  padding: 1px 7px; min-width: 20px;
+}
+.tab-btn.active .tab-badge { background: var(--amber); color: white; }
+
+/* ── Tab Content ── */
+.tab-content { display: none; padding: 24px; }
+.tab-content.active { display: block; }
+
+/* ── Data Table ── */
+.data-table-wrap { overflow-x: auto; }
+.data-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+}
+.data-table th {
+  padding: 10px 14px; text-align: left;
+  font-size: 12px; font-weight: 600; color: var(--ink-muted);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap; background: var(--surface-warm);
+}
+.data-table td {
+  padding: 14px; border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--surface-warm); }
+
+/* ── Badges ── */
+.badge {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+}
+.badge-active   { background: #d1fae5; color: #065f46; }
+.badge-done     { background: #dbeafe; color: #1e40af; }
+.badge-pending  { background: #fef3c7; color: #92400e; }
+.badge-default  { background: var(--surface-warm); color: var(--ink-muted); }
+
+/* ── Course Card ── */
+.course-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.course-item:last-child { border-bottom: none; }
+.course-thumb {
+  width: 60px; height: 60px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--amber-glow), var(--surface-warm));
+  flex-shrink: 0; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.course-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.course-info { flex: 1; min-width: 0; }
+.course-title {
+  font-size: 14px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.course-meta { font-size: 12px; color: var(--ink-muted); }
+
+/* ── Empty ── */
+.empty-state {
+  text-align: center; padding: 48px 24px;
+  color: var(--ink-muted);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-msg { font-size: 15px; margin-bottom: 16px; }
+.empty-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px; border-radius: var(--radius-sm);
+  background: var(--amber); color: white;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: all 0.15s;
+}
+.empty-link:hover { background: var(--amber-light); }
+
+/* ── Pagination ── */
+.pagination {
+  display: flex; gap: 6px; justify-content: center;
+  margin-top: 20px; flex-wrap: wrap;
+}
+.page-btn {
+  width: 36px; height: 36px; border-radius: 8px;
+  border: 1.5px solid var(--border); background: var(--surface-card);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; display: flex; align-items: center; justify-content: center;
+  font-family: inherit; color: var(--ink-muted);
+}
+.page-btn:hover { border-color: var(--amber); color: var(--amber); }
+.page-btn.active { background: var(--amber); border-color: var(--amber); color: white; font-weight: 700; }
+
+/* ── Footer ── */
+footer {
+  background: var(--ink); color: rgba(255,255,255,0.5);
+  text-align: center; padding: 32px 24px;
+  font-size: 13px; margin-top: 60px;
+}
+footer a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 8px; }
+footer a:hover { color: var(--amber); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-wrap { grid-template-columns: 1fr; gap: 16px; }
+  .sidebar { position: static; }
+  .sidebar-menu { display: flex; gap: 4px; overflow-x: auto; padding: 8px; }
+  .menu-item { white-space: nowrap; }
+  .tab-btn { font-size: 13px; padding: 12px 8px; }
+  .data-table { font-size: 13px; }
+}
+@media (max-width: 480px) {
+  .page-wrap { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../../../index.html" class="logo">
+      <div class="logo-mark">AX</div>
+      <span class="logo-text">AX-<span>On</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="../../../../index.html" class="nav-link">홈</a>
+      <a href="../../../../community.html" class="nav-link">커뮤니티</a>
+      <button class="btn-nav" onclick="handleLogout()">로그아웃</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="profile-summary">
+      <div class="avatar">
+        <span id="mpAvatarInitial">?</span>
+        <img id="mpAvatarImg" src="" alt="프로필 사진">
+      </div>
+      <div class="profile-name" id="mpUserName">로딩 중...</div>
+      <span class="profile-role" id="mpUserRole">-</span>
+    </div>
+    <nav class="sidebar-menu">
+      <a class="menu-item" href="index.html">
+        <span class="menu-icon">🏠</span> 마이페이지
+      </a>
+      <a class="menu-item" href="profile-edit.html">
+        <span class="menu-icon">✏️</span> 프로필 편집
+      </a>
+      <a class="menu-item active" href="activity.html">
+        <span class="menu-icon">📊</span> 활동 내역
+      </a>
+      <a class="menu-item" href="settings.html">
+        <span class="menu-icon">⚙️</span> 설정
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div class="page-header">
+      <h1 class="page-title">📊 활동 내역</h1>
+      <p class="page-desc">수강 내역, 작성 게시글, 작성 댓글을 확인할 수 있습니다.</p>
+    </div>
+
+    <!-- Tab Card -->
+    <div class="card">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="enrollments" onclick="switchTab('enrollments')">
+          📚 수강 내역
+          <span class="tab-badge" id="badgeEnrollments">0</span>
+        </button>
+        <button class="tab-btn" data-tab="posts" onclick="switchTab('posts')">
+          📝 작성 게시글
+          <span class="tab-badge" id="badgePosts">0</span>
+        </button>
+        <button class="tab-btn" data-tab="comments" onclick="switchTab('comments')">
+          💬 작성 댓글
+          <span class="tab-badge" id="badgeComments">0</span>
+        </button>
+      </div>
+
+      <!-- 수강 내역 -->
+      <div class="tab-content active" id="tab-enrollments">
+        <div id="enrollmentsList">
+          <div class="empty-state">
+            <div class="empty-icon">⏳</div>
+            <div class="empty-msg">불러오는 중...</div>
+          </div>
+        </div>
+        <div id="enrollmentsPagination"></div>
+      </div>
+
+      <!-- 작성 게시글 -->
+      <div class="tab-content" id="tab-posts">
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:60%">제목</th>
+                <th>카테고리</th>
+                <th>조회</th>
+                <th>날짜</th>
+              </tr>
+            </thead>
+            <tbody id="postsList">
+              <tr><td colspan="4">
+                <div class="empty-state" style="padding:32px">
+                  <div class="empty-icon">⏳</div>
+                  <div class="empty-msg">불러오는 중...</div>
+                </div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="postsPagination"></div>
+      </div>
+
+      <!-- 작성 댓글 -->
+      <div class="tab-content" id="tab-comments">
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:50%">댓글 내용</th>
+                <th>원본 게시글</th>
+                <th>날짜</th>
+              </tr>
+            </thead>
+            <tbody id="commentsList">
+              <tr><td colspan="3">
+                <div class="empty-state" style="padding:32px">
+                  <div class="empty-icon">⏳</div>
+                  <div class="empty-msg">불러오는 중...</div>
+                </div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="commentsPagination"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <a href="../../../../privacy.html">개인정보처리방침</a>
+    <a href="../../../../terms.html">이용약관</a>
+    <a href="../../../../contact.html">문의하기</a>
+  </div>
+  <div style="margin-top:8px;">© 2026 AX-On Platform. All rights reserved.</div>
+</footer>
+
+<script>
+let activeTab = 'enrollments';
+
+(async function() {
+  await mypageInit({
+    onReady: async () => {
+      await renderEnrollments(1);
+    }
+  });
+})();
+
+// ── Tab Switch ──
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const el = document.getElementById('tab-' + tab);
+  if (el) el.classList.add('active');
+
+  if (tab === 'enrollments') renderEnrollments(1);
+  else if (tab === 'posts') renderPosts(1);
+  else if (tab === 'comments') renderComments(1);
+}
+
+// ── Enrollments ──
+async function renderEnrollments(page) {
+  const container = document.getElementById('enrollmentsList');
+  container.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-msg">불러오는 중...</div></div>';
+
+  try {
+    const result = await loadEnrollments(page);
+    const { data, total } = result;
+
+    document.getElementById('badgeEnrollments').textContent = total;
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <div class="empty-msg">수강 중인 과정이 없습니다.</div>
+          <a class="empty-link" href="../../../../index.html#education">과정 둘러보기 →</a>
+        </div>`;
+      document.getElementById('enrollmentsPagination').innerHTML = '';
+      return;
+    }
+
+    container.innerHTML = data.map(item => {
+      const course = item.courses || {};
+      const thumb = course.thumbnail_url
+        ? `<img src="${escapeHtml(course.thumbnail_url)}" alt="${escapeHtml(course.title)}">`
+        : '📖';
+      const status = item.status === 'active' ? '<span class="badge badge-active">수강 중</span>'
+                   : item.status === 'completed' ? '<span class="badge badge-done">수료</span>'
+                   : '<span class="badge badge-pending">대기</span>';
+      return `
+        <div class="course-item">
+          <div class="course-thumb">${thumb}</div>
+          <div class="course-info">
+            <div class="course-title">${escapeHtml(course.title || '과정명 없음')}</div>
+            <div class="course-meta">${escapeHtml(course.category || '')} · 등록일: ${formatDate(item.enrolled_at)}</div>
+          </div>
+          ${status}
+        </div>`;
+    }).join('');
+
+    renderPagination('enrollmentsPagination', pagination.enrollments, 'renderEnrollments');
+  } catch(e) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">불러오기 실패. 잠시 후 다시 시도해주세요.</div></div>';
+  }
+}
+
+// ── Posts ──
+async function renderPosts(page) {
+  const tbody = document.getElementById('postsList');
+  tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state" style="padding:24px"><div class="empty-icon">⏳</div><div class="empty-msg">불러오는 중...</div></div></td></tr>';
+
+  try {
+    const result = await loadPosts(page);
+    const { data, total } = result;
+
+    document.getElementById('badgePosts').textContent = total;
+
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `
+        <tr><td colspan="4">
+          <div class="empty-state" style="padding:32px">
+            <div class="empty-icon">📝</div>
+            <div class="empty-msg">작성한 게시글이 없습니다.</div>
+            <a class="empty-link" href="../../../../community.html">커뮤니티 참여하기 →</a>
+          </div>
+        </td></tr>`;
+      document.getElementById('postsPagination').innerHTML = '';
+      return;
+    }
+
+    tbody.innerHTML = data.map(post => `
+      <tr>
+        <td>
+          <a href="../../../../community.html" style="color:var(--ink);text-decoration:none;font-weight:600;"
+             title="${escapeHtml(post.title)}">
+            ${escapeHtml(post.title?.slice(0, 40) || '제목 없음')}${post.title?.length > 40 ? '...' : ''}
+          </a>
+        </td>
+        <td><span class="badge badge-default">${escapeHtml(post.category || '-')}</span></td>
+        <td style="color:var(--ink-muted);font-size:13px;">${post.view_count ?? 0}</td>
+        <td style="color:var(--ink-muted);font-size:13px;white-space:nowrap;">${formatDate(post.created_at)}</td>
+      </tr>
+    `).join('');
+
+    renderPagination('postsPagination', pagination.posts, 'renderPosts');
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">불러오기 실패.</div></div></td></tr>';
+  }
+}
+
+// ── Comments ──
+async function renderComments(page) {
+  const tbody = document.getElementById('commentsList');
+  tbody.innerHTML = '<tr><td colspan="3"><div class="empty-state" style="padding:24px"><div class="empty-icon">⏳</div><div class="empty-msg">불러오는 중...</div></div></td></tr>';
+
+  try {
+    const result = await loadComments(page);
+    const { data, total } = result;
+
+    document.getElementById('badgeComments').textContent = total;
+
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `
+        <tr><td colspan="3">
+          <div class="empty-state" style="padding:32px">
+            <div class="empty-icon">💬</div>
+            <div class="empty-msg">작성한 댓글이 없습니다.</div>
+            <a class="empty-link" href="../../../../community.html">커뮤니티 참여하기 →</a>
+          </div>
+        </td></tr>`;
+      document.getElementById('commentsPagination').innerHTML = '';
+      return;
+    }
+
+    tbody.innerHTML = data.map(comment => {
+      const postTitle = comment.community_posts?.title || '원본 게시글';
+      const content = comment.content || '';
+      return `
+        <tr>
+          <td style="font-size:14px;">${escapeHtml(content.slice(0, 60))}${content.length > 60 ? '...' : ''}</td>
+          <td>
+            <a href="../../../../community.html" style="color:var(--amber);text-decoration:none;font-size:13px;">
+              ${escapeHtml(postTitle.slice(0, 30))}${postTitle.length > 30 ? '...' : ''}
+            </a>
+          </td>
+          <td style="color:var(--ink-muted);font-size:13px;white-space:nowrap;">${formatDate(comment.created_at)}</td>
+        </tr>`;
+    }).join('');
+
+    renderPagination('commentsPagination', pagination.comments, 'renderComments');
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="3"><div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">불러오기 실패.</div></div></td></tr>';
+  }
+}
+</script>
+</body>
+</html>

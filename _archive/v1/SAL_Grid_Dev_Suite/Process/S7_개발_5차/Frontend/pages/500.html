@@ -1,0 +1,174 @@
+<!-- @task S7F1 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="서버 오류가 발생했습니다 — AX-On Platform">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>500 — 서버 오류 | AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/error-pages.css">
+</head>
+<body>
+
+<a href="../../../../index.html" class="skip-link">본문으로 바로가기</a>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="../../../../index.html" class="nav-logo">
+      <div class="logo-mark">
+        <svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg">
+          <text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text>
+          <text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text>
+        </svg>
+      </div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../../../../startup.html">우리의 창업</a>
+      <a href="../../../../ax-project.html">AX 프로젝트</a>
+      <a href="../../../../expert.html">AI 전문가</a>
+      <a href="../../../../community.html">커뮤니티</a>
+      <a href="../../../../pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
+      <a href="../../../../pages/auth/signup.html" class="nav-auth-mobile signup-mobile">회원가입</a>
+    </div>
+    <div class="nav-right">
+      <a href="../../../../pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="../../../../pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="error-page" id="main-content">
+  <div class="error-content">
+
+    <!-- SVG 일러스트레이션: 서버 에러 표현 -->
+    <svg class="error-illustration" viewBox="0 0 280 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+      <!-- 배경 원 -->
+      <circle cx="140" cy="110" r="90" fill="rgba(232,93,74,0.05)" />
+      <circle cx="140" cy="110" r="65" fill="rgba(232,93,74,0.04)" />
+
+      <!-- 플로팅 그룹: 서버 랙 -->
+      <g class="float-group">
+        <!-- 서버 바디 -->
+        <rect x="82" y="44" width="116" height="136" rx="10" fill="#fff" stroke="rgba(26,26,46,0.1)" stroke-width="1.5"/>
+
+        <!-- 서버 슬롯 1 (정상) -->
+        <rect x="94" y="60" width="92" height="22" rx="5" fill="rgba(13,148,136,0.08)" stroke="rgba(13,148,136,0.2)" stroke-width="1"/>
+        <circle cx="174" cy="71" r="4" fill="#0d9488" opacity="0.7"/>
+        <line x1="102" y1="71" x2="155" y2="71" stroke="rgba(26,26,46,0.12)" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- 서버 슬롯 2 (경고) -->
+        <rect x="94" y="88" width="92" height="22" rx="5" fill="rgba(232,146,13,0.08)" stroke="rgba(232,146,13,0.2)" stroke-width="1"/>
+        <circle cx="174" cy="99" r="4" fill="#e8920d" opacity="0.8">
+          <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <line x1="102" y1="99" x2="148" y2="99" stroke="rgba(26,26,46,0.12)" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- 서버 슬롯 3 (오류) -->
+        <rect x="94" y="116" width="92" height="22" rx="5" fill="rgba(232,93,74,0.08)" stroke="rgba(232,93,74,0.25)" stroke-width="1"/>
+        <circle cx="174" cy="127" r="4" fill="#e85d4a">
+          <animate attributeName="opacity" values="1;0.3;1" dur="0.8s" repeatCount="indefinite"/>
+        </circle>
+        <line x1="102" y1="127" x2="140" y2="127" stroke="rgba(232,93,74,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="146" y1="122" x2="158" y2="132" stroke="rgba(232,93,74,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="158" y1="122" x2="146" y2="132" stroke="rgba(232,93,74,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- 500 표시 -->
+        <text x="140" y="160" text-anchor="middle" font-family="Outfit,Arial Black,sans-serif" font-weight="900" font-size="22" fill="#e85d4a" opacity="0.85">500</text>
+      </g>
+
+      <!-- 플로팅 그룹: 경고 삼각형 -->
+      <g class="float-group-fast">
+        <path d="M48 80 L64 52 L80 80 Z" fill="rgba(232,146,13,0.12)" stroke="rgba(232,146,13,0.3)" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="64" y="74" text-anchor="middle" font-family="Outfit,Arial Black,sans-serif" font-weight="900" font-size="14" fill="#e8920d">!</text>
+      </g>
+
+      <!-- 플로팅 그룹: 번개/에러 아이콘 -->
+      <g class="float-group-slow">
+        <!-- 번개 -->
+        <path d="M220 52 L210 72 L218 72 L208 92 L224 68 L216 68 Z"
+              fill="rgba(232,93,74,0.6)" stroke="rgba(232,93,74,0.8)" stroke-width="0.5" stroke-linejoin="round"/>
+      </g>
+
+      <!-- 연결선 (점선 - 에러 신호) -->
+      <line x1="80" y1="75" x2="94" y2="75" stroke="rgba(232,146,13,0.3)" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <line x1="198" y1="127" x2="210" y2="75" stroke="rgba(232,93,74,0.2)" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+      <!-- 작은 점 장식 -->
+      <circle cx="50" cy="152" r="3" fill="rgba(232,93,74,0.25)"/>
+      <circle cx="234" cy="50" r="2" fill="rgba(13,148,136,0.3)"/>
+      <circle cx="248" cy="148" r="4" fill="rgba(232,146,13,0.12)"/>
+      <circle cx="38" cy="100" r="2.5" fill="rgba(232,93,74,0.15)"/>
+    </svg>
+
+    <!-- 에러 코드 배지 -->
+    <div class="error-code-badge server-error">
+      <span class="badge-dot"></span>
+      500 Internal Server Error
+    </div>
+
+    <!-- 제목 & 설명 -->
+    <h1 class="error-title">서버 오류가 발생했습니다</h1>
+    <p class="error-desc">
+      잠시 후 다시 시도해주세요.<br>
+      문제가 계속되면 관리자에게 문의해주세요.
+    </p>
+
+    <!-- 버튼 -->
+    <div class="error-actions">
+      <a href="../../../../index.html" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/>
+        </svg>
+        홈으로 돌아가기
+      </a>
+      <button onclick="location.reload()" class="btn btn-outline">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+        새로고침
+      </button>
+    </div>
+
+    <!-- 문의 이메일 -->
+    <p class="error-contact">
+      문제가 계속되면
+      <a href="mailto:admin@ax-on.net" aria-label="관리자에게 이메일 보내기">admin@ax-on.net</a>으로 문의해주세요.
+    </p>
+
+  </div>
+</main>
+
+<script src="../js/error-handler.js"></script>
+<script>
+  // 네비게이션 스크롤 효과
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  // 모바일 메뉴 토글
+  const toggle = document.getElementById('mobileToggle');
+  const navLinks = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? '메뉴 닫기' : '메뉴 열기');
+  });
+
+  // 에러 핸들러 초기화
+  if (window.ErrorHandler) {
+    window.ErrorHandler.init({ pageType: '500' });
+  }
+</script>
+</body>
+</html>

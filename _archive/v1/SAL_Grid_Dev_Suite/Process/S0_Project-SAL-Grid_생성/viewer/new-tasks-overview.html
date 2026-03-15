@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AX-On Platform — 전체 등록 Task 현황 (S1~S8)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0a0e1a;
+    color: #e0e6f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Hero Header ── */
+  .hero {
+    background: linear-gradient(135deg, #0f1629 0%, #1a1f3a 50%, #0f1629 100%);
+    border-bottom: 1px solid rgba(99, 130, 255, 0.15);
+    padding: 48px 40px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(99, 130, 255, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c9aff, #a78bfa, #7c9aff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    position: relative;
+  }
+  .hero .subtitle {
+    margin-top: 10px;
+    font-size: 15px;
+    color: #8892b0;
+    position: relative;
+  }
+
+  /* ── Container ── */
+  .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+  /* ── Summary Bar ── */
+  .summary-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .summary-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 18px 28px;
+    text-align: center;
+    min-width: 140px;
+    flex: 1;
+    max-width: 200px;
+  }
+  .summary-card .num {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c9aff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .summary-card .label { font-size: 13px; color: #8892b0; margin-top: 4px; }
+  .summary-card.completed .num {
+    background: linear-gradient(135deg, #34d399, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .summary-card.pending .num {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ── Section Title ── */
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-left: 14px;
+    border-left: 4px solid #6382ff;
+    line-height: 1.3;
+  }
+
+  /* ── Area Legend ── */
+  .legend {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #8892b0;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  /* Area colors */
+  .area-F  { background: #3b82f6; }
+  .area-D  { background: #8b5cf6; }
+  .area-S  { background: #ef4444; }
+  .area-BI { background: #06b6d4; }
+  .area-E  { background: #f97316; }
+  .area-O  { background: #6366f1; }
+  .area-T  { background: #ec4899; }
+  .area-M  { background: #64748b; }
+
+  /* ── Matrix Table ── */
+  .matrix-wrap {
+    overflow-x: auto;
+    margin-bottom: 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .matrix th {
+    background: rgba(99, 130, 255, 0.08);
+    padding: 10px 8px;
+    font-weight: 600;
+    color: #a0aec0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    white-space: nowrap;
+    text-align: center;
+  }
+  .matrix td {
+    padding: 8px 6px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    vertical-align: middle;
+  }
+  .matrix tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+  .matrix .stage-label {
+    font-weight: 700;
+    text-align: left;
+    padding-left: 14px;
+    white-space: nowrap;
+  }
+  .matrix .total-cell {
+    font-weight: 700;
+    color: #7c9aff;
+  }
+  .cell-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .cell-count.has { background: rgba(99,130,255,0.15); color: #7c9aff; }
+  .cell-count.empty { color: #3a4256; }
+
+  /* Stage colors for rows */
+  .stage-s1 .stage-label { color: #60a5fa; }
+  .stage-s2 .stage-label { color: #34d399; }
+  .stage-s3 .stage-label { color: #a78bfa; }
+  .stage-s4 .stage-label { color: #fbbf24; }
+  .stage-s5 .stage-label { color: #f87171; }
+  .stage-s6 .stage-label { color: #fb923c; }
+  .stage-s7 .stage-label { color: #4ade80; }
+  .stage-s8 .stage-label { color: #38bdf8; }
+
+  /* ── Flow Diagram ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    padding: 24px 0;
+  }
+  .flow-stage {
+    text-align: center;
+    padding: 14px 18px;
+    border-radius: 10px;
+    min-width: 140px;
+    position: relative;
+  }
+  .flow-stage .fname { font-size: 11px; color: #8892b0; margin-bottom: 2px; }
+  .flow-stage .ftitle { font-size: 14px; font-weight: 700; }
+  .flow-stage .fcount { font-size: 12px; margin-top: 2px; opacity: 0.7; }
+  .flow-stage .fstatus { font-size: 10px; margin-top: 4px; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+  .flow-arrow {
+    font-size: 20px;
+    color: #3a4256;
+    padding: 0 4px;
+  }
+  .fs1 { background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.25); }
+  .fs1 .ftitle { color: #60a5fa; }
+  .fs1 .fstatus { background: rgba(52,211,153,0.15); color: #34d399; }
+  .fs2 { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.25); }
+  .fs2 .ftitle { color: #34d399; }
+  .fs2 .fstatus { background: rgba(52,211,153,0.15); color: #34d399; }
+  .fs3 { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.25); }
+  .fs3 .ftitle { color: #a78bfa; }
+  .fs3 .fstatus { background: rgba(52,211,153,0.15); color: #34d399; }
+  .fs4 { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25); }
+  .fs4 .ftitle { color: #fbbf24; }
+  .fs4 .fstatus { background: rgba(52,211,153,0.15); color: #34d399; }
+  .fs5 { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25); }
+  .fs5 .ftitle { color: #f87171; }
+  .fs5 .fstatus { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .fs6 { background: rgba(251,146,60,0.1); border: 1px solid rgba(251,146,60,0.25); }
+  .fs6 .ftitle { color: #fb923c; }
+  .fs6 .fstatus { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .fs7 { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.25); }
+  .fs7 .ftitle { color: #4ade80; }
+  .fs7 .fstatus { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .fs8 { background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25); }
+  .fs8 .ftitle { color: #38bdf8; }
+  .fs8 .fstatus { background: rgba(251,191,36,0.15); color: #fbbf24; }
+
+  /* ── Stage Section ── */
+  .stage-section {
+    margin-bottom: 40px;
+  }
+  .stage-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px 18px;
+    border-radius: 10px;
+  }
+  .stage-header .badge {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  .stage-header .stitle {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .stage-header .scount {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-left: auto;
+  }
+  .stage-header .sstatus {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* Stage header colors */
+  .sh-s1 { background: rgba(96,165,250,0.06); border: 1px solid rgba(96,165,250,0.12); }
+  .sh-s1 .badge { background: rgba(96,165,250,0.2); color: #60a5fa; }
+  .sh-s1 .stitle { color: #60a5fa; }
+  .sh-s2 { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.12); }
+  .sh-s2 .badge { background: rgba(52,211,153,0.2); color: #34d399; }
+  .sh-s2 .stitle { color: #34d399; }
+  .sh-s3 { background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.12); }
+  .sh-s3 .badge { background: rgba(167,139,250,0.2); color: #a78bfa; }
+  .sh-s3 .stitle { color: #a78bfa; }
+  .sh-s4 { background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.12); }
+  .sh-s4 .badge { background: rgba(251,191,36,0.2); color: #fbbf24; }
+  .sh-s4 .stitle { color: #fbbf24; }
+  .sh-s5 { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.12); }
+  .sh-s5 .badge { background: rgba(248,113,113,0.2); color: #f87171; }
+  .sh-s5 .stitle { color: #f87171; }
+  .sh-s6 { background: rgba(251,146,60,0.06); border: 1px solid rgba(251,146,60,0.12); }
+  .sh-s6 .badge { background: rgba(251,146,60,0.2); color: #fb923c; }
+  .sh-s6 .stitle { color: #fb923c; }
+  .sh-s7 { background: rgba(74,222,128,0.06); border: 1px solid rgba(74,222,128,0.12); }
+  .sh-s7 .badge { background: rgba(74,222,128,0.2); color: #4ade80; }
+  .sh-s7 .stitle { color: #4ade80; }
+  .sh-s8 { background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.12); }
+  .sh-s8 .badge { background: rgba(56,189,248,0.2); color: #38bdf8; }
+  .sh-s8 .stitle { color: #38bdf8; }
+
+  .status-completed { background: rgba(52,211,153,0.15); color: #34d399; }
+  .status-pending { background: rgba(251,191,36,0.15); color: #fbbf24; }
+
+  /* ── Task Cards Grid ── */
+  .task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .task-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .task-card:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.12);
+    transform: translateY(-1px);
+  }
+  .task-card.card-completed {
+    border-left: 3px solid #34d399;
+  }
+  .task-card.card-completed::after {
+    content: 'Completed';
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #34d399;
+    background: rgba(52,211,153,0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.3px;
+  }
+  .task-card .tid {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .task-card .tname {
+    font-size: 13px;
+    color: #c9d1e0;
+    line-height: 1.4;
+  }
+  .task-card .tarea {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+    color: white;
+  }
+
+  /* Card stage colors for tid */
+  .tid-s1 { color: #60a5fa; }
+  .tid-s2 { color: #34d399; }
+  .tid-s3 { color: #a78bfa; }
+  .tid-s4 { color: #fbbf24; }
+  .tid-s5 { color: #f87171; }
+  .tid-s6 { color: #fb923c; }
+  .tid-s7 { color: #4ade80; }
+  .tid-s8 { color: #38bdf8; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99,130,255,0.2), transparent);
+    margin: 40px 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    color: #4a5568;
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 32px 20px 24px; }
+    .hero h1 { font-size: 22px; }
+    .container { padding: 20px 12px; }
+    .summary-card { min-width: 100px; padding: 12px 16px; }
+    .summary-card .num { font-size: 24px; }
+    .flow-stage { min-width: 100px; padding: 10px 10px; }
+    .flow-stage .ftitle { font-size: 12px; }
+    .task-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>AX-On Platform - 전체 등록 Task 현황</h1>
+  <div class="subtitle">Project SAL Grid | S1 ~ S8 | 총 76개 Task | Completed 17 + Pending 59</div>
+</div>
+
+<div class="container">
+
+  <!-- Summary Bar -->
+  <div class="summary-bar">
+    <div class="summary-card">
+      <div class="num">76</div>
+      <div class="label">총 Task</div>
+    </div>
+    <div class="summary-card completed">
+      <div class="num">17</div>
+      <div class="label">Completed (S1~S4)</div>
+    </div>
+    <div class="summary-card pending">
+      <div class="num">59</div>
+      <div class="label">Pending (S5~S8)</div>
+    </div>
+    <div class="summary-card">
+      <div class="num">8</div>
+      <div class="label">Stages</div>
+    </div>
+    <div class="summary-card">
+      <div class="num">8</div>
+      <div class="label">Areas</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot area-F"></div>F Frontend</div>
+    <div class="legend-item"><div class="legend-dot area-D"></div>D Database</div>
+    <div class="legend-item"><div class="legend-dot area-S"></div>S Security</div>
+    <div class="legend-item"><div class="legend-dot area-BI"></div>BI Backend Infra</div>
+    <div class="legend-item"><div class="legend-dot area-E"></div>E External</div>
+    <div class="legend-item"><div class="legend-dot area-O"></div>O DevOps</div>
+    <div class="legend-item"><div class="legend-dot area-T"></div>T Testing</div>
+    <div class="legend-item"><div class="legend-dot area-M"></div>M Documentation</div>
+  </div>
+
+  <!-- Section: Matrix -->
+  <div class="section-title">Stage x Area 매트릭스</div>
+
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="text-align:left; padding-left:14px;">Stage</th>
+          <th>F</th><th>D</th><th>S</th><th>BI</th><th>E</th><th>O</th><th>T</th><th>M</th><th style="color:#7c9aff;">합계</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="stage-s1">
+          <td class="stage-label">S1 개발 준비</td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td class="total-cell">3</td>
+        </tr>
+        <tr class="stage-s2">
+          <td class="stage-label">S2 개발 1차</td>
+          <td><span class="cell-count has">5</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td class="total-cell">7</td>
+        </tr>
+        <tr class="stage-s3">
+          <td class="stage-label">S3 개발 2차</td>
+          <td><span class="cell-count has">4</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td class="total-cell">5</td>
+        </tr>
+        <tr class="stage-s4">
+          <td class="stage-label">S4 1차 배포 검증</td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td class="total-cell">2</td>
+        </tr>
+        <tr style="border-top: 2px solid rgba(255,255,255,0.08);">
+          <td colspan="9" style="height:6px;"></td>
+        </tr>
+        <tr class="stage-s5">
+          <td class="stage-label">S5 개발 3차</td>
+          <td><span class="cell-count has">3</span></td>
+          <td><span class="cell-count has">5</span></td>
+          <td><span class="cell-count has">2</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td class="total-cell">12</td>
+        </tr>
+        <tr class="stage-s6">
+          <td class="stage-label">S6 개발 4차</td>
+          <td><span class="cell-count has">12</span></td>
+          <td><span class="cell-count has">2</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count has">2</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td class="total-cell">17</td>
+        </tr>
+        <tr class="stage-s7">
+          <td class="stage-label">S7 개발 5차</td>
+          <td><span class="cell-count has">13</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td class="total-cell">16</td>
+        </tr>
+        <tr class="stage-s8">
+          <td class="stage-label">S8 개발 6차</td>
+          <td><span class="cell-count has">9</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count empty">-</span></td>
+          <td><span class="cell-count has">2</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td><span class="cell-count has">1</span></td>
+          <td class="total-cell">14</td>
+        </tr>
+        <tr style="background: rgba(99,130,255,0.04);">
+          <td class="stage-label" style="color: #7c9aff;">합계</td>
+          <td class="total-cell">46</td>
+          <td class="total-cell">9</td>
+          <td class="total-cell">6</td>
+          <td class="total-cell">3</td>
+          <td class="total-cell">4</td>
+          <td class="total-cell">3</td>
+          <td class="total-cell">2</td>
+          <td class="total-cell">2</td>
+          <td class="total-cell" style="font-size:15px;">76</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Flow Diagram -->
+  <div class="section-title">Stage 실행 흐름</div>
+  <div class="flow">
+    <div class="flow-stage fs1">
+      <div class="fname">S1</div>
+      <div class="ftitle">개발 준비</div>
+      <div class="fcount">3개</div>
+      <div class="fstatus">Completed</div>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-stage fs2">
+      <div class="fname">S2</div>
+      <div class="ftitle">개발 1차</div>
+      <div class="fcount">7개</div>
+      <div class="fstatus">Completed</div>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-stage fs3">
+      <div class="fname">S3</div>
+      <div class="ftitle">개발 2차</div>
+      <div class="fcount">5개</div>
+      <div class="fstatus">Completed</div>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-stage fs4">
+      <div class="fname">S4</div>
+      <div class="ftitle">1차 배포 검증</div>
+      <div class="fcount">2개</div>
+      <div class="fstatus">Completed</div>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-stage fs5">
+      <div class="fname">S5</div>
+      <div class="ftitle">개발 3차</div>
+      <div class="fcount">12개</div>
+      <div class="fstatus">Pending</div>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-stage fs6">
+      <div class="fname">S6</div>
+      <div class="ftitle">개발 4차</div>
+      <div class="fcount">17개</div>
+      <div class="fstatus">Pending</div>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-stage fs7">
+      <div class="fname">S7</div>
+      <div class="ftitle">개발 5차</div>
+      <div class="fcount">16개</div>
+      <div class="fstatus">Pending</div>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-stage fs8">
+      <div class="fname">S8</div>
+      <div class="ftitle">개발 6차</div>
+      <div class="fcount">14개</div>
+      <div class="fstatus">Pending</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S1 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="stage-section">
+    <div class="stage-header sh-s1">
+      <span class="badge">S1</span>
+      <span class="stitle">개발 준비</span>
+      <span class="scount">3개 Task</span>
+      <span class="sstatus status-completed">Completed</span>
+    </div>
+    <div class="task-grid">
+      <div class="task-card card-completed">
+        <div class="tid tid-s1">S1BI1</div>
+        <div class="tname">Supabase 프로젝트 초기 설정</div>
+        <span class="tarea area-BI">BI Backend Infra</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s1">S1D1</div>
+        <div class="tname">디자인 시스템 정의</div>
+        <span class="tarea area-D">D Design</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s1">S1M1</div>
+        <div class="tname">프로젝트 기획 문서 작성</div>
+        <span class="tarea area-M">M Documentation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S2 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="stage-section">
+    <div class="stage-header sh-s2">
+      <span class="badge">S2</span>
+      <span class="stitle">개발 1차</span>
+      <span class="scount">7개 Task</span>
+      <span class="sstatus status-completed">Completed</span>
+    </div>
+    <div class="task-grid">
+      <div class="task-card card-completed">
+        <div class="tid tid-s2">S2D1</div>
+        <div class="tname">DB 스키마 설계 및 마이그레이션</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s2">S2S1</div>
+        <div class="tname">Supabase Auth 인증 시스템 구축</div>
+        <span class="tarea area-S">S Security</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s2">S2F1</div>
+        <div class="tname">메인 페이지 (index.html)</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s2">S2F2</div>
+        <div class="tname">로그인/회원가입 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s2">S2F3</div>
+        <div class="tname">AI 전문가 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s2">S2F4</div>
+        <div class="tname">스타트업 교육 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s2">S2F5</div>
+        <div class="tname">AX 프로젝트 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S3 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="stage-section">
+    <div class="stage-header sh-s3">
+      <span class="badge">S3</span>
+      <span class="stitle">개발 2차</span>
+      <span class="scount">5개 Task</span>
+      <span class="sstatus status-completed">Completed</span>
+    </div>
+    <div class="task-grid">
+      <div class="task-card card-completed">
+        <div class="tid tid-s3">S3F1</div>
+        <div class="tname">커뮤니티 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s3">S3F2</div>
+        <div class="tname">수강신청 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s3">S3F3</div>
+        <div class="tname">AI 튜터 채팅 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s3">S3F4</div>
+        <div class="tname">마이페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s3">S3S1</div>
+        <div class="tname">RLS 보안 정책 적용</div>
+        <span class="tarea area-S">S Security</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S4 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="stage-section">
+    <div class="stage-header sh-s4">
+      <span class="badge">S4</span>
+      <span class="stitle">1차 배포 검증</span>
+      <span class="scount">2개 Task</span>
+      <span class="sstatus status-completed">Completed</span>
+    </div>
+    <div class="task-grid">
+      <div class="task-card card-completed">
+        <div class="tid tid-s4">S4O1</div>
+        <div class="tname">Vercel 자동 배포 설정</div>
+        <span class="tarea area-O">O DevOps</span>
+      </div>
+      <div class="task-card card-completed">
+        <div class="tid tid-s4">S4T1</div>
+        <div class="tname">폼 검증 테스트 (240항목)</div>
+        <span class="tarea area-T">T Testing</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S5 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="stage-section">
+    <div class="stage-header sh-s5">
+      <span class="badge">S5</span>
+      <span class="stitle">개발 3차 — Critical + High 버그 수정</span>
+      <span class="scount">12개 Task</span>
+      <span class="sstatus status-pending">Pending</span>
+    </div>
+    <div class="task-grid">
+      <div class="task-card">
+        <div class="tid tid-s5">S5D1</div>
+        <div class="tname">커뮤니티 테이블 누락 컬럼 추가</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5D2</div>
+        <div class="tname">수강신청 enrollments 테이블 생성</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5D3</div>
+        <div class="tname">AI 튜터 채팅 이력 테이블 생성</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5D4</div>
+        <div class="tname">지식허브 knowledge_posts 테이블 생성</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5D5</div>
+        <div class="tname">문의하기 inquiries 테이블 생성</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5S1</div>
+        <div class="tname">Auth 상태 관리 통합</div>
+        <span class="tarea area-S">S Security</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5S2</div>
+        <div class="tname">Google OAuth 콜백 수정</div>
+        <span class="tarea area-S">S Security</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5BI1</div>
+        <div class="tname">Supabase Client 싱글톤 통합</div>
+        <span class="tarea area-BI">BI Backend Infra</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5F1</div>
+        <div class="tname">네비게이션 Auth 상태 반영</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5F2</div>
+        <div class="tname">지식허브 CRUD 기능 연결</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5F3</div>
+        <div class="tname">AI 튜터 Supabase 연동</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s5">S5E1</div>
+        <div class="tname">OpenAI API 프록시 구현</div>
+        <span class="tarea area-E">E External</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S6 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="stage-section">
+    <div class="stage-header sh-s6">
+      <span class="badge">S6</span>
+      <span class="stitle">개발 4차 — Medium + Low 개선</span>
+      <span class="scount">17개 Task</span>
+      <span class="sstatus status-pending">Pending</span>
+    </div>
+    <div class="task-grid">
+      <div class="task-card">
+        <div class="tid tid-s6">S6F1</div>
+        <div class="tname">커뮤니티 게시판 CRUD</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F2</div>
+        <div class="tname">수강신청 결제 플로우</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F3</div>
+        <div class="tname">마이페이지 프로필 편집</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F4</div>
+        <div class="tname">전문가 상세 프로필</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F5</div>
+        <div class="tname">교육 커리큘럼 상세</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F6</div>
+        <div class="tname">전문가 검색/필터</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F7</div>
+        <div class="tname">반응형 모바일 최적화</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F8</div>
+        <div class="tname">다크모드 지원</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F9</div>
+        <div class="tname">문의하기 폼 연동</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F10</div>
+        <div class="tname">공지사항 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F11</div>
+        <div class="tname">FAQ 아코디언</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6F12</div>
+        <div class="tname">이용약관/개인정보처리방침</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6D1</div>
+        <div class="tname">notifications 테이블</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6D2</div>
+        <div class="tname">expert_reviews 테이블</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6E1</div>
+        <div class="tname">이메일 알림 시스템</div>
+        <span class="tarea area-E">E External</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6E2</div>
+        <div class="tname">Kakao 지도 API 연동</div>
+        <span class="tarea area-E">E External</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s6">S6S1</div>
+        <div class="tname">Rate Limiting 미들웨어</div>
+        <span class="tarea area-S">S Security</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S7 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="stage-section">
+    <div class="stage-header sh-s7">
+      <span class="badge">S7</span>
+      <span class="stitle">개발 5차 — 신규 기능</span>
+      <span class="scount">16개 Task</span>
+      <span class="sstatus status-pending">Pending</span>
+    </div>
+    <div class="task-grid">
+      <div class="task-card">
+        <div class="tid tid-s7">S7F1</div>
+        <div class="tname">404/500 에러 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F2</div>
+        <div class="tname">마이페이지 세부 탭</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F3</div>
+        <div class="tname">Kakao 소셜 로그인</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F4</div>
+        <div class="tname">게시판 페이지네이션</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F5</div>
+        <div class="tname">전문가 SEO URL</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F6</div>
+        <div class="tname">수강신청 관리자</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F7</div>
+        <div class="tname">문의 관리자 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F8</div>
+        <div class="tname">신고/차단 관리자</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F9</div>
+        <div class="tname">지식허브 카테고리 확장</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F10</div>
+        <div class="tname">비밀번호 재설정</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7S1</div>
+        <div class="tname">관리자 Role 기반 접근제어</div>
+        <span class="tarea area-S">S Security</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7E1</div>
+        <div class="tname">수강 확인 이메일 자동발송</div>
+        <span class="tarea area-E">E External</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7BI1</div>
+        <div class="tname">Vercel Analytics 연동</div>
+        <span class="tarea area-BI">BI Backend Infra</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F11</div>
+        <div class="tname">관리자 대시보드 홈 (통합 통계 위젯)</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F12</div>
+        <div class="tname">사용자 관리 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s7">S7F13</div>
+        <div class="tname">게시글/댓글 콘텐츠 직접 관리 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S8 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="stage-section">
+    <div class="stage-header sh-s8">
+      <span class="badge">S8</span>
+      <span class="stitle">개발 6차 — 최적화/마무리</span>
+      <span class="scount">14개 Task</span>
+      <span class="sstatus status-pending">Pending</span>
+    </div>
+    <div class="task-grid">
+      <div class="task-card">
+        <div class="tid tid-s8">S8F1</div>
+        <div class="tname">PWA 설정</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8F2</div>
+        <div class="tname">댓글 depth 추가</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8F3</div>
+        <div class="tname">experts JSON 통합</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8F4</div>
+        <div class="tname">SEO 메타 태그</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8F5</div>
+        <div class="tname">Lazy Loading 이미지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8F6</div>
+        <div class="tname">쿠키 동의 배너</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8O1</div>
+        <div class="tname">vercel.json 리다이렉트</div>
+        <span class="tarea area-O">O DevOps</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8O2</div>
+        <div class="tname">sitemap.xml + robots.txt</div>
+        <span class="tarea area-O">O DevOps</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8T1</div>
+        <div class="tname">E2E Playwright 테스트</div>
+        <span class="tarea area-T">T Testing</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8M1</div>
+        <div class="tname">기술 문서 정리</div>
+        <span class="tarea area-M">M Documentation</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8D1</div>
+        <div class="tname">공지사항/설정 테이블 생성</div>
+        <span class="tarea area-D">D Database</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8F7</div>
+        <div class="tname">공지사항 관리 (CRUD)</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8F8</div>
+        <div class="tname">관리자 통합 통계/리포트 페이지</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+      <div class="task-card">
+        <div class="tid tid-s8">S8F9</div>
+        <div class="tname">관리자 활동 로그 뷰어</div>
+        <span class="tarea area-F">F Frontend</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    AX-On Platform &mdash; Project SAL Grid | 생성일: 2026-03-05 | 총 76개 Task (S1~S8)
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!-- @task S7F7 -->
+<!--
+@description 문의 목록 관리자 대시보드 — 카테고리/상태 필터, 키워드 검색, 페이지네이션
+@area Frontend
+@stage S7
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>문의 관리 — AX-On Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1a2e;
+            --ink-muted: #6b7094;
+            --surface: #f8f9fc;
+            --surface-warm: #faf8f5;
+            --surface-card: #ffffff;
+            --amber: #f59e0b;
+            --teal: #14b8a6;
+            --coral: #f97316;
+            --violet: #8b5cf6;
+            --sky: #0ea5e9;
+            --red: #ef4444;
+            --green: #22c55e;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.05);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', 'Outfit', sans-serif;
+            background: var(--surface);
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        /* ── Nav ── */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,.06);
+            transition: box-shadow .3s;
+        }
+        .nav.scrolled { box-shadow: var(--shadow-md); }
+        .nav-inner {
+            max-width: 1440px; margin: 0 auto;
+            padding: 0 2rem; height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700; font-size: 1.35rem;
+            color: var(--ink); text-decoration: none;
+        }
+        .nav-logo span { color: var(--violet); }
+        .nav-badge {
+            display: inline-flex; align-items: center;
+            padding: .25rem .6rem; border-radius: 6px;
+            background: rgba(139,92,246,.1); color: var(--violet);
+            font-size: .72rem; font-weight: 700;
+            margin-left: .6rem; letter-spacing: .3px;
+        }
+        .nav-auth { display: flex; gap: .75rem; align-items: center; }
+        .nav-user { font-size: .85rem; color: var(--ink-muted); }
+        .btn-ghost {
+            padding: .45rem .95rem; border-radius: var(--radius-sm);
+            border: 1px solid rgba(0,0,0,.1); background: transparent;
+            color: var(--ink); font-size: .85rem; font-weight: 500;
+            cursor: pointer; text-decoration: none; transition: all .2s;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .btn-ghost:hover { background: rgba(0,0,0,.04); }
+
+        /* ── Page Header ── */
+        .page-header {
+            margin-top: 64px;
+            padding: 2.5rem 2rem 2rem;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
+            color: #fff;
+        }
+        .page-header-inner { max-width: 1440px; margin: 0 auto; }
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem; font-weight: 700;
+        }
+        .page-header p { color: rgba(255,255,255,.7); margin-top: .4rem; font-size: .9rem; }
+
+        /* ── Stats ── */
+        .stats-grid {
+            max-width: 1440px; margin: -1.75rem auto 0; padding: 0 2rem;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+            position: relative; z-index: 10;
+        }
+        .stat-card {
+            background: var(--surface-card); border-radius: var(--radius);
+            padding: 1.25rem 1.5rem; box-shadow: var(--shadow-md);
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .stat-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem; flex-shrink: 0;
+        }
+        .stat-icon.total    { background: rgba(139,92,246,.1); }
+        .stat-icon.waiting  { background: rgba(245,158,11,.1); }
+        .stat-icon.answered { background: rgba(34,197,94,.1); }
+        .stat-icon.today    { background: rgba(14,165,233,.1); }
+        .stat-info { display: flex; flex-direction: column; }
+        .stat-label { font-size: .75rem; color: var(--ink-muted); font-weight: 500; }
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem; font-weight: 700; color: var(--ink); line-height: 1.1;
+        }
+
+        /* ── Content ── */
+        .content { max-width: 1440px; margin: 2rem auto; padding: 0 2rem 3rem; }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            display: flex; align-items: center; gap: .75rem;
+            margin-bottom: 1.25rem; flex-wrap: wrap;
+        }
+        .search-box { flex: 1; min-width: 220px; position: relative; }
+        .search-box input {
+            width: 100%; padding: .65rem 1rem .65rem 2.5rem;
+            border: 1px solid rgba(0,0,0,.1); border-radius: var(--radius-sm);
+            font-size: .9rem; background: var(--surface-card);
+            outline: none; transition: border-color .2s;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .search-box input:focus { border-color: var(--violet); }
+        .search-icon {
+            position: absolute; left: .75rem; top: 50%; transform: translateY(-50%);
+            font-size: .85rem; pointer-events: none;
+        }
+        .filter-group { display: flex; gap: .5rem; align-items: center; }
+        .filter-select {
+            padding: .6rem .9rem; border-radius: var(--radius-sm);
+            border: 1px solid rgba(0,0,0,.1); background: var(--surface-card);
+            font-size: .85rem; cursor: pointer; outline: none;
+            font-family: 'Noto Sans KR', sans-serif; color: var(--ink);
+            transition: border-color .2s;
+        }
+        .filter-select:focus { border-color: var(--violet); }
+        .filter-tabs { display: flex; gap: .4rem; }
+        .filter-tab {
+            padding: .5rem .95rem; border-radius: 20px;
+            border: 1px solid rgba(0,0,0,.1); background: var(--surface-card);
+            font-size: .8rem; font-weight: 500; cursor: pointer;
+            color: var(--ink-muted); transition: all .2s;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .filter-tab:hover { border-color: var(--violet); color: var(--violet); }
+        .filter-tab.active { background: var(--violet); color: #fff; border-color: var(--violet); }
+        .filter-divider { width: 1px; height: 28px; background: rgba(0,0,0,.08); }
+
+        /* ── Table ── */
+        .table-wrap {
+            background: var(--surface-card); border-radius: var(--radius);
+            box-shadow: var(--shadow); overflow: hidden;
+        }
+        .table-wrap table { width: 100%; border-collapse: collapse; }
+        .table-wrap th {
+            padding: .8rem 1rem; text-align: left;
+            font-size: .72rem; font-weight: 600; color: var(--ink-muted);
+            text-transform: uppercase; letter-spacing: .5px;
+            background: var(--surface); border-bottom: 1px solid rgba(0,0,0,.06);
+            white-space: nowrap;
+        }
+        .table-wrap td {
+            padding: .85rem 1rem; font-size: .88rem;
+            border-bottom: 1px solid rgba(0,0,0,.04);
+            vertical-align: middle;
+        }
+        .table-wrap tr:last-child td { border-bottom: none; }
+        .table-wrap tr:hover td { background: rgba(139,92,246,.02); }
+
+        /* ── Row elements ── */
+        .row-num { color: var(--ink-muted); font-size: .8rem; }
+        .inquiry-title {
+            font-weight: 600; color: var(--ink);
+            max-width: 280px; overflow: hidden;
+            text-overflow: ellipsis; white-space: nowrap;
+        }
+        .inquiry-title a { text-decoration: none; color: inherit; }
+        .inquiry-title a:hover { color: var(--violet); }
+        .user-name { font-weight: 500; }
+        .date-text { color: var(--ink-muted); font-size: .8rem; white-space: nowrap; }
+
+        /* ── Badge ── */
+        .badge {
+            display: inline-flex; align-items: center; gap: .3rem;
+            padding: .22rem .65rem; border-radius: 20px;
+            font-size: .73rem; font-weight: 600; white-space: nowrap;
+        }
+        .badge.cat-lecture  { background: rgba(139,92,246,.1); color: #6d28d9; }
+        .badge.cat-tech     { background: rgba(14,165,233,.1); color: #0369a1; }
+        .badge.cat-payment  { background: rgba(245,158,11,.1); color: #b45309; }
+        .badge.cat-other    { background: rgba(107,114,128,.1); color: #4b5563; }
+        .badge.status-wait  { background: rgba(245,158,11,.12); color: #b45309; }
+        .badge.status-done  { background: rgba(34,197,94,.12); color: #15803d; }
+
+        /* ── Action ── */
+        .action-btn {
+            padding: .32rem .7rem; border-radius: 6px;
+            border: 1px solid rgba(0,0,0,.1); background: transparent;
+            font-size: .75rem; cursor: pointer; color: var(--ink-muted);
+            transition: all .2s; font-family: 'Noto Sans KR', sans-serif;
+            text-decoration: none; display: inline-block;
+        }
+        .action-btn:hover { background: var(--violet); color: #fff; border-color: var(--violet); }
+
+        /* ── Empty / Loading ── */
+        .empty-state {
+            text-align: center; padding: 3.5rem 2rem; color: var(--ink-muted);
+        }
+        .empty-state .icon { font-size: 2.8rem; margin-bottom: .85rem; }
+        .empty-state p { font-size: .9rem; }
+
+        /* ── Pagination ── */
+        .pagination {
+            display: flex; align-items: center; justify-content: center;
+            gap: .4rem; margin-top: 1.5rem; flex-wrap: wrap;
+        }
+        .pg-btn {
+            width: 36px; height: 36px; border-radius: 8px;
+            border: 1px solid rgba(0,0,0,.1); background: var(--surface-card);
+            font-size: .85rem; cursor: pointer; color: var(--ink-muted);
+            display: flex; align-items: center; justify-content: center;
+            transition: all .2s; font-family: 'Noto Sans KR', sans-serif;
+        }
+        .pg-btn:hover:not(:disabled) { border-color: var(--violet); color: var(--violet); }
+        .pg-btn.active { background: var(--violet); color: #fff; border-color: var(--violet); }
+        .pg-btn:disabled { opacity: .4; cursor: not-allowed; }
+        .pg-info { font-size: .82rem; color: var(--ink-muted); margin: 0 .5rem; }
+
+        /* ── Auth blocks ── */
+        .auth-loading, .auth-denied {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            min-height: 80vh; text-align: center; padding: 2rem;
+        }
+        .auth-loading p, .auth-denied p { color: var(--ink-muted); font-size: .95rem; }
+        .auth-denied h2 { font-size: 1.3rem; margin-bottom: .5rem; }
+        .auth-denied a { color: var(--violet); text-decoration: none; font-weight: 600; }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed; bottom: 2rem; right: 2rem;
+            padding: .7rem 1.4rem; border-radius: var(--radius-sm);
+            background: var(--ink); color: #fff; font-size: .85rem;
+            box-shadow: var(--shadow-lg); z-index: 300;
+            transform: translateY(100px); opacity: 0; transition: all .3s;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; margin-top: -1rem; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .filter-group { flex-wrap: wrap; }
+            .table-wrap { overflow-x: auto; }
+            .table-wrap table { min-width: 760px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav" id="mainNav">
+    <div class="nav-inner">
+        <a href="/index.html" class="nav-logo">
+            AX-<span>On</span>
+            <span class="nav-badge">ADMIN</span>
+        </a>
+        <div class="nav-auth" id="navAuth">
+            <span class="nav-user" id="navUserName"></span>
+            <button class="btn-ghost" onclick="handleLogout()">로그아웃</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Auth Loading -->
+<div class="auth-loading" id="authLoading">
+    <p>권한 확인 중...</p>
+</div>
+
+<!-- Auth Denied -->
+<div class="auth-denied" id="authDenied" style="display:none; margin-top:64px;">
+    <h2>관리자 전용 페이지입니다</h2>
+    <p>관리자 권한이 필요합니다.</p>
+    <a href="/index.html" style="margin-top:1rem;">메인으로 돌아가기</a>
+</div>
+
+<!-- Main Content -->
+<div id="mainContent" style="display:none;">
+    <div class="page-header">
+        <div class="page-header-inner">
+            <h1>문의 관리</h1>
+            <p>접수된 문의 목록을 확인하고 답변을 관리합니다</p>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon total">📋</div>
+            <div class="stat-info">
+                <div class="stat-label">총 문의</div>
+                <div class="stat-value" id="statTotal">0</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon waiting">⏳</div>
+            <div class="stat-info">
+                <div class="stat-label">대기중</div>
+                <div class="stat-value" id="statWaiting">0</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon answered">✅</div>
+            <div class="stat-info">
+                <div class="stat-label">답변완료</div>
+                <div class="stat-value" id="statAnswered">0</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon today">📬</div>
+            <div class="stat-info">
+                <div class="stat-label">오늘 접수</div>
+                <div class="stat-value" id="statToday">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="제목, 문의자명으로 검색...">
+            </div>
+            <div class="filter-group">
+                <select class="filter-select" id="categoryFilter">
+                    <option value="">전체 카테고리</option>
+                    <option value="lecture">강의</option>
+                    <option value="tech">기술지원</option>
+                    <option value="payment">결제</option>
+                    <option value="other">기타</option>
+                </select>
+            </div>
+            <div class="filter-divider"></div>
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-status="">전체</button>
+                <button class="filter-tab" data-status="pending">대기중</button>
+                <button class="filter-tab" data-status="answered">답변완료</button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:60px;">번호</th>
+                        <th>제목</th>
+                        <th style="width:100px;">문의자</th>
+                        <th style="width:100px;">카테고리</th>
+                        <th style="width:110px;">등록일</th>
+                        <th style="width:90px;">상태</th>
+                        <th style="width:80px;">액션</th>
+                    </tr>
+                </thead>
+                <tbody id="inquiryTableBody">
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <div class="icon">📋</div>
+                                <p>로딩 중...</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/admin-inquiries.js"></script>
+<script>
+// @task S7F7
+(function () {
+    'use strict';
+
+    // Nav scroll
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1142 @@
+<!-- @task S5F1 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 마이페이지 — 프로필 관리, 수강 내역, 커뮤니티 활동을 확인하세요.">
+<meta name="supabase-url" content="">
+<meta name="supabase-anon-key" content="">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>마이페이지 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="../../config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --teal: #0d9488;
+  --teal-light: #2dd4bf;
+  --coral: #e85d4a;
+  --violet: #7c5ce0;
+  --sky: #3b82f6;
+  --success: #10b981;
+  --danger: #ef4444;
+  --border: rgba(26, 26, 46, 0.08);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(250, 249, 247, 0.85);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(26, 26, 46, 0.06);
+  transition: all 0.4s ease;
+}
+.nav.scrolled {
+  background: rgba(250, 249, 247, 0.95);
+  box-shadow: 0 2px 20px rgba(26, 26, 46, 0.08);
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 72px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--ink);
+}
+.logo-mark {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 22px;
+  letter-spacing: -0.5px; color: var(--ink);
+}
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a {
+  text-decoration: none; color: var(--ink-muted);
+  font-size: 15px; font-weight: 500;
+  padding: 8px 14px; border-radius: 10px;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--ink); background: rgba(26, 26, 46, 0.04); }
+.nav-links a.active { color: var(--amber); }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-auth-btn {
+  text-decoration: none; font-size: 14px; font-weight: 600;
+  padding: 8px 18px; border-radius: 10px; transition: all 0.3s ease;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.nav-login { color: var(--ink-muted); }
+.nav-login:hover { color: var(--ink); }
+.nav-signup {
+  background: var(--ink); color: #fff; border-radius: 12px;
+}
+.nav-signup:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,26,46,0.2); }
+.nav-user-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--amber-glow); border: 1px solid rgba(232, 146, 13, 0.2);
+  border-radius: 12px; padding: 7px 14px;
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  cursor: pointer; transition: all 0.3s ease;
+  text-decoration: none;
+}
+.nav-user-btn:hover { background: rgba(232, 146, 13, 0.18); transform: translateY(-1px); }
+.nav-user-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #fff; font-weight: 700;
+  overflow: hidden;
+}
+.nav-user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.nav-logout-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; color: var(--ink-muted); padding: 8px 12px;
+  border-radius: 10px; transition: all 0.2s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.nav-logout-btn:hover { color: var(--coral); background: rgba(232, 93, 74, 0.06); }
+.mobile-toggle {
+  display: none; background: none; border: none;
+  width: 44px; height: 44px; cursor: pointer;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.mobile-toggle span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 2px; transition: all 0.3s ease;
+}
+.mobile-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mobile-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.mobile-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── PAGE LAYOUT ── */
+.page-wrap {
+  max-width: 1280px; margin: 0 auto;
+  padding: 100px 40px 80px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ── SIDEBAR ── */
+.my-sidebar {
+  position: sticky; top: 88px;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 16px;
+  box-shadow: var(--shadow-soft);
+}
+.my-sidebar-user {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px; padding: 8px 0 20px; border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.sidebar-avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; color: #fff; font-weight: 700;
+  overflow: hidden; box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.sidebar-user-name {
+  font-size: 16px; font-weight: 700; color: var(--ink); text-align: center;
+}
+.sidebar-user-email {
+  font-size: 12px; color: var(--ink-muted); text-align: center; word-break: break-all;
+}
+.sidebar-role-badge {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  text-align: center;
+}
+.role-expert { background: rgba(59,130,246,0.1); color: #3b82f6; }
+.role-company { background: rgba(13,148,136,0.1); color: var(--teal); }
+.role-general { background: rgba(90,95,125,0.1); color: var(--ink-muted); }
+
+.sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.sidebar-menu li a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 10px;
+  text-decoration: none; color: var(--ink-muted);
+  font-size: 14px; font-weight: 500;
+  transition: all 0.2s ease;
+}
+.sidebar-menu li a:hover { color: var(--ink); background: rgba(26, 26, 46, 0.04); }
+.sidebar-menu li a.active {
+  color: var(--amber); background: var(--amber-glow);
+  font-weight: 700;
+}
+.sidebar-menu-icon { font-size: 16px; }
+.sidebar-divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+/* ── MAIN CONTENT ── */
+.my-content { min-width: 0; }
+
+.section-panel {
+  display: none;
+}
+.section-panel.active {
+  display: block;
+}
+
+.panel-header {
+  margin-bottom: 28px;
+}
+.panel-title {
+  font-size: 24px; font-weight: 900; color: var(--ink);
+  letter-spacing: -0.5px; margin-bottom: 6px;
+}
+.panel-subtitle {
+  font-size: 14px; color: var(--ink-muted);
+}
+
+/* ── PROFILE PANEL ── */
+.profile-top {
+  display: flex; align-items: center; gap: 24px;
+  background: var(--surface-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px; margin-bottom: 24px;
+  box-shadow: var(--shadow-soft);
+}
+.profile-avatar-wrap {
+  position: relative; flex-shrink: 0;
+}
+.profile-avatar {
+  width: 96px; height: 96px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; color: #fff; font-weight: 700;
+  overflow: hidden; box-shadow: 0 4px 20px rgba(232, 146, 13, 0.3);
+}
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.profile-info-summary { flex: 1; }
+.profile-display-name {
+  font-size: 22px; font-weight: 900; color: var(--ink); margin-bottom: 4px;
+}
+.profile-email-display {
+  font-size: 14px; color: var(--ink-muted); margin-bottom: 8px;
+}
+.profile-bio-display {
+  font-size: 14px; color: var(--ink); line-height: 1.6;
+}
+
+/* ── FORM ── */
+.form-card {
+  background: var(--surface-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px;
+  box-shadow: var(--shadow-soft); margin-bottom: 20px;
+}
+.form-card-title {
+  font-size: 16px; font-weight: 700; color: var(--ink);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+}
+.form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+}
+.form-group { display: flex; flex-direction: column; gap: 7px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label {
+  font-size: 13px; font-weight: 600; color: var(--ink);
+}
+.form-input, .form-textarea, .form-select {
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--ink);
+  background: var(--surface);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  width: 100%;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px var(--amber-glow);
+  background: #fff;
+}
+.form-input[readonly], .form-input:disabled {
+  background: var(--surface-warm);
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: #aab0c4; }
+.form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+.interests-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.interest-tag {
+  padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; border: 1.5px solid var(--border);
+  color: var(--ink-muted); background: var(--surface-card);
+  user-select: none;
+}
+.interest-tag:hover { border-color: rgba(232, 146, 13, 0.4); color: var(--amber); }
+.interest-tag.selected {
+  background: var(--amber-glow); border-color: rgba(232, 146, 13, 0.4);
+  color: var(--amber); font-weight: 700;
+}
+
+.form-actions {
+  display: flex; gap: 12px; align-items: center; margin-top: 8px;
+}
+.btn-save {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  color: #fff; border: none; border-radius: var(--radius-sm);
+  font-size: 15px; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232, 146, 13, 0.4); }
+.btn-save:disabled { background: #d1d5db; box-shadow: none; cursor: not-allowed; transform: none; }
+.save-status {
+  font-size: 13px; color: var(--success); font-weight: 600;
+  display: none; align-items: center; gap: 5px;
+}
+.save-status.visible { display: flex; }
+
+/* ── ALERT ── */
+.alert {
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  font-size: 14px; margin-bottom: 16px; display: none; line-height: 1.5;
+}
+.alert.visible { display: block; }
+.alert-success {
+  background: rgba(16, 185, 129, 0.08); color: #0d7a5a;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.alert-error {
+  background: rgba(239, 68, 68, 0.08); color: #c0392b;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* ── TABLE ── */
+.data-table-wrap {
+  background: var(--surface-card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.data-table {
+  width: 100%; border-collapse: collapse;
+}
+.data-table th {
+  background: var(--surface-warm); padding: 14px 16px;
+  font-size: 12px; font-weight: 700; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  text-align: left; border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 14px 16px; font-size: 14px; color: var(--ink);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(26, 26, 46, 0.02); }
+.status-badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 700;
+}
+.status-pending { background: rgba(232, 146, 13, 0.1); color: var(--amber); }
+.status-approved { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+.status-rejected { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+.status-completed { background: rgba(13, 148, 136, 0.1); color: var(--teal); }
+
+/* ── COMMUNITY ACTIVITY ── */
+.post-item {
+  background: var(--surface-card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 20px;
+  margin-bottom: 8px; transition: all 0.2s ease;
+  display: flex; align-items: center; gap: 16px;
+}
+.post-item:hover {
+  border-color: rgba(26, 26, 46, 0.15);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+.post-item-info { flex: 1; min-width: 0; }
+.post-item-title {
+  font-size: 15px; font-weight: 700; color: var(--ink);
+  margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.post-item-meta {
+  font-size: 12px; color: var(--ink-muted);
+  display: flex; align-items: center; gap: 12px;
+}
+.post-item-views { display: flex; align-items: center; gap: 4px; }
+.post-item-link {
+  flex-shrink: 0; color: var(--amber); font-size: 13px; font-weight: 600;
+  text-decoration: none; padding: 6px 12px; border-radius: 8px;
+  background: var(--amber-glow); transition: all 0.2s;
+}
+.post-item-link:hover { background: rgba(232, 146, 13, 0.2); }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 60px 24px;
+  color: var(--ink-muted);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-text { font-size: 16px; font-weight: 600; color: var(--ink-muted); margin-bottom: 6px; }
+.empty-sub { font-size: 13px; color: var(--ink-muted); }
+
+/* ── LOADING SPINNER ── */
+.loading-spinner {
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px; color: var(--ink-muted); gap: 12px; font-size: 14px;
+}
+.spinner {
+  width: 24px; height: 24px;
+  border: 3px solid rgba(232, 146, 13, 0.15);
+  border-top: 3px solid var(--amber);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink); color: rgba(255,255,255,0.6);
+  padding: 32px 40px 20px;
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 16px;
+}
+.footer-logo {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 18px; color: #fff;
+}
+.footer-logo span { color: var(--amber); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  color: rgba(255,255,255,0.5); text-decoration: none;
+  font-size: 14px; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 0 auto;
+  font-size: 13px; color: rgba(255,255,255,0.35);
+  padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .nav-inner { padding: 0 24px; }
+  .page-wrap { padding: 100px 24px 60px; gap: 24px; }
+  .footer { padding: 28px 24px 16px; }
+}
+
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 16px; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 72px; left: 0; right: 0;
+    background: rgba(250, 249, 247, 0.98);
+    padding: 16px; gap: 4px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(26, 26, 46, 0.1);
+  }
+  .nav-links.open a { padding: 12px 16px; border-radius: 10px; }
+  .mobile-toggle { display: flex; }
+  .page-wrap {
+    grid-template-columns: 1fr;
+    padding: 88px 16px 60px;
+  }
+  .my-sidebar { position: static; }
+  .my-sidebar-user { padding: 8px 0 16px; }
+  .sidebar-menu { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+  .sidebar-menu li a {
+    padding: 8px 12px; font-size: 13px;
+    border: 1px solid var(--border);
+  }
+  .sidebar-menu li a.active { border-color: rgba(232, 146, 13, 0.3); }
+  .sidebar-divider { display: none; }
+  .profile-top { flex-direction: column; text-align: center; }
+  .form-grid { grid-template-columns: 1fr; }
+  .footer { padding: 24px 16px 16px; }
+  .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+  .data-table th, .data-table td { padding: 10px 12px; font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+  .panel-title { font-size: 20px; }
+  .profile-avatar { width: 72px; height: 72px; font-size: 26px; }
+  .profile-display-name { font-size: 18px; }
+  .form-card { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="logo-mark">
+        <svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg">
+          <text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text>
+          <text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text>
+        </svg>
+      </div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../../startup.html">우리의 창업</a>
+      <a href="../../ax-project.html">AX 프로젝트</a>
+      <a href="../../expert.html">AI 전문가</a>
+      <a href="../../community.html">커뮤니티</a>
+    </div>
+    <div class="nav-right" id="navRight">
+      <!-- JS로 동적 렌더링 -->
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── PAGE WRAP ── -->
+<div class="page-wrap">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="my-sidebar">
+    <div class="my-sidebar-user">
+      <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+      <div class="sidebar-user-name" id="sidebarName">로딩 중...</div>
+      <div class="sidebar-user-email" id="sidebarEmail"></div>
+      <div class="sidebar-role-badge role-general" id="sidebarRole">일반</div>
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <a href="#profile" class="active" data-section="profile" onclick="switchSection('profile', this); return false;">
+          <span class="sidebar-menu-icon">👤</span>
+          프로필
+        </a>
+      </li>
+      <div class="sidebar-divider"></div>
+      <li>
+        <a href="#enrollments" data-section="enrollments" onclick="switchSection('enrollments', this); return false;">
+          <span class="sidebar-menu-icon">📋</span>
+          수강 내역
+        </a>
+      </li>
+      <li>
+        <a href="#community" data-section="community" onclick="switchSection('community', this); return false;">
+          <span class="sidebar-menu-icon">💬</span>
+          커뮤니티 활동
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="my-content" id="mainContent">
+
+    <!-- 전체 로딩 상태 -->
+    <div id="globalLoading" class="loading-spinner">
+      <div class="spinner"></div>
+      <span>정보를 불러오는 중...</span>
+    </div>
+
+    <!-- ── 프로필 섹션 ── -->
+    <div class="section-panel" id="panel-profile">
+
+      <div class="panel-header">
+        <h1 class="panel-title">프로필 관리</h1>
+        <p class="panel-subtitle">내 정보를 확인하고 수정할 수 있습니다.</p>
+      </div>
+
+      <!-- 프로필 요약 카드 -->
+      <div class="profile-top">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar" id="profileAvatar">?</div>
+        </div>
+        <div class="profile-info-summary">
+          <div class="profile-display-name" id="profileDisplayName">—</div>
+          <div class="profile-email-display" id="profileEmailDisplay">—</div>
+          <div class="profile-bio-display" id="profileBioDisplay" style="color: var(--ink-muted); font-size: 13px;">소개글이 없습니다.</div>
+        </div>
+      </div>
+
+      <!-- 알림 -->
+      <div id="profileAlert" class="alert"></div>
+
+      <!-- 기본 정보 수정 폼 -->
+      <form id="profileForm" onsubmit="saveProfile(event)">
+        <div class="form-card">
+          <div class="form-card-title">
+            <span>✏️</span> 기본 정보
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="fieldName">이름</label>
+              <input class="form-input" type="text" id="fieldName" placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fieldNickname">닉네임</label>
+              <input class="form-input" type="text" id="fieldNickname" placeholder="닉네임을 입력하세요">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fieldFullName">전체 이름 (full_name)</label>
+              <input class="form-input" type="text" id="fieldFullName" placeholder="성명을 입력하세요">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fieldPhone">전화번호</label>
+              <input class="form-input" type="tel" id="fieldPhone" placeholder="010-0000-0000">
+            </div>
+            <div class="form-group full">
+              <label class="form-label" for="fieldEmail">이메일</label>
+              <input class="form-input" type="email" id="fieldEmail" readonly>
+            </div>
+            <div class="form-group full">
+              <label class="form-label" for="fieldBio">소개글</label>
+              <textarea class="form-textarea" id="fieldBio" placeholder="자신을 소개해 주세요."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 관심분야 -->
+        <div class="form-card">
+          <div class="form-card-title">
+            <span>🏷️</span> 관심 분야
+          </div>
+          <div class="interests-tags" id="interestsTags"></div>
+        </div>
+
+        <!-- 역할 정보 (읽기전용) -->
+        <div class="form-card">
+          <div class="form-card-title">
+            <span>🎖️</span> 역할 정보 <span style="font-size:12px; color: var(--ink-muted); font-weight:400;">(관리자 변경 가능)</span>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">현재 역할</label>
+              <input class="form-input" type="text" id="fieldRole" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">사용자 ID</label>
+              <input class="form-input" type="text" id="fieldUserId" readonly>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save" id="saveBtn">저장하기</button>
+          <div class="save-status" id="saveStatus">
+            <span>✅</span> 저장되었습니다.
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── 수강 내역 섹션 ── -->
+    <div class="section-panel" id="panel-enrollments">
+      <div class="panel-header">
+        <h1 class="panel-title">수강 내역</h1>
+        <p class="panel-subtitle">신청한 프로그램과 진행 현황을 확인하세요.</p>
+      </div>
+      <div id="enrollmentsContent">
+        <div class="loading-spinner"><div class="spinner"></div><span>불러오는 중...</span></div>
+      </div>
+    </div>
+
+    <!-- ── 커뮤니티 활동 섹션 ── -->
+    <div class="section-panel" id="panel-community">
+      <div class="panel-header">
+        <h1 class="panel-title">커뮤니티 활동</h1>
+        <p class="panel-subtitle">내가 작성한 게시글 목록입니다.</p>
+      </div>
+      <div id="communityContent">
+        <div class="loading-spinner"><div class="spinner"></div><span>불러오는 중...</span></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">AX-<span>On</span> Platform</div>
+    </div>
+    <div class="footer-links">
+      <a href="../../terms.html">이용약관</a>
+      <a href="../../privacy.html">개인정보처리방침</a>
+      <a href="../../contact.html">문의하기</a>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    &copy; 2026 AX-On Platform. All rights reserved.
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<script>
+// ── Supabase 초기화 ──
+const { createClient } = supabase;
+const supabaseClient = createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+
+// ── 상태 변수 ──
+let currentUser = null;
+let currentProfile = null;
+let selectedInterests = [];
+
+// ── 관심분야 목록 ──
+const INTEREST_OPTIONS = [
+  'AI 창업', 'AX 프로젝트', '자연어 처리', '컴퓨터 비전',
+  '머신러닝', '딥러닝', 'LLM', 'ChatGPT 활용',
+  '기업 AI 전환', '데이터 분석', '자동화', '로보틱스',
+  '헬스케어 AI', '금융 AI', '교육 AI', '제조 AI'
+];
+
+// ── 역할 라벨 ──
+const ROLE_LABELS = {
+  expert: '전문가',
+  company: '기업',
+  general: '일반',
+  admin: '관리자'
+};
+const ROLE_CLASSES = {
+  expert: 'role-expert',
+  company: 'role-company',
+  general: 'role-general',
+  admin: 'role-expert'
+};
+
+// ── 초기화 ──
+document.addEventListener('DOMContentLoaded', async () => {
+  await checkAuth();
+  setupNavScroll();
+  setupMobileToggle();
+  renderInterestTags();
+});
+
+// ── 인증 확인 ──
+async function checkAuth() {
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+      window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
+      return;
+    }
+    currentUser = session.user;
+    updateNavForUser();
+    await loadProfile();
+    hideGlobalLoading();
+    switchSection('profile');
+  } catch (e) {
+    window.location.href = 'login.html';
+  }
+}
+
+// ── 프로필 로드 ──
+async function loadProfile() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .eq('id', currentUser.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
+
+    currentProfile = data || { id: currentUser.id };
+
+    // 폼에 데이터 채우기
+    document.getElementById('fieldEmail').value = currentUser.email || '';
+    document.getElementById('fieldName').value = escapeHtml(currentProfile.name || '');
+    document.getElementById('fieldNickname').value = escapeHtml(currentProfile.nickname || '');
+    document.getElementById('fieldFullName').value = escapeHtml(currentProfile.full_name || '');
+    document.getElementById('fieldPhone').value = escapeHtml(currentProfile.phone || '');
+    document.getElementById('fieldBio').value = escapeHtml(currentProfile.bio || '');
+    document.getElementById('fieldRole').value = ROLE_LABELS[currentProfile.role] || '일반';
+    document.getElementById('fieldUserId').value = currentUser.id || '';
+
+    // 관심분야 복원
+    if (currentProfile.interests) {
+      try {
+        selectedInterests = Array.isArray(currentProfile.interests)
+          ? currentProfile.interests
+          : JSON.parse(currentProfile.interests);
+      } catch { selectedInterests = []; }
+    }
+    renderInterestTags();
+
+    // 사이드바 및 요약 카드 업데이트
+    updateProfileSummary();
+
+  } catch (e) {
+    console.error('프로필 로드 오류:', e);
+  }
+}
+
+// ── 프로필 요약 업데이트 ──
+function updateProfileSummary() {
+  const displayName = currentProfile.name || currentProfile.nickname || currentProfile.full_name || '이름 미설정';
+  const email = currentUser.email || '';
+  const bio = currentProfile.bio || '소개글이 없습니다.';
+  const role = currentProfile.role || 'general';
+  const avatarUrl = currentProfile.avatar_url;
+
+  // 사이드바
+  document.getElementById('sidebarName').textContent = displayName;
+  document.getElementById('sidebarEmail').textContent = email;
+
+  const sidebarRole = document.getElementById('sidebarRole');
+  sidebarRole.textContent = ROLE_LABELS[role] || '일반';
+  sidebarRole.className = 'sidebar-role-badge ' + (ROLE_CLASSES[role] || 'role-general');
+
+  setAvatar(document.getElementById('sidebarAvatar'), avatarUrl, displayName);
+
+  // 요약 카드
+  document.getElementById('profileDisplayName').textContent = displayName;
+  document.getElementById('profileEmailDisplay').textContent = email;
+  document.getElementById('profileBioDisplay').textContent = bio;
+  setAvatar(document.getElementById('profileAvatar'), avatarUrl, displayName);
+}
+
+// ── 아바타 설정 ──
+function setAvatar(el, url, name) {
+  if (url && url.startsWith('http')) {
+    el.innerHTML = '<img src="' + escapeHtml(url) + '" alt="프로필 이미지" onerror="this.parentElement.textContent=\'' + escapeHtml((name || '?')[0].toUpperCase()) + '\'">';
+  } else {
+    el.textContent = (name || '?')[0].toUpperCase();
+  }
+}
+
+// ── 관심분야 태그 렌더링 ──
+function renderInterestTags() {
+  const container = document.getElementById('interestsTags');
+  if (!container) return;
+  container.innerHTML = '';
+  INTEREST_OPTIONS.forEach(tag => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'interest-tag' + (selectedInterests.includes(tag) ? ' selected' : '');
+    btn.textContent = tag;
+    btn.addEventListener('click', () => toggleInterest(tag, btn));
+    container.appendChild(btn);
+  });
+}
+
+function toggleInterest(tag, el) {
+  if (selectedInterests.includes(tag)) {
+    selectedInterests = selectedInterests.filter(t => t !== tag);
+    el.classList.remove('selected');
+  } else {
+    selectedInterests.push(tag);
+    el.classList.add('selected');
+  }
+}
+
+// ── 프로필 저장 ──
+async function saveProfile(event) {
+  event.preventDefault();
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+
+  hideAlert('profileAlert');
+
+  const updates = {
+    name: document.getElementById('fieldName').value.trim(),
+    nickname: document.getElementById('fieldNickname').value.trim(),
+    full_name: document.getElementById('fieldFullName').value.trim(),
+    phone: document.getElementById('fieldPhone').value.trim(),
+    bio: document.getElementById('fieldBio').value.trim(),
+    interests: JSON.stringify(selectedInterests),
+    updated_at: new Date().toISOString()
+  };
+
+  try {
+    const { error } = await supabaseClient
+      .from('profiles')
+      .upsert({ id: currentUser.id, ...updates }, { onConflict: 'id' });
+
+    if (error) throw error;
+
+    currentProfile = { ...currentProfile, ...updates };
+    updateProfileSummary();
+
+    showAlert('profileAlert', '프로필이 성공적으로 저장되었습니다.', 'success');
+    const statusEl = document.getElementById('saveStatus');
+    statusEl.classList.add('visible');
+    setTimeout(() => statusEl.classList.remove('visible'), 3000);
+
+  } catch (e) {
+    console.error('저장 오류:', e);
+    showAlert('profileAlert', '저장에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ── 수강 내역 로드 ──
+async function loadEnrollments() {
+  const container = document.getElementById('enrollmentsContent');
+  container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><span>불러오는 중...</span></div>';
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('enrollments')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <div class="empty-text">수강 신청 내역이 없습니다</div>
+          <div class="empty-sub">관심있는 프로그램에 참여해 보세요.</div>
+        </div>`;
+      return;
+    }
+
+    const statusMap = {
+      pending: { label: '심사 중', cls: 'status-pending' },
+      approved: { label: '승인됨', cls: 'status-approved' },
+      rejected: { label: '거절됨', cls: 'status-rejected' },
+      completed: { label: '완료', cls: 'status-completed' }
+    };
+
+    const rows = data.map(row => {
+      const s = statusMap[row.status] || { label: row.status || '—', cls: 'status-pending' };
+      const date = row.created_at ? new Date(row.created_at).toLocaleDateString('ko-KR') : '—';
+      return `
+        <tr>
+          <td>${escapeHtml(row.program_name || row.program_type || '프로그램')}</td>
+          <td>${escapeHtml(row.program_type || '—')}</td>
+          <td>${date}</td>
+          <td><span class="status-badge ${s.cls}">${s.label}</span></td>
+        </tr>`;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>프로그램명</th>
+              <th>유형</th>
+              <th>신청일</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+
+  } catch (e) {
+    console.error('수강 내역 로드 오류:', e);
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-text">불러오기에 실패했습니다</div>
+        <div class="empty-sub">잠시 후 다시 시도해주세요.</div>
+      </div>`;
+  }
+}
+
+// ── 커뮤니티 활동 로드 ──
+async function loadCommunityActivity() {
+  const container = document.getElementById('communityContent');
+  container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><span>불러오는 중...</span></div>';
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('community_posts')
+      .select('id, title, created_at, view_count, category')
+      .eq('author_id', currentUser.id)
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">💬</div>
+          <div class="empty-text">작성한 게시글이 없습니다</div>
+          <div class="empty-sub">커뮤니티에 첫 글을 남겨보세요!</div>
+        </div>`;
+      return;
+    }
+
+    const items = data.map(post => {
+      const date = post.created_at ? new Date(post.created_at).toLocaleDateString('ko-KR') : '—';
+      const views = post.view_count || 0;
+      const title = escapeHtml(post.title || '(제목 없음)');
+      return `
+        <div class="post-item">
+          <div class="post-item-info">
+            <div class="post-item-title">${title}</div>
+            <div class="post-item-meta">
+              <span>${date}</span>
+              <span class="post-item-views">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                ${views.toLocaleString()}
+              </span>
+              ${post.category ? '<span>' + escapeHtml(post.category) + '</span>' : ''}
+            </div>
+          </div>
+          <a href="../../community.html" class="post-item-link">보기</a>
+        </div>`;
+    }).join('');
+
+    container.innerHTML = `<div>${items}</div>`;
+
+  } catch (e) {
+    console.error('커뮤니티 활동 로드 오류:', e);
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-text">불러오기에 실패했습니다</div>
+        <div class="empty-sub">잠시 후 다시 시도해주세요.</div>
+      </div>`;
+  }
+}
+
+// ── 섹션 전환 ──
+function switchSection(sectionId, linkEl) {
+  // 모든 패널 숨기기
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+
+  // 대상 패널 표시
+  const panel = document.getElementById('panel-' + sectionId);
+  if (panel) panel.classList.add('active');
+
+  // 메뉴 활성화
+  if (linkEl) {
+    linkEl.classList.add('active');
+  } else {
+    const target = document.querySelector('.sidebar-menu a[data-section="' + sectionId + '"]');
+    if (target) target.classList.add('active');
+  }
+
+  // 섹션별 데이터 로드
+  if (sectionId === 'enrollments') loadEnrollments();
+  if (sectionId === 'community') loadCommunityActivity();
+}
+
+// ── 전역 로딩 숨기기 ──
+function hideGlobalLoading() {
+  const el = document.getElementById('globalLoading');
+  if (el) el.style.display = 'none';
+}
+
+// ── 알림 표시 ──
+function showAlert(id, msg, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'alert alert-' + type + ' visible';
+  setTimeout(() => el.classList.remove('visible'), 5000);
+}
+function hideAlert(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('visible');
+}
+
+// ── 네비게이션 사용자 상태 업데이트 ──
+function updateNavForUser() {
+  const navRight = document.getElementById('navRight');
+  const displayName = currentProfile?.name || currentProfile?.nickname || currentUser.email?.split('@')[0] || '내 계정';
+  navRight.innerHTML = `
+    <a href="profile.html" class="nav-user-btn" style="text-decoration:none;">
+      <div class="nav-user-avatar" id="navAvatar">${escapeHtml(displayName[0].toUpperCase())}</div>
+      <span>${escapeHtml(displayName)}</span>
+    </a>
+    <button class="nav-logout-btn" onclick="handleLogout()">로그아웃</button>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  `;
+  // 모바일 토글 재설정
+  setupMobileToggle();
+}
+
+// ── 로그아웃 ──
+async function handleLogout() {
+  await supabaseClient.auth.signOut();
+  window.location.href = '../../index.html';
+}
+
+// ── 네비게이션 스크롤 ──
+function setupNavScroll() {
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('nav');
+    if (window.scrollY > 20) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }, { passive: true });
+}
+
+// ── 모바일 토글 ──
+function setupMobileToggle() {
+  const toggle = document.getElementById('mobileToggle');
+  const links = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+  toggle.onclick = () => {
+    const isOpen = links.classList.toggle('open');
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  };
+}
+
+// ── HTML 이스케이프 ──
+function escapeHtml(s) {
+  if (!s) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+</body>
+</html>

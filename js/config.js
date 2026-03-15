@@ -12,6 +12,23 @@ const AXON_CONFIG = {
     if (this._initialized) return this;
     if (this._initPromise) return this._initPromise;
 
+    // S7SC1: sessionStorage 캐싱 (유효시간 1시간)
+    const CACHE_KEY = 'axon_config_cache';
+    const CACHE_TTL = 60 * 60 * 1000; // 1시간 (ms)
+    try {
+      const cached = sessionStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const { data, ts } = JSON.parse(cached);
+        if (Date.now() - ts < CACHE_TTL && data.supabaseUrl && data.supabaseAnonKey) {
+          this.SUPABASE_URL = data.supabaseUrl;
+          this.SUPABASE_ANON_KEY = data.supabaseAnonKey;
+          this._initialized = true;
+          this._initPromise = Promise.resolve(this);
+          return this;
+        }
+      }
+    } catch (e) { /* sessionStorage 접근 실패 시 무시 */ }
+
     this._initPromise = fetch('/api/config')
       .then(res => {
         if (!res.ok) throw new Error('Config fetch failed: ' + res.status);
@@ -21,6 +38,10 @@ const AXON_CONFIG = {
         this.SUPABASE_URL = data.supabaseUrl;
         this.SUPABASE_ANON_KEY = data.supabaseAnonKey;
         this._initialized = true;
+        // 캐시 저장
+        try {
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+        } catch (e) { /* 저장 실패 시 무시 */ }
         return this;
       })
       .catch(() => {

@@ -1,0 +1,1051 @@
+<!-- @task S7F11 -->
+<!-- @description 관리자 대시보드 홈 — KPI 카드 6개, Chart.js 차트 2개, 최근 활동 피드 -->
+<!DOCTYPE html>
+<html lang="ko" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 대시보드 — AX-On Platform</title>
+  <meta name="robots" content="noindex,nofollow">
+
+  <!-- Supabase 환경변수 주입 (Vercel meta 방식) -->
+  <meta name="supabase-url" content="">
+  <meta name="supabase-anon-key" content="">
+
+  <!-- 폰트 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- 관리자 공통 CSS -->
+  <link rel="stylesheet" href="../../css/admin-common.css">
+
+  <!-- Chart.js v4 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- 플랫폼 공통 설정 -->
+  <script src="../../config.js"></script>
+
+  <style>
+    /* ── 대시보드 홈 전용 스타일 ── */
+    .welcome-banner {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-banner::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: rgba(139, 92, 246, 0.2);
+      border-radius: 50%;
+    }
+
+    .welcome-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      right: 80px;
+      width: 140px;
+      height: 140px;
+      background: rgba(14, 165, 233, 0.15);
+      border-radius: 50%;
+    }
+
+    .welcome-text { position: relative; z-index: 1; }
+
+    .welcome-greeting {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .welcome-desc {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .welcome-date {
+      position: relative;
+      z-index: 1;
+      text-align: right;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      flex-shrink: 0;
+    }
+
+    .welcome-date strong {
+      display: block;
+      font-size: 1.5rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── 하단 2열 ── */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 1rem;
+    }
+
+    @media (max-width: 1000px) {
+      .bottom-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── 활동 피드 ── */
+    .activity-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .live-dot::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    /* ── 빠른 링크 ── */
+    .quick-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .quick-link-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+
+    .quick-link-item:hover {
+      border-color: var(--violet);
+      background: var(--violet-light);
+      color: var(--violet);
+    }
+
+    .quick-link-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* ── 시스템 상태 ── */
+    .system-status-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .system-status-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+    }
+
+    .system-status-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--ink-muted);
+    }
+
+    .system-status-val {
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .system-status-val.warn { color: var(--amber); }
+    .system-status-val.err  { color: var(--red); }
+  </style>
+</head>
+<body>
+
+<!-- 사이드바 오버레이 (모바일) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- 관리자 레이아웃 -->
+<div class="admin-layout">
+
+  <!-- ============================================================
+       사이드바
+  ============================================================ -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <!-- 로고 -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">AX</div>
+      <div>
+        <div class="sidebar-logo-text">AX-On Admin</div>
+        <div class="sidebar-logo-sub">관리자 패널</div>
+      </div>
+    </div>
+
+    <!-- 토글 버튼 -->
+    <button class="sidebar-toggle" id="sidebarToggle" title="사이드바 접기/펼치기">&#8249;</button>
+
+    <!-- 네비게이션 -->
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">메인</div>
+
+      <a class="sidebar-item" href="/pages/admin/" data-path="/pages/admin/" data-tooltip="대시보드">
+        <span class="sidebar-item-icon">📊</span>
+        <span class="sidebar-item-text">대시보드</span>
+      </a>
+
+      <div class="sidebar-section-label">사용자</div>
+
+      <a class="sidebar-item" href="/pages/admin/users.html" data-path="/pages/admin/users" data-tooltip="사용자 관리">
+        <span class="sidebar-item-icon">👥</span>
+        <span class="sidebar-item-text">사용자 관리</span>
+      </a>
+
+      <a class="sidebar-item" href="/pages/admin/expert-applications.html" data-path="/pages/admin/expert-applications" data-tooltip="전문가 신청">
+        <span class="sidebar-item-icon">🏅</span>
+        <span class="sidebar-item-text">전문가 신청</span>
+        <span class="sidebar-item-badge" id="sidebarBadgeExpert">0</span>
+      </a>
+
+      <div class="sidebar-section-label">콘텐츠</div>
+
+      <a class="sidebar-item" href="/pages/admin/enrollments.html" data-path="/pages/admin/enrollments" data-tooltip="수강신청 관리">
+        <span class="sidebar-item-icon">📚</span>
+        <span class="sidebar-item-text">수강신청 관리</span>
+      </a>
+
+      <a class="sidebar-item" href="/pages/admin/ax-projects.html" data-path="/pages/admin/ax-projects" data-tooltip="AX 프로젝트">
+        <span class="sidebar-item-icon">🚀</span>
+        <span class="sidebar-item-text">AX 프로젝트</span>
+      </a>
+
+      <div class="sidebar-section-label">운영</div>
+
+      <a class="sidebar-item" href="/pages/admin/inquiries.html" data-path="/pages/admin/inquiries" data-tooltip="문의 관리">
+        <span class="sidebar-item-icon">💬</span>
+        <span class="sidebar-item-text">문의 관리</span>
+        <span class="sidebar-item-badge" id="sidebarBadgeInquiry">0</span>
+      </a>
+
+      <a class="sidebar-item" href="/pages/admin/reports.html" data-path="/pages/admin/reports" data-tooltip="신고/차단">
+        <span class="sidebar-item-icon">🚨</span>
+        <span class="sidebar-item-text">신고/차단</span>
+        <span class="sidebar-item-badge" id="sidebarBadgeReport">0</span>
+      </a>
+
+      <a class="sidebar-item" href="/pages/admin/content.html" data-path="/pages/admin/content" data-tooltip="콘텐츠 관리">
+        <span class="sidebar-item-icon">🖼️</span>
+        <span class="sidebar-item-text">콘텐츠 관리</span>
+      </a>
+    </nav>
+
+    <!-- 사이드바 하단 사용자 정보 -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="adminAvatar">A</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="adminName">로딩 중…</div>
+          <div class="sidebar-user-role">관리자</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       메인 컨텐츠
+  ============================================================ -->
+  <main class="admin-main">
+
+    <!-- 헤더바 -->
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <!-- 모바일 메뉴 버튼 -->
+        <button class="admin-header-btn" id="mobileMenuBtn" title="메뉴">☰</button>
+        <div class="admin-header-breadcrumb">
+          AX-On Admin / <span>대시보드</span>
+        </div>
+      </div>
+      <div class="admin-header-right">
+        <!-- 다크모드 토글 -->
+        <button class="admin-header-btn" id="themeToggleBtn" title="다크/라이트 모드">🌙</button>
+        <!-- 새로고침 -->
+        <button class="admin-header-btn" id="refreshBtn" title="데이터 새로고침">🔄</button>
+        <!-- 로그아웃 -->
+        <button class="admin-logout-btn" id="logoutBtn">로그아웃</button>
+      </div>
+    </header>
+
+    <!-- 페이지 컨텐츠 -->
+    <div class="admin-content">
+
+      <!-- 환영 배너 -->
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <div class="welcome-greeting">안녕하세요, <span id="welcomeName">관리자</span>님 👋</div>
+          <div class="welcome-desc">AX-On 플랫폼 운영 현황을 한눈에 확인하세요.</div>
+        </div>
+        <div class="welcome-date">
+          <strong id="welcomeDate">--</strong>
+          <span id="welcomeDay">--</span>
+        </div>
+      </div>
+
+      <!-- KPI 카드 6개 -->
+      <div class="kpi-grid">
+
+        <div class="kpi-card" data-kpi="users">
+          <div class="kpi-card-top">
+            <div class="kpi-icon violet">👤</div>
+            <div class="kpi-trend neutral" id="trendUsers">—</div>
+          </div>
+          <div class="kpi-value" id="kpiUsers">-</div>
+          <div class="kpi-label">총 사용자 수</div>
+        </div>
+
+        <div class="kpi-card" data-kpi="ax-projects">
+          <div class="kpi-card-top">
+            <div class="kpi-icon sky">🚀</div>
+            <div class="kpi-trend neutral" id="trendAxProjects">—</div>
+          </div>
+          <div class="kpi-value" id="kpiAxProjects">-</div>
+          <div class="kpi-label">AX 프로젝트 접수</div>
+        </div>
+
+        <div class="kpi-card" data-kpi="enrollments">
+          <div class="kpi-card-top">
+            <div class="kpi-icon teal">📚</div>
+            <div class="kpi-trend neutral" id="trendEnrollments">—</div>
+          </div>
+          <div class="kpi-value" id="kpiEnrollments">-</div>
+          <div class="kpi-label">수강신청 수</div>
+        </div>
+
+        <div class="kpi-card" data-kpi="inquiries">
+          <div class="kpi-card-top">
+            <div class="kpi-icon amber">💬</div>
+            <div class="kpi-trend neutral" id="trendInquiries">—</div>
+          </div>
+          <div class="kpi-value" id="kpiInquiries">-</div>
+          <div class="kpi-label">미처리 문의</div>
+        </div>
+
+        <div class="kpi-card" data-kpi="reports">
+          <div class="kpi-card-top">
+            <div class="kpi-icon red">🚨</div>
+            <div class="kpi-trend neutral" id="trendReports">—</div>
+          </div>
+          <div class="kpi-value" id="kpiReports">-</div>
+          <div class="kpi-label">미처리 신고</div>
+        </div>
+
+        <div class="kpi-card" data-kpi="expert-apps">
+          <div class="kpi-card-top">
+            <div class="kpi-icon coral">🏅</div>
+            <div class="kpi-trend neutral" id="trendExpertApps">—</div>
+          </div>
+          <div class="kpi-value" id="kpiExpertApps">-</div>
+          <div class="kpi-label">신규 전문가 신청</div>
+        </div>
+
+      </div>
+
+      <!-- 차트 영역 -->
+      <div class="chart-grid">
+
+        <!-- 사용자 성장 Line Chart -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div>
+              <div class="chart-card-title">신규 가입자 추이</div>
+              <div class="chart-card-sub">최근 30일 일별 신규 가입</div>
+            </div>
+            <div class="kpi-trend up" id="chartUserTrend" style="font-size:0.75rem;">로딩 중…</div>
+          </div>
+          <div class="chart-container" style="height:220px;">
+            <canvas id="userGrowthChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 산업별 Pie Chart -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div>
+              <div class="chart-card-title">AX 프로젝트 산업 분포</div>
+              <div class="chart-card-sub">산업 분류별 접수 비율</div>
+            </div>
+          </div>
+          <div class="chart-container" style="height:220px;">
+            <canvas id="industryPieChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 하단 2열: 활동 피드 + 빠른 링크/시스템 상태 -->
+      <div class="bottom-grid">
+
+        <!-- 최근 활동 피드 -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="chart-card-title">최근 활동</div>
+            <div class="activity-header-actions">
+              <span class="live-dot">실시간</span>
+            </div>
+          </div>
+          <div class="section-card-body" style="padding:0;">
+            <div id="activityFeed" class="activity-feed" style="padding:0 1.25rem;">
+              <div class="loading-overlay">
+                <div class="spinner"></div>
+                <span>활동 내역 로딩 중…</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 우측 패널 -->
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+
+          <!-- 빠른 링크 -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="chart-card-title">빠른 이동</div>
+            </div>
+            <div class="section-card-body">
+              <div class="quick-links">
+                <a class="quick-link-item" href="/pages/admin/users.html">
+                  <span class="quick-link-icon">👥</span>사용자 관리
+                </a>
+                <a class="quick-link-item" href="/pages/admin/expert-applications.html">
+                  <span class="quick-link-icon">🏅</span>전문가 심사
+                </a>
+                <a class="quick-link-item" href="/pages/admin/inquiries.html">
+                  <span class="quick-link-icon">💬</span>문의 처리
+                </a>
+                <a class="quick-link-item" href="/pages/admin/reports.html">
+                  <span class="quick-link-icon">🚨</span>신고 처리
+                </a>
+                <a class="quick-link-item" href="/pages/admin/enrollments.html">
+                  <span class="quick-link-icon">📚</span>수강 현황
+                </a>
+                <a class="quick-link-item" href="/pages/admin/ax-projects.html">
+                  <span class="quick-link-icon">🚀</span>프로젝트
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 시스템 상태 -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="chart-card-title">시스템 상태</div>
+              <span class="badge badge-active">정상</span>
+            </div>
+            <div class="section-card-body">
+              <div class="system-status-list">
+                <div class="system-status-item">
+                  <div class="system-status-label">
+                    <span class="status-dot dot-green"></span>Supabase DB
+                  </div>
+                  <span class="system-status-val" id="sysDb">확인 중…</span>
+                </div>
+                <div class="system-status-item">
+                  <div class="system-status-label">
+                    <span class="status-dot dot-green"></span>Auth 서비스
+                  </div>
+                  <span class="system-status-val" id="sysAuth">정상</span>
+                </div>
+                <div class="system-status-item">
+                  <div class="system-status-label">
+                    <span class="status-dot dot-green"></span>스토리지
+                  </div>
+                  <span class="system-status-val" id="sysStorage">정상</span>
+                </div>
+                <div class="system-status-item">
+                  <div class="system-status-label">
+                    <span class="status-dot dot-gray"></span>마지막 갱신
+                  </div>
+                  <span class="system-status-val" style="color:var(--ink-muted);font-weight:500;" id="sysLastUpdate">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </main>
+</div><!-- /admin-layout -->
+
+<!-- 관리자 공통 JS -->
+<script src="../../js/admin-common.js"></script>
+
+<script>
+/* @task S7F11 — 대시보드 홈 페이지 스크립트 */
+'use strict';
+
+const { formatNumber, formatDate, formatDateTime, showToast, fetchCount, fetchRows,
+        calcTrend, getSupabaseClient, initAdminPage, escapeHtml } = AdminCommon;
+
+/* ── 차트 인스턴스 ── */
+let userGrowthChartInst = null;
+let industryPieChartInst = null;
+
+/* ══════════════════════════════════════════════════
+   초기화
+══════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', async () => {
+  // 날짜 표시
+  renderWelcomeDate();
+
+  // 다크모드 토글
+  bindThemeToggle();
+
+  // 관리자 인증 → 사이드바 → 데이터 로드
+  await initAdminPage({
+    onReady: async (profile) => {
+      const welcomeNameEl = document.getElementById('welcomeName');
+      if (welcomeNameEl) {
+        welcomeNameEl.textContent = profile.full_name || profile.email || '관리자';
+      }
+
+      // 데이터 병렬 로드
+      await loadAllData();
+
+      // 새로고침 버튼
+      document.getElementById('refreshBtn')?.addEventListener('click', async () => {
+        showToast('데이터를 새로고침합니다…', 'info', 1500);
+        await loadAllData();
+      });
+    },
+  });
+});
+
+/* ══════════════════════════════════════════════════
+   날짜 렌더링
+══════════════════════════════════════════════════ */
+function renderWelcomeDate() {
+  const now = new Date();
+  const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const dateEl = document.getElementById('welcomeDate');
+  const dayEl  = document.getElementById('welcomeDay');
+  if (dateEl) {
+    dateEl.textContent = `${now.getMonth() + 1}월 ${now.getDate()}일`;
+  }
+  if (dayEl) {
+    dayEl.textContent = days[now.getDay()];
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   전체 데이터 로드
+══════════════════════════════════════════════════ */
+async function loadAllData() {
+  try {
+    await Promise.all([
+      loadKpiCards(),
+      loadUserGrowthChart(),
+      loadIndustryPieChart(),
+      loadActivityFeed(),
+    ]);
+    updateSidebarBadges();
+    document.getElementById('sysLastUpdate').textContent = formatDateTime(new Date().toISOString());
+    document.getElementById('sysDb').textContent = '정상';
+    document.getElementById('sysDb').className = 'system-status-val';
+  } catch (err) {
+    console.error('[Dashboard] loadAllData error:', err);
+    showToast('일부 데이터 로드에 실패했습니다.', 'error');
+    document.getElementById('sysDb').textContent = '오류';
+    document.getElementById('sysDb').className = 'system-status-val err';
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   KPI 카드
+══════════════════════════════════════════════════ */
+async function loadKpiCards() {
+  const sb = getSupabaseClient();
+  if (!sb) return;
+
+  // 현재 기간 카운트 (전체)
+  const [users, axProjects, enrollments, inquiries, reports, expertApps] = await Promise.all([
+    fetchCount('profiles'),
+    fetchCount('ax_project_requests'),
+    fetchCount('course_enrollments'),
+    fetchCount('contact_inquiries', { status: 'pending' }),
+    fetchCount('reports', { status: 'pending' }),
+    fetchCount('expert_applications', { status: 'pending' }),
+  ]);
+
+  // 이전 30일 기간 기준 증감 계산 (profiles 기준 30일 전 데이터)
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const isoThirty = thirtyDaysAgo.toISOString();
+
+  // 이전 기간 신규 가입자 수 (30일 이전)
+  let prevUsers = 0;
+  try {
+    const { count } = await sb
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .lt('created_at', isoThirty);
+    prevUsers = count || 0;
+  } catch (_) {}
+
+  const userTrend = calcTrend(users, prevUsers);
+
+  // KPI 카드 업데이트
+  _setKpi('kpiUsers', users);
+  _setKpi('kpiAxProjects', axProjects);
+  _setKpi('kpiEnrollments', enrollments);
+  _setKpi('kpiInquiries', inquiries);
+  _setKpi('kpiReports', reports);
+  _setKpi('kpiExpertApps', expertApps);
+
+  // 트렌드 (사용자만 계산, 나머지는 neutral)
+  _setTrend('trendUsers', userTrend);
+
+  // 미처리 건수가 있으면 경고 트렌드
+  if (inquiries > 0) {
+    _setTrend('trendInquiries', { direction: 'down', label: `미처리 ${inquiries}건` });
+  }
+  if (reports > 0) {
+    _setTrend('trendReports', { direction: 'down', label: `미처리 ${reports}건` });
+  }
+  if (expertApps > 0) {
+    _setTrend('trendExpertApps', { direction: 'up', label: `신규 ${expertApps}건` });
+  }
+}
+
+function _setKpi(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = formatNumber(value);
+}
+
+function _setTrend(id, trend) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = trend.label || '—';
+  el.className = `kpi-trend ${trend.direction || 'neutral'}`;
+}
+
+/* ══════════════════════════════════════════════════
+   사용자 성장 Line Chart (최근 30일)
+══════════════════════════════════════════════════ */
+async function loadUserGrowthChart() {
+  const sb = getSupabaseClient();
+  if (!sb) return;
+
+  // 최근 30일 날짜 배열 생성
+  const labels = [];
+  const dateMap = {};
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    labels.push(`${d.getMonth()+1}/${d.getDate()}`);
+    dateMap[key] = 0;
+  }
+
+  // DB에서 30일간 가입자 조회
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  try {
+    const { data, error } = await sb
+      .from('profiles')
+      .select('created_at')
+      .gte('created_at', thirtyDaysAgo.toISOString())
+      .order('created_at', { ascending: true });
+
+    if (!error && data) {
+      data.forEach(row => {
+        const d = new Date(row.created_at);
+        const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        if (dateMap[key] !== undefined) dateMap[key]++;
+      });
+    }
+  } catch (_) {}
+
+  const values = Object.values(dateMap);
+  const total30 = values.reduce((a, b) => a + b, 0);
+  const prev15  = values.slice(0, 15).reduce((a, b) => a + b, 0);
+  const curr15  = values.slice(15).reduce((a, b) => a + b, 0);
+  const trend   = calcTrend(curr15, prev15);
+
+  const trendEl = document.getElementById('chartUserTrend');
+  if (trendEl) {
+    trendEl.textContent = `30일 합계 ${formatNumber(total30)}명 (${trend.label})`;
+    trendEl.className = `kpi-trend ${trend.direction}`;
+  }
+
+  // 차트 렌더
+  const ctx = document.getElementById('userGrowthChart');
+  if (!ctx) return;
+
+  if (userGrowthChartInst) userGrowthChartInst.destroy();
+
+  userGrowthChartInst = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: '신규 가입자',
+        data: values,
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139,92,246,0.08)',
+        pointBackgroundColor: '#8b5cf6',
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ${ctx.parsed.y}명`,
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            font: { size: 10 },
+            maxTicksLimit: 10,
+            color: '#9ca3af',
+          },
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          ticks: {
+            font: { size: 10 },
+            color: '#9ca3af',
+            stepSize: 1,
+          },
+        },
+      },
+    },
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   산업별 파이 차트
+══════════════════════════════════════════════════ */
+async function loadIndustryPieChart() {
+  const sb = getSupabaseClient();
+  if (!sb) return;
+
+  let industryData = {};
+
+  try {
+    const { data, error } = await sb
+      .from('ax_project_requests')
+      .select('industry');
+
+    if (!error && data) {
+      data.forEach(row => {
+        const ind = row.industry || '미분류';
+        industryData[ind] = (industryData[ind] || 0) + 1;
+      });
+    }
+  } catch (_) {}
+
+  // 데이터가 없으면 샘플 데이터
+  if (Object.keys(industryData).length === 0) {
+    industryData = {
+      '제조업': 0, '서비스업': 0, 'IT/SW': 0,
+      '유통/물류': 0, '의료/헬스케어': 0, '기타': 0,
+    };
+  }
+
+  // 상위 6개만
+  const sorted = Object.entries(industryData)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6);
+
+  const pieLabels = sorted.map(([k]) => k);
+  const pieValues = sorted.map(([, v]) => v);
+
+  const COLORS = [
+    '#8b5cf6', '#0ea5e9', '#14b8a6',
+    '#f59e0b', '#f97316', '#ec4899',
+  ];
+
+  const ctx = document.getElementById('industryPieChart');
+  if (!ctx) return;
+
+  if (industryPieChartInst) industryPieChartInst.destroy();
+
+  industryPieChartInst = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: pieLabels,
+      datasets: [{
+        data: pieValues,
+        backgroundColor: COLORS,
+        borderColor: '#ffffff',
+        borderWidth: 2,
+        hoverOffset: 6,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: { size: 11 },
+            padding: 10,
+            usePointStyle: true,
+            pointStyleWidth: 10,
+          },
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
+              return ` ${ctx.label}: ${ctx.parsed}건 (${pct}%)`;
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   최근 활동 피드 (최근 24시간, 최대 20건)
+══════════════════════════════════════════════════ */
+async function loadActivityFeed() {
+  const sb = getSupabaseClient();
+  const feedEl = document.getElementById('activityFeed');
+  if (!sb || !feedEl) return;
+
+  feedEl.innerHTML = `<div class="loading-overlay"><div class="spinner"></div><span>로딩 중…</span></div>`;
+
+  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const events = [];
+
+  try {
+    // 신규 가입
+    const { data: newUsers } = await sb
+      .from('profiles')
+      .select('id, full_name, email, created_at')
+      .gte('created_at', since24h)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    (newUsers || []).forEach(u => events.push({
+      type: 'signup',
+      icon: '👤',
+      color: 'violet',
+      text: `<strong>${escapeHtml(u.full_name || u.email || '사용자')}</strong> 님이 가입했습니다.`,
+      time: u.created_at,
+    }));
+
+    // AX 프로젝트 접수
+    const { data: newProjects } = await sb
+      .from('ax_project_requests')
+      .select('id, company_name, industry, created_at')
+      .gte('created_at', since24h)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    (newProjects || []).forEach(p => events.push({
+      type: 'project',
+      icon: '🚀',
+      color: 'sky',
+      text: `<strong>${escapeHtml(p.company_name || '기업')}</strong> AX 프로젝트가 접수됐습니다. (${escapeHtml(p.industry || '-')})`,
+      time: p.created_at,
+    }));
+
+    // 수강 신청
+    const { data: newEnrollments } = await sb
+      .from('course_enrollments')
+      .select('id, user_id, course_id, created_at')
+      .gte('created_at', since24h)
+      .order('created_at', { ascending: false })
+      .limit(6);
+
+    (newEnrollments || []).forEach(e => events.push({
+      type: 'enrollment',
+      icon: '📚',
+      color: 'teal',
+      text: `새로운 <strong>수강 신청</strong>이 접수됐습니다.`,
+      time: e.created_at,
+    }));
+
+    // 신고
+    const { data: newReports } = await sb
+      .from('reports')
+      .select('id, reason, created_at')
+      .gte('created_at', since24h)
+      .order('created_at', { ascending: false })
+      .limit(6);
+
+    (newReports || []).forEach(r => events.push({
+      type: 'report',
+      icon: '🚨',
+      color: 'red',
+      text: `새로운 <strong>신고</strong>가 접수됐습니다.`,
+      time: r.created_at,
+    }));
+
+    // 전문가 신청
+    const { data: newExpertApps } = await sb
+      .from('expert_applications')
+      .select('id, applicant_name, created_at')
+      .gte('created_at', since24h)
+      .order('created_at', { ascending: false })
+      .limit(6);
+
+    (newExpertApps || []).forEach(a => events.push({
+      type: 'expert',
+      icon: '🏅',
+      color: 'amber',
+      text: `<strong>${escapeHtml(a.applicant_name || '신청자')}</strong> 님의 전문가 신청이 접수됐습니다.`,
+      time: a.created_at,
+    }));
+
+  } catch (err) {
+    console.error('[Dashboard] loadActivityFeed error:', err);
+  }
+
+  // 시간 역순 정렬, 최대 20건
+  events.sort((a, b) => new Date(b.time) - new Date(a.time));
+  const sliced = events.slice(0, 20);
+
+  if (sliced.length === 0) {
+    feedEl.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📭</div>
+        <div class="empty-state-title">최근 24시간 활동 없음</div>
+        <div class="empty-state-desc">새로운 이벤트가 발생하면 여기에 표시됩니다.</div>
+      </div>`;
+    return;
+  }
+
+  feedEl.innerHTML = sliced.map(ev => `
+    <div class="activity-item">
+      <div class="activity-icon-wrap ${ev.color}">${ev.icon}</div>
+      <div class="activity-body">
+        <div class="activity-text">${ev.text}</div>
+        <div class="activity-time">${_relTime(ev.time)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function _relTime(iso) {
+  if (!iso) return '-';
+  const diff = Date.now() - new Date(iso).getTime();
+  const min = Math.floor(diff / 60000);
+  const hr  = Math.floor(min / 60);
+  if (min < 1)  return '방금 전';
+  if (min < 60) return `${min}분 전`;
+  if (hr < 24)  return `${hr}시간 전`;
+  return formatDateTime(iso);
+}
+
+/* ══════════════════════════════════════════════════
+   사이드바 뱃지 업데이트
+══════════════════════════════════════════════════ */
+async function updateSidebarBadges() {
+  const [inquiries, reports, expertApps] = await Promise.all([
+    fetchCount('contact_inquiries', { status: 'pending' }),
+    fetchCount('reports', { status: 'pending' }),
+    fetchCount('expert_applications', { status: 'pending' }),
+  ]);
+
+  const setBadge = (id, count) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = count > 99 ? '99+' : count;
+    el.style.display = count > 0 ? '' : 'none';
+  };
+
+  setBadge('sidebarBadgeInquiry', inquiries);
+  setBadge('sidebarBadgeReport', reports);
+  setBadge('sidebarBadgeExpert', expertApps);
+}
+
+/* ══════════════════════════════════════════════════
+   다크모드 토글
+══════════════════════════════════════════════════ */
+function bindThemeToggle() {
+  const btn = document.getElementById('themeToggleBtn');
+  if (!btn) return;
+
+  const html = document.documentElement;
+  const STORAGE_KEY = 'ax_admin_theme';
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'dark') {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️';
+  }
+
+  btn.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? '' : 'dark');
+    btn.textContent = isDark ? '🌙' : '☀️';
+    localStorage.setItem(STORAGE_KEY, isDark ? '' : 'dark');
+  });
+}
+</script>
+</body>
+</html>

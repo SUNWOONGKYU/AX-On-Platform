@@ -1,0 +1,254 @@
+<!-- @task S8F1 — AX-On Platform Offline Fallback Page -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6c5ce7" />
+  <title>오프라인 — AX-On Platform</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary:    #1a1a2e;
+      --bg-secondary:  #16213e;
+      --bg-card:       #0f3460;
+      --accent:        #6c5ce7;
+      --accent-light:  #a29bfe;
+      --text-primary:  #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted:    #64748b;
+      --border:        rgba(108, 92, 231, 0.25);
+      --shadow:        0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR',
+                   sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(108, 92, 231, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(162, 155, 254, 0.05) 0%, transparent 50%);
+    }
+
+    /* ── Card ─────────────────────────────────────────────────────── */
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    /* ── Icon ─────────────────────────────────────────────────────── */
+    .icon-wrapper {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.75rem;
+      background: rgba(108, 92, 231, 0.12);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-wrapper svg {
+      width: 40px;
+      height: 40px;
+      color: var(--accent-light);
+    }
+
+    /* ── Brand ────────────────────────────────────────────────────── */
+    .brand {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Heading ──────────────────────────────────────────────────── */
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    /* ── Description ──────────────────────────────────────────────── */
+    .description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Tips ─────────────────────────────────────────────────────── */
+    .tips {
+      background: rgba(108, 92, 231, 0.07);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .tips-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent-light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .tips ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .tips li {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      padding: 0.2rem 0;
+      padding-left: 1.1rem;
+      position: relative;
+    }
+
+    .tips li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* ── Button ───────────────────────────────────────────────────── */
+    .btn-retry {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.8rem 2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.35);
+      text-decoration: none;
+    }
+
+    .btn-retry:hover {
+      background: #5a4bd1;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(108, 92, 231, 0.5);
+    }
+
+    .btn-retry:active {
+      transform: translateY(0);
+    }
+
+    .btn-retry svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────────── */
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Responsive ───────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .card {
+        padding: 2rem 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <!-- Icon -->
+    <div class="icon-wrapper" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+    </div>
+
+    <!-- Brand -->
+    <p class="brand">AX-On Platform</p>
+
+    <!-- Heading -->
+    <h1>현재 오프라인 상태입니다</h1>
+
+    <!-- Description -->
+    <p class="description">
+      인터넷 연결을 확인해주세요.<br />
+      연결이 복구되면 서비스를 정상적으로 이용하실 수 있습니다.
+    </p>
+
+    <!-- Tips -->
+    <div class="tips" role="note" aria-label="연결 확인 방법">
+      <p class="tips-title">확인 방법</p>
+      <ul>
+        <li>Wi-Fi 또는 모바일 데이터가 켜져 있는지 확인하세요</li>
+        <li>라우터 또는 핫스팟을 재시작해 보세요</li>
+        <li>비행기 모드가 활성화되어 있지 않은지 확인하세요</li>
+      </ul>
+    </div>
+
+    <!-- Retry Button -->
+    <button class="btn-retry" onclick="location.reload()" type="button"
+            aria-label="페이지 재시도">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+      다시 시도
+    </button>
+
+    <!-- Footer -->
+    <p class="footer">AX-On Platform &copy; 2026</p>
+
+  </div>
+</body>
+</html>

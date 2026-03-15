@@ -1,0 +1,92 @@
+{
+  "_task": "S8F3",
+  "experts": [
+    {
+      "id": "expert-001",
+      "name": "김AI",
+      "title": "AI 전략 컨설턴트",
+      "specialty": ["AI 전략", "디지털 전환", "비즈니스 모델"],
+      "bio": "20년 경력의 AI 전략 전문가. 대기업 및 스타트업의 AI 도입 전략을 수립하고 실행해왔습니다.",
+      "image": "/assets/images/experts/expert-001.jpg",
+      "experience_years": 20,
+      "projects_count": 150,
+      "rating": 4.9,
+      "available": true,
+      "social": {
+        "linkedin": "#",
+        "email": "expert001@axon.ai"
+      },
+      "tags": ["전략", "컨설팅", "AI"]
+    },
+    {
+      "id": "expert-002",
+      "name": "이데이터",
+      "title": "데이터 사이언티스트",
+      "specialty": ["데이터 분석", "머신러닝", "통계 모델링"],
+      "bio": "15년간 금융·유통·헬스케어 산업에서 데이터 기반 의사결정 시스템을 구축해온 데이터 전문가입니다.",
+      "image": "/assets/images/experts/expert-002.jpg",
+      "experience_years": 15,
+      "projects_count": 98,
+      "rating": 4.8,
+      "available": true,
+      "social": {
+        "linkedin": "#",
+        "email": "expert002@axon.ai"
+      },
+      "tags": ["데이터", "머신러닝", "분석"]
+    },
+    {
+      "id": "expert-003",
+      "name": "박NLP",
+      "title": "자연어처리 전문가",
+      "specialty": ["자연어처리", "LLM", "챗봇 개발"],
+      "bio": "대형 언어 모델(LLM) 파인튜닝 및 RAG 시스템 구축 전문가. 국내외 NLP 논문 다수 발표.",
+      "image": "/assets/images/experts/expert-003.jpg",
+      "experience_years": 12,
+      "projects_count": 75,
+      "rating": 4.9,
+      "available": false,
+      "social": {
+        "linkedin": "#",
+        "email": "expert003@axon.ai"
+      },
+      "tags": ["NLP", "LLM", "챗봇"]
+    },
+    {
+      "id": "expert-004",
+      "name": "최비전",
+      "title": "컴퓨터 비전 엔지니어",
+      "specialty": ["컴퓨터 비전", "딥러닝", "영상 인식"],
+      "bio": "제조·물류 분야 비전 AI 시스템 구현 경험 10년. 불량 검출 및 객체 인식 솔루션 다수 납품.",
+      "image": "/assets/images/experts/expert-004.jpg",
+      "experience_years": 10,
+      "projects_count": 62,
+      "rating": 4.7,
+      "available": true,
+      "social": {
+        "linkedin": "#",
+        "email": "expert004@axon.ai"
+      },
+      "tags": ["비전", "딥러닝", "영상처리"]
+    },
+    {
+      "id": "expert-005",
+      "name": "정AX",
+      "title": "기업 AX 전환 코치",
+      "specialty": ["AI 전략", "조직 변화 관리", "AX 교육"],
+      "bio": "시니어 임원 대상 AI 활용 역량 교육 및 기업 AX 로드맵 설계 전문가. 교육 수료생 500명 이상.",
+      "image": "/assets/images/experts/expert-005.jpg",
+      "experience_years": 18,
+      "projects_count": 110,
+      "rating": 4.8,
+      "available": true,
+      "social": {
+        "linkedin": "#",
+        "email": "expert005@axon.ai"
+      },
+      "tags": ["교육", "AX전환", "코칭"]
+    }
+  ],
+  "categories": ["AI 전략", "데이터 분석", "머신러닝", "자연어처리", "컴퓨터 비전"],
+  "updated_at": "2026-03-07"
+}

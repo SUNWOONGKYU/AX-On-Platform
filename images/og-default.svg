@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#002451"/>
+  <!-- Ambient glow top-right -->
+  <radialGradient id="glowTR" cx="85%" cy="15%" r="45%">
+    <stop offset="0%" stop-color="#e8920d" stop-opacity="0.18"/>
+    <stop offset="100%" stop-color="#002451" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#glowTR)"/>
+  <!-- Ambient glow bottom-left -->
+  <radialGradient id="glowBL" cx="10%" cy="85%" r="40%">
+    <stop offset="0%" stop-color="#0d9488" stop-opacity="0.12"/>
+    <stop offset="100%" stop-color="#002451" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#glowBL)"/>
+
+  <!-- Logo mark -->
+  <rect x="90" y="215" width="88" height="96" rx="22" fill="#e8920d"/>
+  <text x="134" y="254" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="52" fill="white">A</text>
+  <text x="134" y="302" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="52" fill="white">X</text>
+
+  <!-- Brand name -->
+  <text x="202" y="268" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="64" fill="white" letter-spacing="-2">AX-</text>
+  <text x="336" y="268" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="64" fill="#e8920d" letter-spacing="-2">On</text>
+  <text x="202" y="308" font-family="Arial, sans-serif" font-weight="400" font-size="22" fill="#7285b7" letter-spacing="2">PLATFORM</text>
+
+  <!-- Tagline -->
+  <text x="90" y="378" font-family="Arial, sans-serif" font-weight="700" font-size="30" fill="white" opacity="0.9">AI 전문가 네트워크 · 기업 AX 프로젝트</text>
+
+  <!-- Decorative line -->
+  <rect x="90" y="410" width="120" height="4" rx="2" fill="#e8920d"/>
+
+  <!-- Sub tagline -->
+  <text x="90" y="455" font-family="Arial, sans-serif" font-size="20" fill="#7285b7">www.ax-on.net</text>
+</svg>

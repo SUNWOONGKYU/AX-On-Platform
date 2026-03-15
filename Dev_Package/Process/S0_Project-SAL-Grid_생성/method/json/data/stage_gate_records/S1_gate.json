@@ -1,0 +1,24 @@
+{
+  "stage": 1,
+  "stage_name": "미니버전 준비",
+  "stage_name_en": "Mini Version Preparation",
+  "total_tasks": 2,
+  "completed_tasks": 2,
+  "verification_status": "Verified",
+  "ai_verification_note": "소급 등록 — DB 마이그레이션 + 디자인 시스템 확인 완료",
+  "ai_verification_date": "2026-03-11",
+  "verification_report_path": "stage-gates/S1GATE_verification_report.md",
+  "stage_gate_status": "Approved",
+  "po_approval_status": "Approved",
+  "po_approval_user": "PO",
+  "po_approval_note": "소급 승인",
+  "po_approval_date": "2026-03-11",
+  "checklist": {
+    "all_tasks_completed": true,
+    "all_verifications_passed": true,
+    "no_blockers": true,
+    "build_success": true,
+    "test_success": true
+  },
+  "remarks": "소급 등록"
+}

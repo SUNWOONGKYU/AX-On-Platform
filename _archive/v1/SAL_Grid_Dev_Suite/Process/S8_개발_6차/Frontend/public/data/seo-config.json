@@ -1,0 +1,46 @@
+// @task S8F4 — SEO 메타태그 전체 페이지 적용
+{
+  "default": {
+    "site_name": "AX-On Platform",
+    "locale": "ko_KR",
+    "type": "website",
+    "image": "/assets/images/og-default.jpg",
+    "twitter_card": "summary_large_image"
+  },
+  "pages": {
+    "/": {
+      "title": "AX-On Platform | AI 활용 플랫폼",
+      "description": "분야별 AI 전문가들이 시니어 AI 창업 교육과 기업 AX 프로젝트를 추진하고, 모든 참여자가 커뮤니티에서 만나는 AI 활용 플랫폼"
+    },
+    "/startup.html": {
+      "title": "시니어 AI 창업 교육 | AX-On Platform",
+      "description": "AI 전문가와 함께하는 시니어 맞춤형 AI 창업 교육 프로그램"
+    },
+    "/ax-project.html": {
+      "title": "AX 프로젝트 | AX-On Platform",
+      "description": "기업의 AI 전환(AX)을 지원하는 전문 프로젝트 서비스"
+    },
+    "/expert.html": {
+      "title": "AI 전문가 | AX-On Platform",
+      "description": "분야별 AI 전문가를 만나보세요"
+    },
+    "/community.html": {
+      "title": "커뮤니티 | AX-On Platform",
+      "description": "AI 활용 지식을 나누는 커뮤니티"
+    },
+    "/enrollment.html": {
+      "title": "수강 신청 | AX-On Platform",
+      "description": "AI 창업 교육 수강 신청"
+    },
+    "/contact.html": {
+      "title": "문의하기 | AX-On Platform",
+      "description": "AX-On Platform에 문의하세요"
+    }
+  },
+  "organization": {
+    "name": "AX-On Platform",
+    "url": "https://ax-on.vercel.app",
+    "logo": "/assets/images/logo.png",
+    "description": "AI 활용 플랫폼"
+  }
+}

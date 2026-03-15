@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 수강 신청 — 시니어 AI 창업자를 위한 바이브코딩 교육 프로그램 수강 신청 페이지">
+<meta property="og:title" content="수강 신청 — AX-On Platform">
+<meta property="og:image" content="https://axon-platform.com/images/og-default.png">
+<meta property="og:description" content="시니어 AI 창업자를 위한 바이브코딩 교육 프로그램 수강 신청">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>수강 신청 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --teal: #0d9488;
+  --coral: #e85d4a;
+  --violet: #7c5ce0;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+  --dark-bg: #002451;
+  --dark-text-muted: #7285b7;
+  --dark-border: rgba(114, 133, 183, 0.15);
+  --border: rgba(26,26,46,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--amber); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(250, 249, 247, 0.85);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(26, 26, 46, 0.06);
+  transition: all 0.4s ease;
+}
+.nav.scrolled {
+  background: rgba(250, 249, 247, 0.95);
+  box-shadow: 0 2px 20px rgba(26, 26, 46, 0.08);
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 72px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--ink);
+}
+.logo-mark {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
+}
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 22px;
+  letter-spacing: -0.5px;
+}
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a {
+  text-decoration: none; color: var(--ink-muted);
+  font-size: 15px; font-weight: 500;
+  padding: 8px 14px; border-radius: 10px;
+  transition: all 0.25s ease; white-space: nowrap;
+}
+.nav-links a:hover { color: var(--ink); background: rgba(26, 26, 46, 0.04); text-decoration: none; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-auth-btn {
+  text-decoration: none; font-size: 14px; font-weight: 600;
+  padding: 8px 18px; border-radius: 10px; transition: all 0.3s ease;
+  white-space: nowrap; font-family: 'Noto Sans KR', sans-serif;
+}
+.nav-login { color: var(--ink-muted); }
+.nav-login:hover { color: var(--ink); text-decoration: none; }
+.nav-signup { background: var(--ink); color: #fff; border-radius: 12px; }
+.nav-signup:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,26,46,0.2); text-decoration: none; }
+.mobile-toggle {
+  display: none; background: none; border: none;
+  width: 40px; height: 40px; cursor: pointer;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.mobile-toggle span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 2px; transition: all 0.3s ease;
+}
+
+/* NAV USER */
+.nav-user { display: flex; align-items: center; gap: 10px; }
+.nav-user-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.nav-logout-btn {
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  background: none; border: 1.5px solid rgba(26,26,46,0.12);
+  padding: 6px 14px; border-radius: 8px; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s;
+}
+.nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ── ENROLLMENT WRAP ── */
+.enrollment-wrap {
+  max-width: 720px; margin: 0 auto;
+  padding: 120px 40px 80px;
+}
+.enrollment-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 36px; font-weight: 900; margin-bottom: 8px;
+}
+.enrollment-title .highlight {
+  background: linear-gradient(135deg, var(--amber), var(--coral));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.enrollment-desc {
+  font-size: 15px; color: var(--ink-muted); margin-bottom: 40px; line-height: 1.7;
+}
+
+/* ── STEP INDICATOR ── */
+.step-indicator {
+  display: flex; align-items: center; gap: 0; margin-bottom: 36px;
+}
+.step {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700; color: var(--ink-muted);
+  transition: color 0.3s;
+}
+.step.active { color: var(--amber); }
+.step.done { color: var(--teal); }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800;
+  background: rgba(26,26,46,0.06); color: var(--ink-muted);
+  font-family: 'Outfit', sans-serif; transition: all 0.3s;
+}
+.step.active .step-num { background: var(--amber); color: #fff; }
+.step.done .step-num { background: var(--teal); color: #fff; }
+.step-line {
+  flex: 1; height: 2px;
+  background: rgba(26,26,46,0.08);
+  margin: 0 12px;
+}
+.step-line.done { background: var(--teal); }
+
+/* ── PROGRAM RADIO CARDS ── */
+.program-selection { margin-bottom: 36px; }
+.program-selection-label {
+  font-size: 14px; font-weight: 700; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 4px;
+}
+.program-selection-label .req { color: #ef4444; }
+.program-radios {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.program-radio {
+  position: relative; cursor: pointer;
+}
+.program-radio input[type="radio"] {
+  position: absolute; opacity: 0; width: 0; height: 0;
+}
+.program-radio-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 22px;
+  background: var(--surface-card);
+  border: 2px solid rgba(26,26,46,0.08);
+  border-radius: 14px;
+  transition: all 0.25s ease;
+}
+.program-radio input:checked + .program-radio-card {
+  border-color: var(--amber);
+  background: rgba(232,146,13,0.03);
+  box-shadow: 0 4px 20px rgba(232,146,13,0.1);
+}
+.program-radio:hover .program-radio-card {
+  border-color: rgba(232,146,13,0.4);
+}
+.program-radio-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid rgba(26,26,46,0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.25s;
+}
+.program-radio input:checked + .program-radio-card .program-radio-dot {
+  border-color: var(--amber);
+}
+.program-radio input:checked + .program-radio-card .program-radio-dot::after {
+  content: '';
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--amber);
+}
+.program-radio-info { flex: 1; }
+.program-radio-name {
+  font-size: 15px; font-weight: 700; margin-bottom: 2px;
+}
+.program-radio-meta {
+  font-size: 13px; color: var(--ink-muted);
+}
+.program-radio-badge {
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 700;
+  flex-shrink: 0;
+}
+.badge-amber { background: rgba(232,146,13,0.1); color: var(--amber); }
+.badge-teal { background: rgba(13,148,136,0.1); color: var(--teal); }
+.badge-violet { background: rgba(124,92,224,0.1); color: var(--violet); }
+
+/* ── FORM ── */
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block; font-size: 13px; font-weight: 700;
+  margin-bottom: 6px; color: var(--ink);
+}
+.form-label .req { color: #ef4444; margin-left: 2px; }
+.form-input, .form-textarea {
+  width: 100%; padding: 12px 16px; font-size: 14px;
+  border: 1.5px solid rgba(26,26,46,0.12); border-radius: 10px;
+  background: white; color: var(--ink);
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-textarea:focus {
+  outline: none; border-color: var(--amber);
+}
+.form-textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+.form-input.invalid, .form-textarea.invalid {
+  border-color: #ef4444;
+}
+.form-error {
+  display: none; font-size: 12px; color: #ef4444; margin-top: 4px; font-weight: 500;
+}
+.form-error.show { display: block; }
+
+.submit-btn {
+  width: 100%; padding: 16px; font-size: 16px; font-weight: 700;
+  background: linear-gradient(135deg, var(--amber), #d4820b);
+  color: white; border: none; border-radius: 14px;
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.3s; margin-top: 8px;
+  box-shadow: 0 6px 24px rgba(232,146,13,0.3);
+}
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(232,146,13,0.4); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── AGREEMENT ── */
+.agreement {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: 20px 0 8px;
+  font-size: 13px; color: var(--ink-muted); line-height: 1.6;
+}
+.agreement input[type="checkbox"] {
+  margin-top: 4px; width: 18px; height: 18px; flex-shrink: 0;
+  accent-color: var(--amber);
+}
+
+/* ── SUCCESS ── */
+.success-view {
+  display: none; text-align: center; padding: 80px 20px;
+}
+.success-icon { font-size: 64px; margin-bottom: 20px; }
+.success-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px; font-weight: 900; margin-bottom: 12px;
+}
+.success-desc {
+  font-size: 15px; color: var(--ink-muted);
+  margin-bottom: 32px; line-height: 1.7;
+}
+.success-actions {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+}
+.success-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 12px 32px; border-radius: 12px;
+  text-decoration: none; font-weight: 700; font-size: 15px;
+  transition: all 0.2s;
+}
+.success-btn-primary {
+  background: linear-gradient(135deg, var(--amber), #d4820b);
+  color: white; box-shadow: 0 4px 16px rgba(232,146,13,0.25);
+}
+.success-btn-primary:hover { opacity: 0.9; text-decoration: none; }
+.success-btn-outline {
+  background: transparent; color: var(--ink);
+  border: 2px solid rgba(26,26,46,0.12);
+}
+.success-btn-outline:hover { border-color: var(--ink); text-decoration: none; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #ef4444; color: white;
+  padding: 14px 28px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; z-index: 999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── FOOTER ── */
+.footer {
+  padding: 24px 40px 16px;
+  background: var(--dark-bg);
+  color: var(--dark-text-muted);
+  margin-top: 80px;
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.footer-logo {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800; font-size: 20px; color: #fff;
+}
+.footer-logo span { color: var(--amber); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  color: var(--dark-text-muted); text-decoration: none;
+  font-size: 14px; transition: color 0.3s ease;
+}
+.footer-links a:hover { color: var(--amber); }
+.footer-copyright {
+  max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
+  border-top: 1px solid var(--dark-border);
+  text-align: center; font-size: 12px; color: var(--dark-text-muted); opacity: 0.7;
+}
+
+/* ── ACCESSIBILITY ── */
+:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px; border-radius: 4px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  body { overflow-x: hidden; }
+
+  /* NAV */
+  .nav-inner { padding: 0 16px; }
+  .nav-links { display: none; }
+  .mobile-toggle { display: flex; min-width: 44px; min-height: 44px; }
+  .nav-login { display: none; }
+  .nav-signup { display: none; }
+  .nav-user { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 72px; left: 0; right: 0;
+    background: var(--surface);
+    padding: 12px 16px 20px;
+    border-bottom: 1px solid rgba(26,26,46,0.06);
+    box-shadow: 0 8px 24px rgba(26,26,46,0.08);
+    gap: 2px;
+  }
+  .nav-links.open a {
+    padding: 12px 16px; min-height: 44px;
+    display: flex; align-items: center; font-size: 16px; border-radius: 10px;
+  }
+  .nav-links.open .nav-auth-mobile { display: flex !important; }
+  .nav-auth-mobile {
+    display: none; text-decoration: none;
+    font-size: 16px; font-weight: 600;
+    padding: 12px 16px; border-radius: 10px;
+    min-height: 44px; align-items: center;
+    transition: all 0.25s ease;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .nav-auth-mobile.login-mobile {
+    color: var(--ink-muted); margin-top: 8px;
+    border-top: 1px solid rgba(26,26,46,0.06); padding-top: 16px;
+  }
+  .nav-auth-mobile.login-mobile:hover { color: var(--ink); background: rgba(26,26,46,0.04); }
+  .nav-auth-mobile.signup-mobile { background: var(--ink); color: #fff; margin-top: 6px; }
+  .nav-auth-mobile.signup-mobile:hover { background: #2a2a4e; }
+
+  /* ENROLLMENT */
+  .enrollment-wrap { padding: 96px 20px 60px; max-width: 100%; }
+  .enrollment-title { font-size: 26px; line-height: 1.3; }
+  .enrollment-desc { font-size: 14px; margin-bottom: 28px; }
+
+  .step { font-size: 12px; }
+  .step-label { display: none; }
+  .step-num { width: 26px; height: 26px; font-size: 11px; }
+  .step-line { margin: 0 8px; }
+
+  .program-radio-card { padding: 14px 16px; gap: 12px; }
+  .program-radio-name { font-size: 14px; }
+  .program-radio-badge { font-size: 11px; padding: 3px 10px; }
+
+  .form-input, .form-textarea { font-size: 16px; padding: 13px 14px; }
+  .submit-btn { min-height: 52px; font-size: 16px; padding: 15px; margin-top: 12px; }
+
+  .success-view { padding: 60px 16px; }
+  .success-title { font-size: 24px; }
+  .success-actions { flex-direction: column; }
+  .success-btn { min-height: 48px; padding: 13px 28px; }
+
+  .footer { padding: 24px 16px 16px; }
+  .footer-inner { text-align: center; gap: 6px; }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .nav-inner { padding: 0 12px; }
+  .program-radio-meta { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="startup.html">우리의 창업</a>
+      <a href="ax-project.html">AX 프로젝트</a>
+      <a href="expert.html">AI 전문가</a>
+      <a href="community.html">커뮤니티</a>
+      <a href="pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-mobile signup-mobile">회원가입</a>
+    </div>
+    <div class="nav-right">
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="enrollment-wrap">
+  <h1 class="enrollment-title">수강 <span class="highlight">신청하기</span></h1>
+  <p class="enrollment-desc">AI 플랫폼 1인 시니어 파운더 매직캠프 — 원하시는 프로그램을 선택하고 아래 정보를 입력해 주세요.</p>
+
+  <!-- STEP INDICATOR (outside formView so it stays visible on success) -->
+  <div class="step-indicator">
+    <div class="step active" id="step1">
+      <span class="step-num">1</span>
+      <span class="step-label">프로그램 선택</span>
+    </div>
+    <div class="step-line" id="stepLine1"></div>
+    <div class="step" id="step2">
+      <span class="step-num">2</span>
+      <span class="step-label">정보 입력</span>
+    </div>
+    <div class="step-line" id="stepLine2"></div>
+    <div class="step" id="step3">
+      <span class="step-num">3</span>
+      <span class="step-label">신청 완료</span>
+    </div>
+  </div>
+
+  <!-- FORM VIEW -->
+  <div id="formView">
+    <form id="enrollmentForm" onsubmit="submitEnrollment(event)">
+
+      <!-- PROGRAM SELECTION -->
+      <div class="program-selection">
+        <div class="program-selection-label">프로그램 선택<span class="req">*</span></div>
+        <div class="program-radios" id="programRadios">
+
+          <label class="program-radio">
+            <input type="radio" name="program" value="vibe-coding-special" data-name="바이브 코딩: 2시간 만에 완성하는 AI 플랫폼 창업">
+            <div class="program-radio-card">
+              <div class="program-radio-dot"></div>
+              <div class="program-radio-info">
+                <div class="program-radio-name">바이브 코딩: 2시간 만에 완성하는 AI 플랫폼 창업</div>
+                <div class="program-radio-meta">120분 특강 · 8 세션 · 입문 · 2026년 4월 12일 (토)</div>
+              </div>
+              <span class="program-radio-badge badge-amber">무료</span>
+            </div>
+          </label>
+
+          <label class="program-radio">
+            <input type="radio" name="program" value="mvp-camp" data-name="6시간 집중으로 나만의 MVP 플랫폼 완성">
+            <div class="program-radio-card">
+              <div class="program-radio-dot"></div>
+              <div class="program-radio-info">
+                <div class="program-radio-name">6시간 집중으로 나만의 MVP 플랫폼 완성</div>
+                <div class="program-radio-meta">1일 집중 실전 캠프 · 4 교시 · 실전 · 2026년 4월 19일 (토)</div>
+              </div>
+              <span class="program-radio-badge badge-teal">10만원</span>
+            </div>
+          </label>
+
+          <label class="program-radio">
+            <input type="radio" name="program" value="master-course" data-name="살아있는 서비스를 직접 배포하는 창업 마스터 과정">
+            <div class="program-radio-card">
+              <div class="program-radio-dot"></div>
+              <div class="program-radio-info">
+                <div class="program-radio-name">살아있는 서비스를 직접 배포하는 창업 마스터 과정</div>
+                <div class="program-radio-meta">2일 집중 마스터 · 4대 인프라 · 마스터 · 2026년 5월 10~11일</div>
+              </div>
+              <span class="program-radio-badge badge-violet">20만원</span>
+            </div>
+          </label>
+
+        </div>
+        <div class="form-error" id="programError"></div>
+      </div>
+
+      <!-- APPLICANT INFO -->
+      <div class="form-group">
+        <label class="form-label" for="applicantName">이름<span class="req">*</span></label>
+        <input type="text" class="form-input" id="applicantName" placeholder="이름을 입력해 주세요" autocomplete="name" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="applicantPhone">연락처<span class="req">*</span></label>
+        <input type="tel" class="form-input" id="applicantPhone" placeholder="010-0000-0000" autocomplete="tel" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="applicantEmail">이메일<span class="req">*</span></label>
+        <input type="email" class="form-input" id="applicantEmail" placeholder="example@email.com" autocomplete="email" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="applicantAffiliation">소속 / 직장</label>
+        <input type="text" class="form-input" id="applicantAffiliation" placeholder="현재 소속이 있으시면 입력해 주세요">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="applicantMotivation">신청 동기<span class="req">*</span></label>
+        <textarea class="form-textarea" id="applicantMotivation" placeholder="이 프로그램에 신청하시는 이유나 기대하시는 점을 알려주세요" required></textarea>
+      </div>
+
+      <div class="agreement">
+        <input type="checkbox" id="agreeTerms" required>
+        <label for="agreeTerms">
+          <a href="privacy.html" target="_blank">개인정보처리방침</a>에 동의하며, 수강 관련 안내를 위한 연락처 활용에 동의합니다.
+        </label>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">수강 신청하기</button>
+    </form>
+  </div>
+
+  <!-- SUCCESS VIEW -->
+  <div class="success-view" id="successView">
+    <div class="success-icon">🎉</div>
+    <h2 class="success-title">수강 신청이 완료되었습니다!</h2>
+    <p class="success-desc" id="successDesc">
+      신청해 주셔서 감사합니다.<br>
+      입력하신 이메일과 연락처로 상세 안내를 보내드리겠습니다.<br>
+      궁금하신 점은 <a href="contact.html">문의하기</a>를 이용해 주세요.
+    </p>
+    <div class="success-actions">
+      <a href="startup.html" class="success-btn success-btn-primary">프로그램 더 보기</a>
+      <a href="index.html" class="success-btn success-btn-outline">메인으로 돌아가기</a>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">AX-<span>On</span> Platform</div>
+    </div>
+    <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    &copy; 2026 AX-On Platform. All rights reserved.
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ── Supabase 초기화 ──
+const supabase = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+
+// ── Nav scroll ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ── Mobile menu ──
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+
+function setMenuOpen(open) {
+  navLinks.classList.toggle('open', open);
+  mobileToggle.setAttribute('aria-expanded', String(open));
+  mobileToggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  const spans = mobileToggle.querySelectorAll('span');
+  if (open) {
+    spans[0].style.cssText = 'transform: translateY(7px) rotate(45deg)';
+    spans[1].style.cssText = 'opacity: 0; transform: scaleX(0)';
+    spans[2].style.cssText = 'transform: translateY(-7px) rotate(-45deg)';
+  } else {
+    spans[0].style.cssText = '';
+    spans[1].style.cssText = '';
+    spans[2].style.cssText = '';
+  }
+}
+
+mobileToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  setMenuOpen(!navLinks.classList.contains('open'));
+});
+document.addEventListener('click', (e) => {
+  if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) setMenuOpen(false);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+    setMenuOpen(false);
+    mobileToggle.focus();
+  }
+});
+
+// ── 로그인 상태 확인 ──
+(async function checkAuth() {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const displayName = user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0];
+      const navRight = document.querySelector('.nav-right');
+      const loginBtn = navRight.querySelector('.nav-login');
+      const signupBtn = navRight.querySelector('.nav-signup');
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (signupBtn) signupBtn.style.display = 'none';
+      const userEl = document.createElement('div');
+      userEl.className = 'nav-user';
+      userEl.innerHTML = '<span class="nav-user-name">' + escapeHtml(displayName) + '님</span><button class="nav-logout-btn" onclick="handleLogout()">로그아웃</button>';
+      navRight.insertBefore(userEl, navRight.querySelector('.mobile-toggle'));
+      // 모바일
+      const mobileLogin = document.querySelector('.login-mobile');
+      const mobileSignup = document.querySelector('.signup-mobile');
+      if (mobileLogin) {
+        mobileLogin.textContent = displayName + '님';
+        mobileLogin.href = '#';
+        mobileLogin.style.cssText = 'font-weight:700;color:var(--ink);';
+        mobileLogin.onclick = (e) => e.preventDefault();
+      }
+      if (mobileSignup) {
+        mobileSignup.textContent = '로그아웃';
+        mobileSignup.href = '#';
+        mobileSignup.onclick = (e) => { e.preventDefault(); handleLogout(); };
+      }
+      // 자동 채우기
+      if (user.user_metadata?.full_name) {
+        document.getElementById('applicantName').value = user.user_metadata.full_name;
+      }
+      if (user.email) {
+        document.getElementById('applicantEmail').value = user.email;
+      }
+    }
+  } catch (e) { /* 미인증 */ }
+})();
+
+async function handleLogout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+// ── URL 파라미터로 프로그램 자동 선택 ──
+(function preSelectProgram() {
+  const params = new URLSearchParams(window.location.search);
+  const program = params.get('program');
+  if (program) {
+    const radio = document.querySelector('input[name="program"][value="' + program + '"]');
+    if (radio) {
+      radio.checked = true;
+      updateStepIndicator();
+    }
+  }
+})();
+
+// ── 스텝 인디케이터 업데이트 ──
+function updateStepIndicator() {
+  const selectedProgram = document.querySelector('input[name="program"]:checked');
+  const step1 = document.getElementById('step1');
+  const step2 = document.getElementById('step2');
+  const stepLine1 = document.getElementById('stepLine1');
+
+  if (selectedProgram) {
+    step1.className = 'step done';
+    stepLine1.className = 'step-line done';
+    step2.className = 'step active';
+  } else {
+    step1.className = 'step active';
+    stepLine1.className = 'step-line';
+    step2.className = 'step';
+  }
+}
+
+// 프로그램 라디오 변경 감지
+document.querySelectorAll('input[name="program"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    updateStepIndicator();
+    clearError('programError');
+  });
+});
+
+// ── 유효성 검사 헬퍼 (config.js 공유 함수 사용) ──
+const validateEmail = isValidEmail;
+const validatePhone = validateKoreanPhone;
+
+function showFieldError(fieldId, message) {
+  const field = document.getElementById(fieldId);
+  field.classList.add('invalid');
+  let errEl = field.parentElement.querySelector('.form-error');
+  if (!errEl) {
+    errEl = document.createElement('div');
+    errEl.className = 'form-error';
+    field.parentElement.appendChild(errEl);
+  }
+  errEl.textContent = message;
+  errEl.classList.add('show');
+}
+
+function clearFieldError(fieldId) {
+  const field = document.getElementById(fieldId);
+  field.classList.remove('invalid');
+  const errEl = field.parentElement.querySelector('.form-error');
+  if (errEl) errEl.classList.remove('show');
+}
+
+function showError(errorElId, message) {
+  const el = document.getElementById(errorElId);
+  el.textContent = message;
+  el.classList.add('show');
+}
+
+function clearError(errorElId) {
+  const el = document.getElementById(errorElId);
+  el.classList.remove('show');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// 실시간 에러 클리어
+['applicantName','applicantPhone','applicantEmail','applicantAffiliation','applicantMotivation'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => clearFieldError(id));
+});
+
+// ── 수강 신청 제출 ──
+let isSubmitting = false;
+
+async function submitEnrollment(e) {
+  e.preventDefault();
+
+  if (isSubmitting) return;
+
+  // 에러 초기화
+  clearError('programError');
+  ['applicantName','applicantPhone','applicantEmail','applicantMotivation'].forEach(clearFieldError);
+
+  const selectedRadio = document.querySelector('input[name="program"]:checked');
+  const name = document.getElementById('applicantName').value.trim();
+  const phone = document.getElementById('applicantPhone').value.trim();
+  const email = document.getElementById('applicantEmail').value.trim();
+  const affiliation = document.getElementById('applicantAffiliation').value.trim();
+  const motivation = document.getElementById('applicantMotivation').value.trim();
+  const agreed = document.getElementById('agreeTerms').checked;
+
+  let valid = true;
+
+  if (!selectedRadio) {
+    showError('programError', '프로그램을 선택해 주세요.');
+    valid = false;
+  }
+  if (!name) { showFieldError('applicantName', '이름을 입력해 주세요.'); valid = false; }
+  if (!phone) { showFieldError('applicantPhone', '연락처를 입력해 주세요.'); valid = false; }
+  else if (!validatePhone(phone)) { showFieldError('applicantPhone', '올바른 연락처 형식을 입력해 주세요. (예: 010-1234-5678)'); valid = false; }
+  if (!email) { showFieldError('applicantEmail', '이메일을 입력해 주세요.'); valid = false; }
+  else if (!validateEmail(email)) { showFieldError('applicantEmail', '올바른 이메일 형식을 입력해 주세요.'); valid = false; }
+  if (!motivation) { showFieldError('applicantMotivation', '신청 동기를 입력해 주세요.'); valid = false; }
+  if (!agreed) { showToast('개인정보처리방침 동의가 필요합니다.'); valid = false; }
+
+  if (!valid) return;
+
+  isSubmitting = true;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '신청 중...';
+
+  const programName = selectedRadio.getAttribute('data-name');
+
+  try {
+    const { error } = await supabase.from('enrollments').insert([{
+      program_id: selectedRadio.value,
+      program_name: programName,
+      applicant_name: name,
+      phone: phone,
+      email: email,
+      affiliation: affiliation || null,
+      motivation: motivation
+    }]);
+
+    if (error) throw error;
+
+    // 스텝 인디케이터 완료
+    document.getElementById('step2').className = 'step done';
+    document.getElementById('stepLine2').className = 'step-line done';
+    document.getElementById('step3').className = 'step active';
+
+    // 성공 화면 표시
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+
+    // 신청 프로그램 정보 표시 (XSS 방지)
+    document.getElementById('successDesc').innerHTML =
+      '<strong>"' + escapeHtml(programName) + '"</strong> 프로그램 수강 신청이 완료되었습니다.<br>' +
+      '입력하신 이메일(<strong>' + escapeHtml(email) + '</strong>)과 연락처로 상세 안내를 보내드리겠습니다.<br>' +
+      '궁금하신 점은 <a href="contact.html">문의하기</a>를 이용해 주세요.';
+
+    isSubmitting = false;
+  } catch (err) {
+    console.error('수강 신청 오류:', err);
+    isSubmitting = false;
+    btn.disabled = false;
+    btn.textContent = '수강 신청하기';
+    showToast('수강 신청 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+  }
+}
+</script>
+</body>
+</html>

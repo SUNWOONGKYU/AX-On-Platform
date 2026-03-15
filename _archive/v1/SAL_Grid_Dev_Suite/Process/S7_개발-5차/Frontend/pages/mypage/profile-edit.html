@@ -1,0 +1,516 @@
+<!-- @task S7F2 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 프로필 편집">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>프로필 편집 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="../../../../js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/mypage.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --success: #10b981;
+  --danger: #ef4444;
+  --border: rgba(26, 26, 46, 0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,249,247,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.logo-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 14px; color: white;
+}
+.logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; }
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 6px; align-items: center; }
+.nav-link {
+  padding: 8px 14px; border-radius: 10px;
+  text-decoration: none; font-size: 14px; font-weight: 500; color: var(--ink-muted);
+  transition: all 0.15s;
+}
+.nav-link:hover { background: var(--amber-glow); color: var(--amber); }
+.btn-nav {
+  padding: 8px 18px; border-radius: 10px; border: none; cursor: pointer;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  background: var(--ink); color: white; transition: all 0.15s;
+}
+.btn-nav:hover { background: #2d2d4a; }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 1200px; margin: 0 auto; padding: 40px 24px;
+  display: grid; grid-template-columns: 240px 1fr; gap: 28px;
+  align-items: start;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: sticky; top: 88px;
+}
+.profile-summary {
+  padding: 28px 20px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.avatar-wrap { position: relative; display: inline-block; margin-bottom: 12px; }
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 700; color: white;
+  overflow: hidden; margin: 0 auto;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.profile-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.profile-role {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  background: var(--amber-glow); color: var(--amber);
+}
+.sidebar-menu { padding: 8px; }
+.menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  text-decoration: none; font-size: 14px; font-weight: 500;
+  color: var(--ink-muted); transition: all 0.15s;
+  border: none; background: none; width: 100%;
+  text-align: left; font-family: inherit; cursor: pointer;
+}
+.menu-item:hover { background: var(--surface-warm); color: var(--ink); }
+.menu-item.active { background: var(--amber-glow); color: var(--amber); font-weight: 600; }
+.menu-icon { font-size: 16px; }
+
+/* ── Main ── */
+.main-content { min-width: 0; }
+.page-header { margin-bottom: 24px; }
+.page-title { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.page-desc { font-size: 14px; color: var(--ink-muted); margin-top: 4px; }
+
+/* ── Card ── */
+.card {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+
+/* ── Avatar Upload Area ── */
+.avatar-upload-area {
+  display: flex; align-items: center; gap: 24px;
+  margin-bottom: 24px;
+}
+.avatar-preview {
+  width: 96px; height: 96px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; font-weight: 700; color: white;
+  overflow: hidden; position: relative;
+  border: 3px solid var(--border);
+}
+.avatar-preview img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.avatar-upload-info {}
+.avatar-upload-info p { font-size: 13px; color: var(--ink-muted); margin-top: 6px; }
+.btn-upload {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); background: var(--surface);
+  font-size: 13px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s; color: var(--ink);
+}
+.btn-upload:hover { border-color: var(--amber); color: var(--amber); }
+
+/* ── Form ── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label {
+  font-size: 13px; font-weight: 600; color: var(--ink-muted);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.form-label-count { font-size: 12px; font-weight: 400; color: var(--ink-muted); }
+.form-input, .form-textarea, .form-select {
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-size: 14px; font-family: inherit; color: var(--ink);
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  outline: none; border-color: var(--amber);
+  background: var(--surface-card);
+}
+.form-input[readonly] { background: var(--surface-warm); color: var(--ink-muted); cursor: not-allowed; }
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-hint { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+
+/* ── Buttons ── */
+.btn-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+.btn-primary {
+  padding: 12px 28px; border-radius: var(--radius-sm);
+  background: var(--amber); color: white; border: none;
+  font-size: 15px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-primary:hover { background: var(--amber-light); transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.btn-secondary {
+  padding: 12px 20px; border-radius: var(--radius-sm);
+  background: transparent; color: var(--ink-muted);
+  border: 1.5px solid var(--border);
+  font-size: 15px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.btn-secondary:hover { border-color: var(--ink-muted); color: var(--ink); }
+
+/* ── Alert ── */
+.alert {
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  font-size: 14px; margin-bottom: 16px; display: none;
+}
+.alert.show { display: block; }
+.alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+/* ── Footer ── */
+footer {
+  background: var(--ink); color: rgba(255,255,255,0.5);
+  text-align: center; padding: 32px 24px;
+  font-size: 13px; margin-top: 60px;
+}
+footer a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 8px; }
+footer a:hover { color: var(--amber); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-wrap { grid-template-columns: 1fr; gap: 16px; }
+  .sidebar { position: static; }
+  .sidebar-menu { display: flex; gap: 4px; overflow-x: auto; padding: 8px; }
+  .menu-item { white-space: nowrap; }
+  .form-grid { grid-template-columns: 1fr; }
+  .avatar-upload-area { flex-direction: column; text-align: center; }
+}
+@media (max-width: 480px) {
+  .page-wrap { padding: 16px; }
+  .btn-row { flex-direction: column; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../../../index.html" class="logo">
+      <div class="logo-mark">AX</div>
+      <span class="logo-text">AX-<span>On</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="../../../../index.html" class="nav-link">홈</a>
+      <a href="../../../../community.html" class="nav-link">커뮤니티</a>
+      <button class="btn-nav" onclick="handleLogout()">로그아웃</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="profile-summary">
+      <div class="avatar-wrap">
+        <div class="avatar">
+          <span id="mpAvatarInitial">?</span>
+          <img id="mpAvatarImg" src="" alt="프로필 사진">
+        </div>
+      </div>
+      <div class="profile-name" id="mpUserName">로딩 중...</div>
+      <span class="profile-role" id="mpUserRole">-</span>
+    </div>
+    <nav class="sidebar-menu">
+      <a class="menu-item" href="index.html">
+        <span class="menu-icon">🏠</span> 마이페이지
+      </a>
+      <a class="menu-item active" href="profile-edit.html">
+        <span class="menu-icon">✏️</span> 프로필 편집
+      </a>
+      <a class="menu-item" href="activity.html">
+        <span class="menu-icon">📊</span> 활동 내역
+      </a>
+      <a class="menu-item" href="settings.html">
+        <span class="menu-icon">⚙️</span> 설정
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div class="page-header">
+      <h1 class="page-title">✏️ 프로필 편집</h1>
+      <p class="page-desc">프로필 사진, 닉네임, 자기소개를 수정할 수 있습니다.</p>
+    </div>
+
+    <div id="profileAlert" class="alert"></div>
+
+    <!-- 프로필 사진 -->
+    <div class="card">
+      <div class="card-title">프로필 사진</div>
+      <div class="avatar-upload-area">
+        <div class="avatar-preview">
+          <span id="mpAvatarInitial2">?</span>
+          <img id="mpAvatarImg2" src="" alt="프로필 사진 미리보기">
+        </div>
+        <div class="avatar-upload-info">
+          <button class="btn-upload" onclick="document.getElementById('avatarInput').click()">
+            📷 사진 변경
+          </button>
+          <input type="file" id="avatarInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none;">
+          <p>JPG, PNG, GIF, WEBP · 최대 5MB</p>
+          <p>권장 크기: 200×200px 이상의 정사각형</p>
+        </div>
+      </div>
+      <div id="avatarAlert" class="alert"></div>
+    </div>
+
+    <!-- 기본 정보 -->
+    <div class="card">
+      <div class="card-title">기본 정보</div>
+      <form id="profileForm" onsubmit="handleSaveProfile(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="fieldEmail">이메일</label>
+            <input class="form-input" id="fieldEmail" type="email" readonly>
+            <span class="form-hint">이메일은 변경할 수 없습니다.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fieldRole">역할</label>
+            <select class="form-select" id="fieldRole">
+              <option value="general">일반 사용자</option>
+              <option value="company">기업</option>
+              <option value="ai_expert">AI 전문가</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fieldDisplayName">
+              표시 이름
+              <span class="form-label-count"><span id="nameCount">0</span>/20</span>
+            </label>
+            <input class="form-input" id="fieldDisplayName" type="text" maxlength="20" placeholder="화면에 표시될 이름">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fieldUsername">
+              닉네임
+              <span class="form-label-count"><span id="usernameCount">0</span>/20</span>
+            </label>
+            <input class="form-input" id="fieldUsername" type="text" maxlength="20" placeholder="고유 닉네임 (영문, 숫자, _)">
+            <span class="form-hint">영문, 숫자, 언더스코어(_)만 사용 가능</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fieldPhone">전화번호</label>
+            <input class="form-input" id="fieldPhone" type="tel" placeholder="010-0000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fieldInterests">관심 분야</label>
+            <input class="form-input" id="fieldInterests" type="text" placeholder="AI, 제조, 헬스케어 (쉼표 구분)">
+          </div>
+          <div class="form-group full">
+            <label class="form-label" for="fieldBio">
+              자기소개
+              <span class="form-label-count"><span id="bioCount">0</span>/200</span>
+            </label>
+            <textarea class="form-textarea" id="fieldBio" maxlength="200" placeholder="간단한 자기소개를 입력하세요 (최대 200자)"></textarea>
+          </div>
+        </div>
+        <div class="btn-row">
+          <a class="btn-secondary" href="index.html">취소</a>
+          <button type="submit" class="btn-primary" id="saveBtn">저장하기</button>
+        </div>
+      </form>
+    </div>
+
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <a href="../../../../privacy.html">개인정보처리방침</a>
+    <a href="../../../../terms.html">이용약관</a>
+    <a href="../../../../contact.html">문의하기</a>
+  </div>
+  <div style="margin-top:8px;">© 2026 AX-On Platform. All rights reserved.</div>
+</footer>
+
+<script>
+(async function() {
+  await mypageInit({
+    onReady: async (db, user, profile) => {
+      fillForm(profile, user);
+      initCharCounters();
+      initAvatarUpload({
+        inputId: 'avatarInput',
+        previewImgId: 'mpAvatarImg2',
+        previewInitialId: 'mpAvatarInitial2',
+        onSuccess: (msg) => showAlert('avatarAlert', msg, 'success'),
+        onError: (msg) => showAlert('avatarAlert', msg, 'error')
+      });
+
+      // 사이드바 아바타도 동기화
+      const sidebarImg = document.getElementById('mpAvatarImg');
+      const sidebarInitial = document.getElementById('mpAvatarInitial');
+      const previewImg = document.getElementById('mpAvatarImg2');
+      const previewInitial = document.getElementById('mpAvatarInitial2');
+      if (sidebarImg && previewImg) sidebarImg.src = previewImg.src;
+    }
+  });
+})();
+
+function fillForm(profile, user) {
+  if (!profile || !user) return;
+  document.getElementById('fieldEmail').value = user.email || '';
+  document.getElementById('fieldRole').value = profile.role || 'general';
+  document.getElementById('fieldDisplayName').value = profile.display_name || '';
+  document.getElementById('fieldUsername').value = profile.username || '';
+  document.getElementById('fieldPhone').value = profile.phone || '';
+  document.getElementById('fieldBio').value = profile.bio || '';
+  const interests = Array.isArray(profile.interests)
+    ? profile.interests.join(', ')
+    : (profile.interests || '');
+  document.getElementById('fieldInterests').value = interests;
+
+  // 아바타 미리보기 (큰 미리보기)
+  if (profile.avatar_url) {
+    document.getElementById('mpAvatarImg2').src = escapeHtml(profile.avatar_url);
+    document.getElementById('mpAvatarImg2').style.display = 'block';
+    document.getElementById('mpAvatarInitial2').style.display = 'none';
+  } else {
+    const name = profile.display_name || profile.username || user.email?.split('@')[0] || '?';
+    document.getElementById('mpAvatarInitial2').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('mpAvatarInitial2').style.display = 'flex';
+  }
+
+  // 글자 수 카운터 초기화
+  updateCount('fieldDisplayName', 'nameCount');
+  updateCount('fieldUsername', 'usernameCount');
+  updateCount('fieldBio', 'bioCount');
+}
+
+function initCharCounters() {
+  const fields = [
+    { inputId: 'fieldDisplayName', countId: 'nameCount' },
+    { inputId: 'fieldUsername', countId: 'usernameCount' },
+    { inputId: 'fieldBio', countId: 'bioCount' }
+  ];
+  fields.forEach(({ inputId, countId }) => {
+    const el = document.getElementById(inputId);
+    if (el) el.addEventListener('input', () => updateCount(inputId, countId));
+  });
+}
+
+function updateCount(inputId, countId) {
+  const val = document.getElementById(inputId)?.value || '';
+  const countEl = document.getElementById(countId);
+  if (countEl) countEl.textContent = val.length;
+}
+
+async function handleSaveProfile(event) {
+  event.preventDefault();
+
+  const displayName = document.getElementById('fieldDisplayName').value.trim();
+  const username = document.getElementById('fieldUsername').value.trim();
+  const role = document.getElementById('fieldRole').value;
+  const phone = document.getElementById('fieldPhone').value.trim();
+  const bio = document.getElementById('fieldBio').value.trim();
+  const interestsRaw = document.getElementById('fieldInterests').value.trim();
+  const interests = interestsRaw ? interestsRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+  // 유효성 검사
+  if (username && !/^[a-zA-Z0-9_가-힣]+$/.test(username)) {
+    showAlert('profileAlert', '닉네임은 영문, 숫자, 언더스코어(_), 한글만 사용 가능합니다.', 'error');
+    return;
+  }
+  if (displayName.length > 20) {
+    showAlert('profileAlert', '표시 이름은 최대 20자까지 입력 가능합니다.', 'error');
+    return;
+  }
+  if (bio.length > 200) {
+    showAlert('profileAlert', '자기소개는 최대 200자까지 입력 가능합니다.', 'error');
+    return;
+  }
+
+  setLoading('saveBtn', true, '저장하기');
+
+  try {
+    await saveProfile({
+      display_name: displayName,
+      username: username || null,
+      role: role,
+      phone: phone || null,
+      bio: bio || null,
+      interests: interests.length ? interests : null
+    });
+    showAlert('profileAlert', '프로필이 성공적으로 저장되었습니다.', 'success');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (err) {
+    showAlert('profileAlert', '저장 중 오류가 발생했습니다: ' + err.message, 'error');
+  } finally {
+    setLoading('saveBtn', false, '저장하기');
+  }
+}
+</script>
+</body>
+</html>

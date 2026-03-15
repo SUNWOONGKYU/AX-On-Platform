@@ -1,0 +1,1932 @@
+<!-- @task S8F7 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AX-On 관리자 - 공지사항 관리</title>
+  <meta name="robots" content="noindex,nofollow" />
+
+  <!-- Supabase 환경변수 주입 (Vercel meta 방식) -->
+  <meta name="supabase-url" content="" />
+  <meta name="supabase-anon-key" content="" />
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:    #1a1a2e;
+      --bg-secondary:  #16213e;
+      --bg-card:       #0f3460;
+      --bg-surface:    #1e2a4a;
+      --accent:        #6c5ce7;
+      --accent-light:  #a29bfe;
+      --accent-hover:  #7d6ff0;
+      --text-primary:  #e8e8f0;
+      --text-secondary:#9da8c7;
+      --text-muted:    #6b7a99;
+      --border:        #2a3a5c;
+      --border-light:  #3a4a6c;
+      --c-success:     #00b894;
+      --c-error:       #d63031;
+      --c-warning:     #e17055;
+      --c-info:        #74b9ff;
+      --c-banner:      #6c5ce7;
+      --c-page:        #0984e3;
+      --c-popup:       #fd79a8;
+      --radius-sm:  6px;
+      --radius-md:  10px;
+      --radius-lg:  16px;
+      --transition: 0.2s ease;
+    }
+
+    html { font-size: 15px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .page-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+
+    .main-content {
+      flex: 1;
+      padding: 24px 20px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      gap: 16px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand-text { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+    .brand-text span { color: var(--accent-light); }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    .header-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .user-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .btn-logout {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-logout:hover { border-color: var(--c-error); color: var(--c-error); }
+
+    /* ── Page Title ── */
+    .page-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-title { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+    .page-title span { color: var(--accent-light); }
+
+    .btn-new {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-new:hover { background: var(--accent-hover); }
+
+    /* ── Stats Cards ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover { border-color: var(--border-light); transform: translateY(-1px); }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.total  { background: rgba(108,92,231,0.2); }
+    .stat-icon.active { background: rgba(0,184,148,0.2); }
+    .stat-icon.banner { background: rgba(108,92,231,0.2); }
+    .stat-icon.page   { background: rgba(9,132,227,0.2); }
+    .stat-icon.popup  { background: rgba(253,121,168,0.2); }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text-primary);
+    }
+
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── Table ── */
+    .table-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .table-info { font-size: 0.82rem; color: var(--text-muted); }
+    .table-info strong { color: var(--text-secondary); }
+
+    .table-search-wrap { display: flex; gap: 8px; align-items: center; }
+
+    .tbl-search {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      outline: none;
+      width: 200px;
+      transition: var(--transition);
+    }
+
+    .tbl-search:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(108,92,231,0.2); }
+
+    .tbl-filter-select {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      outline: none;
+    }
+
+    .tbl-filter-select option { background: var(--bg-secondary); }
+
+    .table-scroll { overflow-x: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+    thead th {
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(108,92,231,0.06); }
+
+    tbody td { padding: 12px 16px; color: var(--text-primary); vertical-align: middle; }
+
+    .td-num { color: var(--text-muted); font-size: 0.8rem; }
+
+    .td-title { font-weight: 500; max-width: 280px; }
+    .td-title .title-text {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.73rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-banner { background: rgba(108,92,231,0.15); color: var(--c-banner); border: 1px solid rgba(108,92,231,0.3); }
+    .badge-page   { background: rgba(9,132,227,0.15);  color: var(--c-page);   border: 1px solid rgba(9,132,227,0.3); }
+    .badge-popup  { background: rgba(253,121,168,0.15);color: var(--c-popup);  border: 1px solid rgba(253,121,168,0.3); }
+
+    .badge-active   { background: rgba(0,184,148,0.15);  color: var(--c-success); border: 1px solid rgba(0,184,148,0.3); }
+    .badge-inactive { background: rgba(107,122,153,0.15);color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-scheduled{ background: rgba(116,185,255,0.15);color: var(--c-info);   border: 1px solid rgba(116,185,255,0.3); }
+    .badge-expired  { background: rgba(214,48,49,0.15);  color: var(--c-error);  border: 1px solid rgba(214,48,49,0.3); }
+
+    .td-period { font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap; }
+    .td-period .period-end { display: block; color: var(--text-muted); font-size: 0.72rem; }
+
+    .td-author { font-size: 0.82rem; color: var(--text-secondary); }
+    .td-date   { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; }
+
+    /* ── Toggle Switch ── */
+    .toggle-switch { position: relative; display: inline-block; width: 42px; height: 22px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      transition: var(--transition);
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 2px;
+      bottom: 2px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .toggle-switch input:checked + .toggle-slider { background: rgba(0,184,148,0.25); border-color: var(--c-success); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); background: var(--c-success); }
+
+    /* ── Action Buttons ── */
+    .action-btns { display: flex; gap: 6px; align-items: center; }
+
+    .btn-action {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-action:hover { border-color: var(--accent); color: var(--accent-light); }
+    .btn-action.edit:hover  { border-color: var(--accent); color: var(--accent-light); }
+    .btn-action.preview:hover { border-color: var(--c-info); color: var(--c-info); }
+    .btn-action.delete { }
+    .btn-action.delete:hover { border-color: var(--c-error); color: var(--c-error); }
+
+    /* ── Pagination ── */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pagination-info { font-size: 0.8rem; color: var(--text-muted); }
+
+    .pagination-controls { display: flex; gap: 4px; }
+
+    .page-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      transition: var(--transition);
+    }
+
+    .page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-light); }
+    .page-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* ── Empty State ── */
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      gap: 12px;
+    }
+
+    .empty-state.visible { display: flex; }
+    .empty-state .empty-icon { font-size: 2.5rem; opacity: 0.4; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── Form Panel ── */
+    .form-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .form-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-surface);
+    }
+
+    .form-panel-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-panel-title .title-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .btn-cancel-form {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-cancel-form:hover { border-color: var(--border-light); color: var(--text-primary); }
+
+    .form-body { padding: 24px; }
+
+    .form-row {
+      display: grid;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .form-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-label .required { color: var(--c-error); margin-left: 2px; }
+
+    .form-control {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      outline: none;
+      transition: var(--transition);
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(108,92,231,0.2); }
+    .form-control::placeholder { color: var(--text-muted); }
+
+    select.form-control option { background: var(--bg-secondary); }
+
+    /* ── Rich Text Editor ── */
+    .rte-toolbar {
+      display: flex;
+      gap: 4px;
+      padding: 8px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      flex-wrap: wrap;
+    }
+
+    .rte-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      transition: var(--transition);
+    }
+
+    .rte-btn:hover  { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .rte-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .rte-btn.bold   { font-style: normal; }
+    .rte-btn.italic { font-style: italic; }
+
+    .rte-separator {
+      width: 1px;
+      background: var(--border);
+      margin: 4px 4px;
+      align-self: stretch;
+    }
+
+    .rte-body {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      min-height: 160px;
+      padding: 12px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+      line-height: 1.7;
+    }
+
+    .rte-body:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(108,92,231,0.2); }
+    .rte-body a { color: var(--accent-light); }
+    .rte-body:empty::before { content: attr(data-placeholder); color: var(--text-muted); pointer-events: none; }
+
+    /* link input popup */
+    .link-input-popup {
+      display: none;
+      position: absolute;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      z-index: 200;
+      min-width: 280px;
+      gap: 8px;
+      align-items: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .link-input-popup.visible { display: flex; }
+
+    .link-input-popup input {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      outline: none;
+      flex: 1;
+    }
+
+    .link-input-popup input:focus { border-color: var(--accent); }
+
+    .link-popup-btn {
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .link-popup-btn.cancel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    /* ── Checkbox ── */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+
+    .checkbox-group:hover { border-color: var(--border-light); }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    /* ── Form Footer ── */
+    .form-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-surface);
+    }
+
+    .btn-submit {
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      padding: 9px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-submit:hover { background: var(--accent-hover); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Preview Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,20,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.visible { display: flex; }
+
+    .modal-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 680px;
+      width: 100%;
+      overflow: hidden;
+      animation: modal-in 0.25s ease;
+    }
+
+    @keyframes modal-in {
+      from { transform: translateY(20px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-surface);
+    }
+
+    .modal-title { font-size: 0.95rem; font-weight: 700; }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+
+    .btn-close-modal:hover { background: var(--bg-card); color: var(--text-primary); }
+
+    .modal-body { padding: 24px; }
+
+    /* Preview Renders */
+    .preview-banner {
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      border-radius: var(--radius-sm);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .preview-banner .preview-close-icon {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: #fff;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .preview-popup {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .preview-popup .popup-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .preview-popup .popup-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .preview-popup .popup-close-icon {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .preview-popup .popup-content {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .preview-page {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .preview-page .page-header-bar {
+      background: var(--bg-card);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .preview-page .page-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .preview-page .page-title-text { font-weight: 700; font-size: 0.95rem; }
+
+    .preview-page .page-body { padding: 16px; }
+
+    .preview-page .page-content {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .preview-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    /* ── Delete Confirm Modal ── */
+    .confirm-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 400px;
+      width: 100%;
+      overflow: hidden;
+      animation: modal-in 0.25s ease;
+    }
+
+    .confirm-body {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .confirm-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .confirm-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .confirm-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+
+    .btn-confirm-delete {
+      background: var(--c-error);
+      border: none;
+      color: #fff;
+      padding: 9px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-confirm-delete:hover { background: #c0392b; }
+    .btn-confirm-delete:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-confirm-cancel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 9px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-confirm-cancel:hover { border-color: var(--border-light); color: var(--text-primary); }
+
+    /* ── Loading ── */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,26,46,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-overlay.visible { display: flex; }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Toast ── */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10000;
+    }
+
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      color: var(--text-primary);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      max-width: 320px;
+      animation: toast-in 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .toast.success { border-left-color: var(--c-success); }
+    .toast.error   { border-left-color: var(--c-error); }
+    .toast.info    { border-left-color: var(--c-info); }
+
+    @keyframes toast-in {
+      from { transform: translateX(40px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .form-row.cols-3 { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .form-row.cols-2,
+      .form-row.cols-3 { grid-template-columns: 1fr; }
+      .page-title { font-size: 1.2rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .table-toolbar { flex-direction: column; align-items: flex-start; }
+      .tbl-search { width: 100%; }
+      .action-btns { flex-wrap: wrap; }
+      .modal-overlay { align-items: flex-end; }
+      .modal-box { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .pagination-bar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Preview Modal -->
+<div class="modal-overlay" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewModalTitle">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="previewModalTitle">미리보기</span>
+      <button class="btn-close-modal" id="closePreviewModal" aria-label="닫기">&times;</button>
+    </div>
+    <div class="modal-body" id="previewModalBody"></div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+  <div class="confirm-box">
+    <div class="confirm-body">
+      <div class="confirm-icon">🗑️</div>
+      <div class="confirm-title" id="deleteModalTitle">공지사항 삭제</div>
+      <p class="confirm-desc">이 공지사항을 삭제하시겠습니까?<br>삭제된 데이터는 복구할 수 없습니다.</p>
+      <div class="confirm-actions">
+        <button class="btn-confirm-cancel" id="cancelDeleteBtn">취소</button>
+        <button class="btn-confirm-delete" id="confirmDeleteBtn">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrapper">
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="header-brand" href="./index.html">
+        <div class="brand-icon">AX</div>
+        <span class="brand-text">AX-On <span>Admin</span></span>
+      </a>
+      <div class="header-right">
+        <div class="header-user">
+          <div class="user-dot" id="userInitial">A</div>
+          <span id="userEmail" style="display:none;font-size:0.82rem;"></span>
+        </div>
+        <button class="btn-logout" id="logoutBtn">로그아웃</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main ── -->
+  <main class="main-content">
+
+    <!-- Page Title -->
+    <div class="page-title-bar">
+      <h1 class="page-title">공지사항 <span>관리</span></h1>
+      <button class="btn-new" id="btnNewAnnouncement">
+        ＋ 새 공지사항
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-icon total">📋</div>
+        <div>
+          <div class="stat-value" id="statTotal">-</div>
+          <div class="stat-label">전체</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon active">✅</div>
+        <div>
+          <div class="stat-value" id="statActive">-</div>
+          <div class="stat-label">활성</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon banner">📢</div>
+        <div>
+          <div class="stat-value" id="statBanner">-</div>
+          <div class="stat-label">배너</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon page">📄</div>
+        <div>
+          <div class="stat-value" id="statPage">-</div>
+          <div class="stat-label">전체 페이지</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon popup">💬</div>
+        <div>
+          <div class="stat-value" id="statPopup">-</div>
+          <div class="stat-label">팝업</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Form Panel (작성/수정) ── -->
+    <div class="form-panel" id="formPanel" style="display:none;">
+      <div class="form-panel-header">
+        <div class="form-panel-title">
+          <span id="formPanelTitleText">새 공지사항 작성</span>
+          <span class="title-badge" id="formPanelBadge">NEW</span>
+        </div>
+        <button class="btn-cancel-form" id="btnCancelForm">취소</button>
+      </div>
+
+      <div class="form-body">
+        <!-- 제목 -->
+        <div class="form-row" style="margin-bottom:20px;">
+          <div class="form-group">
+            <label class="form-label" for="fieldTitle">제목 <span class="required">*</span></label>
+            <input
+              type="text"
+              id="fieldTitle"
+              class="form-control"
+              placeholder="공지사항 제목을 입력하세요"
+              maxlength="200"
+            />
+          </div>
+        </div>
+
+        <!-- 내용 (Rich Text Editor) -->
+        <div class="form-row" style="margin-bottom:20px;">
+          <div class="form-group">
+            <label class="form-label">내용 <span class="required">*</span></label>
+            <div style="position:relative;">
+              <!-- Toolbar -->
+              <div class="rte-toolbar">
+                <button class="rte-btn bold" id="rteBtn-bold" title="볼드 (Ctrl+B)" onclick="rteCommand('bold')"><b>B</b></button>
+                <button class="rte-btn italic" id="rteBtn-italic" title="이탤릭 (Ctrl+I)" onclick="rteCommand('italic')"><i>I</i></button>
+                <div class="rte-separator"></div>
+                <button class="rte-btn" id="rteBtn-link" title="링크 삽입" onclick="toggleLinkPopup()">🔗</button>
+              </div>
+              <!-- Link Popup -->
+              <div class="link-input-popup" id="linkPopup">
+                <input type="url" id="linkUrlInput" placeholder="https://..." />
+                <button class="link-popup-btn" onclick="insertLink()">삽입</button>
+                <button class="link-popup-btn cancel" onclick="closeLinkPopup()">취소</button>
+              </div>
+              <!-- Editor -->
+              <div
+                class="rte-body"
+                id="rteEditor"
+                contenteditable="true"
+                data-placeholder="공지 내용을 입력하세요..."
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 타입 / 활성 여부 -->
+        <div class="form-row cols-2">
+          <div class="form-group">
+            <label class="form-label" for="fieldType">타입 <span class="required">*</span></label>
+            <select id="fieldType" class="form-control">
+              <option value="banner">배너 (Banner)</option>
+              <option value="page">전체 페이지 (Page)</option>
+              <option value="popup">팝업 (Popup)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">활성 여부</label>
+            <div class="checkbox-group" onclick="document.getElementById('fieldActive').click()">
+              <input type="checkbox" id="fieldActive" checked />
+              <label for="fieldActive">활성화 (공개 상태)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 게시 기간 -->
+        <div class="form-row cols-2">
+          <div class="form-group">
+            <label class="form-label" for="fieldStartDate">게시 시작일</label>
+            <input type="date" id="fieldStartDate" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fieldEndDate">게시 종료일</label>
+            <input type="date" id="fieldEndDate" class="form-control" />
+          </div>
+        </div>
+
+        <!-- Hidden ID (수정 모드) -->
+        <input type="hidden" id="fieldId" value="" />
+      </div>
+
+      <div class="form-footer">
+        <button class="btn-cancel-form" id="btnCancelForm2">취소</button>
+        <button class="btn-action preview" onclick="openPreviewFromForm()" style="padding:9px 18px;font-size:0.88rem;">미리보기</button>
+        <button class="btn-submit" id="btnSubmit">저장</button>
+      </div>
+    </div>
+
+    <!-- ── 공지사항 목록 ── -->
+    <div class="table-container">
+      <div class="table-toolbar">
+        <div class="table-info">총 <strong id="totalCount">0</strong>개 공지사항</div>
+        <div class="table-search-wrap">
+          <input type="text" class="tbl-search" id="searchInput" placeholder="제목 검색..." />
+          <select class="tbl-filter-select" id="filterType">
+            <option value="">전체 타입</option>
+            <option value="banner">배너</option>
+            <option value="page">전체 페이지</option>
+            <option value="popup">팝업</option>
+          </select>
+          <select class="tbl-filter-select" id="filterActive">
+            <option value="">전체 상태</option>
+            <option value="true">활성</option>
+            <option value="false">비활성</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:50px;">번호</th>
+              <th>제목</th>
+              <th style="width:90px;">타입</th>
+              <th style="width:160px;">게시 기간</th>
+              <th style="width:80px;">활성</th>
+              <th style="width:100px;">작성자</th>
+              <th style="width:90px;">작성일</th>
+              <th style="width:160px;">액션</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="8">
+                <div class="empty-state visible">
+                  <div class="empty-icon">📋</div>
+                  <p>공지사항을 불러오는 중...</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State (no results) -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">📭</div>
+        <p>공지사항이 없습니다.</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-bar" id="paginationBar" style="display:none;">
+        <div class="pagination-info" id="paginationInfo"></div>
+        <div class="pagination-controls" id="paginationControls"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ── Supabase 초기화 ── */
+  let supabase = null;
+  let currentUser = null;
+
+  function getConfig() {
+    // 1순위: Vercel meta 태그
+    const urlMeta = document.querySelector('meta[name="supabase-url"]');
+    const keyMeta = document.querySelector('meta[name="supabase-anon-key"]');
+    const url = urlMeta?.content || '';
+    const key = keyMeta?.content || '';
+    // 2순위: window.APP_CONFIG (config.js)
+    if (!url && window.APP_CONFIG) {
+      return { url: window.APP_CONFIG.SUPABASE_URL, key: window.APP_CONFIG.SUPABASE_ANON_KEY };
+    }
+    return { url, key };
+  }
+
+  /* ── 상태 ── */
+  const PAGE_SIZE = 15;
+  let announcements = [];   // 전체 데이터 (필터링 전)
+  let filtered     = [];    // 필터링된 데이터
+  let currentPage  = 1;
+  let deleteTargetId = null;
+  let savedRange   = null;  // RTE selection
+
+  /* ── DOM ── */
+  const loadingOverlay   = document.getElementById('loadingOverlay');
+  const toastContainer   = document.getElementById('toastContainer');
+  const tableBody        = document.getElementById('tableBody');
+  const emptyState       = document.getElementById('emptyState');
+  const totalCountEl     = document.getElementById('totalCount');
+  const paginationBar    = document.getElementById('paginationBar');
+  const paginationInfo   = document.getElementById('paginationInfo');
+  const paginationCtrls  = document.getElementById('paginationControls');
+  const searchInput      = document.getElementById('searchInput');
+  const filterType       = document.getElementById('filterType');
+  const filterActive     = document.getElementById('filterActive');
+  const formPanel        = document.getElementById('formPanel');
+  const fieldId          = document.getElementById('fieldId');
+  const fieldTitle       = document.getElementById('fieldTitle');
+  const fieldType        = document.getElementById('fieldType');
+  const fieldActive      = document.getElementById('fieldActive');
+  const fieldStartDate   = document.getElementById('fieldStartDate');
+  const fieldEndDate     = document.getElementById('fieldEndDate');
+  const rteEditor        = document.getElementById('rteEditor');
+  const btnSubmit        = document.getElementById('btnSubmit');
+
+  /* ── 유틸리티 ── */
+  function showLoading()  { loadingOverlay.classList.add('visible'); }
+  function hideLoading()  { loadingOverlay.classList.remove('visible'); }
+
+  function toast(msg, type = 'info') {
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.textContent = msg;
+    toastContainer.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '-').replace('.', '');
+    } catch { return dateStr; }
+  }
+
+  function getStatusBadge(ann) {
+    if (!ann.is_active) return '<span class="badge badge-inactive">비활성</span>';
+    const now = new Date();
+    const start = ann.start_date ? new Date(ann.start_date) : null;
+    const end   = ann.end_date   ? new Date(ann.end_date)   : null;
+    if (end && now > end) return '<span class="badge badge-expired">만료</span>';
+    if (start && now < start) return '<span class="badge badge-scheduled">예정</span>';
+    return '<span class="badge badge-active">활성</span>';
+  }
+
+  function getTypeBadge(type) {
+    const map = {
+      banner: '<span class="badge badge-banner">📢 배너</span>',
+      page:   '<span class="badge badge-page">📄 페이지</span>',
+      popup:  '<span class="badge badge-popup">💬 팝업</span>',
+    };
+    return map[type] || `<span class="badge">${type}</span>`;
+  }
+
+  /* ── 인증 확인 ── */
+  async function checkAuth() {
+    try {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error || !session) {
+        redirectToLogin();
+        return false;
+      }
+
+      currentUser = session.user;
+
+      // 관리자 권한 확인
+      const { data: profile, error: profileErr } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (profileErr || !profile || profile.role !== 'admin') {
+        toast('관리자 권한이 없습니다.', 'error');
+        setTimeout(redirectToLogin, 1500);
+        return false;
+      }
+
+      // UI 업데이트
+      const email = currentUser.email || '';
+      document.getElementById('userInitial').textContent = email.charAt(0).toUpperCase();
+      document.getElementById('userEmail').textContent = email;
+
+      return true;
+    } catch (err) {
+      console.error('Auth check error:', err);
+      redirectToLogin();
+      return false;
+    }
+  }
+
+  function redirectToLogin() {
+    window.location.href = '../../auth/login.html';
+  }
+
+  /* ── 공지사항 로드 ── */
+  async function loadAnnouncements() {
+    showLoading();
+    try {
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      announcements = data || [];
+      updateStats();
+      applyFilters();
+    } catch (err) {
+      console.error('Load error:', err);
+      toast('공지사항을 불러오지 못했습니다: ' + err.message, 'error');
+      announcements = [];
+      renderTable([]);
+    } finally {
+      hideLoading();
+    }
+  }
+
+  /* ── 통계 업데이트 ── */
+  function updateStats() {
+    document.getElementById('statTotal').textContent  = announcements.length;
+    document.getElementById('statActive').textContent = announcements.filter(a => a.is_active).length;
+    document.getElementById('statBanner').textContent = announcements.filter(a => a.type === 'banner').length;
+    document.getElementById('statPage').textContent   = announcements.filter(a => a.type === 'page').length;
+    document.getElementById('statPopup').textContent  = announcements.filter(a => a.type === 'popup').length;
+  }
+
+  /* ── 필터 적용 ── */
+  function applyFilters() {
+    const q    = searchInput.value.trim().toLowerCase();
+    const type = filterType.value;
+    const active = filterActive.value;
+
+    filtered = announcements.filter(a => {
+      const matchQ = !q || (a.title || '').toLowerCase().includes(q);
+      const matchT = !type || a.type === type;
+      const matchA = active === '' || String(a.is_active) === active;
+      return matchQ && matchT && matchA;
+    });
+
+    currentPage = 1;
+    totalCountEl.textContent = filtered.length;
+    renderTable(paginate(filtered, currentPage));
+    renderPagination();
+  }
+
+  function paginate(arr, page) {
+    const start = (page - 1) * PAGE_SIZE;
+    return arr.slice(start, start + PAGE_SIZE);
+  }
+
+  /* ── 테이블 렌더링 ── */
+  function renderTable(rows) {
+    if (!rows || rows.length === 0) {
+      tableBody.innerHTML = '';
+      emptyState.classList.add('visible');
+      return;
+    }
+
+    emptyState.classList.remove('visible');
+
+    const offset = (currentPage - 1) * PAGE_SIZE;
+    const html = rows.map((ann, idx) => {
+      const num      = filtered.indexOf(ann) + 1;
+      const typeBadge   = getTypeBadge(ann.type);
+      const statusBadge = getStatusBadge(ann);
+      const startFmt = formatDate(ann.start_date);
+      const endFmt   = formatDate(ann.end_date);
+      const periodHtml = `${startFmt}<span class="period-end">~ ${endFmt}</span>`;
+      const author   = ann.author_name || ann.author_email || '-';
+      const createdAt = formatDate(ann.created_at);
+      const canPreview = (ann.type === 'banner' || ann.type === 'popup');
+
+      return `
+        <tr data-id="${ann.id}">
+          <td class="td-num">${num}</td>
+          <td class="td-title">
+            <div class="title-text" title="${escHtml(ann.title)}">${escHtml(ann.title)}</div>
+          </td>
+          <td>${typeBadge}</td>
+          <td class="td-period">${periodHtml}</td>
+          <td>
+            <label class="toggle-switch" title="활성/비활성 토글">
+              <input type="checkbox" ${ann.is_active ? 'checked' : ''} onchange="toggleActive('${ann.id}', this.checked)" />
+              <span class="toggle-slider"></span>
+            </label>
+          </td>
+          <td class="td-author">${escHtml(author)}</td>
+          <td class="td-date">${createdAt}</td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-action edit"    onclick="startEdit('${ann.id}')">수정</button>
+              ${canPreview ? `<button class="btn-action preview" onclick="openPreview('${ann.id}')">미리보기</button>` : ''}
+              <button class="btn-action delete"  onclick="openDeleteModal('${ann.id}')">삭제</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    tableBody.innerHTML = html;
+  }
+
+  function escHtml(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── 페이지네이션 ── */
+  function renderPagination() {
+    const total = filtered.length;
+    const pages = Math.ceil(total / PAGE_SIZE);
+
+    if (pages <= 1) {
+      paginationBar.style.display = 'none';
+      return;
+    }
+
+    paginationBar.style.display = 'flex';
+    const start = (currentPage - 1) * PAGE_SIZE + 1;
+    const end   = Math.min(currentPage * PAGE_SIZE, total);
+    paginationInfo.textContent = `${start}–${end} / ${total}건`;
+
+    let btns = `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
+    for (let i = 1; i <= pages; i++) {
+      if (pages > 7 && Math.abs(i - currentPage) > 2 && i !== 1 && i !== pages) {
+        if (i === 2 || i === pages - 1) { btns += `<button class="page-btn" disabled>…</button>`; }
+        continue;
+      }
+      btns += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+    }
+    btns += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === pages ? 'disabled' : ''}>›</button>`;
+    paginationCtrls.innerHTML = btns;
+  }
+
+  window.goPage = function(page) {
+    const pages = Math.ceil(filtered.length / PAGE_SIZE);
+    if (page < 1 || page > pages) return;
+    currentPage = page;
+    renderTable(paginate(filtered, currentPage));
+    renderPagination();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  /* ── 활성/비활성 토글 ── */
+  window.toggleActive = async function(id, isActive) {
+    try {
+      const { error } = await supabase
+        .from('announcements')
+        .update({ is_active: isActive, updated_at: new Date().toISOString() })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      const ann = announcements.find(a => String(a.id) === String(id));
+      if (ann) { ann.is_active = isActive; updateStats(); }
+
+      toast(isActive ? '활성화되었습니다.' : '비활성화되었습니다.', 'success');
+
+      // 상태 배지 re-render (해당 행만)
+      applyFilters();
+    } catch (err) {
+      console.error('Toggle error:', err);
+      toast('변경 실패: ' + err.message, 'error');
+      // 토글 원복
+      applyFilters();
+    }
+  };
+
+  /* ── 폼 열기/닫기 ── */
+  function showForm() {
+    formPanel.style.display = 'block';
+    formPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function hideForm() {
+    formPanel.style.display = 'none';
+    resetForm();
+  }
+
+  function resetForm() {
+    fieldId.value = '';
+    fieldTitle.value = '';
+    rteEditor.innerHTML = '';
+    fieldType.value = 'banner';
+    fieldActive.checked = true;
+    fieldStartDate.value = '';
+    fieldEndDate.value = '';
+    document.getElementById('formPanelTitleText').textContent = '새 공지사항 작성';
+    document.getElementById('formPanelBadge').textContent = 'NEW';
+    btnSubmit.textContent = '저장';
+    closeLinkPopup();
+  }
+
+  document.getElementById('btnNewAnnouncement').addEventListener('click', () => {
+    resetForm();
+    showForm();
+  });
+
+  ['btnCancelForm', 'btnCancelForm2'].forEach(id => {
+    document.getElementById(id).addEventListener('click', hideForm);
+  });
+
+  /* ── 수정 ── */
+  window.startEdit = function(id) {
+    const ann = announcements.find(a => String(a.id) === String(id));
+    if (!ann) return;
+
+    fieldId.value = ann.id;
+    fieldTitle.value = ann.title || '';
+    rteEditor.innerHTML = ann.content || '';
+    fieldType.value = ann.type || 'banner';
+    fieldActive.checked = !!ann.is_active;
+    fieldStartDate.value = ann.start_date ? ann.start_date.substring(0, 10) : '';
+    fieldEndDate.value   = ann.end_date   ? ann.end_date.substring(0, 10)   : '';
+
+    document.getElementById('formPanelTitleText').textContent = '공지사항 수정';
+    document.getElementById('formPanelBadge').textContent = 'EDIT';
+    btnSubmit.textContent = '수정 저장';
+
+    showForm();
+  };
+
+  /* ── 저장 (작성/수정) ── */
+  btnSubmit.addEventListener('click', async () => {
+    const title   = fieldTitle.value.trim();
+    const content = rteEditor.innerHTML.trim();
+    const type    = fieldType.value;
+    const isActive = fieldActive.checked;
+    const startDate = fieldStartDate.value || null;
+    const endDate   = fieldEndDate.value   || null;
+    const id        = fieldId.value;
+
+    if (!title) { toast('제목을 입력해주세요.', 'error'); fieldTitle.focus(); return; }
+    if (!content || content === '') { toast('내용을 입력해주세요.', 'error'); rteEditor.focus(); return; }
+    if (startDate && endDate && startDate > endDate) {
+      toast('종료일이 시작일보다 빠릅니다.', 'error');
+      return;
+    }
+
+    const payload = {
+      title,
+      content,
+      type,
+      is_active: isActive,
+      start_date: startDate,
+      end_date:   endDate,
+      updated_at: new Date().toISOString(),
+    };
+
+    btnSubmit.disabled = true;
+    showLoading();
+
+    try {
+      if (id) {
+        // UPDATE
+        const { error } = await supabase
+          .from('announcements')
+          .update(payload)
+          .eq('id', id);
+        if (error) throw error;
+        toast('공지사항이 수정되었습니다.', 'success');
+      } else {
+        // INSERT
+        payload.author_id    = currentUser?.id        || null;
+        payload.author_email = currentUser?.email     || null;
+        payload.author_name  = currentUser?.user_metadata?.name || null;
+        payload.created_at   = new Date().toISOString();
+        const { error } = await supabase
+          .from('announcements')
+          .insert([payload]);
+        if (error) throw error;
+        toast('공지사항이 등록되었습니다.', 'success');
+      }
+
+      hideForm();
+      await loadAnnouncements();
+    } catch (err) {
+      console.error('Save error:', err);
+      toast('저장 실패: ' + err.message, 'error');
+    } finally {
+      btnSubmit.disabled = false;
+      hideLoading();
+    }
+  });
+
+  /* ── 삭제 ── */
+  window.openDeleteModal = function(id) {
+    deleteTargetId = id;
+    document.getElementById('deleteModal').classList.add('visible');
+  };
+
+  document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+    deleteTargetId = null;
+    document.getElementById('deleteModal').classList.remove('visible');
+  });
+
+  document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+    if (!deleteTargetId) return;
+    const btn = document.getElementById('confirmDeleteBtn');
+    btn.disabled = true;
+    showLoading();
+
+    try {
+      const { error } = await supabase
+        .from('announcements')
+        .delete()
+        .eq('id', deleteTargetId);
+
+      if (error) throw error;
+
+      document.getElementById('deleteModal').classList.remove('visible');
+      deleteTargetId = null;
+      toast('삭제되었습니다.', 'success');
+      await loadAnnouncements();
+    } catch (err) {
+      console.error('Delete error:', err);
+      toast('삭제 실패: ' + err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      hideLoading();
+    }
+  });
+
+  /* ── 미리보기 ── */
+  window.openPreview = function(id) {
+    const ann = announcements.find(a => String(a.id) === String(id));
+    if (!ann) return;
+    renderPreviewModal(ann.type, ann.title, ann.content);
+  };
+
+  window.openPreviewFromForm = function() {
+    const type    = fieldType.value;
+    const title   = fieldTitle.value.trim() || '(제목 없음)';
+    const content = rteEditor.innerHTML || '(내용 없음)';
+    renderPreviewModal(type, title, content);
+  };
+
+  function renderPreviewModal(type, title, content) {
+    const modal = document.getElementById('previewModal');
+    const body  = document.getElementById('previewModalBody');
+
+    let html = `<div class="preview-label">🖼️ ${type.toUpperCase()} 타입 미리보기</div>`;
+
+    if (type === 'banner') {
+      html += `
+        <div class="preview-banner">
+          <span>${escHtml(title)}</span>
+          <button class="preview-close-icon">✕</button>
+        </div>
+      `;
+    } else if (type === 'popup') {
+      html += `
+        <div class="preview-popup">
+          <div class="popup-header">
+            <div class="popup-title">${escHtml(title)}</div>
+            <button class="popup-close-icon">✕</button>
+          </div>
+          <div class="popup-content">${content}</div>
+        </div>
+      `;
+    } else {
+      // page
+      html += `
+        <div class="preview-page">
+          <div class="page-header-bar">
+            <div class="page-icon">📢</div>
+            <div class="page-title-text">${escHtml(title)}</div>
+          </div>
+          <div class="page-body">
+            <div class="page-content">${content}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    body.innerHTML = html;
+    modal.classList.add('visible');
+  }
+
+  document.getElementById('closePreviewModal').addEventListener('click', () => {
+    document.getElementById('previewModal').classList.remove('visible');
+  });
+
+  // 모달 바깥 클릭 시 닫기
+  document.getElementById('previewModal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('visible');
+  });
+  document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      deleteTargetId = null;
+      this.classList.remove('visible');
+    }
+  });
+
+  /* ── Rich Text Editor ── */
+  window.rteCommand = function(command) {
+    rteEditor.focus();
+    document.execCommand(command, false, null);
+    updateRteToolbar();
+  };
+
+  rteEditor.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      if (e.key === 'b') { e.preventDefault(); rteCommand('bold'); }
+      if (e.key === 'i') { e.preventDefault(); rteCommand('italic'); }
+    }
+  });
+
+  rteEditor.addEventListener('mouseup', updateRteToolbar);
+  rteEditor.addEventListener('keyup', updateRteToolbar);
+
+  function updateRteToolbar() {
+    document.getElementById('rteBtn-bold').classList.toggle('active', document.queryCommandState('bold'));
+    document.getElementById('rteBtn-italic').classList.toggle('active', document.queryCommandState('italic'));
+  }
+
+  /* ── Link Insert ── */
+  window.toggleLinkPopup = function() {
+    const popup = document.getElementById('linkPopup');
+    if (popup.classList.contains('visible')) {
+      closeLinkPopup();
+    } else {
+      // 현재 선택 저장
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0) savedRange = sel.getRangeAt(0).cloneRange();
+      popup.classList.add('visible');
+      document.getElementById('linkUrlInput').focus();
+    }
+  };
+
+  window.closeLinkPopup = function() {
+    document.getElementById('linkPopup').classList.remove('visible');
+    document.getElementById('linkUrlInput').value = '';
+    savedRange = null;
+  };
+
+  window.insertLink = function() {
+    const url = document.getElementById('linkUrlInput').value.trim();
+    if (!url) { toast('URL을 입력해주세요.', 'error'); return; }
+
+    rteEditor.focus();
+
+    if (savedRange) {
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(savedRange);
+    }
+
+    document.execCommand('createLink', false, url);
+
+    // target=_blank 설정
+    setTimeout(() => {
+      rteEditor.querySelectorAll('a').forEach(a => {
+        if (a.href === url || a.getAttribute('href') === url) {
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+        }
+      });
+    }, 50);
+
+    closeLinkPopup();
+    toast('링크가 삽입되었습니다.', 'success');
+  };
+
+  document.getElementById('linkUrlInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') insertLink();
+    if (e.key === 'Escape') closeLinkPopup();
+  });
+
+  /* ── 검색/필터 이벤트 ── */
+  let searchTimer;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(applyFilters, 300);
+  });
+
+  filterType.addEventListener('change', applyFilters);
+  filterActive.addEventListener('change', applyFilters);
+
+  /* ── 로그아웃 ── */
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    redirectToLogin();
+  });
+
+  /* ── 초기화 ── */
+  async function init() {
+    showLoading();
+    try {
+      const cfg = getConfig();
+      if (!cfg.url || !cfg.key) {
+        // config.js 로드 대기 후 재시도
+        await new Promise(r => setTimeout(r, 300));
+        const cfg2 = getConfig();
+        if (!cfg2.url || !cfg2.key) {
+          toast('Supabase 설정이 없습니다. config.js를 확인해주세요.', 'error');
+          hideLoading();
+          return;
+        }
+        supabase = window.supabase.createClient(cfg2.url, cfg2.key);
+      } else {
+        supabase = window.supabase.createClient(cfg.url, cfg.key);
+      }
+
+      const isAdmin = await checkAuth();
+      if (!isAdmin) { hideLoading(); return; }
+
+      await loadAnnouncements();
+    } catch (err) {
+      console.error('Init error:', err);
+      toast('초기화 실패: ' + err.message, 'error');
+    } finally {
+      hideLoading();
+    }
+  }
+
+  init();
+
+})();
+</script>
+</body>
+</html>

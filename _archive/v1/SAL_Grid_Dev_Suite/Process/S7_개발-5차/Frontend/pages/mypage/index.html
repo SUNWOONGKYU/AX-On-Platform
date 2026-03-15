@@ -1,0 +1,458 @@
+<!-- @task S7F2 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AX-On Platform 마이페이지">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<title>마이페이지 — AX-On Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="../../../../js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/mypage.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a2e;
+  --ink-muted: #5a5f7d;
+  --surface: #faf9f7;
+  --surface-warm: #f5f0eb;
+  --surface-card: #ffffff;
+  --amber: #e8920d;
+  --amber-light: #f5b942;
+  --amber-glow: rgba(232, 146, 13, 0.12);
+  --teal: #0d9488;
+  --success: #10b981;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --border: rgba(26, 26, 46, 0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
+  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Nav ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,249,247,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.logo-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 14px; color: white;
+}
+.logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; }
+.logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 6px; align-items: center; }
+.nav-link {
+  padding: 8px 14px; border-radius: 10px;
+  text-decoration: none; font-size: 14px; font-weight: 500; color: var(--ink-muted);
+  transition: all 0.15s;
+}
+.nav-link:hover { background: var(--amber-glow); color: var(--amber); }
+.nav-link.active { color: var(--amber); font-weight: 600; }
+.btn-nav {
+  padding: 8px 18px; border-radius: 10px; border: none; cursor: pointer;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  background: var(--ink); color: white; transition: all 0.15s;
+}
+.btn-nav:hover { background: #2d2d4a; }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 1200px; margin: 0 auto; padding: 40px 24px;
+  display: grid; grid-template-columns: 240px 1fr; gap: 28px;
+  align-items: start;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: sticky; top: 88px;
+}
+.profile-summary {
+  padding: 28px 20px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.avatar-wrap { position: relative; display: inline-block; margin-bottom: 12px; }
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 700; color: white;
+  overflow: hidden; margin: 0 auto;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.profile-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.profile-role {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  background: var(--amber-glow); color: var(--amber);
+}
+.sidebar-menu { padding: 8px; }
+.menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  text-decoration: none; font-size: 14px; font-weight: 500;
+  color: var(--ink-muted); transition: all 0.15s;
+  border: none; background: none; width: 100%;
+  text-align: left; font-family: inherit; cursor: pointer;
+}
+.menu-item:hover { background: var(--surface-warm); color: var(--ink); }
+.menu-item.active { background: var(--amber-glow); color: var(--amber); font-weight: 600; }
+.menu-icon { font-size: 16px; }
+
+/* ── Main ── */
+.main-content { min-width: 0; }
+
+/* ── Quick Nav Cards ── */
+.quick-nav {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin-bottom: 28px;
+}
+.quick-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--ink);
+  transition: all 0.2s;
+  box-shadow: var(--shadow-soft);
+  display: block;
+}
+.quick-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--amber);
+}
+.quick-card-icon { font-size: 32px; margin-bottom: 10px; }
+.quick-card-label {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.quick-card-desc {
+  font-size: 12px; color: var(--ink-muted);
+}
+
+/* ── Section Header ── */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.section-title {
+  font-size: 20px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--surface-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+/* ── Summary Stats ── */
+.stats-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-item {
+  text-align: center; padding: 20px 12px;
+  background: var(--surface-warm);
+  border-radius: var(--radius-sm);
+}
+.stat-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px; font-weight: 800;
+  color: var(--amber);
+  display: block; margin-bottom: 4px;
+}
+.stat-label { font-size: 13px; color: var(--ink-muted); }
+
+/* ── Recent Activity ── */
+.activity-list { list-style: none; }
+.activity-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+  background: var(--surface-warm);
+}
+.activity-body { flex: 1; min-width: 0; }
+.activity-title {
+  font-size: 14px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.activity-meta { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+.empty-state {
+  text-align: center; padding: 40px 24px;
+  color: var(--ink-muted);
+}
+.empty-icon { font-size: 40px; margin-bottom: 10px; }
+.empty-msg { font-size: 14px; }
+
+/* ── Alert ── */
+.alert {
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  font-size: 14px; margin-bottom: 16px; display: none;
+}
+.alert.show { display: block; }
+.alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+/* ── Footer ── */
+footer {
+  background: var(--ink); color: rgba(255,255,255,0.5);
+  text-align: center; padding: 32px 24px;
+  font-size: 13px; margin-top: 60px;
+}
+footer a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 8px; }
+footer a:hover { color: var(--amber); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-wrap { grid-template-columns: 1fr; gap: 16px; }
+  .sidebar { position: static; }
+  .sidebar-menu { display: flex; gap: 4px; overflow-x: auto; padding: 8px; }
+  .menu-item { white-space: nowrap; }
+  .profile-summary { padding: 16px; display: flex; align-items: center; gap: 16px; text-align: left; }
+  .quick-nav { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: 1fr; gap: 10px; }
+}
+@media (max-width: 480px) {
+  .page-wrap { padding: 16px; }
+  .nav-links .nav-link { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../../../index.html" class="logo">
+      <div class="logo-mark">AX</div>
+      <span class="logo-text">AX-<span>On</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="../../../../index.html" class="nav-link">홈</a>
+      <a href="../../../../experts.html" class="nav-link">전문가</a>
+      <a href="../../../../community.html" class="nav-link">커뮤니티</a>
+      <button class="btn-nav" onclick="handleLogout()">로그아웃</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="profile-summary">
+      <div class="avatar-wrap">
+        <div class="avatar">
+          <span id="mpAvatarInitial">?</span>
+          <img id="mpAvatarImg" src="" alt="프로필 사진">
+        </div>
+      </div>
+      <div class="profile-name" id="mpUserName">로딩 중...</div>
+      <span class="profile-role" id="mpUserRole">-</span>
+    </div>
+    <nav class="sidebar-menu">
+      <a class="menu-item active" href="index.html">
+        <span class="menu-icon">🏠</span> 마이페이지
+      </a>
+      <a class="menu-item" href="profile-edit.html">
+        <span class="menu-icon">✏️</span> 프로필 편집
+      </a>
+      <a class="menu-item" href="activity.html">
+        <span class="menu-icon">📊</span> 활동 내역
+      </a>
+      <a class="menu-item" href="settings.html">
+        <span class="menu-icon">⚙️</span> 설정
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div id="pageAlert" class="alert"></div>
+
+    <!-- Quick Navigation -->
+    <div class="quick-nav">
+      <a class="quick-card" href="profile-edit.html">
+        <div class="quick-card-icon">✏️</div>
+        <div class="quick-card-label">프로필 편집</div>
+        <div class="quick-card-desc">사진·닉네임·자기소개 수정</div>
+      </a>
+      <a class="quick-card" href="activity.html">
+        <div class="quick-card-icon">📊</div>
+        <div class="quick-card-label">활동 내역</div>
+        <div class="quick-card-desc">수강·게시글·댓글 내역</div>
+      </a>
+      <a class="quick-card" href="settings.html">
+        <div class="quick-card-icon">⚙️</div>
+        <div class="quick-card-label">설정</div>
+        <div class="quick-card-desc">알림 설정 및 계정 관리</div>
+      </a>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="card">
+      <div class="section-title" style="margin-bottom:16px;">📈 나의 활동 요약</div>
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-num" id="statEnrollments">-</span>
+          <span class="stat-label">수강 중인 과정</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="statPosts">-</span>
+          <span class="stat-label">작성한 게시글</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="statComments">-</span>
+          <span class="stat-label">작성한 댓글</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card">
+      <div class="section-header">
+        <div class="section-title">🕐 최근 활동</div>
+        <a href="activity.html" style="font-size:13px;color:var(--amber);text-decoration:none;font-weight:600;">전체 보기 →</a>
+      </div>
+      <ul class="activity-list" id="recentActivityList">
+        <li class="activity-item">
+          <div class="activity-icon">⏳</div>
+          <div class="activity-body">
+            <div class="activity-title">불러오는 중...</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <a href="../../../../privacy.html">개인정보처리방침</a>
+    <a href="../../../../terms.html">이용약관</a>
+    <a href="../../../../contact.html">문의하기</a>
+  </div>
+  <div style="margin-top:8px;">© 2026 AX-On Platform. All rights reserved.</div>
+</footer>
+
+<script>
+(async function() {
+  await mypageInit({
+    onReady: async (db, user, profile) => {
+      await Promise.all([loadSummaryStats(db, user), loadRecentActivity(db, user)]);
+    }
+  });
+})();
+
+async function loadSummaryStats(db, user) {
+  try {
+    const [enrollRes, postRes, commentRes] = await Promise.all([
+      db.from('course_enrollments').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+      db.from('community_posts').select('id', { count: 'exact', head: true }).eq('author_id', user.id).eq('is_deleted', false),
+      db.from('community_comments').select('id', { count: 'exact', head: true }).eq('author_id', user.id).eq('is_deleted', false)
+    ]);
+    document.getElementById('statEnrollments').textContent = enrollRes.count ?? 0;
+    document.getElementById('statPosts').textContent = postRes.count ?? 0;
+    document.getElementById('statComments').textContent = commentRes.count ?? 0;
+  } catch(e) {
+    console.error('통계 로드 오류:', e);
+  }
+}
+
+async function loadRecentActivity(db, user) {
+  const list = document.getElementById('recentActivityList');
+  try {
+    const [posts, comments] = await Promise.all([
+      db.from('community_posts')
+        .select('id, title, created_at')
+        .eq('author_id', user.id).eq('is_deleted', false)
+        .order('created_at', { ascending: false }).limit(3),
+      db.from('community_comments')
+        .select('id, content, created_at, community_posts(id, title)')
+        .eq('author_id', user.id).eq('is_deleted', false)
+        .order('created_at', { ascending: false }).limit(3)
+    ]);
+
+    const items = [];
+
+    (posts.data || []).forEach(p => {
+      items.push({ icon: '📝', title: p.title, meta: '게시글 · ' + formatDate(p.created_at), date: p.created_at });
+    });
+    (comments.data || []).forEach(c => {
+      const postTitle = c.community_posts?.title || '게시글';
+      items.push({ icon: '💬', title: c.content?.slice(0, 50) || '댓글', meta: postTitle + ' · ' + formatDate(c.created_at), date: c.created_at });
+    });
+
+    items.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const recent = items.slice(0, 5);
+
+    if (recent.length === 0) {
+      list.innerHTML = '<li class="empty-state"><div class="empty-icon">🌱</div><div class="empty-msg">아직 활동 내역이 없습니다.</div></li>';
+      return;
+    }
+
+    list.innerHTML = recent.map(item => `
+      <li class="activity-item">
+        <div class="activity-icon">${item.icon}</div>
+        <div class="activity-body">
+          <div class="activity-title">${escapeHtml(item.title)}</div>
+          <div class="activity-meta">${escapeHtml(item.meta)}</div>
+        </div>
+      </li>
+    `).join('');
+  } catch(e) {
+    list.innerHTML = '<li class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-msg">활동 내역을 불러올 수 없습니다.</div></li>';
+  }
+}
+</script>
+</body>
+</html>

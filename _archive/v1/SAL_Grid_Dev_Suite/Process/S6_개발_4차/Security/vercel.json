@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "comment": [
+    "S5S1 — Supabase 환경변수 Vercel 설정 파일",
+    "S6S1 — claude-code-guide.html 접근 차단 리다이렉트 추가",
+    "",
+    "환경변수 설정 방법:",
+    "  1) Vercel 대시보드 → 프로젝트 선택 → Settings → Environment Variables",
+    "  2) 아래 변수명을 각각 추가하고 실제 값을 입력하세요.",
+    "",
+    "변수명            | 설명",
+    "SUPABASE_URL      | Supabase 프로젝트 URL (예: https://xxxx.supabase.co)",
+    "SUPABASE_ANON_KEY | Supabase anon(공개) 키",
+    "",
+    "주의: SUPABASE_SERVICE_ROLE_KEY는 절대 클라이언트 노출 금지"
+  ],
+  "env": {
+    "SUPABASE_URL":      "@supabase-url",
+    "SUPABASE_ANON_KEY": "@supabase-anon-key"
+  },
+  "redirects": [
+    {
+      "source": "/claude-code-guide.html",
+      "destination": "/404.html",
+      "statusCode": 404
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/env-config",
+      "destination": "/api/env-config.js"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options",        "value": "DENY"    },
+        { "key": "Referrer-Policy",        "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}
