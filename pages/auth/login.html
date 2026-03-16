@@ -11,28 +11,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="../../css/common.css">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <script src="../../js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+/* login.html 전용 스타일 (공통 스타일은 css/common.css 참조) */
 :root {
-  --ink: #1a1a2e;
-  --ink-muted: #5a5f7d;
-  --surface: #faf9f7;
-  --surface-warm: #f5f0eb;
-  --surface-card: #ffffff;
-  --amber: #e8920d;
-  --amber-light: #f5b942;
-  --amber-glow: rgba(232, 146, 13, 0.12);
-  --teal: #0d9488;
+  /* 페이지 전용 변수 */
   --success: #10b981;
   --danger: #ef4444;
   --border: rgba(26, 26, 46, 0.12);
-  --radius: 20px;
-  --radius-sm: 12px;
-  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
-  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
 }
 
 html { scroll-behavior: smooth; }

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="AX-On Platform — AI 전문가 네트워크. 다양한 분야의 AI 전문가들이 모여 협업하고 성장하는 플랫폼.">
 <meta property="og:title" content="AX-On Platform">
 <meta property="og:image" content="https://www.ax-on.net/images/og-default.svg">
@@ -430,9 +431,11 @@ const _sbReady = AXON_CONFIG.init().then(() => {
       const { count, error } = await sb.from('ax_experts').select('*', { count: 'exact', head: true });
       if (!error && count !== null) {
         document.getElementById('expertCount').textContent = count;
+        sessionStorage.setItem('axon_expertCount', count);
       }
     } catch (e) {
-      console.error('Expert count fetch error:', e);
+      const cached = sessionStorage.getItem('axon_expertCount');
+      document.getElementById('expertCount').textContent = cached || '100+';
     }
 
     // Auth state
