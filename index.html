@@ -101,6 +101,78 @@ body {
   word-break: keep-all;
 }
 
+/* ── ABOUT-AX 요약 섹션 ── */
+.intro-section { padding: 100px 40px 40px; max-width: 1280px; margin: 0 auto; }
+.intro-card {
+  background: linear-gradient(135deg, var(--surface-card), var(--surface-warm));
+  border: 1px solid rgba(232, 146, 13, 0.15);
+  border-radius: var(--radius);
+  padding: 48px 40px;
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+}
+.intro-eyebrow {
+  display: inline-block; font-family: 'Outfit', sans-serif;
+  font-size: 13px; font-weight: 800;
+  color: var(--amber); letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+.intro-title { font-size: clamp(24px, 3.4vw, 32px); font-weight: 900; line-height: 1.4; margin-bottom: 18px; word-break: keep-all; }
+.intro-title .hl-orange { color: var(--amber); }
+.intro-title .hl-teal { color: var(--teal); }
+.intro-desc {
+  font-size: 16px; color: var(--ink-muted);
+  max-width: 720px; margin: 0 auto 28px;
+  line-height: 1.85; word-break: keep-all;
+}
+.intro-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  text-decoration: none; padding: 12px 28px;
+  background: var(--ink); color: #fff;
+  border-radius: 12px; font-weight: 700; font-size: 15px;
+  transition: all 0.3s ease;
+}
+.intro-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,26,46,0.2); }
+
+/* ── METHODOLOGY 요약 섹션 ── */
+.method-section { padding: 60px 40px 40px; max-width: 1280px; margin: 0 auto; }
+.method-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; margin: 36px 0 28px;
+}
+.method-card {
+  position: relative;
+  background: var(--surface-card);
+  border: 1px solid rgba(26, 26, 46, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 28px 24px;
+  transition: all 0.3s ease;
+}
+.method-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--amber);
+}
+.method-card-icon { font-size: 30px; margin-bottom: 12px; }
+.method-card-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--ink); }
+.method-card-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.7; word-break: keep-all; }
+.patent-badge {
+  position: absolute; top: 16px; right: 16px;
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  color: var(--amber); background: var(--amber-glow);
+  padding: 3px 8px; border-radius: 8px;
+  letter-spacing: 0.5px;
+}
+.method-cta-wrap { text-align: center; }
+
+@media (max-width: 768px) {
+  .intro-section { padding: 80px 16px 24px; }
+  .intro-card { padding: 32px 20px; }
+  .method-section { padding: 40px 16px 24px; }
+  .method-grid { grid-template-columns: 1fr; gap: 14px; }
+}
+
 /* ── HOW IT WORKS ── */
 .how-section { padding-bottom: 60px; }
 .how-steps {
@@ -228,6 +300,8 @@ body {
       <div class="logo-text">AX-<span>On</span></div>
     </a>
     <div class="nav-links" id="navLinks">
+      <a href="about-ax.html">AX란?</a>
+      <a href="methodology.html">방법론</a>
       <a href="pool.html">전문가 풀</a>
       <a href="community.html">커뮤니티</a>
       <!-- 모바일 전용 auth 링크 (햄버거 메뉴 안에 표시) -->
@@ -260,6 +334,54 @@ body {
         <a href="pool.html" class="btn btn-outline">전문가 풀 보기</a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ABOUT-AX 요약 섹션 -->
+<section class="intro-section" id="about-ax-summary" aria-labelledby="about-ax-summary-title">
+  <div class="intro-card fade-in">
+    <div class="intro-eyebrow">WHAT IS AX?</div>
+    <h2 class="intro-title" id="about-ax-summary-title">
+      AX란 단순한 AI 도구 도입이 아닙니다.<br>
+      <span class="hl-orange">전체 업무 프로세스를 AI 중심으로 재설계</span>하고,<br>
+      <span class="hl-teal">데이터 → 정보 → 의사결정의 흐름</span>을 자동화·고도화하는 전사적 변혁입니다.
+    </h2>
+    <p class="intro-desc">
+      AX-On은 KD엔지니어링 전사적 AX 인게이지먼트 경험을 토대로 정리한
+      <strong style="color:var(--ink)">1 Goal · 12 Areas · DID · 5 Phases</strong> 골격으로
+      기업 AX를 설계·실행합니다.
+    </p>
+    <a href="about-ax.html" class="intro-cta">AX 자세히 알아보기 →</a>
+  </div>
+</section>
+
+<!-- METHODOLOGY 요약 섹션 -->
+<section class="method-section" id="methodology-summary" aria-labelledby="method-summary-title">
+  <div class="fade-in" style="text-align:center;">
+    <div class="section-label" style="display:inline-flex;">METHODOLOGY</div>
+    <h2 class="section-title" id="method-summary-title">AX-On은 어떻게 추진하는가</h2>
+    <p class="section-desc" style="margin:0 auto;">자체 IP 자산을 기반으로 기업 AX를 체계적으로 실행합니다.</p>
+  </div>
+  <div class="method-grid">
+    <div class="method-card fade-in">
+      <div class="method-card-icon">🔄</div>
+      <div class="method-card-title">DID System</div>
+      <div class="method-card-desc">Data → Information → Decision 3 Layer 흐름. 12 Areas 업무 혁신과 유기적 순환으로 ROI 증대.</div>
+    </div>
+    <div class="method-card fade-in">
+      <span class="patent-badge">특허 출원</span>
+      <div class="method-card-icon">🧭</div>
+      <div class="method-card-title">SAL Grid_AX</div>
+      <div class="method-card-desc">Stage × Area × Level 3차원 좌표계로 프로젝트를 체계적으로 관리. 예: S1TR1, S2EN3.</div>
+    </div>
+    <div class="method-card fade-in">
+      <div class="method-card-icon">📦</div>
+      <div class="method-card-title">분야별 AX 모듈</div>
+      <div class="method-card-desc">15개 기능분야 × 155개+ 모듈, 14개 산업특화, 5단계 기업규모별 로드맵.</div>
+    </div>
+  </div>
+  <div class="method-cta-wrap fade-in">
+    <a href="methodology.html" class="intro-cta">방법론 전체 보기 →</a>
   </div>
 </section>
 
