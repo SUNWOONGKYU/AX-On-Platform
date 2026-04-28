@@ -341,14 +341,20 @@ a:hover { text-decoration: underline; }
   color: var(--amber); font-weight: 600;
 }
 
-/* ── EMPTY STATE ── */
+/* ── EMPTY STATE (P2.3) ── */
 .empty-state {
-  text-align: center; padding: 80px 40px;
+  text-align: center; padding: 80px 24px;
   grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
 }
-.empty-icon { font-size: 48px; margin-bottom: 16px; }
-.empty-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-.empty-desc { font-size: 15px; color: var(--ink-muted); }
+.empty-icon {
+  width: 56px; height: 56px; margin-bottom: 4px;
+  color: var(--ink-muted); opacity: 0.55;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.empty-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.empty-title { font-size: 18px; font-weight: 700; color: var(--ink); }
+.empty-desc { font-size: 15px; color: var(--ink-muted); max-width: 360px; line-height: 1.6; }
 
 /* ── DETAIL MODAL ── */
 .detail-overlay {
@@ -862,7 +868,7 @@ a:hover { text-decoration: underline; }
 <main class="expert-main">
   <div class="expert-grid" id="expertGrid">
     <div class="empty-state">
-      <div class="empty-icon" aria-hidden="true">&#x23F3;</div>
+      <div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
       <div class="empty-title">전문가 목록을 불러오는 중...</div>
     </div>
   </div>
@@ -1428,11 +1434,11 @@ function renderExperts() {
   document.getElementById('expertCount').textContent = allExperts.length;
 
   if (filtered.length === 0 && allExperts.length > 0) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon" aria-hidden="true">&#x1F50D;</div><div class="empty-title">검색 결과가 없습니다</div><div class="empty-desc">다른 검색어를 시도해 보세요.</div></div>';
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><div class="empty-title">검색 결과가 없습니다</div><div class="empty-desc">다른 검색어를 입력하거나 필터를 초기화해 보세요.</div></div>';
     return;
   }
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon" aria-hidden="true">&#x1F465;</div><div class="empty-title">아직 등록된 전문가가 없습니다</div><div class="empty-desc">첫 번째 전문가로 등록해보세요!</div></div>';
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="empty-title">아직 등록된 전문가가 없습니다</div><div class="empty-desc">첫 번째 전문가로 등록해 보세요.</div></div>';
     return;
   }
 

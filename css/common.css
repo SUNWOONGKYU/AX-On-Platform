@@ -37,10 +37,11 @@
   --border-strong: rgba(26, 26, 46, 0.12);
   --border-amber: rgba(232, 146, 13, 0.30);
 
-  /* RADIUS */
-  --radius: 20px;
+  /* RADIUS — P2.1 토큰화 (--radius 20→16, --radius-lg 28→24, --radius-pill 신설) */
+  --radius: 16px;
   --radius-sm: 12px;
-  --radius-lg: 28px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
 
   /* SHADOW (P0-5: 4→2 통합) */
   --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
@@ -61,6 +62,14 @@
   --fw-h3: 700;   /* Card H3 */
   --fw-lead: 500; /* H2 직하 리드 카피 */
   --fw-body: 400; /* Body */
+
+  /* HOVER — P2.2 4-tier (요소별 차등 피드백) */
+  --hover-cta-tf: scale(1.02);
+  --hover-cta-shadow: 0 4px 16px rgba(232,146,13,0.28);
+  --hover-card-tf: translateY(-2px);
+  --hover-card-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  --hover-link-color: var(--ink);
+  --hover-nav-bg: rgba(26,26,46,0.04);
 
   /* DARK FOOTER (Tomorrow Night Blue — 유지) */
   --dark-bg: #002451;
@@ -124,8 +133,8 @@
   transition: all 0.25s ease;
   white-space: nowrap;
 }
-.nav-links a:hover { color: var(--violet); background: rgba(124, 92, 224, 0.06); }
-.nav-links a.active { color: var(--violet); font-weight: 700; }
+.nav-links a:hover { color: var(--ink); background: var(--hover-nav-bg); }
+.nav-links a.active { color: var(--amber); font-weight: 700; }
 
 .nav-auth-mobile { display: none; }
 .nav-right { display: flex; align-items: center; gap: 8px; }
