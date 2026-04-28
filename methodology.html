@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="description" content="AX-On 방법론 — DID System, SAL Grid_AX(특허 출원), Platoon Formation(특허 출원), STA. 그리고 15분야 155개+ AX 모듈 카탈로그.">
+<meta name="description" content="AX-On 방법론 — DID System, SAL Grid_AX, Platoon Formation, SAL Task Analysis. 4개 자체 IP가 만드는 AX 인게이지먼트 이론 체계.">
 <meta property="og:title" content="방법론 — AX-On Platform">
-<meta property="og:description" content="AX-On이 기업 AX를 추진하는 방법: 이론(DID·SAL Grid·Platoon·STA) + 실행자산(155개+ 분야별 모듈).">
+<meta property="og:description" content="AX-On이 기업 AX를 추진하는 방법: DID System, SAL Grid_AX, Platoon Formation, SAL Task Analysis 4개 자체 IP.">
 <meta property="og:image" content="https://www.ax-on.net/images/og-default.svg">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.ax-on.net/methodology.html">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
 <title>방법론 — AX-On Platform</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="css/common.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://gifxpfdnnfwufzdncmor.supabase.co" crossorigin>
+<link rel="preload" href="/fonts/NotoSansKR-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/NotoSansKR-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
 <style>
 html { scroll-behavior: smooth; }
 body {
@@ -57,23 +57,26 @@ body {
   word-break: keep-all;
 }
 
-/* PART HEADER */
+/* PART HEADER — Amber Gradient (Design System v2 옵션 B) */
 .part-header {
-  background: var(--ink); color: #fff;
+  background: linear-gradient(135deg, var(--amber-soft) 0%, #fde3b8 100%);
+  color: var(--ink);
   padding: 40px 40px 32px;
+  border-bottom: 3px solid var(--amber);
 }
 .part-header-inner { max-width: 960px; margin: 0 auto; }
 .part-tag {
   display: inline-block; font-family: 'Outfit', sans-serif;
   font-size: 12px; font-weight: 800; letter-spacing: 3px;
-  color: var(--amber); margin-bottom: 10px;
+  color: var(--amber-deep); margin-bottom: 10px;
 }
 .part-title {
   font-size: clamp(24px, 3.6vw, 32px);
   font-weight: 900; line-height: 1.35; margin-bottom: 8px;
+  color: var(--ink);
 }
 .part-subtitle {
-  font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.7;
+  font-size: 16px; color: var(--ink-muted); line-height: 1.7;
   word-break: keep-all;
 }
 
@@ -108,13 +111,6 @@ body {
   font-size: 14.5px; color: var(--ink); line-height: 1.85;
   margin: 14px 0; word-break: keep-all;
 }
-.patent-badge-inline {
-  display: inline-block; font-size: 11px; font-weight: 700;
-  color: var(--amber); background: var(--amber-glow);
-  padding: 3px 10px; border-radius: 8px; letter-spacing: 0.5px;
-  vertical-align: middle; margin-left: 8px;
-}
-
 /* METHOD CARD (1부) */
 .method-card {
   background: var(--surface-card);
@@ -146,16 +142,17 @@ body {
   gap: 8px; margin: 14px 0;
 }
 .sal-coord {
-  background: var(--ink); color: #fff;
+  background: var(--amber-soft);
+  border: 1px solid var(--border-amber);
   border-radius: 10px; padding: 12px;
   text-align: center; font-family: 'Outfit', sans-serif;
 }
 .sal-coord .sc-code {
   font-size: 18px; font-weight: 900;
-  color: var(--amber);
+  color: var(--amber-deep);
 }
 .sal-coord .sc-desc {
-  font-size: 11px; color: rgba(255,255,255,0.7);
+  font-size: 11px; color: var(--ink-muted);
   margin-top: 4px; font-family: 'Noto Sans KR', sans-serif;
 }
 .sal-axes {
@@ -215,135 +212,24 @@ body {
 }
 .sta-table td:nth-child(2) { width: 16%; font-weight: 700; color: var(--ink); }
 
-/* MODULES (2부) */
-.module-stat-row {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 14px; margin: 20px 0 32px;
-}
-.module-stat {
-  background: linear-gradient(135deg, var(--ink), #2a2a4e);
-  color: #fff; border-radius: var(--radius-sm);
-  padding: 22px 18px; text-align: center;
-}
-.module-stat .ms-num {
-  font-family: 'Outfit', sans-serif;
-  font-size: 36px; font-weight: 900;
-  color: var(--amber);
-  line-height: 1.1;
-}
-.module-stat .ms-label {
-  font-size: 12px; color: rgba(255,255,255,0.75);
-  margin-top: 6px; letter-spacing: 1px;
-}
-.field-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px; margin: 14px 0;
-}
-.field-card {
-  background: var(--surface-card);
-  border: 1px solid rgba(26, 26, 46, 0.08);
-  border-radius: var(--radius-sm);
-  padding: 16px 18px;
-  display: flex; align-items: center; gap: 14px;
-}
-.field-card .fc-num {
-  font-family: 'Outfit', sans-serif;
-  font-size: 16px; font-weight: 800; color: var(--amber);
-  background: var(--amber-glow);
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.field-card .fc-body { flex: 1; }
-.field-card .fc-name { font-size: 15px; font-weight: 800; color: var(--ink); line-height: 1.3; }
-.field-card .fc-count { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
-.industry-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 10px; margin: 14px 0;
-}
-.industry-pill {
-  background: var(--surface-card);
-  border: 1.5px solid rgba(13, 148, 136, 0.3);
-  border-radius: 10px;
-  padding: 12px 16px; text-align: center;
-  font-size: 14px; font-weight: 700; color: var(--ink);
-  transition: all 0.25s ease;
-}
-.industry-pill:hover {
-  border-color: var(--teal); background: #f0fdfb;
-}
-.industry-pill .ip-count {
-  display: block; font-size: 12px; font-weight: 500;
-  color: var(--ink-muted); margin-top: 2px;
-}
-.roadmap-flow {
-  display: grid; grid-template-columns: repeat(5, 1fr);
-  gap: 8px; margin: 18px 0;
-}
-.roadmap-stage {
-  background: var(--surface-card);
-  border-radius: var(--radius-sm);
-  padding: 16px 12px; text-align: center;
-  border-top: 3px solid var(--teal);
-}
-.roadmap-stage.s2 { border-color: var(--sky); }
-.roadmap-stage.s3 { border-color: var(--violet); }
-.roadmap-stage.s4 { border-color: var(--amber); }
-.roadmap-stage.s5 { border-color: var(--coral); }
-.roadmap-stage .rs-num {
-  font-family: 'Outfit', sans-serif;
-  font-size: 18px; font-weight: 900;
-  color: var(--teal);
-}
-.roadmap-stage.s2 .rs-num { color: var(--sky); }
-.roadmap-stage.s3 .rs-num { color: var(--violet); }
-.roadmap-stage.s4 .rs-num { color: var(--amber); }
-.roadmap-stage.s5 .rs-num { color: var(--coral); }
-.roadmap-stage .rs-name { font-size: 13px; font-weight: 700; color: var(--ink); margin: 4px 0; }
-.roadmap-stage .rs-desc { font-size: 11px; color: var(--ink-muted); }
-
-/* CTA */
-.page-cta {
-  background: linear-gradient(135deg, var(--ink), #2a2a4e);
-  padding: 56px 40px; margin-top: 40px;
-  text-align: center; color: #fff;
-}
-.page-cta .cta-title {
-  font-size: clamp(22px, 3.2vw, 30px);
-  font-weight: 900; line-height: 1.4;
-  margin-bottom: 24px; word-break: keep-all;
-}
-.page-cta .cta-actions {
-  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-}
-.cta-btn {
-  display: inline-block; padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 15px; font-weight: 700;
-  text-decoration: none; transition: all 0.3s ease;
-}
-.cta-btn-primary { background: var(--amber); color: #fff; }
-.cta-btn-primary:hover { background: var(--amber-light); transform: translateY(-2px); }
-.cta-btn-outline {
-  background: transparent; color: #fff;
-  border: 2px solid rgba(255,255,255,0.3);
-}
-.cta-btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
-
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .page-hero { padding: 96px 16px 40px; }
   .doc-section { padding: 32px 16px; }
   .part-header { padding: 32px 16px 24px; }
   .method-card { padding: 22px 20px; }
-  .module-stat-row { grid-template-columns: repeat(2, 1fr); }
-  .module-stat .ms-num { font-size: 28px; }
   .sal-axes { grid-template-columns: 1fr; }
-  .roadmap-flow { grid-template-columns: repeat(2, 1fr); }
-  .field-grid { grid-template-columns: 1fr; }
-  .industry-grid { grid-template-columns: repeat(2, 1fr); }
-  .page-cta { padding: 40px 16px; }
+  .sta-table { font-size: 13px; }
+  .sta-table th, .sta-table td { padding: 8px 10px; word-break: keep-all; }
+  .sta-table td:first-child { width: auto; }
+  .sta-table td:nth-child(2) { width: auto; }
+  .platoon-row { flex-wrap: wrap; gap: 8px; }
+  .platoon-node { font-size: 13px; min-width: 140px; padding: 10px 14px; }
+  .sal-coord-grid { grid-template-columns: repeat(2, 1fr); }
+  .sal-coord .sc-code { font-size: 16px; }
+}
+@media (max-width: 480px) {
+  .sal-coord-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -360,7 +246,7 @@ body {
     </a>
     <div class="nav-links" id="navLinks">
       <a href="about-ax.html">AX란?</a>
-      <a href="methodology.html" class="active" style="color:var(--violet);font-weight:700">방법론</a>
+      <a href="methodology.html" class="active">방법론</a>
       <a href="pool.html">전문가 풀</a>
       <a href="community.html">커뮤니티</a>
       <a href="pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
@@ -382,22 +268,22 @@ body {
     <div class="page-eyebrow">METHODOLOGY</div>
     <h1 class="page-title">AX-On 방법론</h1>
     <p class="page-subtitle">
-      AX-On이 기업 AX 프로젝트를 추진하는 방식 — <strong>이론 체계</strong>(How we think) +
-      <strong>실행 자산</strong>(What we apply).
+      AX-On이 기업 AX 프로젝트를 추진하는 방식 — DID System · SAL Grid_AX · Platoon Formation · SAL Task Analysis,
+      <strong>4개 자체 IP</strong>로 구성됩니다.
     </p>
   </div>
 </header>
 
 <main>
 
-<!-- ═══════════════ PART 1 — 이론 체계 ═══════════════ -->
+<!-- ═══════════════ 4개 자체 IP ═══════════════ -->
 <section class="part-header" id="theory">
   <div class="part-header-inner">
-    <div class="part-tag">PART 1 / HOW WE THINK</div>
-    <h2 class="part-title">이론 체계 — 4개 자체 IP</h2>
+    <div class="part-tag">FOUR PROPRIETARY IP</div>
+    <h2 class="part-title">AX-On 4개 자체 IP</h2>
     <p class="part-subtitle">
-      DID System · SAL Grid_AX(특허 출원) · Platoon Formation(특허 출원) · SAL Task Analysis.
-      네 자산이 함께 작동해 12 Areas × DID 양 축의 혁신을 가능하게 합니다.
+      DID System · SAL Grid_AX · Platoon Formation · SAL Task Analysis.
+      네 자산이 함께 작동해 Areas × DID 양 축의 혁신을 가능하게 합니다.
     </p>
   </div>
 </section>
@@ -410,7 +296,7 @@ body {
     <p class="mc-desc">
       조직의 모든 업무 데이터를 <strong>L1 데이터 → L2 정보 → L3 의사결정</strong>의 흐름으로 연결하는 3 Layer 시스템.
       L3의 결과가 다시 L1으로 유입되는 자가 개선 순환 구조를 가집니다.
-      12 Areas 업무 혁신과 유기적으로 순환하면서 ROI 증대의 근원이 됩니다.
+      Areas 업무 혁신과 유기적으로 순환하면서 ROI 증대의 근원이 됩니다.
     </p>
     <p class="mc-desc" style="margin-top:10px;">
       <a href="about-ax.html#sec-4" style="color:var(--amber);font-weight:700;text-decoration:none;">DID 상세 구조 보기 →</a>
@@ -421,11 +307,11 @@ body {
 <!-- ② SAL Grid_AX -->
 <section class="doc-section" id="theory-sal-grid">
   <div class="method-card">
-    <div class="mc-tag">② SAL GRID_AX <span class="patent-badge-inline">특허 출원</span></div>
+    <div class="mc-tag">② SAL GRID_AX</div>
     <div class="mc-title">SAL Grid_AX — Stage × Area × Level 3차원 좌표계</div>
     <p class="mc-desc">
       AX 프로젝트의 모든 Task를 <strong>3개 축</strong>에 위치시켜 체계적으로 관리합니다.
-      어디까지 왔고(Stage), 어느 영역에서(Area), 얼마나 깊이(Level) 진행되었는지를 좌표 하나로 표현합니다.
+      각 업무(Task)가 업무 흐름의 어디에 있는지(Stage), 어느 영역인지(Area), 어느 깊이인지(Level)를 좌표 하나로 표현합니다.
     </p>
 
     <h3 class="doc-h3" style="margin-top:18px;">3개 축</h3>
@@ -433,12 +319,12 @@ body {
       <div class="sal-axis">
         <div class="sa-letter">S</div>
         <div class="sa-name">Stage</div>
-        <div class="sa-desc">AX 추진 단계 (5 Phases와 정합)</div>
+        <div class="sa-desc">업무 흐름 단계 — 선후 의존성을 가진 시간축 (S1 → S2 → … → Sn)</div>
       </div>
       <div class="sal-axis">
         <div class="sa-letter">A</div>
         <div class="sa-name">Area</div>
-        <div class="sa-desc">12 Areas 중 어느 영역</div>
+        <div class="sa-desc">Areas 중 어느 영역</div>
       </div>
       <div class="sal-axis">
         <div class="sa-letter">L</div>
@@ -447,23 +333,39 @@ body {
       </div>
     </div>
 
-    <h3 class="doc-h3">좌표 예시</h3>
+    <h3 class="doc-h3">Stage 정의 (S축) — 산업·기업별로 다름</h3>
+    <p class="doc-p" style="margin-bottom:10px;">
+      Stage는 <strong>각 산업·기업의 본업 업무 흐름</strong>을 따라 정의됩니다.
+      앞 Stage가 끝나야 다음 Stage가 시작되는 <strong>선후 의존성</strong>을 갖고,
+      각 Stage 경계에서 <strong>Stage Gate</strong>로 품질을 검증합니다.
+    </p>
+    <table class="sta-table">
+      <thead><tr><th>산업</th><th>업무 흐름 (S1 → … → Sn)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>엔지니어링</strong></td><td>영업/수주 → 착수/계획 → 조사·분석 → 설계·용역수행 → 검토·납품 → 사후관리</td></tr>
+        <tr><td><strong>건설</strong></td><td>사업기획 → 설계 → 분양 → 시공 → 준공/사후</td></tr>
+        <tr><td><strong>아카이브</strong></td><td>구축상담 → 아카이브설계 → 자료수집 → 디지털화·메타 → 시스템등록 → 운영·서비스 → 사후관리</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="doc-h3">좌표 예시 (엔지니어링 업종)</h3>
     <div class="sal-coord-grid">
-      <div class="sal-coord"><div class="sc-code">S1TR1</div><div class="sc-desc">진단/교통/Lv1</div></div>
-      <div class="sal-coord"><div class="sc-code">S2EN3</div><div class="sc-desc">설계/환경/Lv3</div></div>
-      <div class="sal-coord"><div class="sc-code">S3HR2</div><div class="sc-desc">구축/인사/Lv2</div></div>
-      <div class="sal-coord"><div class="sc-code">S4FI1</div><div class="sc-desc">전환/회계/Lv1</div></div>
-      <div class="sal-coord"><div class="sc-code">S5GA2</div><div class="sc-desc">상시/총무/Lv2</div></div>
+      <div class="sal-coord"><div class="sc-code">S1TR1</div><div class="sc-desc">영업·수주/교통/Lv1</div></div>
+      <div class="sal-coord"><div class="sc-code">S2EN3</div><div class="sc-desc">착수·계획/환경/Lv3</div></div>
+      <div class="sal-coord"><div class="sc-code">S3SV2</div><div class="sc-desc">조사·분석/측량/Lv2</div></div>
+      <div class="sal-coord"><div class="sc-code">S4ST1</div><div class="sc-desc">설계·용역수행/구조·안전/Lv1</div></div>
+      <div class="sal-coord"><div class="sc-code">S5CM2</div><div class="sc-desc">검토·납품/건설사업관리/Lv2</div></div>
+      <div class="sal-coord"><div class="sc-code">S6CS1</div><div class="sc-desc">사후관리/고객관리/Lv1</div></div>
     </div>
 
     <div class="callout">
-      좌표를 보면 어느 단계의 어느 영역의 어떤 깊이에 있는 Task인지 한눈에 파악됩니다.
-      90개 Task × 25개 속성 규모의 프로젝트도 좌표 한 줄로 추적 가능합니다.
+      좌표를 보면 업무 흐름의 어느 단계, 어느 영역, 어떤 깊이에 있는 Task인지 한눈에 파악됩니다.
+      90개 Task × 약 25개 속성 규모의 프로젝트도 좌표 한 줄로 추적 가능합니다.
     </div>
 
     <div class="callout-amber">
-      <strong>특허 출원:</strong> SAL Grid_AX의 좌표 체계와 운영 방법은 특허 출원 중입니다.
-      세부 청구항은 출원·등록 이후 안내합니다.
+      <strong>특허 출원 완료:</strong> SAL Grid_AX의 좌표 체계와 운영 방법은 특허 출원이 완료되었습니다.
+      세부 청구항은 등록 이후 안내합니다.
     </div>
   </div>
 </section>
@@ -471,7 +373,7 @@ body {
 <!-- ③ Platoon Formation -->
 <section class="doc-section" id="theory-platoon">
   <div class="method-card">
-    <div class="mc-tag">③ PLATOON FORMATION <span class="patent-badge-inline">특허 출원</span></div>
+    <div class="mc-tag">③ PLATOON FORMATION</div>
     <div class="mc-title">Platoon Formation — AI 에이전트의 소대 편제</div>
     <p class="mc-desc">
       군 소대 편제(소대장/분대장/분대원 3계층)를 AI 에이전트 팀에 응용합니다.
@@ -498,7 +400,7 @@ body {
     </div>
 
     <div class="callout-amber">
-      <strong>특허 출원:</strong> Platoon Formation 구조는 특허 출원 중입니다.
+      <strong>특허 출원 완료:</strong> Platoon Formation 구조는 특허 출원이 완료되었습니다.
     </div>
   </div>
 </section>
@@ -507,121 +409,30 @@ body {
 <section class="doc-section" id="theory-sta">
   <div class="method-card">
     <div class="mc-tag">④ SAL TASK ANALYSIS</div>
-    <div class="mc-title">STA — 5 Parts · 25 속성 · H·A·R·P·X</div>
+    <div class="mc-title">STA — 5 Parts · 약 25 속성 · H·A·R·P·X</div>
     <p class="mc-desc">
-      SAL Grid 좌표 위의 각 Task를 5개 Part(H·A·R·P·X), 총 25개 속성으로 분석합니다.
+      SAL Grid 좌표 위의 각 Task를 5개 Part(H·A·R·P·X), 약 25개 속성으로 분석합니다.
       "SAL Grid_AX가 지도라면, STA는 그 지도 위의 각 지점을 탐사하는 도구"입니다.
     </p>
 
     <table class="sta-table">
       <thead><tr><th>Part</th><th>의미</th><th>속성 수</th></tr></thead>
       <tbody>
-        <tr><td>H</td><td>Header (식별·메타)</td><td>5개</td></tr>
-        <tr><td>A</td><td>Activity (활동·산출물)</td><td>5개</td></tr>
-        <tr><td>R</td><td>Resource (리소스)</td><td>5개</td></tr>
-        <tr><td>P</td><td>Process (실행 프로세스)</td><td>6개</td></tr>
-        <tr><td>X</td><td>eXecution (실행·검증)</td><td>4개</td></tr>
+        <tr><td>H</td><td>Human — 사람이 수행하는 영역 (담당·역할·책임)</td><td>7개</td></tr>
+        <tr><td>A</td><td>AI — AI가 수행·협업하는 영역 (모델·도구·자동화)</td><td>11개</td></tr>
+        <tr><td>R</td><td>Ranking — 우선순위·중요도 평가</td><td>2개</td></tr>
+        <tr><td>P</td><td>Planning — 일정·자원 계획</td><td>2개</td></tr>
+        <tr><td>X</td><td>eXecution — 실행·검증</td><td>4개</td></tr>
       </tbody>
     </table>
 
     <div class="callout">
-      Phase 1에서 H·A·R이 채워지고, Phase 2 이후 P·X가 활성화되어 실행·검증까지 추적합니다.
+      Step 1에서 H·A·R이 채워지고, Step 2 이후 P·X가 활성화되어 실행·검증까지 추적합니다.
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ PART 2 — 실행 자산 ═══════════════ -->
-<section class="part-header" id="modules" style="background:linear-gradient(135deg, #001a3a, var(--ink));">
-  <div class="part-header-inner">
-    <div class="part-tag" style="color:var(--teal-light);">PART 2 / WHAT WE APPLY</div>
-    <h2 class="part-title">실행 자산 — 분야별 AX 모듈 카탈로그</h2>
-    <p class="part-subtitle">
-      어떤 산업·기능 분야의 AX 프로젝트가 와도 즉시 적용할 수 있도록 정리한 모듈 라이브러리.
-      <strong style="color:#fff">15개 기능분야 · 155개+ 모듈 · 14개 산업특화 · 5단계 기업규모별 로드맵</strong>.
-    </p>
-  </div>
-</section>
-
-<section class="doc-section">
-  <div class="module-stat-row">
-    <div class="module-stat"><div class="ms-num">15</div><div class="ms-label">기능 분야</div></div>
-    <div class="module-stat"><div class="ms-num">155+</div><div class="ms-label">AX 모듈</div></div>
-    <div class="module-stat"><div class="ms-num">14</div><div class="ms-label">산업 특화</div></div>
-    <div class="module-stat"><div class="ms-num">5</div><div class="ms-label">규모별 로드맵</div></div>
-  </div>
-
-  <h3 class="doc-h3">15개 기능 분야</h3>
-  <p class="doc-p">
-    경영부터 총무까지 기업의 모든 기능을 15개 분야로 정리하고, 각 분야에 6~17개의 AX 모듈을 매핑했습니다.
-  </p>
-  <div class="field-grid">
-    <div class="field-card"><div class="fc-num">1</div><div class="fc-body"><div class="fc-name">경영·전략</div><div class="fc-count">12개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">2</div><div class="fc-body"><div class="fc-name">재무·회계·감사</div><div class="fc-count">15개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">3</div><div class="fc-body"><div class="fc-name">인사·조직</div><div class="fc-count">15개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">4</div><div class="fc-body"><div class="fc-name">영업·마케팅</div><div class="fc-count">17개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">5</div><div class="fc-body"><div class="fc-name">생산·제조</div><div class="fc-count">14개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">6</div><div class="fc-body"><div class="fc-name">법무·컴플라이언스</div><div class="fc-count">10개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">7</div><div class="fc-body"><div class="fc-name">IT·보안</div><div class="fc-count">14개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">8</div><div class="fc-body"><div class="fc-name">R&amp;D·제품</div><div class="fc-count">12개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">9</div><div class="fc-body"><div class="fc-name">금융·투자</div><div class="fc-count">12개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">10</div><div class="fc-body"><div class="fc-name">고객서비스·운영</div><div class="fc-count">14개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">11</div><div class="fc-body"><div class="fc-name">구매·조달</div><div class="fc-count">8개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">12</div><div class="fc-body"><div class="fc-name">물류·SCM</div><div class="fc-count">7개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">13</div><div class="fc-body"><div class="fc-name">총무·시설관리</div><div class="fc-count">7개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">14</div><div class="fc-body"><div class="fc-name">품질·환경·안전 QES</div><div class="fc-count">7개 모듈</div></div></div>
-    <div class="field-card"><div class="fc-num">15</div><div class="fc-body"><div class="fc-name">홍보·커뮤니케이션</div><div class="fc-count">6개 모듈</div></div></div>
-  </div>
-
-  <h3 class="doc-h3">14개 산업 특화</h3>
-  <p class="doc-p">
-    공통 기능 모듈 위에, 각 산업 고유의 업무 특성에 맞춘 특화 모듈을 추가로 정리했습니다.
-  </p>
-  <div class="industry-grid">
-    <div class="industry-pill">제조업<span class="ip-count">6개</span></div>
-    <div class="industry-pill">금융·핀테크<span class="ip-count">6개</span></div>
-    <div class="industry-pill">의료·헬스케어<span class="ip-count">6개</span></div>
-    <div class="industry-pill">유통·커머스<span class="ip-count">6개</span></div>
-    <div class="industry-pill">건설·부동산<span class="ip-count">5개</span></div>
-    <div class="industry-pill">교육<span class="ip-count">5개</span></div>
-    <div class="industry-pill">미디어·콘텐츠<span class="ip-count">5개</span></div>
-    <div class="industry-pill">에너지·환경<span class="ip-count">5개</span></div>
-    <div class="industry-pill">물류·운송<span class="ip-count">6개</span></div>
-    <div class="industry-pill">농업·식품<span class="ip-count">7개</span></div>
-    <div class="industry-pill">부동산 PropTech<span class="ip-count">6개</span></div>
-    <div class="industry-pill">관광·호텔·외식<span class="ip-count">7개</span></div>
-    <div class="industry-pill">법률·법무서비스<span class="ip-count">6개</span></div>
-    <div class="industry-pill">공공·사회서비스<span class="ip-count">6개</span></div>
-  </div>
-
-  <h3 class="doc-h3">기업 규모별 5단계 로드맵</h3>
-  <p class="doc-p">
-    소기업부터 글로벌 기업까지, 같은 모듈도 적용 순서·깊이가 다릅니다.
-    SAL Grid 기반 5 Stage × 3 Area 로드맵으로 단계별 적용을 안내합니다.
-  </p>
-  <div class="roadmap-flow">
-    <div class="roadmap-stage"><div class="rs-num">S1</div><div class="rs-name">진단</div><div class="rs-desc">현황 파악</div></div>
-    <div class="roadmap-stage s2"><div class="rs-num">S2</div><div class="rs-name">자동화</div><div class="rs-desc">단일 도입</div></div>
-    <div class="roadmap-stage s3"><div class="rs-num">S3</div><div class="rs-name">통합</div><div class="rs-desc">대시보드</div></div>
-    <div class="roadmap-stage s4"><div class="rs-num">S4</div><div class="rs-name">예측</div><div class="rs-desc">예측 기능</div></div>
-    <div class="roadmap-stage s5"><div class="rs-num">S5</div><div class="rs-name">반자동</div><div class="rs-desc">운영 체계</div></div>
-  </div>
-  <div class="callout">
-    소기업(매출 10~100억) · 중기업 · 중견기업 각각 독립된 SAL Grid 로드맵을 따릅니다.
-    Stage·Area 구성과 적용 모듈 풀이 규모별로 달라집니다.
-  </div>
-</section>
-
 </main>
-
-<!-- CTA -->
-<section class="page-cta">
-  <h2 class="cta-title">방법론을 실제 프로젝트에 적용해보세요.</h2>
-  <div class="cta-actions">
-    <a href="about-ax.html" class="cta-btn cta-btn-outline">AX 개념 다시 보기</a>
-    <a href="pool.html" class="cta-btn cta-btn-primary">전문가 풀 보기 →</a>
-    <a href="contact.html" class="cta-btn cta-btn-outline">문의하기</a>
-  </div>
-</section>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -644,7 +455,7 @@ body {
 </footer>
 
 <script src="js/config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 <script>
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
@@ -669,7 +480,7 @@ document.addEventListener('click', (e) => { if (!navLinks.contains(e.target) && 
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && navLinks.classList.contains('open')) { setMenuOpen(false); mobileToggle.focus(); } });
 
 let _sb = null;
-const _sbReady = AXON_CONFIG.init().then(() => {
+const _sbReady = Promise.all([AXON_CONFIG.init(), whenSupabaseReady()]).then(() => {
   if (typeof window.supabase !== 'undefined') {
     _sb = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
   }

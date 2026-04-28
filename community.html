@@ -11,16 +11,23 @@
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
 <title>AI 전문가 커뮤니티 — AX-On</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="css/common.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://gifxpfdnnfwufzdncmor.supabase.co" crossorigin>
+<link rel="preload" href="/fonts/NotoSansKR-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/NotoSansKR-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
 
 <style>
 /* community.html 전용 스타일 (공통 스타일은 css/common.css 참조) */
 
 html { scroll-behavior: smooth; }
+
+/* CLS 방지: 인증 체크 전 동적 콘텐츠 영역 자리 예약 (footer가 viewport 밖에 머물게 해서 shift 미발생) */
+body.community-loading::before {
+  content: '';
+  display: block;
+  min-height: 100vh;
+}
 body {
   font-family: 'Noto Sans KR', sans-serif;
   background: var(--surface);
@@ -74,7 +81,6 @@ body {
   transition: all 0.25s ease;
 }
 .nav-links a:hover { color: var(--violet); background: rgba(124, 92, 224, 0.06); }
-.nav-links a.active { color: var(--violet); font-weight: 700; }
 .nav-right { display: flex; align-items: center; gap: 8px; }
 .nav-auth-btn {
   text-decoration: none; font-size: 14px; font-weight: 600;
@@ -84,9 +90,10 @@ body {
 .nav-login { color: var(--ink-muted); }
 .nav-login:hover { color: var(--ink); }
 .nav-signup {
-  background: var(--ink); color: #fff; border-radius: 12px;
+  background: var(--amber); color: #fff; border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(232,146,13,0.25);
 }
-.nav-signup:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,26,46,0.2); }
+.nav-signup:hover { transform: translateY(-1px); background: var(--amber-deep); box-shadow: 0 6px 18px rgba(232,146,13,0.35); }
 .mobile-toggle {
   display: none; background: none; border: none;
   width: 44px; height: 44px; cursor: pointer;
@@ -851,7 +858,7 @@ body {
   .nav-links.open .mobile-admin-link { display: flex !important; }
   .nav-links.open .login-mobile { color: var(--ink-muted); }
   .nav-links.open .signup-mobile {
-    background: var(--ink); color: #fff;
+    background: var(--amber); color: #fff;
     border-radius: 12px; margin-top: 4px; justify-content: center;
   }
 
@@ -971,9 +978,26 @@ body {
   .footer-links { flex-wrap: wrap; gap: 12px; justify-content: center; }
   .footer-links a { min-height: 44px; display: flex; align-items: center; }
 }
+
+/* ── RESPONSIVE: SMALL MOBILE (480px) ── */
+@media (max-width: 480px) {
+  .page-header { padding: 60px 12px 16px; }
+  .page-title { font-size: 18px; }
+  .page-subtitle { font-size: 11.5px; }
+  .mobile-cat-bar { padding: 10px 12px 6px; gap: 5px; }
+  .mobile-cat-chip { padding: 6px 11px; font-size: 12px; min-height: 32px; }
+  .post-card-header { padding: 10px; }
+  .post-title { font-size: 13.5px; line-height: 1.45; }
+  .post-preview { font-size: 11.5px; line-height: 1.55; }
+  .post-footer { gap: 6px; font-size: 10.5px; }
+  .write-modal { padding: 20px 14px 24px; }
+  .write-modal-title { font-size: 16px; }
+  .gate-overlay { margin: 60px 12px 32px; padding: 32px 16px; }
+  .gate-title { font-size: 18px; }
+}
 </style>
 </head>
-<body>
+<body class="community-loading">
 <a href="#feedMain" class="skip-link" style="position:absolute;top:-100%;left:0;background:var(--violet);color:#fff;padding:12px 24px;z-index:9999;font-weight:700;border-radius:0 0 12px 0;transition:top 0.3s;" onfocus="this.style.top='0'" onblur="this.style.top='-100%'">본문 바로가기</a>
 
 <!-- NAV -->
@@ -1200,8 +1224,8 @@ body {
 
 <!-- CDN -->
 <script src="js/config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js" defer></script>
 <script>
 // =============================================================
 //  AX-On 전문가 커뮤니티 — Expert-only Community
@@ -1209,7 +1233,7 @@ body {
 
 // ── Supabase init ──
 let db = null;
-const _sbReady = AXON_CONFIG.init().then(() => {
+const _sbReady = Promise.all([AXON_CONFIG.init(), whenSupabaseReady()]).then(() => {
   if (typeof window.supabase !== 'undefined') {
     db = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
   }
@@ -1311,6 +1335,7 @@ async function initAuth() {
 }
 
 function showGate(type) {
+  document.body.classList.remove('community-loading');
   const gate = document.getElementById('gateSection');
   gate.style.display = 'block';
 
@@ -1390,6 +1415,7 @@ async function doLogout() {
 
 // ── Show community (authorized) ──
 function showCommunity() {
+  document.body.classList.remove('community-loading');
   document.getElementById('pageHeader').style.display = 'block';
   document.getElementById('communityLayout').style.display = 'grid';
   // Show mobile category bar on small screens only
