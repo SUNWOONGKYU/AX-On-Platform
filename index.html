@@ -17,8 +17,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/common.css">
 <style>
 /* index.html 전용 스타일 (공통 스타일은 css/common.css 참조) */
@@ -37,46 +37,41 @@ body {
   min-height: 100vh;
 }
 
-/* ── HERO ── */
+/* ── HERO (P1.1: 2-컬럼 재설계, radial blob 제거) ── */
 .hero {
-  display: flex; align-items: center;
-  padding: 120px 40px 56px;
-  position: relative; overflow: hidden;
-}
-.hero::before {
-  content: ''; position: absolute; top: -200px; right: -200px;
-  width: 800px; height: 800px; border-radius: 50%;
-  background: radial-gradient(circle, var(--amber-glow) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero::after {
-  content: ''; position: absolute; bottom: -300px; left: -100px;
-  width: 600px; height: 600px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(13, 148, 136, 0.06) 0%, transparent 70%);
-  pointer-events: none;
+  padding: 120px 40px 72px;
+  position: relative;
 }
 .hero-inner {
-  max-width: 800px; margin: 0 auto; width: 100%;
-  text-align: center;
-  position: relative; z-index: 1;
+  max-width: 1280px; margin: 0 auto; width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 64px; align-items: center;
 }
-.hero-content { animation: fadeUp 1s ease 0.2s both; }
+.hero-content { animation: fadeUp 1s ease 0.2s both; text-align: left; }
 .hero-title {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: clamp(28px, 3.6vw, 42px);
-  font-weight: 900; line-height: 1.3;
-  letter-spacing: -0.5px; margin-bottom: 20px;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900; line-height: 1.25;
+  letter-spacing: -0.5px; margin-bottom: 24px;
   word-break: keep-all;
 }
-.hero-title .highlight {
-  color: var(--amber);
-}
+.hero-title .highlight { color: var(--amber); }
 .hero-desc {
   font-size: 18px; line-height: 1.8;
-  color: var(--ink-muted); margin-bottom: 40px;
-  max-width: 600px; margin-left: auto; margin-right: auto; word-break: keep-all;
+  color: var(--ink-muted); margin-bottom: 36px;
+  max-width: 560px; word-break: keep-all;
 }
-.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-start; }
+
+/* HERO 우측: 5 Phases 다이어그램 */
+.hero-diagram {
+  animation: fadeUp 1s ease 0.4s both;
+  display: flex; justify-content: center; align-items: center;
+}
+.hero-diagram svg {
+  width: 100%; max-width: 520px; height: auto;
+}
 
 /* ── SECTION COMMON ── */
 .section {
@@ -261,9 +256,17 @@ body {
 }
 
 /* ── RESPONSIVE (index 전용) ── */
+@media (max-width: 960px) {
+  /* HERO: 2-컬럼 → 1-컬럼 stack */
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero-content { text-align: center; }
+  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-actions { justify-content: center; }
+  .hero-diagram svg { max-width: 460px; }
+}
 @media (max-width: 768px) {
   /* HERO */
-  .hero { padding: 88px 16px 36px; }
+  .hero { padding: 88px 16px 40px; }
   .hero-desc { font-size: 17px; }
   .hero-actions {
     justify-content: center;
@@ -271,6 +274,7 @@ body {
     gap: 12px;
   }
   .hero-actions .btn { justify-content: center; min-height: 48px; }
+  .hero-diagram svg { max-width: 100%; }
 
   /* SECTIONS */
   .section, .stats-section {
@@ -347,8 +351,55 @@ body {
       </p>
       <div class="hero-actions">
         <a href="pool.html" class="btn btn-primary">전문가로 참여하기</a>
-        <a href="pool.html" class="btn btn-outline">전문가 풀 보기</a>
+        <a href="pool.html" class="btn btn-outline">전문가 풀 둘러보기</a>
       </div>
+    </div>
+    <div class="hero-diagram" aria-label="AX-On 5 Phases 추진 여정 다이어그램">
+      <svg viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg" role="img">
+        <title>AX-On 5 Phases — 교육+진단 → 설계 → 구축 → 전환 → 지속적 혁신</title>
+        <defs>
+          <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L8,4 L0,8 z" fill="#1a1a2e" opacity="0.55"/>
+          </marker>
+        </defs>
+        <!-- Phase 1 -->
+        <g>
+          <rect x="20" y="20" width="480" height="48" rx="8" fill="#fff" stroke="#1a1a2e" stroke-opacity="0.18" stroke-width="1.2"/>
+          <text x="48" y="50" font-family="'Outfit',sans-serif" font-size="13" font-weight="800" fill="#e8920d" letter-spacing="1.5">PHASE 1</text>
+          <text x="140" y="50" font-family="'Noto Sans KR',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">교육 + 진단</text>
+          <text x="488" y="50" text-anchor="end" font-family="'Outfit',sans-serif" font-size="12" fill="#1a1a2e" opacity="0.55">시작</text>
+        </g>
+        <line x1="260" y1="68" x2="260" y2="84" stroke="#1a1a2e" stroke-width="1.4" opacity="0.55" marker-end="url(#arrowhead)"/>
+        <!-- Phase 2 -->
+        <g>
+          <rect x="20" y="88" width="480" height="48" rx="8" fill="#fff" stroke="#1a1a2e" stroke-opacity="0.18" stroke-width="1.2"/>
+          <text x="48" y="118" font-family="'Outfit',sans-serif" font-size="13" font-weight="800" fill="#e8920d" letter-spacing="1.5">PHASE 2</text>
+          <text x="140" y="118" font-family="'Noto Sans KR',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">설계</text>
+        </g>
+        <line x1="260" y1="136" x2="260" y2="152" stroke="#1a1a2e" stroke-width="1.4" opacity="0.55" marker-end="url(#arrowhead)"/>
+        <!-- Phase 3 -->
+        <g>
+          <rect x="20" y="156" width="480" height="48" rx="8" fill="#fff" stroke="#1a1a2e" stroke-opacity="0.18" stroke-width="1.2"/>
+          <text x="48" y="186" font-family="'Outfit',sans-serif" font-size="13" font-weight="800" fill="#e8920d" letter-spacing="1.5">PHASE 3</text>
+          <text x="140" y="186" font-family="'Noto Sans KR',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">구축</text>
+        </g>
+        <line x1="260" y1="204" x2="260" y2="220" stroke="#1a1a2e" stroke-width="1.4" opacity="0.55" marker-end="url(#arrowhead)"/>
+        <!-- Phase 4 -->
+        <g>
+          <rect x="20" y="224" width="480" height="48" rx="8" fill="#fff" stroke="#1a1a2e" stroke-opacity="0.18" stroke-width="1.2"/>
+          <text x="48" y="254" font-family="'Outfit',sans-serif" font-size="13" font-weight="800" fill="#e8920d" letter-spacing="1.5">PHASE 4</text>
+          <text x="140" y="254" font-family="'Noto Sans KR',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">전환</text>
+          <text x="488" y="254" text-anchor="end" font-family="'Outfit',sans-serif" font-size="12" fill="#1a1a2e" opacity="0.55">~ 28주</text>
+        </g>
+        <line x1="260" y1="272" x2="260" y2="288" stroke="#1a1a2e" stroke-width="1.4" opacity="0.55" marker-end="url(#arrowhead)"/>
+        <!-- Phase 5 -->
+        <g>
+          <rect x="20" y="292" width="480" height="48" rx="8" fill="#fff8ee" stroke="#e8920d" stroke-opacity="0.45" stroke-width="1.4"/>
+          <text x="48" y="322" font-family="'Outfit',sans-serif" font-size="13" font-weight="800" fill="#e8920d" letter-spacing="1.5">PHASE 5</text>
+          <text x="140" y="322" font-family="'Noto Sans KR',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">지속적 혁신</text>
+          <text x="488" y="322" text-anchor="end" font-family="'Outfit',sans-serif" font-size="12" fill="#e8920d" opacity="0.85">3년 이상</text>
+        </g>
+      </svg>
     </div>
   </div>
 </section>
@@ -381,23 +432,23 @@ body {
   <div class="method-grid">
     <div class="method-card fade-in">
       <div class="method-card-icon" aria-hidden="true">🔄</div>
-      <div class="method-card-title">DID System</div>
-      <div class="method-card-desc">Data → Information → Decision 3 Layer 흐름. Areas 업무 혁신과 유기적 순환으로 ROI 증대.</div>
+      <div class="method-card-title">DID System <span style="font-weight:500;color:var(--ink-muted);font-size:14px;">(데이터→정보→의사결정)</span></div>
+      <div class="method-card-desc">데이터(Data) → 정보(Information) → 의사결정(Decision) 3 Layer 흐름. 업무 Areas 혁신과 유기적 순환으로 ROI 증대.</div>
     </div>
     <div class="method-card fade-in">
       <div class="method-card-icon" aria-hidden="true">🧭</div>
-      <div class="method-card-title">SAL Grid_AX</div>
-      <div class="method-card-desc">Stage × Area × Level 3차원 좌표계로 프로젝트를 체계적으로 관리. 예: S1TR1, S2EN3.</div>
+      <div class="method-card-title">SAL Grid_AX <span style="font-weight:500;color:var(--ink-muted);font-size:14px;">(Stage·Area·Level 3차원 좌표계)</span></div>
+      <div class="method-card-desc">Stage(단계) × Area(영역) × Level(깊이) 3차원 좌표계로 프로젝트를 체계적으로 관리. 예: S1TR1, S2EN3.</div>
     </div>
     <div class="method-card fade-in">
       <div class="method-card-icon" aria-hidden="true">👥</div>
-      <div class="method-card-title">Platoon Formation</div>
+      <div class="method-card-title">Platoon Formation <span style="font-weight:500;color:var(--ink-muted);font-size:14px;">(소대 편제 협업 운용)</span></div>
       <div class="method-card-desc">소대장 + 분대장 + 병사 + 서기 4역할의 AI 협업 운용 체계.</div>
     </div>
     <div class="method-card fade-in">
       <div class="method-card-icon" aria-hidden="true">🔍</div>
-      <div class="method-card-title">SAL Task Analysis</div>
-      <div class="method-card-desc">각 Task를 H·A·R·P·X 5 Parts(~26 attributes)로 분석하는 STA 도구.</div>
+      <div class="method-card-title">SAL Task Analysis <span style="font-weight:500;color:var(--ink-muted);font-size:14px;">(이하 STA)</span></div>
+      <div class="method-card-desc">각 Task(과제)를 H·A·R·P·X 5 Parts(약 26 속성)로 분석하는 STA 도구.</div>
     </div>
   </div>
   <div class="method-cta-wrap fade-in">
