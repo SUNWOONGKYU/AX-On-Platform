@@ -806,6 +806,9 @@ a:hover { text-decoration: underline; }
   .btn-prev, .btn-next, .btn-submit { flex: 1; min-width: 120px; text-align: center; }
 }
 </style>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
 </head>
 <body>
 <a href="#expertGrid" class="skip-link" style="position:absolute;top:-100%;left:0;background:var(--amber);color:#fff;padding:12px 24px;z-index:9999;font-weight:700;border-radius:0 0 12px 0;transition:top 0.3s;" onfocus="this.style.top='0'" onblur="this.style.top='-100%'">본문 바로가기</a>
@@ -1244,7 +1247,7 @@ a:hover { text-decoration: underline; }
   <div class="footer-inner">
     <div>
       <div class="footer-logo">AX-<span>On</span> Platform</div>
-      <div class="footer-org-name">파인더월드</div>
+      <div class="footer-org-name">파인더���드</div>
       <div class="footer-org-person">서울특별시 강남구 테헤란로63길 9, 삼성롯데캐슬클라세 9층</div>
       <div class="footer-org-person">대표/공인회계사 선웅규</div>
     </div>
@@ -1794,7 +1797,7 @@ function validateStep(step) {
 
     if (!name) { showFieldErr('regName', 'regNameError', '이름을 입력해주세요.'); valid = false; }
     if (!birth) { showFieldErr('regBirth', 'regBirthError', '생년월일을 선택해주세요.'); valid = false; }
-    if (!selectedGender) { showErr('regGenderError', '성별을 선택해주세요.'); valid = false; }
+    if (!selectedGender) { showErr('regGenderError', '���별을 선택해주세요.'); valid = false; }
     if (!email) { showFieldErr('regEmail', 'regEmailError', '이메일을 입력해주세요.'); valid = false; }
     else if (!isValidEmail(email)) { showFieldErr('regEmail', 'regEmailError', '올바른 이메일 형식을 입력해주세요.'); valid = false; }
     if (!phone) { showFieldErr('regPhone', 'regPhoneError', '핸드폰 번호를 입력해주세요.'); valid = false; }
