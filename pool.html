@@ -10,7 +10,7 @@
 <meta property="og:description" content="AI 전문가 네트워크에 등록된 전문가들을 만나보세요.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.ax-on.net/pool.html">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>전문가 풀 — AX-On Platform</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://gifxpfdnnfwufzdncmor.supabase.co" crossorigin>
@@ -62,10 +62,8 @@ a:hover { text-decoration: underline; }
   text-decoration: none; color: var(--ink);
 }
 .logo-mark {
-  width: 42px; height: 42px; border-radius: 12px;
-  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  width: 42px; height: 42px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
 }
 .logo-text {
   font-family: 'Outfit', sans-serif;
@@ -120,37 +118,37 @@ a:hover { text-decoration: underline; }
 /* Desktop: hide mobile auth links */
 .nav-auth-mobile { display: none; }
 
-/* ── PAGE HEADER ── */
-.page-header {
-  padding: 120px 40px 48px;
-  text-align: center;
+/* ── PAGE HERO (통일: about-ax / methodology와 동일 구조) ── */
+.page-hero {
+  padding: 140px 40px 60px;
+  background: linear-gradient(135deg, #fff8ec 0%, var(--surface) 60%);
   position: relative; overflow: hidden;
 }
-.page-header::before {
-  content: ''; position: absolute; top: -100px; right: -200px;
+.page-hero::before {
+  content: ''; position: absolute; top: -200px; right: -200px;
   width: 600px; height: 600px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,146,13,0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--amber-glow) 0%, transparent 70%);
   pointer-events: none;
 }
-.page-header-inner { position: relative; z-index: 1; }
-.page-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(232,146,13,0.1); border: 1px solid rgba(232,146,13,0.2);
-  padding: 8px 18px; border-radius: 50px;
-  font-size: 15px; font-weight: 600; color: var(--amber);
-  margin-bottom: 20px;
+.page-hero-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; text-align: center; }
+.page-eyebrow {
+  display: inline-block; font-family: 'Outfit', sans-serif;
+  font-size: 13px; font-weight: 800;
+  color: var(--amber); letter-spacing: 3px;
+  margin-bottom: 16px;
 }
-.page-header h1 {
-  font-size: clamp(28px, 4vw, 44px);
-  font-weight: 900; line-height: 1.3;
-  letter-spacing: -0.5px; margin-bottom: 14px;
+.page-title {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 900; line-height: 1.25;
+  letter-spacing: -1px; word-break: keep-all;
+  margin-bottom: 18px;
 }
-.page-header p {
-  font-size: 17px; color: var(--ink-muted);
-  max-width: 560px; margin: 0 auto; line-height: 1.8;
+.page-subtitle {
+  font-size: 14px; color: var(--ink-muted);
+  line-height: 1.85; max-width: 720px; margin: 0 auto;
   word-break: keep-all;
 }
-.page-header-actions {
+.page-hero-actions {
   display: flex; align-items: center; justify-content: center; gap: 16px;
   margin-top: 28px; flex-wrap: wrap;
 }
@@ -158,7 +156,7 @@ a:hover { text-decoration: underline; }
   display: inline-flex; align-items: center; gap: 8px;
   padding: 14px 28px; border-radius: 14px;
   background: linear-gradient(135deg, var(--amber), #d4820b);
-  color: #fff; font-size: 15px; font-weight: 700;
+  color: #fff; font-size: 14px; font-weight: 700;
   text-decoration: none; cursor: pointer; border: none;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.3s ease;
@@ -171,11 +169,11 @@ a:hover { text-decoration: underline; }
   text-decoration: none;
 }
 .expert-counter {
-  font-size: 15px; color: var(--ink-muted); font-weight: 600;
+  font-size: 14px; color: var(--ink-muted); font-weight: 600;
 }
 .expert-counter strong {
   color: var(--amber); font-weight: 900;
-  font-family: 'Outfit', sans-serif; font-size: 18px;
+  font-family: 'Outfit', sans-serif; font-size: 14px;
 }
 
 /* ── CONTROLS BAR ── */
@@ -192,7 +190,7 @@ a:hover { text-decoration: underline; }
   width: 100%; padding: 12px 16px 12px 44px;
   border: 1.5px solid rgba(26,26,46,0.12);
   border-radius: var(--radius-sm);
-  font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
   background: var(--surface-card);
   color: var(--ink); outline: none;
   transition: border-color 0.25s ease;
@@ -204,7 +202,7 @@ a:hover { text-decoration: underline; }
 .search-icon {
   position: absolute; left: 14px; top: 50%;
   transform: translateY(-50%);
-  color: var(--ink-muted); font-size: 16px; pointer-events: none;
+  color: var(--ink-muted); font-size: 14px; pointer-events: none;
 }
 .view-toggle {
   display: flex; gap: 4px;
@@ -275,7 +273,7 @@ a:hover { text-decoration: underline; }
 }
 .expert-info { flex: 1; min-width: 0; }
 .expert-name {
-  font-size: 17px; font-weight: 700;
+  font-size: 14px; font-weight: 700;
   margin-bottom: 2px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
@@ -353,8 +351,8 @@ a:hover { text-decoration: underline; }
   display: inline-flex; align-items: center; justify-content: center;
 }
 .empty-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.5; }
-.empty-title { font-size: 18px; font-weight: 700; color: var(--ink); }
-.empty-desc { font-size: 15px; color: var(--ink-muted); max-width: 360px; line-height: 1.6; }
+.empty-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+.empty-desc { font-size: 14px; color: var(--ink-muted); max-width: 360px; line-height: 1.6; }
 
 /* ── DETAIL MODAL ── */
 .detail-overlay {
@@ -596,7 +594,7 @@ a:hover { text-decoration: underline; }
 }
 .btn-prev, .btn-next, .btn-submit {
   padding: 14px 32px; border-radius: 14px;
-  font-size: 15px; font-weight: 700; cursor: pointer;
+  font-size: 14px; font-weight: 700; cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.3s; border: none;
 }
@@ -760,10 +758,10 @@ a:hover { text-decoration: underline; }
   }
 
   /* PAGE HEADER */
-  .page-header { padding: 80px 16px 28px; }
-  .page-header h1 { font-size: 24px; }
-  .page-header p { font-size: 14px; }
-  .page-header-actions { flex-direction: column; gap: 10px; }
+  .page-hero { padding: 96px 16px 40px; }
+  .page-title { font-size: 22px; }
+  .page-subtitle { font-size: 13px; }
+  .page-hero-actions { flex-direction: column; gap: 10px; }
   .register-btn { width: 100%; justify-content: center; }
 
   /* CONTROLS */
@@ -775,7 +773,7 @@ a:hover { text-decoration: underline; }
   .expert-grid { grid-template-columns: 1fr; gap: 12px; }
   .expert-card { padding: 20px 16px; }
   .expert-avatar { width: 52px; height: 52px; }
-  .expert-name { font-size: 15px; }
+  .expert-name { font-size: 14px; }
 
   /* REG OVERLAY */
   .reg-overlay { padding: 16px 8px; }
@@ -785,7 +783,7 @@ a:hover { text-decoration: underline; }
   .step-label { display: none; }
   .step-num { width: 24px; height: 24px; font-size: 11px; }
   .step-line { margin: 0 4px; }
-  .form-input, .form-textarea { font-size: 16px; }
+  .form-input, .form-textarea { font-size: 14px; }
 
   /* DETAIL */
   .detail-box { padding: 24px 16px; width: 96%; }
@@ -814,11 +812,11 @@ a:hover { text-decoration: underline; }
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-mark"><svg width="42" height="42" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><radialGradient id="ax-core" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff5d8"/><stop offset="0.5" stop-color="#e8920d"/><stop offset="1" stop-color="#c47a0a"/></radialGradient></defs><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1" opacity="0.15"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.35"/><circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.6" opacity="0.6"/><circle cx="24" cy="24" r="5.5" fill="url(#ax-core)"/><circle cx="24" cy="24" r="2" fill="#fff5d8"/></svg></div>
       <div class="logo-text">AX-<span>On</span></div>
     </a>
     <div class="nav-links" id="navLinks">
-      <a href="about-ax.html">AX란?</a>
+      <a href="about-ax.html">AX란</a>
       <a href="methodology.html">방법론</a>
       <a href="pool.html" class="active">전문가 풀</a>
       <a href="community.html">커뮤니티</a>
@@ -835,13 +833,13 @@ a:hover { text-decoration: underline; }
   </div>
 </nav>
 
-<!-- PAGE HEADER -->
-<header class="page-header">
-  <div class="page-header-inner fade-in">
-    <div class="page-badge">EXPERT POOL</div>
-    <h1>전문가 풀</h1>
-    <p>AX 프로젝트를 함께 수행할 AI 전문가들입니다</p>
-    <div class="page-header-actions">
+<!-- PAGE HERO -->
+<header class="page-hero" id="main-content">
+  <div class="page-hero-inner fade-in">
+    <div class="page-eyebrow">EXPERT POOL</div>
+    <h1 class="page-title">전문가 풀</h1>
+    <p class="page-subtitle">AX 프로젝트를 함께 수행할 AI 전문가들입니다</p>
+    <div class="page-hero-actions">
       <button class="register-btn" id="openRegBtn">+ 전문가 등록</button>
       <span class="expert-counter">현재 <strong id="expertCount">0</strong>명 등록</span>
     </div>
@@ -921,7 +919,7 @@ a:hover { text-decoration: underline; }
       현재 <strong id="chkCountNum">0</strong> / 5 선택됨
     </div>
 
-    <button id="chkProceedBtn" class="btn-submit" style="width:100%; padding:14px; font-size:16px; opacity:0.4; cursor:not-allowed;" disabled>
+    <button id="chkProceedBtn" class="btn-submit" style="width:100%; padding:14px; font-size:14px; opacity:0.4; cursor:not-allowed;" disabled>
       등록 폼 진입하기
     </button>
     <p id="chkWarning" style="text-align:center; font-size:13px; color:var(--coral); margin-top:12px; display:none;">

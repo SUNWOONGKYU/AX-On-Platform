@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="AX-On Platform 로그인">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <title>로그인 — AX-On Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,10 +64,8 @@ body {
   color: var(--ink);
 }
 .logo-mark {
-  width: 42px; height: 42px; border-radius: 12px;
-  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  width: 42px; height: 42px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
 }
 .logo-text {
   font-family: 'Outfit', sans-serif;
@@ -127,7 +125,7 @@ body {
   padding: 13px 16px;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
-  font-size: 15px;
+  font-size: 14px;
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--ink);
   background: var(--surface);
@@ -147,7 +145,7 @@ body {
 .pw-toggle {
   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
   background: none; border: none; cursor: pointer; padding: 4px;
-  color: var(--ink-muted); font-size: 18px; line-height: 1;
+  color: var(--ink-muted); font-size: 14px; line-height: 1;
   display: flex; align-items: center; justify-content: center;
 }
 .pw-toggle:hover { color: var(--ink); }
@@ -191,7 +189,7 @@ body {
   color: #fff;
   border: none;
   border-radius: var(--radius-sm);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
   cursor: pointer;
@@ -232,7 +230,7 @@ body {
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   background: #fff;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   font-family: 'Noto Sans KR', sans-serif;
   color: var(--ink);
@@ -297,12 +295,7 @@ body {
 <div class="auth-card">
   <div class="logo">
     <a href="../../index.html">
-      <div class="logo-mark">
-        <svg width="26" height="26" viewBox="0 0 40 44">
-          <text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text>
-          <text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text>
-        </svg>
-      </div>
+      <div class="logo-mark"><svg width="42" height="42" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><radialGradient id="ax-core" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff5d8"/><stop offset="0.5" stop-color="#e8920d"/><stop offset="1" stop-color="#c47a0a"/></radialGradient></defs><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1" opacity="0.15"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.35"/><circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.6" opacity="0.6"/><circle cx="24" cy="24" r="5.5" fill="url(#ax-core)"/><circle cx="24" cy="24" r="2" fill="#fff5d8"/></svg></div>
       <span class="logo-text">AX-<span>On</span></span>
     </a>
   </div>

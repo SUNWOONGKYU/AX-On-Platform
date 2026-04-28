@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>관리자 대시보드 — AX-On Platform</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -58,10 +58,8 @@ body {
   text-decoration: none; color: var(--ink);
 }
 .logo-mark {
-  width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(232, 146, 13, 0.3);
 }
 .logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; }
 .logo-text span { color: var(--amber); }
@@ -93,10 +91,10 @@ body {
 .loading-text { margin-top: 16px; color: var(--ink-muted); font-size: 14px; }
 .auth-gate-icon { font-size: 56px; margin-bottom: 16px; }
 .auth-gate-title { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
-.auth-gate-desc { font-size: 15px; color: var(--ink-muted); margin-bottom: 24px; }
+.auth-gate-desc { font-size: 14px; color: var(--ink-muted); margin-bottom: 24px; }
 .auth-gate-btn {
   display: inline-block; padding: 12px 28px; background: var(--ink); color: white;
-  border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 15px;
+  border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px;
 }
 
 /* ── DASHBOARD ── */
@@ -228,7 +226,7 @@ body {
 /* ── EMPTY ── */
 .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); }
 .empty-icon { font-size: 48px; margin-bottom: 12px; }
-.empty-text { font-size: 15px; }
+.empty-text { font-size: 14px; }
 
 /* ── TOAST ── */
 .toast {
@@ -290,7 +288,7 @@ body {
 <nav class="nav" id="adminNav" style="display:none;">
   <div class="nav-inner">
     <a href="../../index.html" class="nav-logo">
-      <div class="logo-mark"><svg width="22" height="22" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-mark"><svg width="42" height="42" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><radialGradient id="ax-core" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff5d8"/><stop offset="0.5" stop-color="#e8920d"/><stop offset="1" stop-color="#c47a0a"/></radialGradient></defs><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1" opacity="0.15"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.35"/><circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.6" opacity="0.6"/><circle cx="24" cy="24" r="5.5" fill="url(#ax-core)"/><circle cx="24" cy="24" r="2" fill="#fff5d8"/></svg></div>
       <div class="logo-text">AX-<span>On</span></div>
     </a>
     <span class="nav-badge">ADMIN</span>
@@ -739,7 +737,7 @@ function showCreateForm(tab) {
 
   if (tab === 'notice') {
     list.innerHTML = '<div class="item-card" style="border:2px solid var(--amber);"><div class="item-detail open" style="padding:20px;">' +
-      '<h3 style="margin-bottom:16px;font-size:16px;font-weight:700;">공지사항 작성</h3>' +
+      '<h3 style="margin-bottom:16px;font-size:14px;font-weight:700;">공지사항 작성</h3>' +
       '<div class="detail-grid">' +
         '<div class="detail-field detail-full"><div class="detail-label">제목 *</div><input id="createTitle" class="action-textarea" style="min-height:auto;padding:8px 12px;" placeholder="공지 제목"></div>' +
         '<div class="detail-field detail-full"><div class="detail-label">내용 *</div><textarea id="createContent" class="action-textarea" style="min-height:120px;" placeholder="공지 내용 (최소 10자)"></textarea></div>' +
@@ -751,7 +749,7 @@ function showCreateForm(tab) {
     '</div></div>' + list.innerHTML;
   } else if (tab === 'project') {
     list.innerHTML = '<div class="item-card" style="border:2px solid var(--amber);"><div class="item-detail open" style="padding:20px;">' +
-      '<h3 style="margin-bottom:16px;font-size:16px;font-weight:700;">프로젝트 등록</h3>' +
+      '<h3 style="margin-bottom:16px;font-size:14px;font-weight:700;">프로젝트 등록</h3>' +
       '<div class="detail-grid">' +
         '<div class="detail-field detail-full"><div class="detail-label">프로젝트명 *</div><input id="createName" class="action-textarea" style="min-height:auto;padding:8px 12px;" placeholder="프로젝트 이름"></div>' +
         '<div class="detail-field detail-full"><div class="detail-label">설명</div><textarea id="createDesc" class="action-textarea" style="min-height:80px;" placeholder="프로젝트 설명"></textarea></div>' +

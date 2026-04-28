@@ -10,7 +10,7 @@
 <meta property="og:description" content="AI 전문가 네트워크. 다양한 분야의 AI 전문가들이 모여 협업하고 성장하는 플랫폼.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.ax-on.net">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>AX-On Platform</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://gifxpfdnnfwufzdncmor.supabase.co" crossorigin>
@@ -109,7 +109,7 @@ body {
   display: inline-flex; align-items: center; gap: 8px;
   text-decoration: none; padding: 12px 28px;
   background: var(--amber); color: #fff;
-  border-radius: 12px; font-weight: 700; font-size: 15px;
+  border-radius: 12px; font-weight: 700; font-size: 14px;
   box-shadow: 0 4px 14px rgba(232, 146, 13, 0.25);
   transition: all 0.3s ease;
 }
@@ -166,11 +166,11 @@ body {
   border-radius: var(--radius);
   position: relative;
 }
-.how-step-num {
-  font-family: 'Outfit', sans-serif;
-  font-size: var(--fs-tiny); font-weight: 800;
-  color: var(--amber); letter-spacing: 2px;
-  margin-bottom: 12px;
+.how-step::before {
+  content: ''; display: block;
+  width: 28px; height: 2px;
+  background: var(--amber); margin-bottom: 16px;
+  border-radius: 2px;
 }
 .how-step-icon {
   width: 32px; height: 32px; margin-bottom: 12px;
@@ -245,7 +245,7 @@ body {
   line-height: 1.2;
 }
 .stats-unit {
-  font-size: 18px; color: var(--ink-muted); margin-top: 8px;
+  font-size: 14px; color: var(--ink-muted); margin-top: 8px;
   font-weight: 500;
 }
 .stats-cta-wrap { margin-top: 32px; }
@@ -262,7 +262,7 @@ body {
 @media (max-width: 768px) {
   /* HERO */
   .hero { padding: 96px 16px 56px; }
-  .hero-subtitle { font-size: 16px; }
+  .hero-subtitle { font-size: 14px; }
   .hero-actions {
     flex-direction: column; align-items: stretch;
     gap: 12px;
@@ -295,8 +295,8 @@ body {
   .stats-number { font-size: 36px; }
   .stats-unit { font-size: 14px; }
   .why-card { padding: 24px 20px; }
-  .method-card-title { font-size: 16px; }
-  .method-card-desc { font-size: 16px; }
+  .method-card-title { font-size: 14px; }
+  .method-card-desc { font-size: 14px; }
 }
 </style>
 </head>
@@ -309,11 +309,11 @@ body {
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <div class="logo-mark"><svg width="26" height="26" viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg"><text x="20" y="16" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">A</text><text x="20" y="30" text-anchor="middle" dominant-baseline="central" font-family="Arial Black,Impact,sans-serif" font-weight="900" font-size="28" fill="white">X</text></svg></div>
+      <div class="logo-mark"><svg width="42" height="42" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><radialGradient id="ax-core" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff5d8"/><stop offset="0.5" stop-color="#e8920d"/><stop offset="1" stop-color="#c47a0a"/></radialGradient></defs><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1" opacity="0.15"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.35"/><circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.6" opacity="0.6"/><circle cx="24" cy="24" r="5.5" fill="url(#ax-core)"/><circle cx="24" cy="24" r="2" fill="#fff5d8"/></svg></div>
       <div class="logo-text">AX-<span>On</span></div>
     </a>
     <div class="nav-links" id="navLinks">
-      <a href="about-ax.html">AX란?</a>
+      <a href="about-ax.html">AX란</a>
       <a href="methodology.html">방법론</a>
       <a href="pool.html">전문가 풀</a>
       <a href="community.html">커뮤니티</a>
@@ -341,7 +341,7 @@ body {
         <span class="highlight">AI 전문가</span>들이 팀에 합류하여 함께 실행합니다.
       </h1>
       <div class="hero-actions">
-        <a href="pool.html" class="btn btn-primary" data-cta="hero_join_expert" data-cta-group="conversion">전문가로 참여하기</a>
+        <a href="pool.html" class="btn btn-primary" data-cta="hero_join_expert" data-cta-group="conversion">전문가 등록하기</a>
         <a href="pool.html" class="btn btn-outline" data-cta="hero_browse_pool" data-cta-group="conversion">전문가 풀 둘러보기</a>
       </div>
     </div>
@@ -400,21 +400,18 @@ body {
   </div>
   <div class="how-steps fade-in">
     <div class="how-step">
-      <div class="how-step-num">01</div>
       <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="22" x2="9" y2="18"/><line x1="15" y1="22" x2="15" y2="18"/><line x1="8" y1="6" x2="10" y2="6"/><line x1="14" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></svg></div>
       <div class="how-step-title">AX-On이 AX 프로젝트를 확보합니다</div>
       <div class="how-step-desc">제조·금융·유통·물류 등 다양한 산업의 AX 프로젝트를 AX-On이 확보합니다.</div>
     </div>
     <div class="how-arrow">→</div>
     <div class="how-step">
-      <div class="how-step-num">02</div>
       <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 17l-5-5 5-5"/><path d="M13 17l5-5-5-5"/><circle cx="12" cy="12" r="10"/></svg></div>
       <div class="how-step-title">AI 전문가가 프로젝트 팀에 합류합니다</div>
       <div class="how-step-desc">AX-On에 등록된 AI 전문가들이 프로젝트 팀으로 참여합니다. 산업과 기능 분야 전문성이 프로젝트에 직결됩니다.</div>
     </div>
     <div class="how-arrow">→</div>
     <div class="how-step">
-      <div class="how-step-num">03</div>
       <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></div>
       <div class="how-step-title">AX-On과 전문가가 함께 실행합니다</div>
       <div class="how-step-desc">기획부터 실행까지, AX-On과 AI 전문가가 한 팀이 되어 AX 프로젝트를 실질적으로 이끌어갑니다.</div>
@@ -462,7 +459,7 @@ body {
     <div class="stats-cta-wrap">
       <p class="stats-cta-text">AX 프로젝트 현장에서 활약하고 싶다면, 전문가 풀에 합류하세요.</p>
       <div class="stats-cta-actions">
-        <a href="pool.html" class="btn btn-primary" data-cta="stats_join_pool" data-cta-group="conversion">전문가 풀 등록하기</a>
+        <a href="pool.html" class="btn btn-primary" data-cta="stats_join_pool" data-cta-group="conversion">전문가 등록하기</a>
         <a href="pool.html" class="btn btn-outline" data-cta="stats_browse_pool" data-cta-group="conversion">전문가 풀 둘러보기</a>
       </div>
     </div>

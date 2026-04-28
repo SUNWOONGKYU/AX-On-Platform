@@ -56,24 +56,24 @@
   --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
   --sp-7: 48px; --sp-8: 72px; --sp-9: 96px;
 
-  /* TYPOGRAPHY — P1.3 위계 4-tier (fake-bold 제거) */
+  /* TYPOGRAPHY — P1.3 위계 4-tier (원복) */
   --fw-h1: 900;   /* Hero H1 */
   --fw-h2: 800;   /* Section H2 */
   --fw-h3: 700;   /* Card H3 */
   --fw-lead: 500; /* H2 직하 리드 카피 */
   --fw-body: 400; /* Body */
 
-  /* TYPOGRAPHY SCALE — 전 페이지 통합 위계 (P3) */
-  --fs-display: clamp(34px, 4.4vw, 46px); /* Hero/Page 최상위 H1 */
-  --fs-h1:      clamp(28px, 3.4vw, 38px); /* Page H1 */
-  --fs-h2:      clamp(22px, 2.6vw, 28px); /* Section H2 */
-  --fs-h3:      clamp(18px, 1.9vw, 21px); /* Subsection / Card title */
-  --fs-h4:      16px;                     /* Card sub heading */
-  --fs-lead:    clamp(16px, 1.5vw, 18px); /* Subtitle / lead */
-  --fs-body:    16px;                     /* Body text */
-  --fs-small:   14px;                     /* Small / footer */
-  --fs-tiny:    13px;                     /* Eyebrow / tag */
-  --fs-mega:    clamp(36px, 5vw, 52px);   /* Stats numbers */
+  /* TYPOGRAPHY SCALE — 헤딩/리드 원래대로, 본문(--fs-body)만 16→15 다운 */
+  --fs-display: clamp(34px, 4.4vw, 46px); /* Hero/Page 최상위 H1 — 원복 */
+  --fs-h1:      clamp(28px, 3.4vw, 38px); /* Page H1 — 원복 */
+  --fs-h2:      clamp(22px, 2.6vw, 28px); /* Section H2 — 원복 */
+  --fs-h3:      clamp(18px, 1.9vw, 21px); /* Subsection / Card title — 원복 */
+  --fs-h4:      16px;                     /* Card sub heading — 원복 */
+  --fs-lead:    clamp(16px, 1.5vw, 18px); /* Subtitle / lead — 원복 */
+  --fs-body:    14px;                     /* Body — 16→14 (사용자 표준: 14-15px 본문) */
+  --fs-small:   14px;                     /* Small / footer — 원복 */
+  --fs-tiny:    13px;                     /* Eyebrow / tag — 원복 */
+  --fs-mega:    clamp(36px, 5vw, 52px);   /* Stats numbers — 원복 */
 
   --lh-tight:  1.25;
   --lh-snug:   1.4;
@@ -130,12 +130,10 @@
   text-decoration: none; color: var(--ink);
 }
 .logo-mark {
-  width: 42px; height: 42px; border-radius: 12px;
-  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  width: 42px; height: 42px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-  box-shadow: 0 4px 16px rgba(232, 146, 13, 0.3);
 }
+.logo-mark svg { width: 100%; height: 100%; display: block; }
 .logo-text {
   font-family: 'Outfit', sans-serif;
   font-weight: 800; font-size: 22px;

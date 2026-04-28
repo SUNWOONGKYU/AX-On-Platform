@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="AX-On Platform 마이페이지">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <title>마이페이지 — AX-On Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
@@ -64,10 +64,9 @@ body {
 }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
 .logo-mark {
-  width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--amber), var(--amber-light));
+  width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 14px; color: white;
+  font-family: 'Outfit', sans-serif; font-weight: 900;
 }
 .logo-text { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; }
 .logo-text span { color: var(--amber); }
@@ -133,7 +132,7 @@ body {
   cursor: pointer; font-size: 12px;
   display: flex; align-items: center; justify-content: center;
 }
-.profile-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.profile-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
 .profile-tagline { font-size: 13px; color: var(--ink-muted); margin-bottom: 8px; }
 .profile-role {
   display: inline-block; padding: 3px 10px; border-radius: 20px;
@@ -152,7 +151,7 @@ body {
 }
 .menu-item:hover { background: var(--surface-warm); color: var(--ink); }
 .menu-item.active { background: var(--amber-glow); color: var(--amber); font-weight: 600; }
-.menu-icon { font-size: 16px; }
+.menu-icon { font-size: 14px; }
 
 /* ── Main Content ── */
 .main-content { min-width: 0; }
@@ -175,7 +174,7 @@ body {
   margin-bottom: 20px;
 }
 .card-subtitle {
-  font-size: 15px; font-weight: 600; color: var(--ink);
+  font-size: 14px; font-weight: 600; color: var(--ink);
   margin-bottom: 16px; padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
@@ -211,7 +210,7 @@ body {
 .btn-primary {
   padding: 12px 28px; border-radius: var(--radius-sm);
   background: var(--amber); color: white; border: none;
-  font-size: 15px; font-weight: 600; font-family: inherit;
+  font-size: 14px; font-weight: 600; font-family: inherit;
   cursor: pointer; transition: all 0.15s;
 }
 .btn-primary:hover { background: var(--amber-light); transform: translateY(-1px); }
@@ -256,7 +255,7 @@ body {
   color: var(--ink-muted);
 }
 .empty-icon { font-size: 48px; margin-bottom: 12px; }
-.empty-msg { font-size: 15px; }
+.empty-msg { font-size: 14px; }
 
 /* ── Alert ── */
 .alert {
@@ -307,7 +306,7 @@ footer a:hover { color: var(--amber); }
 <nav class="nav">
   <div class="nav-inner">
     <a href="../../index.html" class="nav-logo">
-      <div class="logo-mark">AX</div>
+      <div class="logo-mark"><svg width="42" height="42" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><radialGradient id="ax-core" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff5d8"/><stop offset="0.5" stop-color="#e8920d"/><stop offset="1" stop-color="#c47a0a"/></radialGradient></defs><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1" opacity="0.15"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.35"/><circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.6" opacity="0.6"/><circle cx="24" cy="24" r="5.5" fill="url(#ax-core)"/><circle cx="24" cy="24" r="2" fill="#fff5d8"/></svg></div>
       <span class="logo-text">AX-<span>On</span></span>
     </a>
     <div class="nav-right" id="navRight">
