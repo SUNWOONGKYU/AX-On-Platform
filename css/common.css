@@ -42,11 +42,13 @@
   --radius-sm: 12px;
   --radius-lg: 28px;
 
-  /* SHADOW */
-  --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
-  --shadow-card: 0 8px 32px rgba(26, 26, 46, 0.08);
-  --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
-  --shadow-amber: 0 6px 22px rgba(232, 146, 13, 0.25);
+  /* SHADOW (P0-5: 4→2 통합) */
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-cta: 0 2px 8px rgba(232,146,13,0.18);
+  /* legacy aliases — 점진적 마이그레이션 */
+  --shadow-soft: var(--shadow-card);
+  --shadow-hover: var(--shadow-card);
+  --shadow-amber: var(--shadow-cta);
 
   /* SPACING — 8pt 격자 */
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
@@ -58,8 +60,8 @@
   --dark-bg-deep: #001126;
   --dark-bg-hover: #00346e;
   --dark-bg-active: #003f8e;
-  --dark-text-muted: #7285b7;
-  --dark-border: rgba(114, 133, 183, 0.15);
+  --dark-text-muted: #a3b3d6;        /* P0-1: WCAG AA — 5.5:1 대비 (was #7285b7 = 4.3:1) */
+  --dark-border: rgba(163, 179, 214, 0.20);
 }
 
 /* ── SKIP LINK (접근성) ── */
@@ -221,20 +223,20 @@
   margin-top: 4px; text-align: center; letter-spacing: 0.5px;
 }
 .footer-org-person {
-  font-size: 12px; color: var(--dark-text-muted); opacity: 0.75;
+  font-size: 13px; color: var(--dark-text-muted);
   margin-top: 2px; text-align: center;
 }
 .footer-links { display: flex; gap: 24px; }
 .footer-links a {
   color: var(--dark-text-muted);
-  text-decoration: none; font-size: 14px;
-  transition: color 0.3s ease;
+  text-decoration: underline; text-underline-offset: 3px;
+  font-size: 14px; transition: color 0.3s ease;
 }
 .footer-links a:hover { color: var(--amber); }
 .footer-copyright {
   max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
   border-top: 1px solid var(--dark-border);
-  text-align: center; font-size: 12px; color: var(--dark-text-muted); opacity: 0.7;
+  text-align: center; font-size: 13px; color: var(--dark-text-muted);
 }
 
 /* ── ANIMATIONS ── */

@@ -69,9 +69,7 @@ body {
   word-break: keep-all;
 }
 .hero-title .highlight {
-  background: linear-gradient(135deg, var(--amber), var(--coral));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--amber);
 }
 .hero-desc {
   font-size: 18px; line-height: 1.8;
@@ -164,7 +162,7 @@ body {
 }
 .method-card-icon { font-size: 30px; margin-bottom: 12px; }
 .method-card-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--ink); }
-.method-card-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.7; word-break: keep-all; }
+.method-card-desc { font-size: 16px; color: var(--ink-muted); line-height: 1.7; word-break: keep-all; }
 .method-cta-wrap { text-align: center; }
 
 @media (max-width: 768px) {
@@ -193,7 +191,7 @@ body {
 }
 .how-step-icon { font-size: 32px; margin-bottom: 12px; }
 .how-step-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
-.how-step-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.7; word-break: keep-all; }
+.how-step-desc { font-size: 16px; color: var(--ink-muted); line-height: 1.7; word-break: keep-all; }
 .how-arrow {
   flex: 0 0 48px; text-align: center;
   font-size: 22px; color: var(--amber);
@@ -231,7 +229,7 @@ body {
   font-size: 18px; font-weight: 700; margin-bottom: 10px;
 }
 .why-card-desc {
-  font-size: 15px; color: var(--ink-muted); line-height: 1.7;
+  font-size: 16px; color: var(--ink-muted); line-height: 1.7;
   word-break: keep-all;
 }
 
@@ -254,9 +252,7 @@ body {
   font-family: 'Outfit', sans-serif;
   font-size: clamp(48px, 8vw, 72px);
   font-weight: 900;
-  background: linear-gradient(135deg, var(--amber), var(--coral));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--amber);
   line-height: 1.2;
 }
 .stats-unit {
@@ -268,7 +264,7 @@ body {
 @media (max-width: 768px) {
   /* HERO */
   .hero { padding: 88px 16px 36px; }
-  .hero-desc { font-size: 15px; }
+  .hero-desc { font-size: 17px; }
   .hero-actions {
     justify-content: center;
     flex-direction: column; align-items: stretch;
@@ -301,7 +297,7 @@ body {
   .stats-unit { font-size: 14px; }
   .why-card { padding: 24px 20px; }
   .method-card-title { font-size: 16px; }
-  .method-card-desc { font-size: 14px; }
+  .method-card-desc { font-size: 16px; }
 }
 </style>
 </head>
@@ -384,22 +380,22 @@ body {
   </div>
   <div class="method-grid">
     <div class="method-card fade-in">
-      <div class="method-card-icon">🔄</div>
+      <div class="method-card-icon" aria-hidden="true">🔄</div>
       <div class="method-card-title">DID System</div>
       <div class="method-card-desc">Data → Information → Decision 3 Layer 흐름. Areas 업무 혁신과 유기적 순환으로 ROI 증대.</div>
     </div>
     <div class="method-card fade-in">
-      <div class="method-card-icon">🧭</div>
+      <div class="method-card-icon" aria-hidden="true">🧭</div>
       <div class="method-card-title">SAL Grid_AX</div>
       <div class="method-card-desc">Stage × Area × Level 3차원 좌표계로 프로젝트를 체계적으로 관리. 예: S1TR1, S2EN3.</div>
     </div>
     <div class="method-card fade-in">
-      <div class="method-card-icon">👥</div>
+      <div class="method-card-icon" aria-hidden="true">👥</div>
       <div class="method-card-title">Platoon Formation</div>
       <div class="method-card-desc">소대장 + 분대장 + 병사 + 서기 4역할의 AI 협업 운용 체계.</div>
     </div>
     <div class="method-card fade-in">
-      <div class="method-card-icon">🔍</div>
+      <div class="method-card-icon" aria-hidden="true">🔍</div>
       <div class="method-card-title">SAL Task Analysis</div>
       <div class="method-card-desc">각 Task를 H·A·R·P·X 5 Parts(~26 attributes)로 분석하는 STA 도구.</div>
     </div>
@@ -419,21 +415,21 @@ body {
   <div class="how-steps fade-in">
     <div class="how-step">
       <div class="how-step-num">01</div>
-      <div class="how-step-icon">🏢</div>
+      <div class="how-step-icon" aria-hidden="true">🏢</div>
       <div class="how-step-title">AX-On이 기업 AX 프로젝트를 확보합니다</div>
       <div class="how-step-desc">제조·금융·유통·물류 등 다양한 산업의 기업 AX 프로젝트를 AX-On이 확보합니다.</div>
     </div>
     <div class="how-arrow">→</div>
     <div class="how-step">
       <div class="how-step-num">02</div>
-      <div class="how-step-icon">🤝</div>
+      <div class="how-step-icon" aria-hidden="true">🤝</div>
       <div class="how-step-title">AI 전문가가 프로젝트 팀에 합류합니다</div>
       <div class="how-step-desc">AX-On에 등록된 AI 전문가들이 프로젝트 팀으로 참여합니다. 산업과 기능 분야 전문성이 프로젝트에 직결됩니다.</div>
     </div>
     <div class="how-arrow">→</div>
     <div class="how-step">
       <div class="how-step-num">03</div>
-      <div class="how-step-icon">🚀</div>
+      <div class="how-step-icon" aria-hidden="true">🚀</div>
       <div class="how-step-title">AX-On과 전문가가 함께 실행합니다</div>
       <div class="how-step-desc">기획부터 실행까지, AX-On과 AI 전문가가 한 팀이 되어 기업 AX를 실질적으로 이끌어갑니다.</div>
     </div>
@@ -449,22 +445,22 @@ body {
   </div>
   <div class="why-grid">
     <div class="why-card fade-in">
-      <div class="why-card-icon">🏢</div>
+      <div class="why-card-icon" aria-hidden="true">🏢</div>
       <div class="why-card-title">확보된 기업 프로젝트</div>
       <div class="why-card-desc">AX-On이 확보한 기업 AX 프로젝트에 팀원으로 합류합니다. 제조·금융·유통 등 다양한 산업 현장에서 AI 전문가로 활약합니다.</div>
     </div>
     <div class="why-card fade-in">
-      <div class="why-card-icon">💡</div>
+      <div class="why-card-icon" aria-hidden="true">💡</div>
       <div class="why-card-title">기업 AX의 최전선</div>
       <div class="why-card-desc">기업들이 본격적으로 AX에 나서는 지금, AX-On이 이끄는 프로젝트에서 그 변화를 직접 만들어가세요.</div>
     </div>
     <div class="why-card fade-in">
-      <div class="why-card-icon">🤝</div>
+      <div class="why-card-icon" aria-hidden="true">🤝</div>
       <div class="why-card-title">함께 일하는 전문가 팀</div>
       <div class="why-card-desc">AX-On이 구성한 프로젝트 팀에서 각 분야 전문가들과 협업합니다. 서로의 전문성을 모아 더 큰 성과를 만듭니다.</div>
     </div>
     <div class="why-card fade-in">
-      <div class="why-card-icon">📈</div>
+      <div class="why-card-icon" aria-hidden="true">📈</div>
       <div class="why-card-title">실전 레퍼런스 축적</div>
       <div class="why-card-desc">AX-On이 이끄는 기업 AX 프로젝트 경험이 곧 커리어가 됩니다. 실전 레퍼런스를 쌓으며 AX 전문가로 성장하세요.</div>
     </div>
