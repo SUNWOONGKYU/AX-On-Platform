@@ -1,0 +1,68 @@
+{
+  "cycle": 3,
+  "stage_s3": {
+    "assumptions": 8,
+    "by_class": {
+      "self_verifiable": ["g2(slate-700 토큰 정의 누락 — 행 98~104 직접 확인)", "g4(80% 삭제 완전 — 행 8~10 확인)", "g6(N 분기 룰 명시 — 행 63~67 확인)"],
+      "external_needed": ["g1(+3% 임계값 업계 벤치마크 가능 여부)", "g3(다크모드 도입 시점)"],
+      "fundamentally_uncertain": ["g5(N<30 시 Phase B 진입 정당성)", "g7(A0 게이트 통과 PO 결정 구조)", "g8(amber-100 vs amber-500 사용자 지각 차이)"]
+    }
+  },
+  "stage_s4_da_rebuttals": [
+    {
+      "id": "n1",
+      "subject": "+3% 비즈니스 KPI / -20% 리드타임 임계값 근거 공백 — 허위 정밀도",
+      "evidence": "c2_fix.md 행 73~83",
+      "alt": "Phase A0 산출물에 'A1 임계값 잠정값 (베이스라인 확보 후 재조정)' 명시 + Phase A0 Task 5 추가: '베이스라인 기반 임계값 재설정'"
+    },
+    {
+      "id": "n2",
+      "subject": "Legal 그룹 slate-700 토큰 정의 누락 — 거버넌스 규칙 위반",
+      "evidence": "c2_fix.md 행 92(slate-700 사용) vs 행 98~104(토큰 정의에 없음)",
+      "alt": "토큰 축 1(컬러)에 --accent-neutral-strong: slate-700 추가 또는 행 92를 slate-500으로 정정"
+    },
+    {
+      "id": "n3",
+      "subject": "N<30 시 Phase B 진입 가능 구조 — 최상위 목표와 내부 모순",
+      "evidence": "c2_fix.md 행 8~10('비즈니스 가치는 측정 후 판단') vs 행 83(N<30 시 생산성 KPI 단독 Phase B 진입)",
+      "alt": "행 83 수정: 'N<30 시 Phase B 비즈니스 KPI 측정 불가 → Phase B 보류 (생산성 KPI 만족 시에도 PO 별도 승인 필수)'"
+    },
+    {
+      "id": "n4",
+      "subject": "A0 게이트 통과 조건 미정의",
+      "evidence": "c2_fix.md 행 48('N에 따라 다음 분기 결정')",
+      "alt": "행 48 보강: 'A0 게이트 통과 조건 = (a) Vercel Analytics 운영 ≥4주, (b) N 데이터 확보, (c) PO 승인 — 3건 모두 충족 시 A1 진입'"
+    },
+    {
+      "id": "n5",
+      "subject": "다크모드 토큰 분기 미설계",
+      "evidence": "c2_fix.md 행 98~104 토큰 정의 — :root만 정의, [data-theme=dark] 슬롯 없음",
+      "alt": "행 104 다음에 ':root[data-theme=dark] {/* TODO: Phase A1 산출물 D-2 */}' 슬롯 추가"
+    }
+  ],
+  "stage_s5_step1_responses": {
+    "n1": {"e1": "a", "e2": "a", "e3": "a"},
+    "n2": {"e1": "a", "e2": "a", "e3": "a"},
+    "n3": {"e1": "a", "e2": "a", "e3": "b"},
+    "n4": {"e1": "a", "e2": "a", "e3": "a"},
+    "n5": {"e1": "a", "e2": "b", "e3": "a"}
+  },
+  "stage_s5_step1_notes": {
+    "n3_e3_partial": "E3는 '비즈니스 KPI 보류' 자체에는 동의하나 '생산성 KPI 만족 시에도 PO 승인 필수'는 게이트가 너무 엄격 — 시각 개선이 사용자 만족도 향상에 직결되는데 ROI 측정 부재로 막는 것은 디자인 가치 과소평가. 부분 수용",
+    "n5_e2_skip": "E2는 다크모드를 비즈니스 KPI 관점에서 우선순위 낮음 — Phase A1 슬롯보다 Phase B 이후 별도 검토 권장. 부분 수용"
+  },
+  "stage_s5_step2_aggregation": {
+    "e1": {"c3_start": 0.62, "c3_end": 0.65, "delta_c2c3": 0.25, "conf": 0.81},
+    "e2": {"c3_start": 0.35, "c3_end": 0.45, "delta_c2c3": 0.25, "conf": 0.74},
+    "e3": {"c3_start": 0.32, "c3_end": 0.42, "delta_c2c3": 0.27, "conf": 0.78},
+    "da": {"c3_start": 0.00, "c3_end": 0.00, "delta_c2c3": 0.00, "conf": 0.80}
+  },
+  "stage_s5_step3_convergence": {
+    "condition_1_delta_under_0.1": "false (E1 0.25, E2 0.25, E3 0.27 — 모두 ≥0.1)",
+    "condition_2_avg_conf_over_0.6": "true (평균 0.776, DA 제외)",
+    "condition_3_new_evidence_under_10pct": "false — DA 신규 반론 5건 추가 (전체 가정 12건 중 5건 신규 = 41.6% > 10% 임계값)",
+    "verdict": "미수렴",
+    "emergent_event": "군중효과 약화 — Cycle 2의 일제 +0.55 패턴 대신 E1만 +0.65, E2 +0.45, E3 +0.42로 분산. 양보 카르텔 의심 해소되고 정상 수렴 패턴",
+    "secondary_signal": "표준편차 0.14→0.10→0.10 (Cycle 1→2→3) — 점진 수렴 진행 중이나 정량 임계값 미달"
+  }
+}

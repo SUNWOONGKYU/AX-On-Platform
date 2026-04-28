@@ -1,0 +1,33 @@
+{
+  "cycle": 5,
+  "judge_quality": {
+    "e1": {"logic": 0.93, "evidence": 0.90, "reality": 0.86, "quality": 0.904, "note": "토큰명 통일·재사용률 단위·그룹 배정 룰 모두 행 단위 인용. workflow 5단계 자가 점검 일관"},
+    "e2": {"logic": 0.94, "evidence": 0.90, "reality": 0.86, "quality": 0.908, "note": "옵션 A/B 선택지 수치적 분석 + N<30 모순 발견 + 통계 요건 정교"},
+    "e3": {"logic": 0.89, "evidence": 0.86, "reality": 0.84, "quality": 0.868, "note": "accent-neutral → accent-formal 권고 일관, 토큰-무드 검증 기준 v6 제시"},
+    "da": {"logic": 0.96, "evidence": 0.96, "reality": 0.86, "quality": 0.940, "note": "v5-x1~x4 신규 4건 모두 행 단위 인용, '수렴 정체 vs 정밀화 함정' 메타 분석"}
+  },
+  "bpi_calculation": {
+    "numerator": "(0.85×0.86×0.904) + (0.74×0.83×0.908) + (0.65×0.80×0.868) + (0×0.74×0.940)",
+    "numerator_value": 1.6592,
+    "denominator": "(0.86×0.904) + (0.83×0.908) + (0.80×0.868) + (0.74×0.940)",
+    "denominator_value": 2.8973,
+    "bpi": 0.5727,
+    "bpi_index": 57,
+    "interpretation": "강한 긍정 (C4 +46에서 +11 추가 상승)"
+  },
+  "score_100": {
+    "category_scores": {
+      "디자인_일관성": {"max": 20, "c4": 18, "c5": 19, "delta": 1, "reason": "warm-orange → --accent-warm 통일 +1, accent-neutral 네이밍 정체성 잔존 -1"},
+      "사용자_여정_명확성": {"max": 20, "c4": 16, "c5": 17, "delta": 1, "reason": "4그룹 배정 룰 3단계 명시 +2, 옵션 B 단독 N<30 통계 무의미 -1"},
+      "브랜드_차별화": {"max": 15, "c4": 12, "c5": 13, "delta": 1, "reason": "Legal 무채색 + slate-700 강조 정합 +1, accent-neutral 명명 미해소 -1"},
+      "실행_가능성": {"max": 15, "c4": 14, "c5": 14, "delta": 0, "reason": "A0 Task 통합 +1, PO 검토 기간 미추정 -1"},
+      "측정_가능성": {"max": 15, "c4": 13, "c5": 14, "delta": 1, "reason": "Vercel 운영 정량 + CSS 중복 라인 단위 +2, 95% CI vs N<30 모순 -1"},
+      "비즈니스_정합성": {"max": 15, "c4": 13, "c5": 14, "delta": 1, "reason": "PO 승인 기준 표 3건 +2, A1 산출물 가치 검증 부재 -1"}
+    },
+    "total_c4": 86,
+    "total_c5": 91,
+    "delta": 5,
+    "interpretation": "C4 신규 4건 + 잔여 3건 모두 반영. 잔여 4건(v5-x1~x4)은 모두 마이크로 디테일 — A0 킥오프 워크숍에서 해소 가능. 91점은 PO 결재 충분"
+  },
+  "verdict": "거의 수렴 + 91/100. Cycle 5 강제 종료 — 수확 체감 명확. C4→C5 점수 증가폭 +5, BPI 증가폭 +11 모두 직전 사이클보다 작음. 추가 사이클 시 변동 폭 ±2점 수준 예상"
+}

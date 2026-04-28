@@ -1,0 +1,38 @@
+{
+  "cycle": 2,
+  "stage_s3": {
+    "assumptions": 12,
+    "by_class": {
+      "self_verifiable": ["g3부분", "g4", "g9", "g11", "g12"],
+      "external_needed": ["g2", "g3부분", "g6", "g8부분"],
+      "fundamentally_uncertain": ["g1", "g5", "g7", "g8부분", "g10"]
+    }
+  },
+  "stage_s4_da_rebuttals": [
+    {"id": "n1", "subject": "KPI 목표값 모두 TODO — Phase A 성공 판정 불가", "alt": "A0(측정인프라) + A1(시각통일) 분리"},
+    {"id": "n2", "subject": "Phase B ROI 임계값 부재 = 결정 회피", "alt": "임계값 표 추가 (+5%/+1~5%/-1%)"},
+    {"id": "n3", "subject": "단일 시스템 + 페이지 정체성 모순 — 5페이지 amber 동일 카테고리", "alt": "8페이지 4그룹화 (Legal/Conversion/Content/Community)"},
+    {"id": "n4", "subject": "트래픽 볼륨 N 미공개", "alt": "N 명시, N<100/일이면 측정 4주 연장"},
+    {"id": "n5", "subject": "80% 효과 분모 부재", "alt": "분모 명시 또는 80% 문구 삭제"}
+  ],
+  "stage_s5_step1_responses": {
+    "n1": {"e1": "a", "e2": "a", "e3": "a"},
+    "n2": {"e1": "b", "e2": "a", "e3": "a"},
+    "n3": {"e1": "b", "e2": "b", "e3": "a"},
+    "n4": {"e1": "a", "e2": "a", "e3": "a"},
+    "n5": {"e1": "a", "e2": "b", "e3": "a"}
+  },
+  "stage_s5_step2_aggregation": {
+    "e1": {"c2_start": 0.45, "c2_end": 0.40, "delta_c1c2": -0.05, "conf": 0.78},
+    "e2": {"c2_start": 0.05, "c2_end": 0.20, "delta_c1c2": 0.15, "conf": 0.62},
+    "e3": {"c2_start": -0.05, "c2_end": 0.15, "delta_c1c2": 0.20, "conf": 0.74},
+    "da": {"c2_start": 0.00, "c2_end": 0.00, "delta_c1c2": 0.00, "conf": 0.74}
+  },
+  "stage_s5_step3_convergence": {
+    "condition_1_delta_under_0.1": false,
+    "condition_2_avg_conf_over_0.6": true,
+    "condition_3_new_evidence_under_10pct": false,
+    "verdict": "미수렴",
+    "emergent_event": "전환점 (E2/E3 후퇴) + 군중효과 (DA 영향)"
+  }
+}

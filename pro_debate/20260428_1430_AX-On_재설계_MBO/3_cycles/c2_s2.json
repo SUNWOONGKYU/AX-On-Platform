@@ -1,0 +1,27 @@
+{
+  "cycle": 2,
+  "stage": "S2_cross_debate",
+  "stance_updates": {
+    "e1": {"prev": 0.55, "new": 0.62, "delta": 0.07, "conf_prev": 0.78, "conf_new": 0.71},
+    "e2": {"prev": 0.55, "new": 0.50, "delta": -0.05, "conf_prev": 0.72, "conf_new": 0.74},
+    "e3": {"prev": 0.55, "new": 0.50, "delta": -0.05, "conf_prev": 0.72, "conf_new": 0.68},
+    "da": {"prev": 0.00, "new": 0.00, "delta": 0.00, "conf_prev": 0.72, "conf_new": 0.74}
+  },
+  "halluc_judgments": {
+    "e1": "DOUBT — 토큰 5종 본문 vs Phase A 3종 리스크 모순 인정",
+    "e2": "DOUBT — 벤치마크 수치 출처 부재 인정",
+    "e3": "DOUBT — visual identity 2분류 시드 근거 부재 인정",
+    "da_self": "2 FACT (트래픽·인과) + 2 DOUBT (ROI 임계값·본문/리스크 모순)"
+  },
+  "key_insights": {
+    "da_charge": "양보 카르텔 — 3 페르소나가 자기 영역만 OK 도장 찍고 교차 검증 없이 +0.55 동시 수렴",
+    "e1_admits": "본문/리스크 숫자 모순 + weight 토큰·아이콘 시스템 누락 인정",
+    "e2_proposes": "MDE 3%p α=0.05 power=0.8 기준 샘플 사이즈 가정, atomic 릴리즈, Phase B Go/No-Go 임계값",
+    "e3_proposes": "fluid는 spacing·weight까지 확장, 시각 앵커 명세 보강, Phase B 항목 P0 승격"
+  },
+  "convergence_signals": {
+    "all_delta_under_0.1": true,
+    "avg_conf_excl_da": 0.71,
+    "consensus_strength": "표면 합의는 있으나 DA가 양보 카르텔 의혹 제기 — 진짜 수렴인지 의문"
+  }
+}
