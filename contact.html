@@ -302,6 +302,9 @@ a:hover { text-decoration: underline; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 </style>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
 </head>
 <body>
 
@@ -343,7 +346,7 @@ a:hover { text-decoration: underline; }
   <div id="formView">
     <div class="contact-header">
       <h1 class="contact-title">문의<span>하기</span></h1>
-      <p class="contact-desc">AX-On Platform에 대한 문의사항이 있으시면 아래 양식을 작성해 주세요.<br>확인 후 빠르게 답변 드리겠습니다.</p>
+      <p class="contact-desc">AX-On Platform에 대한 문의사��이 있으시면 아래 양식을 작성해 주세요.<br>확인 후 빠르게 답변 드리겠습니다.</p>
     </div>
 
     <form id="contactForm" novalidate>
@@ -509,7 +512,7 @@ async function doLogout() {
   location.reload();
 }
 
-// ── Sanitize helper ──
+// ─��� Sanitize helper ──
 function sanitize(str) {
   if (!str) return '';
   if (typeof DOMPurify !== 'undefined') return DOMPurify.sanitize(str, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
