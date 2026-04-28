@@ -63,6 +63,23 @@
   --fw-lead: 500; /* H2 직하 리드 카피 */
   --fw-body: 400; /* Body */
 
+  /* TYPOGRAPHY SCALE — 전 페이지 통합 위계 (P3) */
+  --fs-display: clamp(34px, 4.4vw, 46px); /* Hero/Page 최상위 H1 */
+  --fs-h1:      clamp(28px, 3.4vw, 38px); /* Page H1 */
+  --fs-h2:      clamp(22px, 2.6vw, 28px); /* Section H2 */
+  --fs-h3:      clamp(18px, 1.9vw, 21px); /* Subsection / Card title */
+  --fs-h4:      16px;                     /* Card sub heading */
+  --fs-lead:    clamp(16px, 1.5vw, 18px); /* Subtitle / lead */
+  --fs-body:    16px;                     /* Body text */
+  --fs-small:   14px;                     /* Small / footer */
+  --fs-tiny:    13px;                     /* Eyebrow / tag */
+  --fs-mega:    clamp(36px, 5vw, 52px);   /* Stats numbers */
+
+  --lh-tight:  1.25;
+  --lh-snug:   1.4;
+  --lh-normal: 1.65;
+  --lh-loose:  1.8;
+
   /* HOVER — P2.2 4-tier (요소별 차등 피드백) */
   --hover-cta-tf: scale(1.02);
   --hover-cta-shadow: 0 4px 16px rgba(232,146,13,0.28);
