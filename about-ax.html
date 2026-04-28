@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="description" content="AX란 무엇인가 — 1 Goal · 12 Areas · DID · 5 Phases 골격으로 정리한 AI Transformation의 정의와 추진 체계.">
+<meta name="description" content="AX란 무엇인가 — 1 Goal · Areas · DID · 5 Phases 골격으로 정리한 AI Transformation의 정의와 추진 체계.">
 <meta property="og:title" content="AX란 무엇인가 — AX-On Platform">
-<meta property="og:description" content="AX = 12 Areas 업무 프로세스 혁신 ←→ DID 데이터·의사결정 흐름 혁신. 두 축의 유기적 순환이 ROI 증대의 근원.">
+<meta property="og:description" content="AX = Areas 업무 프로세스 혁신 ←→ DID 데이터·의사결정 흐름 혁신. 두 축의 유기적 순환이 ROI 증대의 근원.">
 <meta property="og:image" content="https://www.ax-on.net/images/og-default.svg">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.ax-on.net/about-ax.html">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
 <title>AX란 무엇인가 — AX-On Platform</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="css/common.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://gifxpfdnnfwufzdncmor.supabase.co" crossorigin>
+<link rel="preload" href="/fonts/NotoSansKR-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/NotoSansKR-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
 <style>
 html { scroll-behavior: smooth; }
 body {
@@ -159,7 +159,8 @@ body {
   font-family: 'Outfit', sans-serif;
   font-size: 11px; font-weight: 800; letter-spacing: 2px;
   padding: 4px 10px; border-radius: 6px;
-  background: var(--ink); color: #fff;
+  background: var(--amber-soft); color: var(--amber-deep);
+  border: 1px solid var(--border-amber);
 }
 .fw-block.fw-goal .fw-tag { background: var(--amber); }
 .fw-block.fw-how .fw-tag { background: var(--teal); }
@@ -268,18 +269,12 @@ body {
   content: '·'; color: var(--amber); margin-right: 6px; font-weight: 700;
 }
 .did-loop {
-  background: var(--ink); color: #fff;
+  background: var(--surface-deep); color: var(--ink);
   border-radius: 12px; padding: 16px 22px;
   margin: 18px 0; text-align: center;
   font-size: 15px; line-height: 1.85;
+  border: 1px solid var(--border-soft);
 }
-.patent-badge-inline {
-  display: inline-block; font-size: 11px; font-weight: 700;
-  color: var(--amber); background: var(--amber-glow);
-  padding: 3px 10px; border-radius: 8px; letter-spacing: 0.5px;
-  vertical-align: middle; margin-left: 8px;
-}
-
 /* PHASES (§5) */
 .phase-flow {
   display: grid; grid-template-columns: repeat(5, 1fr);
@@ -429,65 +424,7 @@ body {
 .effect-card .ef-title { font-size: 16px; font-weight: 800; color: var(--amber); margin-bottom: 8px; }
 .effect-card .ef-body { font-size: 14px; color: var(--ink-muted); line-height: 1.85; }
 
-/* CTA */
-.page-cta {
-  background: linear-gradient(135deg, var(--ink), #2a2a4e);
-  padding: 56px 40px; margin-top: 40px;
-  text-align: center; color: #fff;
-}
-.page-cta .cta-title {
-  font-size: clamp(22px, 3.2vw, 30px);
-  font-weight: 900; line-height: 1.4;
-  margin-bottom: 24px; word-break: keep-all;
-}
-.page-cta .cta-actions {
-  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-}
-.cta-btn {
-  display: inline-block; padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 15px; font-weight: 700;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-.cta-btn-primary { background: var(--amber); color: #fff; }
-.cta-btn-primary:hover { background: var(--amber-light); transform: translateY(-2px); }
-.cta-btn-outline {
-  background: transparent; color: #fff;
-  border: 2px solid rgba(255,255,255,0.3);
-}
-.cta-btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
-
-/* TABLE OF CONTENTS (right floating) */
-.toc {
-  position: fixed; right: 24px; top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(26,26,46,0.08);
-  border-radius: 14px;
-  padding: 14px 18px; max-width: 220px;
-  z-index: 50; font-size: 13px;
-  box-shadow: var(--shadow-soft);
-}
-.toc-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11px; font-weight: 800;
-  letter-spacing: 2px; color: var(--amber);
-  margin-bottom: 8px;
-}
-.toc a {
-  display: block; padding: 5px 0;
-  color: var(--ink-muted); text-decoration: none;
-  font-size: 13px;
-  transition: color 0.2s;
-}
-.toc a:hover { color: var(--amber); }
-
 /* RESPONSIVE */
-@media (max-width: 1180px) {
-  .toc { display: none; }
-}
 @media (max-width: 768px) {
   .page-hero { padding: 96px 16px 40px; }
   .doc-section { padding: 40px 16px; }
@@ -499,13 +436,19 @@ body {
   .phase-flow { grid-template-columns: repeat(2, 1fr); }
   .culture-steps { grid-template-columns: repeat(2, 1fr); }
   .effect-grid { grid-template-columns: 1fr; }
-  .page-cta { padding: 40px 16px; }
   .fw-block { padding: 16px 18px; }
-  .resistance-table th, .resistance-table td { padding: 10px 12px; font-size: 13px; }
+  .resistance-table th, .resistance-table td { padding: 10px 12px; font-size: 13px; word-break: keep-all; }
+  .area-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .area-card { padding: 10px 8px; }
+  .doc-h2 { font-size: 22px; }
+  .doc-h3 { font-size: 16px; }
+  .doc-p, .doc-lead { font-size: 14.5px; }
 }
 @media (max-width: 480px) {
   .phase-flow { grid-template-columns: 1fr; }
   .culture-steps { grid-template-columns: 1fr; }
+  .resistance-table { font-size: 12px; }
+  .resistance-table th, .resistance-table td { padding: 8px 8px; }
 }
 </style>
 </head>
@@ -521,7 +464,7 @@ body {
       <div class="logo-text">AX-<span>On</span></div>
     </a>
     <div class="nav-links" id="navLinks">
-      <a href="about-ax.html" class="active" style="color:var(--violet);font-weight:700">AX란?</a>
+      <a href="about-ax.html" class="active">AX란?</a>
       <a href="methodology.html">방법론</a>
       <a href="pool.html">전문가 풀</a>
       <a href="community.html">커뮤니티</a>
@@ -538,18 +481,6 @@ body {
   </div>
 </nav>
 
-<!-- TOC -->
-<aside class="toc" aria-label="페이지 목차">
-  <div class="toc-title">CONTENTS</div>
-  <a href="#sec-1">§1. AX란 무엇인가</a>
-  <a href="#sec-2">§2. AX의 기본 체계</a>
-  <a href="#sec-3">§3. 12 Areas</a>
-  <a href="#sec-4">§4. DID System</a>
-  <a href="#sec-5">§5. 5 Phases</a>
-  <a href="#sec-6">§6. AX 문화</a>
-  <a href="#sec-7">§7. 도입 효과</a>
-</aside>
-
 <!-- PAGE HERO -->
 <header class="page-hero" id="main-content">
   <div class="page-hero-inner">
@@ -557,7 +488,7 @@ body {
     <h1 class="page-title">AX란 무엇인가</h1>
     <p class="page-subtitle">
       AX(AI Transformation)는 단순한 AI 도구 도입이 아닙니다.<br>
-      <strong style="color:var(--ink)">12 Areas 업무 프로세스 혁신</strong>과
+      <strong style="color:var(--ink)">Areas 업무 프로세스 혁신</strong>과
       <strong style="color:var(--ink)">DID 데이터·의사결정 흐름 혁신</strong>의
       유기적 순환으로 ROI를 증대시키고 기업가치를 상승시키는 전사적 변혁입니다.
     </p>
@@ -600,7 +531,7 @@ body {
   <h2 class="doc-h2" id="sec-2-title">AX의 기본 체계 — 1·2·3·5</h2>
   <p class="doc-lead">
     AX-On 방법론의 골격은 다음과 같습니다:
-    <strong>1 Goal · 12 Areas · DID · 5 Phases</strong>.
+    <strong>1 Goal · Areas · DID · 5 Phases</strong>.
     GOAL이 위에 있고, 그 아래 두 축(WHAT·SYSTEM)이 마주 보며, 다시 그 아래 실행 여정(HOW)이 받칩니다.
   </p>
 
@@ -616,7 +547,7 @@ body {
       <div class="axes-diagram" style="width:100%;padding:0;">
         <div class="axis-card">
           <div class="axis-label">WHAT</div>
-          <div class="axis-name">12 Areas</div>
+          <div class="axis-name">Areas</div>
           <div class="axis-desc">업무 프로세스 혁신</div>
         </div>
         <div class="axis-arrow">←→</div>
@@ -647,45 +578,45 @@ body {
     3방향 복합 효과를 목표로 합니다.
   </p>
 
-  <h3 class="doc-h3">2.2  양 축 — 12 Areas ←→ DID</h3>
+  <h3 class="doc-h3">2.2  양 축 — Areas ←→ DID</h3>
   <p class="doc-p">
     AX는 두 축의 동시 혁신입니다. 한 축만으로는 AX가 성립하지 않습니다.
   </p>
   <p class="doc-p">
-    · <strong>12 Areas</strong>에서는 <strong>업무 프로세스 자체</strong>가 혁신됩니다. 각 영역의 반복 업무가 AI로 대체되고, 담당자는 고부가 판단 업무에 집중합니다.<br>
+    · <strong>Areas</strong>에서는 <strong>업무 프로세스 자체</strong>가 혁신됩니다. 각 영역의 반복 업무가 AI로 대체되고, 담당자는 고부가 판단 업무에 집중합니다.<br>
     · <strong>DID 시스템</strong>에서는 <strong>데이터 → 정보 → 의사결정의 흐름</strong>이 혁신됩니다. 현장 데이터가 실시간으로 수집·분석되어 경영진의 의사결정 품질이 높아집니다.
   </p>
 
   <h3 class="doc-h3">2.3 ★ 양쪽 혁신의 유기적 순환</h3>
   <div class="kd-quote">
-    "12 Areas의 업무 혁신이 DID 시스템의 입력 데이터 품질을 높이고,
+    "Areas의 업무 혁신이 DID 시스템의 입력 데이터 품질을 높이고,
     DID 시스템의 의사결정 지원이 다시 각 Area의 업무 방향을 개선합니다.
     <strong>이 유기적 순환이 ROI 증대의 근원</strong>입니다."
     <span class="quote-source">— AX-On 방법론 「양쪽 혁신의 관계」</span>
   </div>
   <div class="callout-amber">
-    이 순환이 약하면 — 즉 12 Areas만 혁신하거나 DID만 구축하면 — AX는 중간에 멈춥니다.
+    이 순환이 약하면 — 즉 Areas만 혁신하거나 DID만 구축하면 — AX는 중간에 멈춥니다.
     AX-On이 두 축을 함께 다루는 이유입니다.
   </div>
   </div>
 </section>
 
-<!-- ─── §3. 12 Areas ─── -->
+<!-- ─── §3. Areas ─── -->
 <section class="doc-section" id="sec-3" aria-labelledby="sec-3-title">
   <div class="doc-eyebrow">§ 3 · AXIS ① — 12 AREAS</div>
-  <h2 class="doc-h2" id="sec-3-title">축 ① &nbsp;12 Areas — 업무 프로세스 혁신</h2>
+  <h2 class="doc-h2" id="sec-3-title">축 ① &nbsp;Areas — 업무 프로세스 혁신</h2>
   <p class="doc-lead">
     기업의 모든 업무를 빠짐없이 AI로 재설계하기 위한 첫 번째 축입니다.
-    핵심 서비스 / 사업 지원 / 관리 3분류로 모든 영역을 포괄합니다.
+    목적사업 / 사업 지원 / 관리 3분류로 모든 영역을 포괄합니다.
   </p>
 
-  <h3 class="doc-h3">3.1  3분류 — 핵심 서비스 · 사업 지원 · 관리</h3>
+  <h3 class="doc-h3">3.1  3분류 — 목적사업 · 사업 지원 · 관리</h3>
   <p class="doc-p">
     어떤 산업이든 기업의 업무는 크게 셋으로 나뉩니다:
-    <strong>핵심 서비스 Area</strong>(고객·시장과 직접 만나는 본업),
+    <strong>목적사업 Area</strong>(고객·시장과 직접 만나는 본업),
     <strong>사업 지원 Area</strong>(R&D·영업·홍보·고객관리),
     <strong>관리 Area</strong>(회계·인사·총무 — 모든 회사 공통).
-    AX는 어느 한쪽에 치우치지 않고 12개 Area를 동시에 다룹니다.
+    AX는 어느 한쪽에 치우치지 않고 기업의 전 Area를 동시에 다룹니다.
   </p>
 
   <h3 class="doc-h3">3.2  두 종류의 시스템이 있다</h3>
@@ -709,21 +640,12 @@ body {
     업무별 운영 시스템에서 생성되는 도면·측정값·거래 데이터가 모두 포함됩니다.
   </div>
 
-  <h3 class="doc-h3">3.3  분야별 모듈은 별도 카탈로그로</h3>
+  <h3 class="doc-h3">3.3  산업별 Areas 구성 예 — 엔지니어링 (KD 엔지니어링 사례)</h3>
   <p class="doc-p">
-    AX-On은 산업·기능 분야별로 적용 가능한 모듈을 별도 카탈로그로 정리합니다.
-    15개 기능분야 · 155개+ 모듈 · 14개 산업특화 · 5단계 기업 규모별 로드맵.
-  </p>
-  <p style="margin-top:14px;">
-    <a href="methodology.html#modules" class="intro-cta" style="display:inline-block;background:var(--amber);">분야별 모듈 카탈로그 보기 →</a>
+    Areas의 개수와 구성은 산업·기업마다 다릅니다. 아래는 기반시설·환경 엔지니어링 기업(KD 엔지니어링)의 Areas 구성 사례입니다 — 목적사업 5, 사업지원 4, 관리 3.
   </p>
 
-  <h3 class="doc-h3">3.4  산업별 12 Areas 구성 예 — 엔지니어링</h3>
-  <p class="doc-p">
-    기반시설·환경 엔지니어링 기업의 12 Areas는 다음과 같이 구성됩니다.
-  </p>
-
-  <div class="area-class-label">핵심 서비스 Area (5)</div>
+  <div class="area-class-label">목적사업 Area (5)</div>
   <div class="area-grid">
     <div class="area-card"><div class="area-code">TR</div><div class="area-name">교통·도로</div></div>
     <div class="area-card"><div class="area-code">EN</div><div class="area-name">환경</div></div>
@@ -748,7 +670,7 @@ body {
   </div>
 
   <p class="doc-p" style="margin-top:18px;font-size:13px;">
-    ※ 산업이 다르면 핵심 서비스 Area의 코드와 명칭이 달라집니다(예: 제조업은 PR/QM/PD/SCM 등).
+    ※ 산업이 다르면 목적사업 Area의 코드와 명칭이 달라집니다(예: 제조업은 PR/QM/PD/SCM 등).
     사업 지원·관리 Area는 대부분 공통 구조를 따릅니다.
   </p>
 </section>
@@ -759,11 +681,10 @@ body {
   <div class="doc-eyebrow">§ 4 · AXIS ② — DID SYSTEM</div>
   <h2 class="doc-h2" id="sec-4-title">
     축 ② &nbsp;DID System — 데이터·의사결정 혁신
-    <span class="patent-badge-inline">특허 출원</span>
   </h2>
   <p class="doc-lead">
     DID는 <strong>D</strong>ata → <strong>I</strong>nformation → <strong>D</strong>ecision의 흐름을 AI로 끝까지 연결하는 두 번째 축입니다.
-    12 Areas의 업무에서 발생하는 모든 데이터가 의사결정 품질로 이어지도록 설계됩니다.
+    Areas의 업무에서 발생하는 모든 데이터가 의사결정 품질로 이어지도록 설계됩니다.
   </p>
 
   <h3 class="doc-h3">4.1  한 줄 — D → I → D 흐름을 끝까지 연결</h3>
@@ -779,7 +700,6 @@ body {
       <ul class="layer-list">
         <li>"조직의 모든 업무 데이터" 분류</li>
         <li>AI 역할 자동 적용</li>
-        <li>등급별 저장 (Bronze/Silver/Gold)</li>
       </ul>
     </div>
     <div class="did-layer layer-2">
@@ -789,7 +709,6 @@ body {
         <li>현황 분석 엔진</li>
         <li>분석 엔진</li>
         <li>분석 기반 예측 엔진</li>
-        <li>AI 집단지성 시뮬레이션</li>
       </ul>
     </div>
     <div class="did-layer layer-3">
@@ -807,23 +726,15 @@ body {
   <p class="doc-p">
     조직에서 만들어지는 모든 업무 데이터를 분류하고, 데이터의 성격에 맞는 AI 역할을 자동으로 적용합니다.
   </p>
-  <p class="doc-p">
-    · <strong>작성 보조자(Co-writer)</strong>: 사람이 만드는 문서 데이터에 대해 AI가 작성·검토를 보조<br>
-    · <strong>능동 처리자(Active Processor)</strong>: 시스템이 만들어내는 비문서 데이터를 AI가 능동적으로 수집·처리
-  </p>
-  <p class="doc-p">
-    분류·처리된 데이터는 활용도와 신뢰도에 따라 <strong>Bronze · Silver · Gold</strong> 3등급으로 저장되어 Layer 2가 활용합니다.
-  </p>
 
-  <h3 class="doc-h3">4.3  Layer 2 — 정보 시스템 (4 병렬 엔진)</h3>
+  <h3 class="doc-h3">4.3  Layer 2 — 정보 시스템 (3 병렬 엔진)</h3>
   <p class="doc-p">
-    Layer 1의 데이터는 4개의 병렬 엔진을 거쳐 의사결정에 쓸 수 있는 정보로 변환됩니다.
+    Layer 1의 데이터는 3개의 병렬 엔진을 거쳐 의사결정에 쓸 수 있는 정보로 변환됩니다.
   </p>
   <p class="doc-p">
     ① <strong>현황 엔진</strong> — 지금 어떤 상태인가<br>
     ② <strong>분석 엔진</strong> — 왜 그런가<br>
-    ③ <strong>분석 기반 예측 엔진</strong> — 앞으로 어떻게 될 것인가<br>
-    ④ <strong>AI 집단지성 시뮬레이션</strong> — 만약 이렇게 한다면?
+    ③ <strong>분석 기반 예측 엔진</strong> — 앞으로 어떻게 될 것인가
   </p>
 
   <h3 class="doc-h3">4.4  Layer 3 — 의사결정 시스템 (3 계층 차별 지원)</h3>
@@ -834,15 +745,6 @@ body {
     · <strong>실무자</strong>: 즉시 행동 가능한 추천<br>
     · <strong>중간관리자</strong>: 자원 배분·우선순위 판단<br>
     · <strong>경영진</strong>: 시나리오·리스크·기회의 큰 그림
-  </p>
-
-  <h3 class="doc-h3">4.5  자가 개선 순환</h3>
-  <div class="did-loop">
-    L3 의사결정 결과 → 실행 → 새로운 데이터 발생 → <strong>다시 L1으로 유입</strong> → 시스템이 스스로 개선
-  </div>
-  <p class="doc-p">
-    DID는 한 방향 파이프라인이 아니라 <strong>L1 → L2 → L3 → L1</strong>의 닫힌 루프입니다.
-    의사결정의 결과가 다시 데이터로 들어오면서 시스템이 시간이 지날수록 똑똑해집니다.
   </p>
 
   <div class="callout-amber">
@@ -857,7 +759,7 @@ body {
   <div class="doc-eyebrow">§ 5 · HOW</div>
   <h2 class="doc-h2" id="sec-5-title">5 Phases — AX 추진 여정</h2>
   <p class="doc-lead">
-    12 Areas와 DID, 두 축의 혁신을 실제로 실행하기 위한 5단계입니다.
+    Areas와 DID, 두 축의 혁신을 실제로 실행하기 위한 5단계입니다.
     교육+진단으로 시작해 지속적 혁신으로 이어집니다. 총 7개월 + 상시 운영.
   </p>
 
@@ -877,7 +779,7 @@ body {
       <tr>
         <td>1단계 교육+진단</td>
         <td>4주</td>
-        <td>전사 AI 리터러시 교육 + 12 Areas 현황 진단 + AX 마스터플랜</td>
+        <td>전사 AI 리터러시 교육 + Areas 현황 진단 + AX 마스터플랜</td>
       </tr>
       <tr>
         <td>2단계 설계</td>
@@ -897,7 +799,7 @@ body {
       <tr>
         <td>5단계 지속적 혁신</td>
         <td>상시</td>
-        <td>운영·확장 + DID 자가 개선 루프 가동 + 신규 모듈 추가</td>
+        <td>운영·확장 + 신규 모듈 추가</td>
       </tr>
     </tbody>
   </table>
@@ -1032,21 +934,11 @@ body {
   </div>
 
   <div class="callout-amber" style="text-align:center;font-weight:700;font-size:16px;">
-    AX-On은 12 Areas × DID × 5 Phases × AX 문화 — 4가지가 함께 굴러가도록 기업 AX 프로젝트를 설계·실행합니다.
+    AX-On은 Areas × DID × 5 Phases × AX 문화 — 4가지가 함께 굴러가도록 기업 AX 프로젝트를 설계·실행합니다.
   </div>
 </section>
 
 </main>
-
-<!-- CTA -->
-<section class="page-cta">
-  <h2 class="cta-title">AX-On이 함께합니다.</h2>
-  <div class="cta-actions">
-    <a href="methodology.html" class="cta-btn cta-btn-primary">방법론 자세히 보기 →</a>
-    <a href="pool.html" class="cta-btn cta-btn-outline">전문가 풀 보기</a>
-    <a href="contact.html" class="cta-btn cta-btn-outline">문의하기</a>
-  </div>
-</section>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -1069,7 +961,7 @@ body {
 </footer>
 
 <script src="js/config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 <script>
 // Nav scroll
 const nav = document.getElementById('nav');
@@ -1097,7 +989,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && navLinks
 
 // Auth (간단 버전 — 로그인 시 우측 상단 로그아웃 버튼 표시)
 let _sb = null;
-const _sbReady = AXON_CONFIG.init().then(() => {
+const _sbReady = Promise.all([AXON_CONFIG.init(), whenSupabaseReady()]).then(() => {
   if (typeof window.supabase !== 'undefined') {
     _sb = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
   }
