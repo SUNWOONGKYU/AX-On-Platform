@@ -3,42 +3,6 @@
    S7FE1: 공통 스타일 분리
    ============================================================ */
 
-/* ── SELF-HOSTED FONTS (LCP 최적화: chain 3→1) ──
-   - 시스템 fallback (Apple SD Gothic Neo / Malgun Gothic) 으로 cmap 미존재 글리프 자동 대체
-   - swap: 폰트 로드 전 fallback 텍스트 즉시 표시 (FCP 단축) */
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/NotoSansKR-Regular.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0-00FF, U+2010-2027, U+AC00-D7A3;
-}
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/NotoSansKR-Bold.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0-00FF, U+2010-2027, U+AC00-D7A3;
-}
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/Outfit-Bold.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0-00FF;
-}
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url('/fonts/Outfit-ExtraBold.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0-00FF;
-}
-
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

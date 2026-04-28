@@ -1,0 +1,24 @@
+AX-On Platform v3 배포 완료
+============================
+
+커밋: 5d35878
+브랜치: main
+푸시 시각: 2026-04-27
+
+신규/변경 페이지
+- https://www.ax-on.net/                  (index — AX란?·방법론 요약 섹션 추가)
+- https://www.ax-on.net/about-ax.html     (NEW — 7섹션 KD 정합 구조)
+- https://www.ax-on.net/methodology.html  (NEW — PART 1 이론 + PART 2 실행 자산)
+- https://www.ax-on.net/pool.html         (nav 4-메뉴)
+- https://www.ax-on.net/community.html    (nav 4-메뉴)
+- https://www.ax-on.net/contact.html      (nav 4-메뉴)
+- https://www.ax-on.net/terms.html        (nav 4-메뉴, 깨진 링크 제거)
+- https://www.ax-on.net/privacy.html      (nav 4-메뉴, 깨진 링크 제거)
+
+모바일 검증 권장 (CLAUDE.md 절대 규칙):
+1) 상단 nav 4개 메뉴 전부 클릭 → 정상 라우트
+2) about-ax 좌측 TOC 7개 앵커 클릭
+3) methodology PART 1/PART 2 앵커 + CTA [방법론 전체 보기 →]
+4) terms·privacy 푸터 링크 (startup/ax-project/expert 잔여 없음 확인)
+
+Vercel 자동 배포는 푸시 후 1~3분 내 완료됩니다.
