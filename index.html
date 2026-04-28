@@ -12,11 +12,11 @@
 <meta property="og:url" content="https://www.ax-on.net">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'><rect rx='20' width='100' height='110' fill='%23e8920d'/><text x='50' y='38' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>A</text><text x='50' y='74' text-anchor='middle' dominant-baseline='central' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='65' fill='white'>X</text></svg>">
 <title>AX-On Platform</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preconnect" href="https://gifxpfdnnfwufzdncmor.supabase.co" crossorigin>
-<link rel="preload" href="/fonts/NotoSansKR-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/NotoSansKR-Bold.woff2" as="font" type="font/woff2" crossorigin>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/common.css">
 <style>
 /* index.html 전용 스타일 (공통 스타일은 css/common.css 참조) */
 
@@ -37,7 +37,7 @@ body {
 /* ── HERO ── */
 .hero {
   display: flex; align-items: center;
-  padding: 120px 40px 56px;
+  padding: 140px 40px 80px;
   position: relative; overflow: hidden;
 }
 .hero::before {
@@ -60,9 +60,9 @@ body {
 .hero-content { animation: fadeUp 1s ease 0.2s both; }
 .hero-title {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: clamp(28px, 3.6vw, 42px);
-  font-weight: 900; line-height: 1.3;
-  letter-spacing: -0.5px; margin-bottom: 20px;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900; line-height: 1.25;
+  letter-spacing: -1px; margin-bottom: 24px;
   word-break: keep-all;
 }
 .hero-title .highlight {
@@ -79,7 +79,7 @@ body {
 
 /* ── SECTION COMMON ── */
 .section {
-  padding: 72px 40px;
+  padding: 120px 40px;
   max-width: 1280px; margin: 0 auto;
 }
 .section-label {
@@ -102,7 +102,7 @@ body {
 }
 
 /* ── ABOUT-AX 요약 섹션 ── */
-.intro-section { padding: 56px 40px 28px; max-width: 1280px; margin: 0 auto; }
+.intro-section { padding: 100px 40px 40px; max-width: 1280px; margin: 0 auto; }
 .intro-card {
   background: linear-gradient(135deg, var(--surface-card), var(--surface-warm));
   border: 1px solid rgba(232, 146, 13, 0.15);
@@ -128,20 +128,14 @@ body {
 .intro-cta {
   display: inline-flex; align-items: center; gap: 8px;
   text-decoration: none; padding: 12px 28px;
-  background: var(--amber); color: #fff;
+  background: var(--ink); color: #fff;
   border-radius: 12px; font-weight: 700; font-size: 15px;
-  box-shadow: 0 4px 14px rgba(232, 146, 13, 0.25);
   transition: all 0.3s ease;
-}
-.intro-cta:hover {
-  background: var(--amber-deep);
-  box-shadow: 0 6px 18px rgba(232, 146, 13, 0.35);
-  transform: translateY(-1px);
 }
 .intro-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,26,46,0.2); }
 
 /* ── METHODOLOGY 요약 섹션 ── */
-.method-section { padding: 40px 40px 28px; max-width: 1280px; margin: 0 auto; }
+.method-section { padding: 60px 40px 40px; max-width: 1280px; margin: 0 auto; }
 .method-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 20px; margin: 36px 0 28px;
@@ -162,10 +156,20 @@ body {
 .method-card-icon { font-size: 30px; margin-bottom: 12px; }
 .method-card-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--ink); }
 .method-card-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.7; word-break: keep-all; }
+.patent-badge {
+  position: absolute; top: 16px; right: 16px;
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  color: var(--amber); background: var(--amber-glow);
+  padding: 3px 8px; border-radius: 8px;
+  letter-spacing: 0.5px;
+}
 .method-cta-wrap { text-align: center; }
 
 @media (max-width: 768px) {
-  .intro-card { padding: 28px 18px; }
+  .intro-section { padding: 80px 16px 24px; }
+  .intro-card { padding: 32px 20px; }
+  .method-section { padding: 40px 16px 24px; }
   .method-grid { grid-template-columns: 1fr; gap: 14px; }
 }
 
@@ -234,7 +238,7 @@ body {
 
 /* ── STATS ── */
 .stats-section {
-  padding: 56px 40px;
+  padding: 80px 40px;
   background: var(--surface-warm);
 }
 .stats-inner {
@@ -264,8 +268,8 @@ body {
 /* ── RESPONSIVE (index 전용) ── */
 @media (max-width: 768px) {
   /* HERO */
-  .hero { padding: 88px 16px 36px; }
-  .hero-desc { font-size: 15px; }
+  .hero { padding: 96px 16px 48px; }
+  .hero-desc { font-size: 16px; }
   .hero-actions {
     justify-content: center;
     flex-direction: column; align-items: stretch;
@@ -275,30 +279,11 @@ body {
 
   /* SECTIONS */
   .section, .stats-section {
-    padding: 48px 16px;
+    padding: 72px 16px;
   }
-  .intro-section { padding: 36px 16px 16px; }
-  .method-section { padding: 28px 16px 20px; }
 
   /* CARDS */
   .why-grid { grid-template-columns: 1fr; gap: 16px; }
-
-  /* INTRO */
-  .intro-title { font-size: 24px; }
-  .intro-desc { font-size: 15px; }
-  .intro-cta { width: 100%; justify-content: center; min-height: 48px; }
-
-  /* SECTION HEADERS */
-  .section-eyebrow { font-size: 11px; }
-  .section-title { font-size: 26px; }
-  .section-subtitle { font-size: 14.5px; }
-}
-@media (max-width: 480px) {
-  .stats-number { font-size: 44px; }
-  .stats-unit { font-size: 14px; }
-  .why-card { padding: 24px 20px; }
-  .method-card-title { font-size: 16px; }
-  .method-card-desc { font-size: 14px; }
 }
 </style>
 </head>
@@ -338,9 +323,7 @@ body {
   <div class="hero-inner">
     <div class="hero-content">
       <h1 class="hero-title">
-        AX-On이<br>
-        기업 AX 프로젝트를 이끌고,<br>
-        <span class="highlight">AI 전문가</span>가 함께합니다
+        AX-On이 기업 AX 프로젝트를 이끌고,<br><span class="highlight">AI 전문가</span>가 함께합니다
       </h1>
       <p class="hero-desc">
         AX-On은 기업 AX 프로젝트를 확보하고 주도합니다.<br>
@@ -365,7 +348,7 @@ body {
     </h2>
     <p class="intro-desc">
       AX-On은 전사적 AX 인게이지먼트 경험을 토대로 정리한
-      <strong style="color:var(--ink)">1 Goal · Areas · DID · 5 Phases</strong> 골격으로
+      <strong style="color:var(--ink)">1 Goal · 12 Areas · DID · 5 Phases</strong> 골격으로
       기업 AX를 설계·실행합니다.
     </p>
     <a href="about-ax.html" class="intro-cta">AX 자세히 알아보기 →</a>
@@ -383,22 +366,18 @@ body {
     <div class="method-card fade-in">
       <div class="method-card-icon">🔄</div>
       <div class="method-card-title">DID System</div>
-      <div class="method-card-desc">Data → Information → Decision 3 Layer 흐름. Areas 업무 혁신과 유기적 순환으로 ROI 증대.</div>
+      <div class="method-card-desc">Data → Information → Decision 3 Layer 흐름. 12 Areas 업무 혁신과 유기적 순환으로 ROI 증대.</div>
     </div>
     <div class="method-card fade-in">
+      <span class="patent-badge">특허 출원</span>
       <div class="method-card-icon">🧭</div>
       <div class="method-card-title">SAL Grid_AX</div>
       <div class="method-card-desc">Stage × Area × Level 3차원 좌표계로 프로젝트를 체계적으로 관리. 예: S1TR1, S2EN3.</div>
     </div>
     <div class="method-card fade-in">
-      <div class="method-card-icon">👥</div>
-      <div class="method-card-title">Platoon Formation</div>
-      <div class="method-card-desc">소대장 + 분대장 + 병사 + 서기 4역할의 AI 협업 운용 체계.</div>
-    </div>
-    <div class="method-card fade-in">
-      <div class="method-card-icon">🔍</div>
-      <div class="method-card-title">SAL Task Analysis</div>
-      <div class="method-card-desc">각 Task를 H·A·R·P·X 5 Parts(~26 attributes)로 분석하는 STA 도구.</div>
+      <div class="method-card-icon">📦</div>
+      <div class="method-card-title">분야별 AX 모듈</div>
+      <div class="method-card-desc">15개 기능분야 × 155개+ 모듈, 14개 산업특화, 5단계 기업규모별 로드맵.</div>
     </div>
   </div>
   <div class="method-cta-wrap fade-in">
@@ -498,7 +477,7 @@ body {
 </footer>
 
 <script src="js/config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 
 // Nav scroll effect
@@ -557,7 +536,7 @@ fadeEls.forEach(el => observer.observe(el));
 
 // ── Supabase init & data ──
 let _sb = null;
-const _sbReady = Promise.all([AXON_CONFIG.init(), whenSupabaseReady()]).then(() => {
+const _sbReady = AXON_CONFIG.init().then(() => {
   if (typeof window.supabase !== 'undefined') {
     _sb = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
   }

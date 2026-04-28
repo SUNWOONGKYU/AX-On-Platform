@@ -3,93 +3,29 @@
    S7FE1: 공통 스타일 분리
    ============================================================ */
 
-/* ── SELF-HOSTED FONTS (LCP 최적화: chain 3→1) ──
-   - 시스템 fallback (Apple SD Gothic Neo / Malgun Gothic) 으로 cmap 미존재 글리프 자동 대체
-   - swap: 폰트 로드 전 fallback 텍스트 즉시 표시 (FCP 단축) */
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/NotoSansKR-Regular.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0-00FF, U+2010-2027, U+AC00-D7A3;
-}
-@font-face {
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/NotoSansKR-Bold.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0-00FF, U+2010-2027, U+AC00-D7A3;
-}
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/Outfit-Bold.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0-00FF;
-}
-@font-face {
-  font-family: 'Outfit';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url('/fonts/Outfit-ExtraBold.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0-00FF;
-}
-
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ── CSS VARIABLES ── */
 :root {
-  /* INK (텍스트 전용 — 배경 사용 자제) */
   --ink: #1a1a2e;
   --ink-muted: #5a5f7d;
-
-  /* SURFACE (페이지 계층) */
-  --surface-cream: #fdfbf7;
   --surface: #faf9f7;
   --surface-warm: #f5f0eb;
-  --surface-deep: #ebe1d2;          /* 강조 섹션 (검정 대체) */
   --surface-card: #ffffff;
-  --surface-ink-soft: #2d3349;      /* 부드러운 잉크블루 (필요 시 footer 대체) */
-
-  /* BRAND (Amber 중심) */
   --amber: #e8920d;
   --amber-light: #f5b942;
-  --amber-deep: #c47a0a;             /* 호버/강조 */
-  --amber-soft: #fff8ed;             /* 옅은 앰버 배경 */
-  --amber-glow: rgba(232, 146, 13, 0.10);
+  --amber-glow: rgba(232, 146, 13, 0.12);
   --teal: #0d9488;
   --teal-light: #2dd4bf;
   --coral: #e85d4a;
   --violet: #7c5ce0;
   --sky: #3b82f6;
-
-  /* BORDER */
-  --border-soft: rgba(26, 26, 46, 0.06);
-  --border-strong: rgba(26, 26, 46, 0.12);
-  --border-amber: rgba(232, 146, 13, 0.30);
-
-  /* RADIUS */
   --radius: 20px;
   --radius-sm: 12px;
-  --radius-lg: 28px;
-
-  /* SHADOW */
   --shadow-soft: 0 4px 24px rgba(26, 26, 46, 0.06);
-  --shadow-card: 0 8px 32px rgba(26, 26, 46, 0.08);
   --shadow-hover: 0 12px 40px rgba(26, 26, 46, 0.12);
-  --shadow-amber: 0 6px 22px rgba(232, 146, 13, 0.25);
-
-  /* SPACING — 8pt 격자 */
-  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
-  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
-  --sp-7: 48px; --sp-8: 72px; --sp-9: 96px;
-
-  /* DARK FOOTER (Tomorrow Night Blue — 유지) */
+  /* Tomorrow Night Blue */
   --dark-bg: #002451;
   --dark-bg-deep: #001126;
   --dark-bg-hover: #00346e;
@@ -152,7 +88,6 @@
   white-space: nowrap;
 }
 .nav-links a:hover { color: var(--violet); background: rgba(124, 92, 224, 0.06); }
-.nav-links a.active { color: var(--violet); font-weight: 700; }
 
 .nav-auth-mobile { display: none; }
 .nav-right { display: flex; align-items: center; gap: 8px; }
@@ -162,21 +97,19 @@
   padding: 8px 18px; border-radius: 10px;
   transition: all 0.3s ease;
   white-space: nowrap;
-  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 .nav-login {
   color: var(--ink-muted);
 }
 .nav-login:hover { color: var(--ink); }
 .nav-signup {
-  background: var(--amber); color: #fff;
+  background: var(--ink); color: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(232, 146, 13, 0.25);
 }
 .nav-signup:hover {
   transform: translateY(-1px);
-  background: var(--amber-deep);
-  box-shadow: 0 6px 18px rgba(232, 146, 13, 0.35);
+  box-shadow: 0 4px 12px rgba(26, 26, 46, 0.2);
 }
 
 .mobile-toggle {
@@ -204,7 +137,7 @@
   font-size: 13px; font-weight: 600; color: var(--ink-muted);
   background: none; border: 1.5px solid rgba(26,26,46,0.12);
   padding: 6px 14px; border-radius: 10px; cursor: pointer;
-  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
   transition: all 0.25s ease;
 }
 .nav-logout-btn:hover { color: var(--ink); border-color: var(--ink); }
@@ -216,7 +149,7 @@
   font-size: 16px; font-weight: 700;
   text-decoration: none; cursor: pointer;
   transition: all 0.3s ease; border: none;
-  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 .btn-primary {
   background: linear-gradient(135deg, var(--amber), #d4820b);
@@ -337,7 +270,7 @@
     padding: 12px 16px; border-radius: 10px;
     min-height: 44px; align-items: center;
     transition: all 0.25s ease;
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
     white-space: nowrap;
   }
   .nav-auth-mobile.login-mobile {
@@ -348,10 +281,10 @@
   }
   .nav-auth-mobile.login-mobile:hover { color: var(--ink); background: rgba(26,26,46,0.04); }
   .nav-auth-mobile.signup-mobile {
-    background: var(--amber); color: #fff;
+    background: var(--ink); color: #fff;
     margin-top: 6px;
   }
-  .nav-auth-mobile.signup-mobile:hover { background: var(--amber-deep); }
+  .nav-auth-mobile.signup-mobile:hover { background: #2a2a4e; }
 
   /* FOOTER */
   .footer { padding: 24px 16px 16px; }

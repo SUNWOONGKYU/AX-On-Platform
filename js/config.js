@@ -56,21 +56,6 @@ const AXON_CONFIG = {
   }
 };
 
-// defer-loaded supabase 스크립트 준비 대기 (defer는 parser 끝난 뒤 실행되므로 인라인 init보다 늦음)
-function whenSupabaseReady(timeoutMs) {
-  if (typeof window.supabase !== 'undefined') return Promise.resolve();
-  return new Promise((resolve) => {
-    const limit = (timeoutMs || 5000);
-    const start = Date.now();
-    const tick = setInterval(() => {
-      if (typeof window.supabase !== 'undefined' || Date.now() - start > limit) {
-        clearInterval(tick);
-        resolve();
-      }
-    }, 20);
-  });
-}
-
 // Shared utility functions
 function escapeHtml(s) {
   if (!s) return '';
