@@ -43,12 +43,12 @@ body {
   position: relative;
 }
 .hero-inner {
-  max-width: 960px; margin: 0 auto; width: 100%;
+  max-width: 1080px; margin: 0 auto; width: 100%;
 }
 .hero-content { animation: fadeUp 1s ease 0.2s both; text-align: center; }
 .hero-title {
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: var(--fs-h1);
+  font-size: var(--fs-display);
   font-weight: var(--fw-h1); line-height: var(--lh-snug);
   letter-spacing: -0.4px; margin-bottom: 40px;
   word-break: keep-all;
@@ -81,7 +81,7 @@ body {
 }
 
 /* ── ABOUT-AX 요약 섹션 ── */
-.intro-section { padding: 56px 40px 28px; max-width: 1280px; margin: 0 auto; }
+.intro-section { padding: 72px 40px; max-width: 1280px; margin: 0 auto; }
 .intro-card {
   background: linear-gradient(135deg, var(--surface-card), var(--surface-warm));
   border: 1px solid rgba(232, 146, 13, 0.15);
@@ -97,10 +97,15 @@ body {
   margin-bottom: 16px;
 }
 .intro-title { font-size: var(--fs-h2); font-weight: var(--fw-h2); line-height: var(--lh-snug); margin-bottom: 16px; word-break: keep-all; }
-.intro-title .hl-orange { color: var(--amber); }
-.intro-title .hl-teal { color: var(--amber); } /* P2.4: 브랜드 단일색 통합 */
+.intro-emphasis {
+  font-size: var(--fs-lead); font-weight: 600;
+  line-height: var(--lh-loose); color: var(--ink);
+  max-width: 760px; margin: 0 auto 20px;
+  word-break: keep-all;
+}
+.intro-emphasis .hl { color: var(--amber); font-weight: 700; }
 .intro-desc {
-  font-size: var(--fs-lead); color: var(--ink-muted);
+  font-size: var(--fs-body); color: var(--ink-muted);
   max-width: 720px; margin: 0 auto 28px;
   line-height: var(--lh-loose); word-break: keep-all;
 }
@@ -120,7 +125,7 @@ body {
 .intro-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,26,46,0.2); }
 
 /* ── METHODOLOGY 요약 섹션 ── */
-.method-section { padding: 40px 40px 28px; max-width: 1280px; margin: 0 auto; }
+.method-section { padding: 72px 40px; max-width: 1280px; margin: 0 auto; }
 .method-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 20px; margin: 36px 0 28px;
@@ -247,6 +252,15 @@ body {
   font-size: 18px; color: var(--ink-muted); margin-top: 8px;
   font-weight: 500;
 }
+.stats-cta-wrap { margin-top: 32px; }
+.stats-cta-text {
+  font-size: var(--fs-lead); color: var(--ink);
+  font-weight: 600; margin-bottom: 20px;
+  word-break: keep-all;
+}
+.stats-cta-actions {
+  display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+}
 
 /* ── RESPONSIVE (index 전용) ── */
 @media (max-width: 768px) {
@@ -259,12 +273,15 @@ body {
   }
   .hero-actions .btn { justify-content: center; min-height: 48px; }
 
-  /* SECTIONS */
-  .section, .stats-section {
+  /* SECTIONS — 모바일 일관 padding */
+  .section, .stats-section,
+  .intro-section, .method-section {
     padding: 48px 16px;
   }
-  .intro-section { padding: 36px 16px 16px; }
-  .method-section { padding: 28px 16px 20px; }
+
+  /* STATS CTA */
+  .stats-cta-actions { flex-direction: column; align-items: stretch; gap: 12px; width: 100%; }
+  .stats-cta-actions .btn { justify-content: center; min-height: 48px; width: 100%; }
 
   /* CARDS */
   .why-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -340,11 +357,11 @@ body {
 <section class="intro-section" id="about-ax-summary" aria-labelledby="about-ax-summary-title">
   <div class="intro-card fade-in">
     <div class="intro-eyebrow">WHAT IS AX?</div>
-    <h2 class="intro-title" id="about-ax-summary-title">
-      AX란 단순한 AI 도구 도입이 아닙니다.<br>
-      <span class="hl-orange">전체 업무 프로세스를 AI 중심으로 재설계</span>하고,<br>
-      <span class="hl-teal">데이터 → 정보 → 의사결정의 흐름</span>을 자동화·고도화하는 전사적 변혁입니다.
-    </h2>
+    <h2 class="intro-title" id="about-ax-summary-title">AX란 단순한 AI 도구 도입이 아닙니다.</h2>
+    <p class="intro-emphasis">
+      <span class="hl">전체 업무 프로세스를 AI 중심으로 재설계</span>하고,<br>
+      <span class="hl">데이터 → 정보 → 의사결정의 흐름</span>을 자동화·고도화하는 전사적 변혁입니다.
+    </p>
     <p class="intro-desc">
       AX-On은 전사적 AX 인게이지먼트 경험을 토대로 정리한
       <strong style="color:var(--ink)">Goal · 업무 Areas · DID · 5 Phases</strong> 골격으로
@@ -385,10 +402,10 @@ body {
 
 <!-- HOW IT WORKS -->
 <section class="section how-section" id="how-it-works" aria-labelledby="how-title">
-  <div class="fade-in">
-    <div class="section-label">HOW IT WORKS</div>
+  <div class="fade-in" style="text-align:center;">
+    <div class="section-label" style="display:inline-flex;">HOW IT WORKS</div>
     <h2 class="section-title" id="how-title">AX-On은 이렇게 일합니다</h2>
-    <p class="section-desc">AX-On이 기업 프로젝트를 확보하고, AI 전문가 팀을 구성하여 실행합니다.</p>
+    <p class="section-desc" style="margin:0 auto;">AX-On이 기업 프로젝트를 확보하고, AI 전문가 팀을 구성하여 실행합니다.</p>
   </div>
   <div class="how-steps fade-in">
     <div class="how-step">
@@ -416,10 +433,10 @@ body {
 
 <!-- WHY JOIN -->
 <section class="section" id="why-join" aria-labelledby="why-join-title">
-  <div class="fade-in">
-    <div class="section-label">WHY JOIN</div>
+  <div class="fade-in" style="text-align:center;">
+    <div class="section-label" style="display:inline-flex;">WHY JOIN</div>
     <h2 class="section-title" id="why-join-title">AI 전문가라면, AX-On과 함께해야 하는 이유</h2>
-    <p class="section-desc">AX-On이 확보한 기업 프로젝트에서, AI 전문가로서 실력을 발휘하세요.</p>
+    <p class="section-desc" style="margin:0 auto;">AX-On이 확보한 기업 프로젝트에서, AI 전문가로서 실력을 발휘하세요.</p>
   </div>
   <div class="why-grid">
     <div class="why-card fade-in">
@@ -451,6 +468,13 @@ body {
     <div class="stats-label" id="stats-title">등록 전문가</div>
     <div class="stats-number" id="expertCount">-</div>
     <div class="stats-unit">AX-On과 함께 기업 AX 프로젝트를 수행하는 AI 전문가</div>
+    <div class="stats-cta-wrap">
+      <p class="stats-cta-text">AX 프로젝트 현장에서 활약하고 싶다면, 전문가 풀에 합류하세요.</p>
+      <div class="stats-cta-actions">
+        <a href="pool.html" class="btn btn-primary" data-cta="stats_join_pool" data-cta-group="conversion">전문가 풀 등록하기</a>
+        <a href="pool.html" class="btn btn-secondary" data-cta="stats_browse_pool" data-cta-group="conversion">전문가 풀 둘러보기</a>
+      </div>
+    </div>
   </div>
 </section>
 
