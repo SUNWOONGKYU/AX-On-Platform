@@ -83,14 +83,14 @@ body {
 }
 .doc-h2 + .doc-h3 { margin-top: 28px; }
 .doc-h4 {
-  font-size: 16px; font-weight: 700;
+  font-size: var(--fs-h4); font-weight: 700;
   color: var(--ink); margin: 28px 0 10px;
 }
 .doc-lead {
   font-size: 16.5px; color: var(--ink); line-height: 1.9;
   word-break: keep-all; margin-bottom: 18px;
 }
-.doc-p { font-size: 16px; color: var(--ink-muted); line-height: 1.95; word-break: keep-all; margin-bottom: 16px; }
+.doc-p { font-size: var(--fs-h4); color: var(--ink-muted); line-height: 1.95; word-break: keep-all; margin-bottom: 16px; }
 .doc-p strong { color: var(--ink); }
 
 /* CALLOUTS */
@@ -149,7 +149,7 @@ body {
 }
 .term-define .td-en {
   font-family: 'Outfit', sans-serif;
-  font-size: 14px; font-weight: 600;
+  font-size: var(--fs-body); font-weight: 600;
   color: var(--ink-muted); font-style: italic;
 }
 .term-define .td-body {
@@ -162,7 +162,7 @@ body {
   padding-top: 12px;
   border-top: 1px dashed rgba(232, 146, 13, 0.3);
 }
-.term-define .td-bullet { font-size: 14px; color: var(--ink); line-height: 1.7; }
+.term-define .td-bullet { font-size: var(--fs-body); color: var(--ink); line-height: 1.7; }
 .term-define .td-x {
   display: inline-block; width: 18px; height: 18px;
   border-radius: 50%; background: rgba(220, 80, 80, 0.12); color: #c44;
@@ -198,7 +198,7 @@ body {
   width: 26px; height: 26px; border-radius: 50%;
   background: rgba(220,80,80,0.12); color: #c44;
   text-align: center; line-height: 26px;
-  font-size: 14px; font-weight: 800;
+  font-size: var(--fs-body); font-weight: 800;
 }
 .compare-card.cc-good .cc-icon {
   background: rgba(0,180,150,0.14); color: var(--teal);
@@ -209,7 +209,7 @@ body {
 .compare-card.cc-good .cc-title { color: var(--teal); }
 .compare-card .cc-list {
   list-style: none; padding: 0; margin: 0;
-  font-size: 14px; color: var(--ink-muted); line-height: 1.95;
+  font-size: var(--fs-body); color: var(--ink-muted); line-height: 1.95;
 }
 .compare-card .cc-list li { padding-left: 16px; position: relative; margin-bottom: 6px; }
 .compare-card .cc-list li::before {
@@ -250,7 +250,7 @@ body {
 .phase-card.p-3 .ph-num { color: var(--violet); }
 .phase-card.p-4 .ph-num { color: var(--amber); }
 .phase-card.p-5 .ph-num { color: var(--coral); }
-.phase-card .ph-name { font-size: 14px; font-weight: 800; color: var(--ink); margin: 4px 0; }
+.phase-card .ph-name { font-size: var(--fs-body); font-weight: 800; color: var(--ink); margin: 4px 0; }
 .phase-card .ph-time { font-size: 13px; color: var(--ink-muted); }
 
 /* TIMELINE STRIP */
@@ -276,7 +276,7 @@ body {
 
 .phase-detail-table {
   width: 100%; border-collapse: collapse;
-  font-size: 14px; margin: 24px 0;
+  font-size: var(--fs-body); margin: 24px 0;
   border-radius: var(--radius-sm); overflow: hidden;
   border: 1px solid rgba(26,26,46,0.07);
 }
@@ -346,7 +346,7 @@ body {
   color: var(--amber); margin-bottom: 6px;
 }
 .phase-deep-card .pd-block .pd-body {
-  font-size: 14px; color: var(--ink); line-height: 1.85;
+  font-size: var(--fs-body); color: var(--ink); line-height: 1.85;
   word-break: keep-all;
 }
 .phase-deep-card .pd-block ul { list-style: none; padding: 0; margin: 0; }
@@ -375,7 +375,7 @@ body {
   color: var(--amber); margin-bottom: 6px;
 }
 .gov-card .gov-title { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
-.gov-card .gov-body { font-size: 14px; color: var(--ink-muted); line-height: 1.9; word-break: keep-all; }
+.gov-card .gov-body { font-size: var(--fs-body); color: var(--ink-muted); line-height: 1.9; word-break: keep-all; }
 
 /* PLATOON ROLES */
 .platoon-list {
@@ -393,7 +393,7 @@ body {
   font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
   color: var(--amber); margin-bottom: 4px;
 }
-.platoon-role .pr-name { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+.platoon-role .pr-name { font-size: var(--fs-body); font-weight: 800; color: var(--ink); margin-bottom: 4px; }
 .platoon-role .pr-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.7; }
 
 /* CHECKLIST (§5) */
@@ -404,7 +404,7 @@ body {
   padding: 28px 32px; margin: 24px 0;
 }
 .checklist .cl-title {
-  font-size: 16px; font-weight: 800; color: var(--ink);
+  font-size: var(--fs-h4); font-weight: 800; color: var(--ink);
   margin-bottom: 16px;
 }
 .checklist ul { list-style: none; padding: 0; margin: 0; }
@@ -478,11 +478,11 @@ body {
   .cta-block { padding: 28px 22px; }
   .phase-card:hover, .gov-card:hover, .platoon-role:hover, .compare-card:hover { transform: none; box-shadow: none; }
   .doc-h2 { font-size: 19px; }
-  .doc-h3 { font-size: 16px; margin-top: 36px; }
+  .doc-h3 { font-size: var(--fs-h4); margin-top: 36px; }
   .doc-h3:first-of-type { margin-top: 20px; }
   .doc-h4 { font-size: 15px; }
   .doc-p { font-size: 15.5px; }
-  .doc-lead { font-size: 16px; }
+  .doc-lead { font-size: var(--fs-h4); }
   .page-subtitle { font-size: 14.5px; }
   .callout, .callout-amber { font-size: 14.5px; margin: 20px 0; }
   .kd-quote { font-size: 14.5px; margin: 24px 0; padding: 18px 20px; }

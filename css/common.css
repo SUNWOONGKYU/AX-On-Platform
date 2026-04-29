@@ -97,11 +97,11 @@
   --dark-border: rgba(163, 179, 214, 0.20);
 
   /* HARPX / SALID — Semantic 색상 토큰 (brand 팔레트와 분리) */
-  --harpx-h: #FF8C00;   /* H — Harvest / STA-H */
-  --harpx-a: #00B4D8;   /* A — Analyze / STA-A */
-  --harpx-r: #00D4AA;   /* R — Refine / STA-R */
-  --harpx-p: #A78BFA;   /* P — Plan / STA-P */
-  --harpx-x: #48CAE4;   /* X — eXecute / STA-X */
+  --harpx-h: #FF8C00;   /* H — Human (담당자 작성) */
+  --harpx-a: #00B4D8;   /* A — AI (자동수집) */
+  --harpx-r: #00D4AA;   /* R — Rank (순위) */
+  --harpx-p: #A78BFA;   /* P — Planning (계획) */
+  --harpx-x: #48CAE4;   /* X — eXecution (실행) */
 }
 
 /* ── SKIP LINK (접근성) ── */

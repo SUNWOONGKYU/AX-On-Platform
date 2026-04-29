@@ -35,6 +35,16 @@ body {
 a { color: var(--amber); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* ── NAV USER (contact 전용 구조) ── */
+.nav-user-info { display: flex; align-items: center; gap: var(--sp-2); }
+.nav-user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--violet), #a78bfa);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--fs-tiny); color: #fff; font-weight: var(--fw-h3);
+}
+.nav-user-name { font-size: var(--fs-body); font-weight: var(--fw-lead); color: var(--ink); }
+
 /* ── CONTACT FORM ── */
 .contact-wrap { max-width: 640px; margin: 0 auto; padding: 120px var(--sp-5) 80px; flex: 1; width: 100%; }
 .contact-header { margin-bottom: var(--sp-5); }
