@@ -471,7 +471,7 @@ body {
       <div class="sal-axis">
         <div class="sa-letter">L</div>
         <div class="sa-name">Level</div>
-        <div class="sa-desc">각 셀 내 실행 항목 순서</div>
+        <div class="sa-desc">각 Area 내 실행 순서</div>
       </div>
     </div>
 
@@ -499,32 +499,9 @@ body {
       <div class="sal-coord"><div class="sc-code">S6CS1</div><div class="sc-desc">사후관리/고객관리/Lv1</div></div>
     </div>
 
-    <h3 class="doc-h3">5가지 효과</h3>
-    <div class="effects-grid">
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 1</div>
-        <div class="ef-title">No-Code 프로젝트 정의</div>
-        <div class="ef-desc">코드 없이 Stage × Area 매트릭스 채우기만으로 프로젝트 구조 정의. 누구나 SAL ID만으로 작업 정의 가능.</div>
-      </div>
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 2</div>
-        <div class="ef-title">3D 위상 위의 의존성 자동 결정</div>
-        <div class="ef-desc">Stage 순서 → 시간축 의존성 / Area 인접 → 영역 간 인접성 / Level → 절차적 깊이가 좌표만으로 결정됨.</div>
-      </div>
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 3</div>
-        <div class="ef-title">실행–검증 일체화</div>
-        <div class="ef-desc">Task 지시서와 검증 지시서가 동시에 생성되어, 실행 직후 검증 결과까지 동일 좌표에 기록.</div>
-      </div>
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 4</div>
-        <div class="ef-title">Stage Gate 기반 자가 치유</div>
-        <div class="ef-desc">Stage 미완료 시 다음 Stage 진입 차단. 검증 리포트가 누락된 작업을 자동 식별 → 보완 사이클 진입.</div>
-      </div>
-    </div>
-
     <div class="callout">
-      90개 Task × 25개 속성 규모의 복잡한 프로젝트도 3차원 좌표 체계로 분해되어 한눈에 파악됩니다.
+      AX 인게이지먼트에서 SAL Grid은 <strong>업무 분해를 체계적으로 파악</strong>하는 도구로 사용됩니다.
+      산업·조직별 Stage 흐름과 Area를 좌표화하여 작업 단위를 일관되게 식별합니다.
     </div>
 
     <div class="callout-amber">
@@ -590,68 +567,8 @@ body {
       </div>
     </div>
 
-    <h3 class="doc-h3">편성 공식</h3>
-    <div class="formula-box">
-      <div class="formula">작업팀 총원 = P + N × {1 + M} + K</div>
-      <div class="formula-legend">
-        <span><b>P</b> 본부 정원 (소대장 + 연락병)</span>
-        <span><b>N</b> 분대 수</span>
-        <span><b>M</b> 분대당 분대원 수</span>
-        <span><b>K</b> 용병(외부 AI) 수</span>
-      </div>
-      <div class="formula-example">
-        예: P=2, N=3, M=11, K=4 → 총원 <strong>42명</strong> (본부 2 + 3분대×12 + 용병 4)
-      </div>
-    </div>
-
-    <h3 class="doc-h3">분대 수 3~5의 근거 — Span of Control</h3>
-    <p class="doc-p" style="margin-bottom:8px;">
-      한 명의 지휘관이 효과적으로 통제할 수 있는 하위 단위는 <strong>3~5개</strong>입니다.
-      이 원리는 군사학·실전 군대·AI 에이전트 분야에서 모두 일관되게 확인됩니다.
-    </p>
-    <ul class="evidence-list">
-      <li><b>미 해병대 지휘통제 교리 (MCDP 6, 1996)</b> — 한 지휘관의 효과적 통제 범위는 3~5개. 3개 하위 단위는 2개보다 유연하고 통제 가능 범위 유지.</li>
-      <li><b>전 세계 군대의 보편 편성</b> — 대한민국 육군(소총소대 3개 분대), 미 육군(보병소대 3+1), 독일 연방군(Zug 3 Gruppen), 일본 육상자위대(3개 소총분대), 프랑스 육군(3개 전투조).</li>
-      <li><b>RAND Research Report RR-184</b> — 분대→소대(×3)→중대(×3)→대대(×3)의 계층적 확장이 3의 배수로 이루어진다는 패턴 확인.</li>
-      <li><b>Anthropic Claude Code Agent Teams (2025)</b> — "Start with 3-5 teammates for most workflows. Three focused teammates often outperform five scattered ones." AI 에이전트 분야에서도 동일 원리 확인.</li>
-    </ul>
-
-    <h3 class="doc-h3">5가지 효과</h3>
-    <div class="effects-grid">
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 1</div>
-        <div class="ef-title">예측 가능한 편성</div>
-        <div class="ef-desc">편성 공식 P+N×{1+M}+K로 프로젝트 규모와 무관하게 일관된 팀 구조 형성.</div>
-      </div>
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 2</div>
-        <div class="ef-title">통신 경로 94.8% ↓</div>
-        <div class="ef-desc">평면 구조 O(n²) 861개 → 계층 구조 O(n) 45개 (42명 기준). 토큰 소비·API 비용·처리 시간 동시 감소.</div>
-      </div>
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 3</div>
-        <div class="ef-title">동적 모델 배치 비용 절감</div>
-        <div class="ef-desc">소대장 1(고급) + 분대장 3(중급) + 분대원 33(경량) = 전원 고급 대비 약 94.7% 비용 절감.</div>
-      </div>
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 4</div>
-        <div class="ef-title">이종 AI 통합 운용</div>
-        <div class="ef-desc">용병(외부 AI) 풀을 단일 게이트웨이로 집약. 연동 복잡도가 에이전트 수와 무관하게 K로 고정.</div>
-      </div>
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 5</div>
-        <div class="ef-title">선형 확장 + 자율 운용</div>
-        <div class="ef-desc">소대 단위 복제로 10소대(420명) · 100소대(4,200명) 선형 확장. 사용자 개입은 3회로 제한.</div>
-      </div>
-    </div>
-
     <div class="callout-amber">
-      <strong>특허 출원 완료</strong>
-      <ul style="margin:8px 0 0; padding-left:18px; line-height:1.7;">
-        <li>발명의 명칭: 군 소대 편제를 응용한 계층적 다중 AI 에이전트 작업팀 편성·운용 시스템 및 방법</li>
-        <li>출원번호: 10-2026-0041235</li>
-        <li>출원일자: 2026.03.07</li>
-      </ul>
+      AX 인게이지먼트에서 Platoon Formation은 작업팀이 필요한 시점에 한해 적용하는 실행 도구입니다. 계층 구조와 외부 AI 연계를 통해 일관된 팀 편성을 지원합니다.
     </div>
   </div>
 </section>
