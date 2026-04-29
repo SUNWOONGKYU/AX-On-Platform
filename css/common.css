@@ -95,6 +95,13 @@
   --dark-bg-active: #003f8e;
   --dark-text-muted: #a3b3d6;        /* P0-1: WCAG AA — 5.5:1 대비 (was #7285b7 = 4.3:1) */
   --dark-border: rgba(163, 179, 214, 0.20);
+
+  /* HARPX / SALID — Semantic 색상 토큰 (brand 팔레트와 분리) */
+  --harpx-h: #FF8C00;   /* H — Harvest / STA-H */
+  --harpx-a: #00B4D8;   /* A — Analyze / STA-A */
+  --harpx-r: #00D4AA;   /* R — Refine / STA-R */
+  --harpx-p: #A78BFA;   /* P — Plan / STA-P */
+  --harpx-x: #48CAE4;   /* X — eXecute / STA-X */
 }
 
 /* ── SKIP LINK (접근성) ── */
