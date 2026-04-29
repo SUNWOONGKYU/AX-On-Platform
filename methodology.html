@@ -374,6 +374,39 @@ body {
 .c-p { color: #A78BFA; } .bg-p { background: #A78BFA; }
 .c-x { color: #48CAE4; } .bg-x { background: #48CAE4; }
 
+/* HARPX 색상 일치 — 표 코드 셀을 배지와 동일한 칩으로 통일 */
+.sta-harpx td:nth-child(2) { font-size: 0; line-height: 1; }
+.sta-harpx td:nth-child(2)::before {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 6px;
+  color: #fff; font-weight: 800; font-size: 13.5px;
+}
+.sta-harpx td:nth-child(2).c-h::before { background: #FF8C00; content: 'H'; }
+.sta-harpx td:nth-child(2).c-a::before { background: #00B4D8; content: 'A'; }
+.sta-harpx td:nth-child(2).c-r::before { background: #00D4AA; content: 'R'; }
+.sta-harpx td:nth-child(2).c-p::before { background: #A78BFA; content: 'P'; }
+.sta-harpx td:nth-child(2).c-x::before { background: #48CAE4; content: 'X'; }
+
+/* 범례도 동일한 칩 스타일로 통일 */
+.sta-legend .c-h b,
+.sta-legend .c-a b,
+.sta-legend .c-r b,
+.sta-legend .c-p b,
+.sta-legend .c-x b {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 5px;
+  color: #fff; font-weight: 800; font-size: 12px;
+  margin-right: 6px;
+}
+.sta-legend .c-h b { background: #FF8C00; }
+.sta-legend .c-a b { background: #00B4D8; }
+.sta-legend .c-r b { background: #00D4AA; }
+.sta-legend .c-p b { background: #A78BFA; }
+.sta-legend .c-x b { background: #48CAE4; }
+.sta-legend .c-h, .sta-legend .c-a, .sta-legend .c-r, .sta-legend .c-p, .sta-legend .c-x {
+  color: #fff;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .page-hero { padding: 96px 16px 40px; }
@@ -522,8 +555,7 @@ body {
     <h2 class="doc-h2">Platoon Formation — AI 에이전트의 소대 편제</h2>
     <p class="doc-lead">
       군 소대 편제 원리를 AI 에이전트 팀 편성에 응용합니다.
-      <strong>소대장 · 분대장 · 분대원 · 용병(외부 AI)</strong>의 4계층으로 구성되며,
-      사용자(지휘관) 개입은 <strong>임무 부여 · 작전 개시 승인 · 해산 승인 3회</strong>로 제한됩니다.
+      <strong>소대장 · 분대장 · 분대원 · 용병(외부 AI)</strong>의 4계층으로 구성됩니다.
     </p>
 
     <h3 class="doc-h3" style="margin-top:18px;">군사용어 ↔ 기술용어 대응</h3>
@@ -569,6 +601,15 @@ body {
 
     <div class="callout-amber">
       AX 인게이지먼트에서 Platoon Formation은 작업팀이 필요한 시점에 한해 적용하는 실행 도구입니다. 계층 구조와 외부 AI 연계를 통해 일관된 팀 편성을 지원합니다.
+    </div>
+
+    <div class="callout-amber">
+      <strong>특허 출원 완료</strong>
+      <ul style="margin:8px 0 0; padding-left:18px; line-height:1.7;">
+        <li>발명의 명칭: 군 소대 편제를 응용한 계층적 다중 AI 에이전트 작업팀 편성·운용 시스템 및 방법</li>
+        <li>출원번호: 10-2026-0041235</li>
+        <li>출원일자: 2026.03.07</li>
+      </ul>
     </div>
   </div>
 </section>
