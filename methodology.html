@@ -181,6 +181,19 @@ body {
 }
 .sta-table td:nth-child(2) { width: 16%; font-weight: 700; color: var(--ink); }
 
+/* STA H·A·R·P·X 표 전용 (6열 압축) */
+.sta-harpx { table-layout: fixed; }
+.sta-harpx th, .sta-harpx td {
+  padding: 8px 10px; white-space: nowrap;
+  font-size: 13.5px;
+}
+.sta-harpx td:first-child { width: 12%; color: var(--ink); font-weight: 800; text-align: center; background: var(--surface-warm); }
+.sta-harpx td:nth-child(2) { width: 7%; text-align: center; color: var(--amber); font-weight: 800; }
+.sta-harpx td:nth-child(3) { width: 22%; font-weight: 700; color: var(--ink); }
+.sta-harpx td:nth-child(4) { width: 9%; text-align: center; color: var(--ink-soft); }
+.sta-harpx td:nth-child(5) { width: 8%; text-align: center; font-weight: 700; }
+.sta-harpx td:nth-child(6) { width: 42%; white-space: normal; color: var(--ink-soft); }
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .page-hero { padding: 96px 16px 40px; }
@@ -304,8 +317,12 @@ body {
     </div>
 
     <div class="callout-amber">
-      <strong>특허 출원 완료:</strong> SAL Grid의 좌표 체계와 운영 방법은 특허 출원이 완료되었습니다.
-      세부 청구항은 등록 이후 안내합니다.
+      <strong>특허 출원 완료</strong>
+      <ul style="margin:8px 0 0; padding-left:18px; line-height:1.7;">
+        <li>발명의 명칭: 3차원 좌표 정보가 인코딩된 식별자 기반으로 구축하는 프로젝트 그리드를 활용한 멀티태스크 오케스트레이션 시스템 및 방법</li>
+        <li>출원번호: 10-2026-0009425</li>
+        <li>출원일자: 2026.01.17</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -340,7 +357,12 @@ body {
     </div>
 
     <div class="callout-amber">
-      <strong>특허 출원 완료:</strong> Platoon Formation 구조는 특허 출원이 완료되었습니다.
+      <strong>특허 출원 완료</strong>
+      <ul style="margin:8px 0 0; padding-left:18px; line-height:1.7;">
+        <li>발명의 명칭: 군 소대 편제를 응용한 계층적 다중 AI 에이전트 작업팀 편성·운용 시스템 및 방법</li>
+        <li>출원번호: 10-2026-0041235</li>
+        <li>출원일자: 2026.03.07</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -355,19 +377,21 @@ body {
       "SAL Grid가 지도라면, STA는 그 지도 위의 각 지점을 탐사하는 도구"입니다.
     </p>
 
-    <table class="sta-table">
-      <thead><tr><th>Part</th><th>의미</th><th>속성 수</th></tr></thead>
+    <div style="overflow-x:auto;">
+    <table class="sta-table sta-harpx">
+      <thead><tr><th>단계</th><th>코드</th><th>이름</th><th>누가</th><th>속성 수</th><th>내용</th></tr></thead>
       <tbody>
-        <tr><td>H</td><td>Human — 사람이 수행하는 영역 (담당·역할·책임)</td><td>7개</td></tr>
-        <tr><td>A</td><td>AI — AI가 수행·협업하는 영역 (모델·도구·자동화)</td><td>11개</td></tr>
-        <tr><td>R</td><td>Ranking — 우선순위·중요도 평가</td><td>2개</td></tr>
-        <tr><td>P</td><td>Planning — 일정·자원 계획</td><td>2개</td></tr>
-        <tr><td>X</td><td>eXecution — 실행·검증</td><td>4개</td></tr>
+        <tr><td rowspan="3">Step 1<br>진단</td><td>H</td><td>Human (담당자 작성)</td><td>사람</td><td>7개</td><td>현업이 직접 답하는 업무 현황 (H1~H7)</td></tr>
+        <tr><td>A</td><td>AI (자동수집)</td><td>AI</td><td>11개</td><td>AI가 자동 파악하는 객관 데이터 (A1~A11)</td></tr>
+        <tr><td>R</td><td>Rank (순위)</td><td>시스템</td><td>1개</td><td>종합 점수 + 우선순위 자동 산출</td></tr>
+        <tr><td rowspan="2">Step 2<br>추진</td><td>P</td><td>Planning (계획)</td><td>PM</td><td>2개</td><td>담당팀, 목표일 (P1~P2)</td></tr>
+        <tr><td>X</td><td>eXecution (실행)</td><td>시스템</td><td>4개</td><td>상태, 진행률, 이슈, 검증 (X1~X4)</td></tr>
       </tbody>
     </table>
+    </div>
 
     <div class="callout">
-      Step 1에서 H·A·R이 채워지고, Step 2 이후 P·X가 활성화되어 실행·검증까지 추적합니다.
+      <strong>흐름:</strong> H(인터뷰) → A(AI 자동수집) → R(순위 산출) — 여기까지가 진단. → P(계획) → X(실행·검증) → 다음 Task.
     </div>
   </div>
 </section>
