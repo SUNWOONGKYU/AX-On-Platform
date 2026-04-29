@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="AX 인게이지먼트 — AX-On이 고객 조직과 함께 5 Phases 28주를 실행하고 상시 운영으로 ROI를 책임지는 동반 여정.">
+<meta property="og:title" content="AX 인게이지먼트 — AX-On Platform">
+<meta property="og:description" content="단발성 컨설팅이 아닌 5 Phases 동반 여정. 28주 + 상시 운영(3년+)으로 ROI까지 책임지는 장기 파트너십.">
+<meta property="og:image" content="https://www.ax-on.net/images/og-default.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.ax-on.net/engagement.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>AX 인게이지먼트 — AX-On Platform</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://gifxpfdnnfwufzdncmor.supabase.co" crossorigin>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/common.css">
+<style>
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  display: flex; flex-direction: column; min-height: 100vh;
+}
+
+/* PAGE HERO */
+.page-hero {
+  padding: 140px 40px 60px;
+  background: linear-gradient(135deg, #fff8ec 0%, var(--surface) 60%);
+  position: relative; overflow: hidden;
+}
+.page-hero::before {
+  content: ''; position: absolute; top: -200px; right: -200px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, var(--amber-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.page-hero-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; text-align: center; }
+.page-eyebrow {
+  display: inline-block; font-family: 'Outfit', sans-serif;
+  font-size: 13px; font-weight: 800;
+  color: var(--amber); letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+.page-title {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 900; line-height: 1.25;
+  letter-spacing: -1px; word-break: keep-all;
+  margin-bottom: 18px;
+}
+.page-subtitle {
+  font-size: 15.5px; color: var(--ink-muted);
+  line-height: 1.9; max-width: 760px; margin: 0 auto;
+  word-break: keep-all;
+}
+
+/* SECTION COMMON */
+.doc-section { max-width: 960px; margin: 0 auto; padding: 56px 40px; }
+.doc-eyebrow {
+  display: inline-block; font-family: 'Outfit', sans-serif;
+  font-size: 12px; font-weight: 800;
+  color: var(--amber); letter-spacing: 2.5px;
+  margin-bottom: 10px;
+}
+.doc-h2 {
+  font-size: clamp(20px, 2.6vw, 26px);
+  font-weight: 800; letter-spacing: -0.3px;
+  line-height: 1.35; margin-bottom: 20px; word-break: keep-all;
+}
+.doc-h3 {
+  font-size: 20px; font-weight: 800;
+  color: var(--ink); margin: 48px 0 16px;
+  padding-left: 14px; border-left: 4px solid var(--amber);
+  word-break: keep-all;
+}
+.doc-h2 + .doc-h3 { margin-top: 28px; }
+.doc-h4 {
+  font-size: 16px; font-weight: 700;
+  color: var(--ink); margin: 28px 0 10px;
+}
+.doc-lead {
+  font-size: 16.5px; color: var(--ink); line-height: 1.9;
+  word-break: keep-all; margin-bottom: 18px;
+}
+.doc-p { font-size: 16px; color: var(--ink-muted); line-height: 1.95; word-break: keep-all; margin-bottom: 16px; }
+.doc-p strong { color: var(--ink); }
+
+/* CALLOUTS */
+.callout {
+  background: var(--surface-warm);
+  border-radius: 12px; padding: 20px 24px;
+  font-size: 15px; color: var(--ink); line-height: 1.9;
+  margin: 28px 0; word-break: keep-all;
+  border: 1px solid rgba(26, 26, 46, 0.07);
+}
+.callout-amber {
+  background: var(--amber-glow);
+  border: 1px solid rgba(232, 146, 13, 0.25);
+  border-radius: 12px; padding: 20px 24px;
+  font-size: 15px; color: var(--ink); line-height: 1.9;
+  margin: 28px 0; word-break: keep-all;
+}
+.kd-quote {
+  background: linear-gradient(135deg, #fff8ec, #fff);
+  border-left: 4px solid var(--amber);
+  padding: 24px 30px; border-radius: 0 12px 12px 0;
+  margin: 32px 0; font-size: 15px; color: var(--ink);
+  line-height: 1.9;
+  box-shadow: 0 2px 12px rgba(232, 146, 13, 0.08);
+}
+.kd-quote .quote-source {
+  display: block; margin-top: 10px;
+  font-size: 12px; color: var(--ink-muted); font-style: italic;
+}
+
+/* TERM DEFINE */
+.term-define {
+  background: linear-gradient(135deg, #fff 0%, var(--amber-soft) 100%);
+  border: 1.5px solid var(--border-amber);
+  border-left: 5px solid var(--amber);
+  border-radius: var(--radius-sm);
+  margin: 24px 0 32px;
+  padding: 22px 26px;
+  box-shadow: 0 4px 18px rgba(232, 146, 13, 0.08);
+}
+.term-define .td-head {
+  display: flex; align-items: baseline; gap: 12px;
+  flex-wrap: wrap; margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(232, 146, 13, 0.3);
+}
+.term-define .td-tag {
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px; font-weight: 800; letter-spacing: 2px;
+  background: var(--amber); color: #fff;
+  padding: 4px 10px; border-radius: 6px;
+}
+.term-define .td-word {
+  font-size: 22px; font-weight: 900; color: var(--amber-deep);
+  letter-spacing: -0.3px;
+}
+.term-define .td-en {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px; font-weight: 600;
+  color: var(--ink-muted); font-style: italic;
+}
+.term-define .td-body {
+  font-size: 15.5px; color: var(--ink); line-height: 1.95;
+  word-break: keep-all; margin-bottom: 14px;
+}
+.term-define .td-body strong { color: var(--amber-deep); font-weight: 800; }
+.term-define .td-foot {
+  display: flex; flex-direction: column; gap: 6px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(232, 146, 13, 0.3);
+}
+.term-define .td-bullet { font-size: 14px; color: var(--ink); line-height: 1.7; }
+.term-define .td-x {
+  display: inline-block; width: 18px; height: 18px;
+  border-radius: 50%; background: rgba(220, 80, 80, 0.12); color: #c44;
+  text-align: center; line-height: 18px; font-size: 11px; font-weight: 800;
+  margin-right: 8px;
+}
+.term-define .td-o {
+  display: inline-block; width: 18px; height: 18px;
+  border-radius: 50%; background: rgba(0, 180, 150, 0.12); color: var(--teal);
+  text-align: center; line-height: 18px; font-size: 11px; font-weight: 800;
+  margin-right: 8px;
+}
+
+/* COMPARE TABLE — ✗ vs ✓ 비교 */
+.compare-table {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin: 28px 0;
+}
+.compare-card {
+  background: var(--surface-card);
+  border-radius: var(--radius-sm);
+  padding: 22px 24px;
+  border: 1px solid rgba(26,26,46,0.08);
+  border-top: 4px solid #c44;
+}
+.compare-card.cc-good { border-top-color: var(--teal); background: linear-gradient(180deg, #fff 0%, rgba(0,180,150,0.04) 100%); }
+.compare-card .cc-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px dashed rgba(26,26,46,0.12);
+}
+.compare-card .cc-icon {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(220,80,80,0.12); color: #c44;
+  text-align: center; line-height: 26px;
+  font-size: 14px; font-weight: 800;
+}
+.compare-card.cc-good .cc-icon {
+  background: rgba(0,180,150,0.14); color: var(--teal);
+}
+.compare-card .cc-title {
+  font-size: 15px; font-weight: 800; color: #c44; letter-spacing: -0.2px;
+}
+.compare-card.cc-good .cc-title { color: var(--teal); }
+.compare-card .cc-list {
+  list-style: none; padding: 0; margin: 0;
+  font-size: 14px; color: var(--ink-muted); line-height: 1.95;
+}
+.compare-card .cc-list li { padding-left: 16px; position: relative; margin-bottom: 6px; }
+.compare-card .cc-list li::before {
+  content: ''; position: absolute; left: 0; top: 10px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(220,80,80,0.4);
+}
+.compare-card.cc-good .cc-list li::before { background: rgba(0,180,150,0.5); }
+
+/* PHASES (§2) */
+.phase-flow {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 10px; margin: 32px 0;
+}
+.phase-card {
+  background: var(--surface-card);
+  border-radius: var(--radius-sm);
+  padding: 22px 14px;
+  text-align: center;
+  border: 1px solid rgba(26,26,46,0.07);
+  border-top: 4px solid var(--teal);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.phase-card:hover {
+  box-shadow: 0 4px 18px rgba(26,26,46,0.10);
+  transform: translateY(-2px);
+}
+.phase-card.p-2 { border-color: rgba(26,26,46,0.07); border-top-color: var(--sky); }
+.phase-card.p-3 { border-color: rgba(26,26,46,0.07); border-top-color: var(--violet); }
+.phase-card.p-4 { border-color: rgba(26,26,46,0.07); border-top-color: var(--amber); }
+.phase-card.p-5 { border-color: rgba(26,26,46,0.07); border-top-color: var(--coral); }
+.phase-card .ph-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px; font-weight: 900;
+  color: var(--teal);
+}
+.phase-card.p-2 .ph-num { color: var(--sky); }
+.phase-card.p-3 .ph-num { color: var(--violet); }
+.phase-card.p-4 .ph-num { color: var(--amber); }
+.phase-card.p-5 .ph-num { color: var(--coral); }
+.phase-card .ph-name { font-size: 14px; font-weight: 800; color: var(--ink); margin: 4px 0; }
+.phase-card .ph-time { font-size: 13px; color: var(--ink-muted); }
+
+/* TIMELINE STRIP */
+.timeline-strip {
+  display: grid; grid-template-columns: 4fr 4fr 8fr 12fr 6fr;
+  gap: 4px; margin: 14px 0 24px;
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid rgba(26,26,46,0.08);
+  background: #fff;
+}
+.ts-block {
+  padding: 12px 10px; text-align: center;
+  font-size: 12px; color: #fff;
+  font-weight: 700;
+}
+.ts-block.t-1 { background: var(--teal); }
+.ts-block.t-2 { background: var(--sky); }
+.ts-block.t-3 { background: var(--violet); }
+.ts-block.t-4 { background: var(--amber); }
+.ts-block.t-5 { background: var(--coral); }
+.ts-block .ts-week { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 800; }
+.ts-block .ts-name { font-size: 11px; opacity: 0.92; margin-top: 2px; }
+
+.phase-detail-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px; margin: 24px 0;
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid rgba(26,26,46,0.07);
+}
+.phase-detail-table th, .phase-detail-table td {
+  padding: 12px 16px; text-align: left;
+  border-bottom: 1px solid rgba(26, 26, 46, 0.06);
+}
+.phase-detail-table th {
+  background: var(--surface-warm); color: var(--ink);
+  font-weight: 700; font-size: 13px;
+}
+.phase-detail-table tbody tr:last-child td { border-bottom: none; }
+.phase-detail-table td:first-child { font-weight: 700; color: var(--ink); width: 22%; }
+.phase-detail-table td:nth-child(2) { color: var(--amber); font-weight: 700; width: 14%; }
+
+/* PHASE DEEP CARDS (§3) — 각 Phase 활동/산출물/게이트/인력 4 블록 */
+.phase-deep-card {
+  background: var(--surface-card);
+  border: 1px solid rgba(26,26,46,0.08);
+  border-radius: var(--radius);
+  padding: 28px 30px;
+  margin: 28px 0;
+  position: relative;
+  border-top: 5px solid var(--teal);
+  box-shadow: 0 4px 18px rgba(26,26,46,0.05);
+}
+.phase-deep-card.pd-2 { border-top-color: var(--sky); }
+.phase-deep-card.pd-3 { border-top-color: var(--violet); }
+.phase-deep-card.pd-4 { border-top-color: var(--amber); }
+.phase-deep-card.pd-5 { border-top-color: var(--coral); }
+.phase-deep-card .pd-head {
+  display: flex; align-items: baseline; gap: 14px;
+  margin-bottom: 16px; padding-bottom: 14px;
+  border-bottom: 1px dashed rgba(26,26,46,0.12);
+  flex-wrap: wrap;
+}
+.phase-deep-card .pd-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 36px; font-weight: 900;
+  color: var(--teal); line-height: 1;
+}
+.phase-deep-card.pd-2 .pd-num { color: var(--sky); }
+.phase-deep-card.pd-3 .pd-num { color: var(--violet); }
+.phase-deep-card.pd-4 .pd-num { color: var(--amber); }
+.phase-deep-card.pd-5 .pd-num { color: var(--coral); }
+.phase-deep-card .pd-name {
+  font-size: 18px; font-weight: 900; color: var(--ink);
+  letter-spacing: -0.3px;
+}
+.phase-deep-card .pd-time {
+  margin-left: auto;
+  font-size: 13px; color: var(--ink-muted);
+  font-weight: 700;
+}
+.phase-deep-card .pd-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.phase-deep-card .pd-block {
+  background: var(--surface-warm);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+.phase-deep-card .pd-block .pd-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px; font-weight: 800; letter-spacing: 2px;
+  color: var(--amber); margin-bottom: 6px;
+}
+.phase-deep-card .pd-block .pd-body {
+  font-size: 14px; color: var(--ink); line-height: 1.85;
+  word-break: keep-all;
+}
+.phase-deep-card .pd-block ul { list-style: none; padding: 0; margin: 0; }
+.phase-deep-card .pd-block li { padding-left: 12px; position: relative; }
+.phase-deep-card .pd-block li::before {
+  content: ''; position: absolute; left: 0; top: 10px;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--amber);
+}
+
+/* GOVERNANCE GRID (§4) */
+.gov-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 14px; margin: 24px 0 32px;
+}
+.gov-card {
+  background: var(--surface-card);
+  border: 1px solid rgba(26,26,46,0.08);
+  border-left: 4px solid var(--amber);
+  border-radius: var(--radius-sm);
+  padding: 20px 22px;
+}
+.gov-card .gov-tag {
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px; font-weight: 800; letter-spacing: 2px;
+  color: var(--amber); margin-bottom: 6px;
+}
+.gov-card .gov-title { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
+.gov-card .gov-body { font-size: 14px; color: var(--ink-muted); line-height: 1.9; word-break: keep-all; }
+
+/* PLATOON ROLES */
+.platoon-list {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px; margin: 20px 0 32px;
+}
+.platoon-role {
+  background: linear-gradient(135deg, #fff, var(--surface-warm));
+  border: 1px solid rgba(232, 146, 13, 0.18);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+.platoon-role .pr-rank {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
+  color: var(--amber); margin-bottom: 4px;
+}
+.platoon-role .pr-name { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+.platoon-role .pr-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.7; }
+
+/* CHECKLIST (§5) */
+.checklist {
+  background: var(--surface-card);
+  border: 1px solid rgba(26,26,46,0.08);
+  border-radius: var(--radius);
+  padding: 28px 32px; margin: 24px 0;
+}
+.checklist .cl-title {
+  font-size: 16px; font-weight: 800; color: var(--ink);
+  margin-bottom: 16px;
+}
+.checklist ul { list-style: none; padding: 0; margin: 0; }
+.checklist li {
+  padding: 10px 0 10px 32px;
+  position: relative;
+  font-size: 15px; color: var(--ink);
+  line-height: 1.7; word-break: keep-all;
+  border-bottom: 1px dashed rgba(26,26,46,0.08);
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li::before {
+  content: ''; position: absolute; left: 0; top: 14px;
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--amber);
+  border-radius: 4px;
+  background: #fff;
+}
+.checklist li::after {
+  content: ''; position: absolute; left: 5px; top: 17px;
+  width: 8px; height: 4px;
+  border-left: 2px solid var(--amber);
+  border-bottom: 2px solid var(--amber);
+  transform: rotate(-45deg);
+}
+
+/* CTA */
+.cta-block {
+  background: linear-gradient(135deg, var(--amber) 0%, #d97a08 100%);
+  color: #fff; border-radius: var(--radius);
+  padding: 36px 40px; text-align: center;
+  margin: 36px 0 0;
+  box-shadow: 0 8px 32px rgba(232,146,13,0.22);
+}
+.cta-block .cta-title {
+  font-size: clamp(20px, 2.6vw, 24px);
+  font-weight: 900; margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.cta-block .cta-desc {
+  font-size: 15px; line-height: 1.85;
+  margin-bottom: 22px; opacity: 0.95;
+  word-break: keep-all;
+}
+.cta-block .cta-btn {
+  display: inline-block;
+  background: #fff; color: var(--amber-deep);
+  padding: 14px 32px; border-radius: 999px;
+  font-size: 15px; font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.cta-block .cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .page-hero { padding: 96px 16px 40px; }
+  .doc-section { padding: 40px 16px; }
+  .compare-table { grid-template-columns: 1fr; }
+  .phase-flow { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .timeline-strip { grid-template-columns: 1fr; }
+  .timeline-strip .ts-block { padding: 8px 10px; }
+  .phase-deep-card { padding: 22px 18px; }
+  .phase-deep-card .pd-grid { grid-template-columns: 1fr; }
+  .gov-grid { grid-template-columns: 1fr; }
+  .checklist { padding: 22px 20px; }
+  .cta-block { padding: 28px 22px; }
+  .phase-card:hover, .gov-card:hover, .platoon-role:hover, .compare-card:hover { transform: none; box-shadow: none; }
+  .doc-h2 { font-size: 19px; }
+  .doc-h3 { font-size: 16px; margin-top: 36px; }
+  .doc-h3:first-of-type { margin-top: 20px; }
+  .doc-h4 { font-size: 15px; }
+  .doc-p { font-size: 15.5px; }
+  .doc-lead { font-size: 16px; }
+  .page-subtitle { font-size: 14.5px; }
+  .callout, .callout-amber { font-size: 14.5px; margin: 20px 0; }
+  .kd-quote { font-size: 14.5px; margin: 24px 0; padding: 18px 20px; }
+}
+@media (max-width: 480px) {
+  .doc-section { padding: 32px 14px; }
+  .phase-flow { grid-template-columns: 1fr; }
+  .phase-detail-table { font-size: 13px; }
+  .phase-detail-table th, .phase-detail-table td { padding: 10px 12px; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">본문으로 바로가기</a>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="42" height="42" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><radialGradient id="ax-core" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff5d8"/><stop offset="0.5" stop-color="#e8920d"/><stop offset="1" stop-color="#c47a0a"/></radialGradient></defs><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1" opacity="0.15"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.35"/><circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.6" opacity="0.6"/><circle cx="24" cy="24" r="5.5" fill="url(#ax-core)"/><circle cx="24" cy="24" r="2" fill="#fff5d8"/></svg></div>
+      <div class="logo-text">AX-<span>On</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="about-ax.html">AX란</a>
+      <a href="engagement.html" class="active">인게이지먼트</a>
+      <a href="methodology.html">방법론</a>
+      <a href="pool.html">전문가 풀</a>
+      <a href="community.html">커뮤니티</a>
+      <a href="pages/auth/login.html" class="nav-auth-mobile login-mobile">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-mobile signup-mobile">회원가입</a>
+    </div>
+    <div class="nav-right">
+      <a href="pages/auth/login.html" class="nav-auth-btn nav-login">로그인</a>
+      <a href="pages/auth/signup.html" class="nav-auth-btn nav-signup">회원가입</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<header class="page-hero" id="main-content">
+  <div class="page-hero-inner">
+    <div class="page-eyebrow">AX ENGAGEMENT</div>
+    <h1 class="page-title">AX 인게이지먼트 — 동반 여정</h1>
+    <p class="page-subtitle">
+      AX-On은 보고서 한 번 납품으로 끝내지 않습니다.<br>
+      <strong style="color:var(--ink)">5 Phases 28주를 함께 실행</strong>하고
+      <strong style="color:var(--ink)">상시 운영(3년 이상 권장)</strong>으로<br>
+      ROI까지 책임지는 <strong style="color:var(--ink)">장기 파트너십</strong>입니다.
+    </p>
+  </div>
+</header>
+
+<main>
+
+<!-- ─── §1. 인게이지먼트란? ─── -->
+<section class="doc-section" id="sec-1" aria-labelledby="sec-1-title">
+  <div class="doc-eyebrow">§ 1 · WHAT</div>
+  <h2 class="doc-h2" id="sec-1-title">인게이지먼트란 무엇인가</h2>
+  <p class="doc-lead">
+    AX-On이 고객 조직과 함께 <strong>5 Phases 전체를 진행하는 동반 여정</strong>을 인게이지먼트라고 부릅니다.
+    설계만 해주고 떠나는 컨설팅이 아니라, 28주 동안 함께 만들고 상시 운영으로 이어갑니다.
+  </p>
+
+  <div class="term-define">
+    <div class="td-head">
+      <span class="td-tag">TERM</span>
+      <span class="td-word">인게이지먼트</span>
+      <span class="td-en">Engagement</span>
+    </div>
+    <div class="td-body">
+      AX-On이 고객 조직과 함께 <strong>5 Phases 전체를 진행하는 동반 여정</strong>을 뜻합니다.
+      AX는 보고서 한 번 납품으로 완성되지 않습니다 — <strong>28주(약 7개월) 동안 함께 설계·구축·전환</strong>한 뒤,
+      <strong>상시 운영(3년 이상 권장)</strong>으로 지속적 혁신을 이어가는 <strong>장기 파트너십</strong>입니다.
+      이 전체 기간을 한 단위로 묶어 <strong>"인게이지먼트"</strong>라고 부릅니다.
+    </div>
+    <div class="td-foot">
+      <span class="td-bullet"><span class="td-x">✗</span> 단발성 컨설팅 — 보고서 납품 후 종료</span>
+      <span class="td-bullet"><span class="td-o">✓</span> 인게이지먼트 — 5 Phases 동안 함께 실행하고 ROI까지 책임</span>
+    </div>
+  </div>
+
+  <h3 class="doc-h3">컨설팅과 인게이지먼트의 차이</h3>
+  <div class="compare-table">
+    <div class="compare-card">
+      <div class="cc-head">
+        <span class="cc-icon">✗</span>
+        <span class="cc-title">단발성 컨설팅</span>
+      </div>
+      <ul class="cc-list">
+        <li>보고서·전략 문서 납품 후 종료</li>
+        <li>실행은 고객 조직의 몫</li>
+        <li>운영 단계의 ROI 책임 없음</li>
+        <li>외부 시각 위주, 현업 내재화 부족</li>
+      </ul>
+    </div>
+    <div class="compare-card cc-good">
+      <div class="cc-head">
+        <span class="cc-icon">✓</span>
+        <span class="cc-title">AX 인게이지먼트</span>
+      </div>
+      <ul class="cc-list">
+        <li>5 Phases 전 단계를 함께 실행</li>
+        <li>설계·구축·전환·운영을 한 팀이 책임</li>
+        <li>상시 운영(3년+)으로 ROI 지속 추적</li>
+        <li>현업 인력 동참 → 조직 내 역량 내재화</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="kd-quote">
+    "AI는 단지 도구이며, 본질은 우리 회사 업무의 본 모습을 정확하고 객관적으로 꿰뚫어보고
+    어떻게 운영해 갈 것인가에 대한 깊은 통찰을 가지고 일관성 있게 추진해 가야 한다."
+    <span class="quote-source">— AX-On 총괄 PM 철학</span>
+  </div>
+</section>
+
+<!-- ─── §2. 5 Phases 여정 ─── -->
+<section class="doc-section" id="sec-2" aria-labelledby="sec-2-title" style="background:var(--surface-warm);max-width:none;">
+  <div style="max-width:960px;margin:0 auto;">
+  <div class="doc-eyebrow">§ 2 · JOURNEY</div>
+  <h2 class="doc-h2" id="sec-2-title">5 Phases 여정 — 28주 + 상시</h2>
+  <p class="doc-lead">
+    1~4단계는 <strong>총 28주(약 7개월)</strong> 안에 완료하는 것을 표준으로 합니다.
+    5단계는 그 이후 상시로 이어지며, 일반적으로 <strong>3년 이상의 지속적 혁신</strong>이 권장됩니다.
+  </p>
+
+  <div class="phase-flow">
+    <div class="phase-card"><div class="ph-num">1</div><div class="ph-name">교육+진단</div><div class="ph-time">4주</div></div>
+    <div class="phase-card p-2"><div class="ph-num">2</div><div class="ph-name">설계</div><div class="ph-time">4주</div></div>
+    <div class="phase-card p-3"><div class="ph-num">3</div><div class="ph-name">구축</div><div class="ph-time">8주</div></div>
+    <div class="phase-card p-4"><div class="ph-num">4</div><div class="ph-name">전환</div><div class="ph-time">12주</div></div>
+    <div class="phase-card p-5"><div class="ph-num">5</div><div class="ph-name">지속적 혁신</div><div class="ph-time">상시</div></div>
+  </div>
+
+  <div class="timeline-strip" aria-label="28주 타임라인">
+    <div class="ts-block t-1"><div class="ts-week">W1–4</div><div class="ts-name">교육+진단</div></div>
+    <div class="ts-block t-2"><div class="ts-week">W5–8</div><div class="ts-name">설계</div></div>
+    <div class="ts-block t-3"><div class="ts-week">W9–16</div><div class="ts-name">구축</div></div>
+    <div class="ts-block t-4"><div class="ts-week">W17–28</div><div class="ts-name">전환</div></div>
+    <div class="ts-block t-5"><div class="ts-week">W29+</div><div class="ts-name">지속적 혁신</div></div>
+  </div>
+
+  <table class="phase-detail-table">
+    <thead>
+      <tr><th>단계</th><th>기간</th><th>주요 활동·산출물</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1단계 교육+진단</td><td>4주</td><td>전사 AI 리터러시 교육 + Areas 현황 진단 + AX 마스터플랜</td></tr>
+      <tr><td>2단계 설계</td><td>4주</td><td>Area별 솔루션 설계 + DID 아키텍처 설계 + 모듈/에이전트 명세</td></tr>
+      <tr><td>3단계 구축</td><td>8주</td><td>모듈/에이전트 구현 + DID 3 Layer 시스템 구축 + 통합 테스트</td></tr>
+      <tr><td>4단계 전환</td><td>12주 내외</td><td>현업 적용·전환 + 사용자 트레이닝 + 운영 안정화</td></tr>
+      <tr><td>5단계 지속적 혁신</td><td>상시</td><td>운영·확장 + 신규 모듈 추가 + ROI 추적·개선</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>기업 규모별 가이드</strong> ·
+    소기업은 6~12개월(28주 표준 일정 적용 가능),
+    중기업은 1~2년(설계·구축 기간 확장),
+    중견기업은 2~3년(부문별 단계적 전개)을 일반적인 인게이지먼트 기간으로 권장합니다.
+  </div>
+  </div>
+</section>
+
+<!-- ─── §3. Phase별 상세 ─── -->
+<section class="doc-section" id="sec-3" aria-labelledby="sec-3-title">
+  <div class="doc-eyebrow">§ 3 · DETAIL</div>
+  <h2 class="doc-h2" id="sec-3-title">Phase별 상세 — 활동·산출물·게이트</h2>
+  <p class="doc-lead">
+    각 Phase는 명확한 <strong>활동</strong>·<strong>산출물</strong>·<strong>다음 단계 진입 게이트</strong>로 구성됩니다.
+    인력 투입은 AX-On Platoon과 고객 현업 인력이 한 팀으로 결합합니다.
+  </p>
+
+  <!-- Phase 1 -->
+  <div class="phase-deep-card">
+    <div class="pd-head">
+      <span class="pd-num">1</span>
+      <span class="pd-name">교육+진단</span>
+      <span class="pd-time">4주 · W1–4</span>
+    </div>
+    <div class="pd-grid">
+      <div class="pd-block">
+        <div class="pd-label">ACTIVITIES</div>
+        <div class="pd-body"><ul>
+          <li>전사 AI 리터러시 교육 — 경영진·현업·실무진 계층별</li>
+          <li>업무 Areas 현황 진단 — 데이터·프로세스·의사결정 흐름</li>
+          <li>마스터플랜 워크숍 — 우선순위 Area·DID 격차 정의</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">DELIVERABLES</div>
+        <div class="pd-body"><ul>
+          <li>AX 마스터플랜 (28주 일정 + 우선순위)</li>
+          <li>Area별 진단 리포트 (As-Is)</li>
+          <li>DID 격차 분석 + KPI 베이스라인</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">GATE</div>
+        <div class="pd-body">경영진 마스터플랜 승인 + 우선순위 Area 3~5개 확정 → 2단계 진입</div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">PEOPLE</div>
+        <div class="pd-body">총괄 PM · Area 진단 분과장 · 현업 핵심 사용자 · 경영진 스폰서</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase-deep-card pd-2">
+    <div class="pd-head">
+      <span class="pd-num">2</span>
+      <span class="pd-name">설계</span>
+      <span class="pd-time">4주 · W5–8</span>
+    </div>
+    <div class="pd-grid">
+      <div class="pd-block">
+        <div class="pd-label">ACTIVITIES</div>
+        <div class="pd-body"><ul>
+          <li>Area별 솔루션 설계 — 모듈·에이전트·HARPX 표준</li>
+          <li>DID 3 Layer 아키텍처 설계 — 데이터·인사이트·결정</li>
+          <li>모듈/에이전트 명세서 작성 + 통합 시나리오 정의</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">DELIVERABLES</div>
+        <div class="pd-body"><ul>
+          <li>Area별 모듈/에이전트 명세서</li>
+          <li>DID 아키텍처 다이어그램 + 데이터 흐름도</li>
+          <li>구축 단계 일정·예산 확정안</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">GATE</div>
+        <div class="pd-body">설계 산출물 검토 통과 + 구축 예산 승인 → 3단계 진입</div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">PEOPLE</div>
+        <div class="pd-body">설계 분과장 · Area별 솔루션 아키텍트 · 현업 SME · 데이터 엔지니어</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-deep-card pd-3">
+    <div class="pd-head">
+      <span class="pd-num">3</span>
+      <span class="pd-name">구축</span>
+      <span class="pd-time">8주 · W9–16</span>
+    </div>
+    <div class="pd-grid">
+      <div class="pd-block">
+        <div class="pd-label">ACTIVITIES</div>
+        <div class="pd-body"><ul>
+          <li>모듈/에이전트 구현 — Area별 병렬 진행</li>
+          <li>DID 3 Layer 시스템 구축 — 데이터 파이프라인·UI</li>
+          <li>통합 테스트 + 시범 사용자 그룹 검증</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">DELIVERABLES</div>
+        <div class="pd-body"><ul>
+          <li>운영 가능한 모듈·에이전트 시스템</li>
+          <li>DID 3 Layer 통합 시스템</li>
+          <li>통합 테스트 리포트 + 시범 검증 결과</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">GATE</div>
+        <div class="pd-body">통합 테스트 통과 + 시범 그룹 사용자 만족도 충족 → 4단계 진입</div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">PEOPLE</div>
+        <div class="pd-body">구축 분과장 · 솔루션 엔지니어 · 데이터 엔지니어 · QA · 시범 사용자</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase-deep-card pd-4">
+    <div class="pd-head">
+      <span class="pd-num">4</span>
+      <span class="pd-name">전환</span>
+      <span class="pd-time">12주 · W17–28</span>
+    </div>
+    <div class="pd-grid">
+      <div class="pd-block">
+        <div class="pd-label">ACTIVITIES</div>
+        <div class="pd-body"><ul>
+          <li>현업 부서 단계적 전환 — 부서별 롤아웃 일정</li>
+          <li>사용자 트레이닝 + 변화 관리 (저항 관리 4단계)</li>
+          <li>운영 안정화 + 초기 ROI 측정 시작</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">DELIVERABLES</div>
+        <div class="pd-body"><ul>
+          <li>전 부서 운영 전환 완료</li>
+          <li>운영 매뉴얼 + 트레이닝 자료</li>
+          <li>초기 ROI 리포트 (W28 시점)</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">GATE</div>
+        <div class="pd-body">전환 완료 + 운영 안정성 확인 → 5단계 상시 운영 진입</div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">PEOPLE</div>
+        <div class="pd-body">전환 분과장 · 변화 관리 코치 · 현업 챔피언 · 운영 엔지니어</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase-deep-card pd-5">
+    <div class="pd-head">
+      <span class="pd-num">5</span>
+      <span class="pd-name">지속적 혁신</span>
+      <span class="pd-time">상시 · W29+</span>
+    </div>
+    <div class="pd-grid">
+      <div class="pd-block">
+        <div class="pd-label">ACTIVITIES</div>
+        <div class="pd-body"><ul>
+          <li>운영·확장 — 모듈/에이전트 개선 사이클</li>
+          <li>신규 Area·신규 모듈 추가</li>
+          <li>분기 리뷰 + ROI 추적 + 차기 우선순위 갱신</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">DELIVERABLES</div>
+        <div class="pd-body"><ul>
+          <li>분기별 운영 리포트 + ROI 추적표</li>
+          <li>연간 마스터플랜 갱신본</li>
+          <li>신규 모듈 백로그</li>
+        </ul></div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">GATE</div>
+        <div class="pd-body">분기 리뷰에서 다음 분기 우선순위·예산 합의</div>
+      </div>
+      <div class="pd-block">
+        <div class="pd-label">PEOPLE</div>
+        <div class="pd-body">총괄 PM(상시) · 운영 분과장 · 현업 챔피언 · 신규 모듈 분과</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── §4. 인게이지먼트 운영 — Platoon ─── -->
+<section class="doc-section" id="sec-4" aria-labelledby="sec-4-title" style="background:var(--surface-warm);max-width:none;">
+  <div style="max-width:960px;margin:0 auto;">
+  <div class="doc-eyebrow">§ 4 · OPERATION</div>
+  <h2 class="doc-h2" id="sec-4-title">인게이지먼트 운영 — Platoon Formation</h2>
+  <p class="doc-lead">
+    AX-On은 인게이지먼트마다 <strong>Platoon</strong>(소대) 단위로 팀을 편성합니다.
+    총괄 PM 1명 + Area별 분과장 + 현업 챔피언 + 솔루션·데이터 엔지니어가
+    한 팀으로 28주를 함께 진행하고 상시 운영으로 이어갑니다.
+  </p>
+
+  <h3 class="doc-h3">Platoon 핵심 역할</h3>
+  <div class="platoon-list">
+    <div class="platoon-role">
+      <div class="pr-rank">PLATOON LEAD</div>
+      <div class="pr-name">총괄 PM</div>
+      <div class="pr-desc">5 Phases 전체 책임. 경영진 스폰서와 직접 소통.</div>
+    </div>
+    <div class="platoon-role">
+      <div class="pr-rank">SQUAD LEAD</div>
+      <div class="pr-name">Area 분과장</div>
+      <div class="pr-desc">Area별 설계·구축·전환 책임자. 현업 SME와 직접 협업.</div>
+    </div>
+    <div class="platoon-role">
+      <div class="pr-rank">CHAMPION</div>
+      <div class="pr-name">현업 챔피언</div>
+      <div class="pr-desc">고객 조직 내 추진력. 변화 관리·확산의 중심축.</div>
+    </div>
+    <div class="platoon-role">
+      <div class="pr-rank">ENGINEER</div>
+      <div class="pr-name">솔루션·데이터 엔지니어</div>
+      <div class="pr-desc">모듈/에이전트 구현, DID 3 Layer 시스템 구축.</div>
+    </div>
+    <div class="platoon-role">
+      <div class="pr-rank">COACH</div>
+      <div class="pr-name">변화 관리 코치</div>
+      <div class="pr-desc">전환 단계 사용자 트레이닝·저항 관리 담당.</div>
+    </div>
+    <div class="platoon-role">
+      <div class="pr-rank">SPONSOR</div>
+      <div class="pr-name">경영진 스폰서</div>
+      <div class="pr-desc">고객 조직 측 의사결정자. Stage Gate 승인 권한.</div>
+    </div>
+  </div>
+
+  <h3 class="doc-h3">운영 거버넌스</h3>
+  <div class="gov-grid">
+    <div class="gov-card">
+      <div class="gov-tag">CADENCE</div>
+      <div class="gov-title">정기 보고 주기</div>
+      <div class="gov-body">
+        주간 — Platoon 내부 진척 점검<br>
+        월간 — 경영진 스폰서 보고 + KPI 리뷰<br>
+        분기 — 마스터플랜 갱신 + ROI 리뷰
+      </div>
+    </div>
+    <div class="gov-card">
+      <div class="gov-tag">GATES</div>
+      <div class="gov-title">Stage Gate 승인</div>
+      <div class="gov-body">
+        Phase 1→2, 2→3, 3→4, 4→5 진입 시
+        경영진 스폰서가 산출물 검토 후 승인.
+        승인 미통과 시 보완 후 재검토.
+      </div>
+    </div>
+    <div class="gov-card">
+      <div class="gov-tag">KPI</div>
+      <div class="gov-title">KPI 추적 체계</div>
+      <div class="gov-body">
+        W4 베이스라인 → W28 초기 측정 → 분기별 갱신.
+        Area별 업무 KPI + 전사 ROI 지표를
+        DID 3 Layer로 자동 집계.
+      </div>
+    </div>
+    <div class="gov-card">
+      <div class="gov-tag">CHANGE</div>
+      <div class="gov-title">변화 관리</div>
+      <div class="gov-body">
+        4단계 전환에서 저항 관리 4단계 적용
+        (인지 → 이해 → 수용 → 내재화).
+        현업 챔피언과 코치가 부서별 맞춤 지원.
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ─── §5. 시작하기 ─── -->
+<section class="doc-section" id="sec-5" aria-labelledby="sec-5-title">
+  <div class="doc-eyebrow">§ 5 · GET STARTED</div>
+  <h2 class="doc-h2" id="sec-5-title">인게이지먼트 시작하기</h2>
+  <p class="doc-lead">
+    인게이지먼트 시작 전 다음 항목을 확인하면 1단계 교육+진단 진입이 매끄럽습니다.
+    문의 후 일정·범위 협의를 거쳐 마스터플랜 워크숍으로 시작합니다.
+  </p>
+
+  <div class="checklist">
+    <div class="cl-title">시작 전 체크리스트</div>
+    <ul>
+      <li>경영진 스폰서가 지정되어 있다 (의사결정·예산 승인 권한)</li>
+      <li>주요 업무 Areas가 식별되어 있다 (3~5개 우선순위 후보)</li>
+      <li>현업 챔피언 후보가 있다 (Area당 1명 이상)</li>
+      <li>인게이지먼트 기간을 합의할 수 있다 (28주 + 상시 또는 규모별 가이드)</li>
+      <li>예산 범위가 합의되어 있다 (1~4단계 + 5단계 상시 운영)</li>
+      <li>현재 데이터·시스템 상태를 공유할 수 있다 (NDA 후)</li>
+    </ul>
+  </div>
+
+  <div class="cta-block">
+    <div class="cta-title">인게이지먼트 문의하기</div>
+    <div class="cta-desc">
+      마스터플랜 워크숍 일정과 28주 진행 계획을 함께 설계해드립니다.<br>
+      문의 후 1~2주 내 사전 미팅을 진행합니다.
+    </div>
+    <a href="contact.html" class="cta-btn">문의하기 →</a>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">AX-<span>On</span> Platform</div>
+      <div class="footer-org-name">파인더월드</div>
+      <div class="footer-org-person">대표/공인회계사 선웅규</div>
+      <div class="footer-org-person">서울특별시 강남구 테헤란로63길 9, 삼성롯데캐슬클라세 9층</div>
+    </div>
+    <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="contact.html">문의하기</a>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    &copy; 2026 AX-On Platform. All rights reserved.
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+function setMenuOpen(open) {
+  navLinks.classList.toggle('open', open);
+  mobileToggle.setAttribute('aria-expanded', String(open));
+  mobileToggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  const spans = mobileToggle.querySelectorAll('span');
+  if (open) {
+    spans[0].style.cssText = 'transform: translateY(7px) rotate(45deg)';
+    spans[1].style.cssText = 'opacity: 0; transform: scaleX(0)';
+    spans[2].style.cssText = 'transform: translateY(-7px) rotate(-45deg)';
+  } else {
+    spans[0].style.cssText = ''; spans[1].style.cssText = ''; spans[2].style.cssText = '';
+  }
+}
+mobileToggle.addEventListener('click', (e) => { e.stopPropagation(); setMenuOpen(!navLinks.classList.contains('open')); });
+document.addEventListener('click', (e) => { if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) setMenuOpen(false); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && navLinks.classList.contains('open')) { setMenuOpen(false); mobileToggle.focus(); } });
+
+let _sb = null;
+const _sbReady = Promise.all([AXON_CONFIG.init(), whenSupabaseReady()]).then(() => {
+  if (typeof window.supabase !== 'undefined') {
+    _sb = window.supabase.createClient(AXON_CONFIG.SUPABASE_URL, AXON_CONFIG.SUPABASE_ANON_KEY);
+  }
+}).catch(err => console.error('Config 초기화 실패:', err));
+
+(async function() {
+  try {
+    await _sbReady;
+    if (!_sb) return;
+    const { data: { user } } = await _sb.auth.getUser();
+    if (!user) return;
+    const navRight = document.querySelector('.nav-right');
+    const loginBtn = navRight.querySelector('.nav-login');
+    const signupBtn = navRight.querySelector('.nav-signup');
+    if (loginBtn) loginBtn.remove();
+    if (signupBtn) signupBtn.remove();
+    let realName = '';
+    try {
+      const { data: expert } = await _sb.from('ax_experts').select('name').eq('user_id', user.id).maybeSingle();
+      if (expert && expert.name) realName = expert.name;
+    } catch(e) {}
+    const displayName = realName || user.user_metadata?.full_name || user.email?.split('@')[0] || '사용자';
+    const wrap = document.createElement('div');
+    wrap.className = 'nav-user-wrap';
+    wrap.innerHTML = '<a href="pages/auth/profile.html" class="nav-user-name">' + displayName + '님</a><button class="nav-logout-btn" id="navLogoutBtn">로그아웃</button>';
+    navRight.insertBefore(wrap, navRight.querySelector('.mobile-toggle'));
+    document.getElementById('navLogoutBtn').addEventListener('click', async () => { await _sb.auth.signOut(); location.reload(); });
+  } catch(e) { console.error(e); }
+})();
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/js/analytics.js"></script>
+</body>
+</html>
