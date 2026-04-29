@@ -142,23 +142,84 @@ body {
 .definition-card .def-formula .hl-coral { color: var(--coral); }
 .definition-card .def-source { margin-top: 14px; font-size: 13px; color: var(--ink-muted); font-style: italic; }
 
-/* FRAMEWORK STACK (§2.2) */
+/* AX BLUEPRINT — 외곽 청사진 박스 (§2.2) */
+.ax-blueprint {
+  position: relative;
+  background: linear-gradient(180deg, #ffffff 0%, var(--surface-warm) 100%);
+  border: 1.5px solid rgba(26,26,46,0.12);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(26,26,46,0.08);
+  margin: 36px 0;
+  padding: 0 0 32px;
+  overflow: hidden;
+}
+.ax-blueprint::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+  width: 5px; background: linear-gradient(180deg, var(--amber) 0%, var(--teal) 100%);
+}
+.blueprint-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 28px 16px 32px;
+  border-bottom: 1px dashed rgba(26,26,46,0.15);
+  background: rgba(255,255,255,0.6);
+}
+.blueprint-header .bh-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px; font-weight: 900;
+  color: var(--amber); line-height: 1;
+}
+.blueprint-header .bh-title {
+  font-size: 16px; font-weight: 800; color: var(--ink);
+  letter-spacing: -0.2px;
+}
+.blueprint-header .bh-sub {
+  margin-left: auto;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  color: var(--ink-muted); text-transform: uppercase;
+}
+.blueprint-tier {
+  margin: 22px 28px 0 36px;
+  position: relative;
+}
+.blueprint-tier .tier-side {
+  position: absolute; left: -28px; top: 18px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px; font-weight: 800; letter-spacing: 2px;
+  color: var(--ink-muted);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+.blueprint-arrow {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; margin: 12px 28px 0 36px;
+  font-size: 12px; color: var(--ink-muted);
+  letter-spacing: 0.5px;
+}
+.blueprint-arrow .ba-icon {
+  display: inline-block; width: 18px; height: 18px;
+  border-radius: 50%; background: var(--amber-soft);
+  color: var(--amber-deep); font-size: 11px;
+  text-align: center; line-height: 18px; font-weight: 800;
+  border: 1px solid var(--border-amber);
+}
+.blueprint-arrow.ba-down .ba-icon { background: rgba(0,180,150,0.08); color: var(--teal); border-color: rgba(0,180,150,0.3); }
+
+/* FRAMEWORK STACK (legacy — now used inside blueprint) */
 .framework-stack {
   display: flex; flex-direction: column; gap: 0;
-  border-radius: var(--radius); overflow: hidden;
-  margin: 36px 0;
-  box-shadow: 0 2px 16px rgba(26,26,46,0.08);
-  border: 1px solid rgba(26,26,46,0.07);
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid rgba(26,26,46,0.08);
+  background: #fff;
 }
 .fw-block {
   background: var(--surface-card);
-  padding: 26px 32px;
+  padding: 22px 28px;
   display: flex; align-items: center; gap: 20px;
   flex-wrap: wrap;
   border-left: 4px solid transparent;
 }
 .fw-block.fw-goal { border-color: var(--amber); background: #fffaf2; }
-.fw-block.fw-axes { border-color: var(--ink); background: #fff; }
+.fw-block.fw-axes { border-color: var(--ink); background: #fff; padding: 14px 20px; }
 .fw-block.fw-how { border-color: var(--teal); background: #f0fdfb; }
 .fw-bridge {
   text-align: center; padding: 8px 0;
@@ -459,6 +520,63 @@ body {
 .resistance-table td:first-child { font-weight: 700; color: var(--coral); width: 18%; }
 .resistance-table tr:last-child td { border-bottom: none; }
 
+/* TERM DEFINE — 용어 정의 박스 (§5 인게이지먼트 등) */
+.term-define {
+  background: linear-gradient(135deg, #fff 0%, var(--amber-soft) 100%);
+  border: 1.5px solid var(--border-amber);
+  border-left: 5px solid var(--amber);
+  border-radius: var(--radius-sm);
+  margin: 24px 0 32px;
+  padding: 22px 26px;
+  box-shadow: 0 4px 18px rgba(232, 146, 13, 0.08);
+}
+.term-define .td-head {
+  display: flex; align-items: baseline; gap: 12px;
+  flex-wrap: wrap; margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(232, 146, 13, 0.3);
+}
+.term-define .td-tag {
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px; font-weight: 800; letter-spacing: 2px;
+  background: var(--amber); color: #fff;
+  padding: 4px 10px; border-radius: 6px;
+}
+.term-define .td-word {
+  font-size: 22px; font-weight: 900; color: var(--amber-deep);
+  letter-spacing: -0.3px;
+}
+.term-define .td-en {
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px; font-weight: 600;
+  color: var(--ink-muted); font-style: italic;
+}
+.term-define .td-body {
+  font-size: 15.5px; color: var(--ink); line-height: 1.95;
+  word-break: keep-all; margin-bottom: 14px;
+}
+.term-define .td-body strong { color: var(--amber-deep); font-weight: 800; }
+.term-define .td-foot {
+  display: flex; flex-direction: column; gap: 6px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(232, 146, 13, 0.3);
+}
+.term-define .td-bullet {
+  font-size: 14px; color: var(--ink); line-height: 1.7;
+}
+.term-define .td-x {
+  display: inline-block; width: 18px; height: 18px;
+  border-radius: 50%; background: rgba(220, 80, 80, 0.12); color: #c44;
+  text-align: center; line-height: 18px; font-size: 11px; font-weight: 800;
+  margin-right: 8px;
+}
+.term-define .td-o {
+  display: inline-block; width: 18px; height: 18px;
+  border-radius: 50%; background: rgba(0, 180, 150, 0.12); color: var(--teal);
+  text-align: center; line-height: 18px; font-size: 11px; font-weight: 800;
+  margin-right: 8px;
+}
+
 /* EFFECT (§7) */
 .effect-grid {
   display: grid; grid-template-columns: repeat(2, 1fr);
@@ -493,7 +611,15 @@ body {
   .culture-3-detail { margin: 20px 0; gap: 10px; }
   .effect-grid { grid-template-columns: 1fr; gap: 12px; }
   .fw-block { padding: 18px 18px; }
-  .framework-stack { margin: 24px 0; }
+  .framework-stack { margin: 0; }
+  .ax-blueprint { margin: 24px 0; padding: 0 0 22px; }
+  .blueprint-header { padding: 14px 18px 12px 22px; gap: 10px; }
+  .blueprint-header .bh-num { font-size: 22px; }
+  .blueprint-header .bh-title { font-size: 14px; }
+  .blueprint-header .bh-sub { font-size: 10px; letter-spacing: 1.2px; }
+  .blueprint-tier { margin: 16px 18px 0 26px; }
+  .blueprint-tier .tier-side { left: -22px; font-size: 9px; letter-spacing: 1.5px; }
+  .blueprint-arrow { margin: 8px 18px 0 26px; font-size: 11px; }
   .resistance-table th, .resistance-table td { padding: 10px 12px; font-size: 13px; word-break: keep-all; }
   .area-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .area-card { padding: 12px 10px; }
@@ -604,32 +730,62 @@ body {
     GOAL이 위에 있고, 그 아래 두 축(WHAT·SYSTEM)이 마주 보며, 다시 그 아래 실행 여정(HOW)이 받칩니다.
   </p>
 
-  <!-- Framework Stack -->
-  <div class="framework-stack">
-    <div class="fw-block fw-goal">
-      <span class="fw-main">Goal</span>
-      <span class="fw-sub">— ROI 증대 → 기업: 기업가치 / 공조직: 공공가치 상승</span>
+  <!-- AX Blueprint — 4 Components 청사진 -->
+  <div class="ax-blueprint">
+    <div class="blueprint-header">
+      <span class="bh-num">4</span>
+      <span class="bh-title">AX-On Framework</span>
+      <span class="bh-sub">Goal · Areas · DID · 5 Phases</span>
     </div>
-    <div class="fw-bridge">▲ 양쪽 혁신의 결과</div>
-    <div class="fw-block fw-axes">
-      <div class="axes-diagram" style="width:100%;padding:0;">
-        <div class="axis-card">
-          <div class="axis-label">WHAT</div>
-          <div class="axis-name">업무 Areas</div>
-          <div class="axis-desc">업무 프로세스 혁신</div>
-        </div>
-        <div class="axis-arrow">←→</div>
-        <div class="axis-card axis-did">
-          <div class="axis-label">SYSTEM</div>
-          <div class="axis-name">DID System</div>
-          <div class="axis-desc">D → I → D 흐름 혁신</div>
+
+    <!-- Tier 1: GOAL -->
+    <div class="blueprint-tier">
+      <span class="tier-side">GOAL</span>
+      <div class="framework-stack">
+        <div class="fw-block fw-goal">
+          <span class="fw-main">Goal</span>
+          <span class="fw-sub">— ROI 증대 → 기업: 기업가치 / 공조직: 공공가치 상승</span>
         </div>
       </div>
     </div>
-    <div class="fw-bridge">▼ 양쪽 혁신을 실행하는 여정</div>
-    <div class="fw-block fw-how">
-      <span class="fw-main">5 Phases</span>
-      <span class="fw-sub">교육+진단 → 설계 → 구축 → 전환 → 지속적 혁신</span>
+
+    <!-- Bridge: ▲ 결과 -->
+    <div class="blueprint-arrow"><span class="ba-icon">▲</span> 양쪽 혁신의 결과</div>
+
+    <!-- Tier 2: AXES (WHAT × SYSTEM) -->
+    <div class="blueprint-tier">
+      <span class="tier-side">AXES</span>
+      <div class="framework-stack">
+        <div class="fw-block fw-axes">
+          <div class="axes-diagram" style="width:100%;padding:0;">
+            <div class="axis-card">
+              <div class="axis-label">WHAT</div>
+              <div class="axis-name">업무 Areas</div>
+              <div class="axis-desc">업무 프로세스 혁신</div>
+            </div>
+            <div class="axis-arrow">←→</div>
+            <div class="axis-card axis-did">
+              <div class="axis-label">SYSTEM</div>
+              <div class="axis-name">DID System</div>
+              <div class="axis-desc">D → I → D 흐름 혁신</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bridge: ▼ 여정 -->
+    <div class="blueprint-arrow ba-down"><span class="ba-icon">▼</span> 양쪽 혁신을 실행하는 여정</div>
+
+    <!-- Tier 3: HOW (5 Phases) -->
+    <div class="blueprint-tier">
+      <span class="tier-side">HOW</span>
+      <div class="framework-stack">
+        <div class="fw-block fw-how">
+          <span class="fw-main">5 Phases</span>
+          <span class="fw-sub">교육+진단 → 설계 → 구축 → 전환 → 지속적 혁신</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -824,11 +980,30 @@ body {
 <!-- ─── §5. 5 Phases ─── -->
 <section class="doc-section" id="sec-5" aria-labelledby="sec-5-title">
   <div class="doc-eyebrow">§ 5 · HOW</div>
-  <h2 class="doc-h2" id="sec-5-title">5 Phases — AX 추진 여정</h2>
+  <h2 class="doc-h2" id="sec-5-title">5 Phases — AX 인게이지먼트 여정</h2>
   <p class="doc-lead">
     Areas와 DID, 두 축의 혁신을 실제로 실행하기 위한 5단계입니다.
     교육+진단으로 시작해 지속적 혁신으로 이어집니다. 총 7개월 + 상시 운영.
   </p>
+
+  <!-- 인게이지먼트 정의 박스 -->
+  <div class="term-define">
+    <div class="td-head">
+      <span class="td-tag">TERM</span>
+      <span class="td-word">인게이지먼트</span>
+      <span class="td-en">Engagement</span>
+    </div>
+    <div class="td-body">
+      AX-On이 고객 조직과 함께 <strong>5 Phases 전체를 진행하는 동반 여정</strong>을 뜻합니다.
+      AX는 보고서 한 번 납품으로 완성되지 않습니다 — <strong>28주(약 7개월) 동안 함께 설계·구축·전환</strong>한 뒤,
+      <strong>상시 운영(3년 이상 권장)</strong>으로 지속적 혁신을 이어가는 <strong>장기 파트너십</strong>입니다.
+      이 전체 기간을 한 단위로 묶어 <strong>"인게이지먼트"</strong>라고 부릅니다.
+    </div>
+    <div class="td-foot">
+      <span class="td-bullet"><span class="td-x">✗</span> 단발성 컨설팅 — 보고서 납품 후 종료</span>
+      <span class="td-bullet"><span class="td-o">✓</span> 인게이지먼트 — 5 Phases 동안 함께 실행하고 ROI까지 책임</span>
+    </div>
+  </div>
 
   <div class="phase-flow">
     <div class="phase-card"><div class="ph-num">1</div><div class="ph-name">교육+진단</div><div class="ph-time">4주</div></div>
