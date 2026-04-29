@@ -195,6 +195,45 @@ body {
 .sta-harpx td:nth-child(5) { width: 7%; text-align: center; font-weight: 700; }
 .sta-harpx td:nth-child(6) { width: 54%; white-space: normal; color: var(--ink-soft); }
 
+/* STA 상세 5표 (Part별 색상) */
+.sta-legend {
+  background: var(--ink); color: #fff;
+  padding: 12px 18px; border-radius: 10px;
+  margin: 22px 0 4px;
+  display: flex; gap: 18px; flex-wrap: wrap;
+  font-size: 13px; line-height: 1.6;
+}
+.sta-legend .sl-label { opacity: 0.55; margin-right: 6px; }
+.sta-legend b { font-weight: 800; margin-right: 4px; }
+
+.sta-part-title {
+  margin: 22px 0 6px;
+  font-size: 14px; font-weight: 800;
+  display: flex; align-items: center; gap: 10px;
+  letter-spacing: -0.2px;
+}
+.sta-part-title .badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 6px;
+  color: #fff; font-weight: 800; font-size: 14px;
+}
+
+.sta-detail { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 8px 0 4px; }
+.sta-detail th, .sta-detail td {
+  padding: 8px 12px; text-align: left;
+  border-bottom: 1px solid rgba(26,26,46,0.06);
+}
+.sta-detail th { background: var(--surface-warm); font-weight: 700; font-size: 12.5px; color: var(--ink); text-align: center; }
+.sta-detail td:first-child { width: 10%; text-align: center; font-weight: 800; }
+.sta-detail td:nth-child(2) { width: 26%; font-weight: 700; color: var(--ink); }
+.sta-detail td:nth-child(3) { color: var(--ink-soft); }
+
+.c-h { color: #FF8C00; } .bg-h { background: #FF8C00; }
+.c-a { color: #00B4D8; } .bg-a { background: #00B4D8; }
+.c-r { color: #00D4AA; } .bg-r { background: #00D4AA; }
+.c-p { color: #A78BFA; } .bg-p { background: #A78BFA; }
+.c-x { color: #48CAE4; } .bg-x { background: #48CAE4; }
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .page-hero { padding: 96px 16px 40px; }
@@ -388,6 +427,80 @@ body {
       </tbody>
     </table>
     </div>
+
+    <div class="sta-legend">
+      <span><span class="sl-label">범례</span></span>
+      <span><b class="c-h">H</b> Human (담당자 작성)</span>
+      <span><b class="c-a">A</b> AI (자동수집)</span>
+      <span><b class="c-r">R</b> Rank (순위)</span>
+      <span><b class="c-p">P</b> Planning (계획)</span>
+      <span><b class="c-x">X</b> eXecution (실행)</span>
+    </div>
+
+    <!-- H Part — 7개 -->
+    <div class="sta-part-title"><span class="badge bg-h">H</span><span class="c-h">H = Human (담당자 작성) — 7개</span></div>
+    <table class="sta-detail">
+      <thead><tr><th>코드</th><th>항목</th><th>질문</th></tr></thead>
+      <tbody>
+        <tr><td class="c-h">H1</td><td>빈도</td><td>얼마나 자주 하나?</td></tr>
+        <tr><td class="c-h">H2</td><td>소요시간</td><td>한 번에 얼마나 걸리나?</td></tr>
+        <tr><td class="c-h">H3</td><td>협업</td><td>누구와 같이 하나?</td></tr>
+        <tr><td class="c-h">H4</td><td>반복성</td><td>매번 같은가 다른가?</td></tr>
+        <tr><td class="c-h">H5</td><td>예외·판단</td><td>예외 상황이 얼마나 자주, 얼마나 복잡한가?</td></tr>
+        <tr><td class="c-h">H6</td><td>Pain Point</td><td>이 업무에서 뭐가 제일 힘든가?</td></tr>
+        <tr><td class="c-h">H7</td><td>AI 희망</td><td>AI가 뭘 해주면 좋겠나?</td></tr>
+      </tbody>
+    </table>
+
+    <!-- A Part — 11개 -->
+    <div class="sta-part-title"><span class="badge bg-a">A</span><span class="c-a">A = AI (자동수집) — 11개</span></div>
+    <table class="sta-detail">
+      <thead><tr><th>코드</th><th>항목</th><th>파악 방법</th></tr></thead>
+      <tbody>
+        <tr><td class="c-a">A1</td><td>담당자·인원수</td><td>조직도 / 인사시스템</td></tr>
+        <tr><td class="c-a">A2</td><td>사용 도구·시스템</td><td>IT 시스템 로그</td></tr>
+        <tr><td class="c-a">A3</td><td>입력 데이터 유형</td><td>시스템 분석</td></tr>
+        <tr><td class="c-a">A4</td><td>출력 산출물 유형</td><td>시스템 분석</td></tr>
+        <tr><td class="c-a">A5</td><td>업무 연결 관계</td><td>프로세스 추적</td></tr>
+        <tr><td class="c-a">A6</td><td>데이터 디지털화 수준</td><td>시스템 상태 분석</td></tr>
+        <tr><td class="c-a">A7</td><td>업무 구조화 수준</td><td>절차 기술 분석</td></tr>
+        <tr><td class="c-a">A8</td><td>오류 영향 심각도</td><td>규정 / 안전 키워드 분석</td></tr>
+        <tr><td class="c-a">A9</td><td>성과 측정 기준</td><td>시스템 KPI</td></tr>
+        <tr><td class="c-a">A10</td><td>예상 시간 절감량</td><td>H1 × H2 × A1 계산</td></tr>
+        <tr><td class="c-a">A11</td><td>적합 AI 유형</td><td>A7 기반: RPA / ML / LLM</td></tr>
+      </tbody>
+    </table>
+
+    <!-- R Part — 1개 -->
+    <div class="sta-part-title"><span class="badge bg-r">R</span><span class="c-r">R = Rank (순위) — 1개</span></div>
+    <table class="sta-detail">
+      <thead><tr><th>코드</th><th>항목</th><th>산출 방식</th></tr></thead>
+      <tbody>
+        <tr><td class="c-r">R</td><td>종합 순위</td><td>(H4 + H5반전 + A6 + A7) × A10 ÷ A8 → 점수순 자동 정렬<br><span style="font-size:12px; color:var(--ink-muted);">H5반전: 예외·판단이 높을수록 자동화 어려움 → 높음=1, 낮음=5로 반전</span></td></tr>
+      </tbody>
+    </table>
+
+    <!-- P Part — 2개 -->
+    <div class="sta-part-title"><span class="badge bg-p">P</span><span class="c-p">P = Planning (계획) — 2개</span></div>
+    <table class="sta-detail">
+      <thead><tr><th>코드</th><th>항목</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td class="c-p">P1</td><td>담당팀</td><td>Alpha · Bravo · Charlie · Delta 분대 중 배정</td></tr>
+        <tr><td class="c-p">P2</td><td>목표일</td><td>목표 완료 시점</td></tr>
+      </tbody>
+    </table>
+
+    <!-- X Part — 4개 -->
+    <div class="sta-part-title"><span class="badge bg-x">X</span><span class="c-x">X = eXecution (실행) — 4개</span></div>
+    <table class="sta-detail">
+      <thead><tr><th>코드</th><th>항목</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td class="c-x">X1</td><td>상태</td><td>Pending / In Progress / Done</td></tr>
+        <tr><td class="c-x">X2</td><td>진행률</td><td>0~100%</td></tr>
+        <tr><td class="c-x">X3</td><td>이슈</td><td>진행 중 발생한 문제 사항</td></tr>
+        <tr><td class="c-x">X4</td><td>검증</td><td>Not Verified / Verified / Failed</td></tr>
+      </tbody>
+    </table>
 
     <div class="callout">
       <strong>흐름:</strong> H(인터뷰) → A(AI 자동수집) → R(순위 산출) — 여기까지가 진단. → P(계획) → X(실행·검증) → 다음 Task.
