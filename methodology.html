@@ -188,12 +188,12 @@ body {
   font-size: 13.5px;
 }
 .sta-harpx th { text-align: center; }
-.sta-harpx td:first-child { width: 12%; color: var(--ink); font-weight: 800; text-align: center; background: var(--surface-warm); }
-.sta-harpx td:nth-child(2) { width: 7%; text-align: center; color: var(--amber); font-weight: 800; }
-.sta-harpx td:nth-child(3) { width: 22%; text-align: center; font-weight: 700; color: var(--ink); }
-.sta-harpx td:nth-child(4) { width: 9%; text-align: center; color: var(--ink-soft); }
-.sta-harpx td:nth-child(5) { width: 8%; text-align: center; font-weight: 700; }
-.sta-harpx td:nth-child(6) { width: 42%; white-space: normal; color: var(--ink-soft); }
+.sta-harpx td:first-child { width: 9%; color: var(--ink); font-weight: 800; text-align: center; background: var(--surface-warm); }
+.sta-harpx td:nth-child(2) { width: 6%; text-align: center; color: var(--amber); font-weight: 800; }
+.sta-harpx td:nth-child(3) { width: 17%; text-align: center; font-weight: 700; color: var(--ink); }
+.sta-harpx td:nth-child(4) { width: 7%; text-align: center; color: var(--ink-soft); }
+.sta-harpx td:nth-child(5) { width: 7%; text-align: center; font-weight: 700; }
+.sta-harpx td:nth-child(6) { width: 54%; white-space: normal; color: var(--ink-soft); }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
@@ -264,8 +264,8 @@ body {
     <div class="doc-eyebrow">① SAL GRID</div>
     <h2 class="doc-h2">SAL Grid — Stage × Area × Level 3차원 좌표계</h2>
     <p class="doc-lead">
-      AX 프로젝트의 모든 Task를 <strong>3개 축</strong>에 위치시켜 체계적으로 관리합니다.
-      각 업무(Task)가 업무 흐름의 어디에 있는지(Stage), 어느 영역인지(Area), 어느 깊이인지(Level)를 좌표 하나로 표현합니다.
+      SAL Grid는 AX 프로젝트의 모든 Task를 Stage·Area·Level <strong>3개 축</strong>으로 분해하여 정리합니다.
+      각 Task는 자신만의 좌표(예: S1TR1)를 갖습니다.
     </p>
 
     <h3 class="doc-h3" style="margin-top:18px;">3개 축</h3>
@@ -290,8 +290,7 @@ body {
     <h3 class="doc-h3">Stage 정의 (S축) — 산업·조직별로 다름</h3>
     <p class="doc-p" style="margin-bottom:10px;">
       Stage는 <strong>각 산업·조직의 본업 업무 흐름</strong>을 따라 정의됩니다.
-      앞 Stage가 끝나야 다음 Stage가 시작되는 <strong>선후 의존성</strong>을 갖고,
-      각 Stage 경계에서 <strong>Stage Gate</strong>로 품질을 검증합니다.
+      앞 Stage가 끝나야 다음 Stage가 시작되는 <strong>선후 의존성</strong>을 갖습니다.
     </p>
     <table class="sta-table">
       <thead><tr><th>산업</th><th>업무 흐름 (S1 → … → Sn)</th></tr></thead>
@@ -313,8 +312,7 @@ body {
     </div>
 
     <div class="callout">
-      좌표를 보면 업무 흐름의 어느 단계, 어느 영역, 어떤 깊이에 있는 Task인지 한눈에 파악됩니다.
-      90개 Task × 25개 속성 규모의 프로젝트도 좌표 한 줄로 추적 가능합니다.
+      90개 Task × 25개 속성 규모의 복잡한 프로젝트도 3차원 좌표 체계로 분해되어 한눈에 파악됩니다.
     </div>
 
     <div class="callout-amber">
@@ -382,8 +380,8 @@ body {
     <table class="sta-table sta-harpx">
       <thead><tr><th>단계</th><th>코드</th><th>이름</th><th>누가</th><th>속성 수</th><th>내용</th></tr></thead>
       <tbody>
-        <tr><td rowspan="3">Step 1<br>진단</td><td>H</td><td>Human (담당자 작성)</td><td>사람</td><td>7개</td><td>현업이 직접 답하는 업무 현황 (H1~H7)</td></tr>
-        <tr><td>A</td><td>AI (자동수집)</td><td>AI</td><td>11개</td><td>AI가 자동 파악하는 객관 데이터 (A1~A11)</td></tr>
+        <tr><td rowspan="3">Step 1<br>진단</td><td>H</td><td>Human (담당자 작성)</td><td>사람</td><td>7개</td><td>현업 담당자가 직접 답변하는 업무 현황 (H1~H7)</td></tr>
+        <tr><td>A</td><td>AI (자동수집)</td><td>AI</td><td>11개</td><td>AI가 자동 파악하는 데이터 (A1~A11)</td></tr>
         <tr><td>R</td><td>Rank (순위)</td><td>시스템</td><td>1개</td><td>종합 점수 + 우선순위 자동 산출</td></tr>
         <tr><td rowspan="2">Step 2<br>추진</td><td>P</td><td>Planning (계획)</td><td>PM</td><td>2개</td><td>담당팀, 목표일 (P1~P2)</td></tr>
         <tr><td>X</td><td>eXecution (실행)</td><td>시스템</td><td>4개</td><td>상태, 진행률, 이슈, 검증 (X1~X4)</td></tr>
