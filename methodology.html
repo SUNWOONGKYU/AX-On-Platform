@@ -323,7 +323,7 @@ body {
 }
 .sta-harpx th { text-align: center; }
 .sta-harpx td:first-child { width: 9%; color: var(--ink); font-weight: 800; text-align: center; background: var(--surface-warm); }
-.sta-harpx td:nth-child(2) { width: 6%; text-align: center; color: var(--amber); font-weight: 800; }
+.sta-harpx td:nth-child(2) { width: 6%; text-align: center; font-weight: 800; }
 .sta-harpx td:nth-child(3) { width: 17%; text-align: center; font-weight: 700; color: var(--ink); }
 .sta-harpx td:nth-child(4) { width: 7%; text-align: center; color: var(--ink-soft); }
 .sta-harpx td:nth-child(5) { width: 7%; text-align: center; font-weight: 700; }
@@ -494,21 +494,16 @@ body {
       </div>
       <div class="effect-card">
         <div class="ef-num">EFFECT 2</div>
-        <div class="ef-title">자기설명적 식별자</div>
-        <div class="ef-desc">자동 증가 번호(#1234)와 달리 SAL ID(S3BA2a)는 좌표·의존성·병렬성·인접성을 식별자 자체에 내재.</div>
-      </div>
-      <div class="effect-card">
-        <div class="ef-num">EFFECT 3</div>
         <div class="ef-title">3D 위상 위의 의존성 자동 결정</div>
         <div class="ef-desc">Stage 순서 → 시간축 의존성 / Area 인접 → 영역 간 인접성 / Level → 절차적 깊이가 좌표만으로 결정됨.</div>
       </div>
       <div class="effect-card">
-        <div class="ef-num">EFFECT 4</div>
+        <div class="ef-num">EFFECT 3</div>
         <div class="ef-title">실행–검증 일체화</div>
         <div class="ef-desc">Task 지시서와 검증 지시서가 동시에 생성되어, 실행 직후 검증 결과까지 동일 좌표에 기록.</div>
       </div>
       <div class="effect-card">
-        <div class="ef-num">EFFECT 5</div>
+        <div class="ef-num">EFFECT 4</div>
         <div class="ef-title">Stage Gate 기반 자가 치유</div>
         <div class="ef-desc">Stage 미완료 시 다음 Stage 진입 차단. 검증 리포트가 누락된 작업을 자동 식별 → 보완 사이클 진입.</div>
       </div>
@@ -661,11 +656,11 @@ body {
     <table class="sta-table sta-harpx">
       <thead><tr><th>단계</th><th>코드</th><th>이름</th><th>누가</th><th>속성 수</th><th>내용</th></tr></thead>
       <tbody>
-        <tr><td rowspan="3">Step 1<br>진단</td><td>H</td><td>Human (담당자 작성)</td><td>사람</td><td>7개</td><td>현업 담당자가 직접 답변하는 업무 현황 (H1~H7)</td></tr>
-        <tr><td>A</td><td>AI (자동수집)</td><td>AI</td><td>11개</td><td>AI가 자동 파악하는 데이터 (A1~A11)</td></tr>
-        <tr><td>R</td><td>Rank (순위)</td><td>시스템</td><td>1개</td><td>종합 점수 + 우선순위 자동 산출</td></tr>
-        <tr><td rowspan="2">Step 2<br>추진</td><td>P</td><td>Planning (계획)</td><td>PM</td><td>2개</td><td>담당팀, 목표일 (P1~P2)</td></tr>
-        <tr><td>X</td><td>eXecution (실행)</td><td>시스템</td><td>4개</td><td>상태, 진행률, 이슈, 검증 (X1~X4)</td></tr>
+        <tr><td rowspan="3">Step 1<br>진단</td><td class="c-h">H</td><td class="c-h">Human (담당자 작성)</td><td>사람</td><td>7개</td><td>현업 담당자가 직접 답변하는 업무 현황 (H1~H7)</td></tr>
+        <tr><td class="c-a">A</td><td class="c-a">AI (자동수집)</td><td>AI</td><td>11개</td><td>AI가 자동 파악하는 데이터 (A1~A11)</td></tr>
+        <tr><td class="c-r">R</td><td class="c-r">Rank (순위)</td><td>시스템</td><td>1개</td><td>종합 점수 + 우선순위 자동 산출</td></tr>
+        <tr><td rowspan="2">Step 2<br>추진</td><td class="c-p">P</td><td class="c-p">Planning (계획)</td><td>PM</td><td>2개</td><td>담당팀, 목표일 (P1~P2)</td></tr>
+        <tr><td class="c-x">X</td><td class="c-x">eXecution (실행)</td><td>시스템</td><td>4개</td><td>상태, 진행률, 이슈, 검증 (X1~X4)</td></tr>
       </tbody>
     </table>
     </div>
