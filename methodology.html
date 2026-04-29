@@ -158,6 +158,15 @@ body {
   padding: 12px 22px; text-align: center;
   font-weight: 700; color: var(--ink);
   min-width: 200px;
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.platoon-node:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(26, 26, 46, 0.10);
+}
+@media (prefers-reduced-motion: reduce) {
+  .platoon-node, .platoon-node:hover { transition: none; transform: none; }
 }
 .platoon-node.lvl-1 { border-color: var(--amber); background: #fffaf2; }
 .platoon-node.lvl-2 { border-color: var(--sky); background: #f5f9ff; }
