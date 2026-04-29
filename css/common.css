@@ -257,11 +257,11 @@
   font-size: 13px; color: var(--dark-text-muted);
   margin-top: 2px; text-align: center;
 }
-.footer-links { display: flex; gap: 24px; }
+.footer-links { display: flex; gap: 24px; order: -1; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--dark-border); width: 100%; justify-content: center; }
 .footer-links a {
-  color: var(--dark-text-muted);
+  color: #fff;
   text-decoration: none;
-  font-size: 14px; transition: color 0.3s ease;
+  font-size: 14px; font-weight: 700; transition: color 0.3s ease;
 }
 .footer-links a:hover { color: var(--amber); }
 .footer-copyright {

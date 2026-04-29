@@ -55,8 +55,8 @@ body {
   margin-bottom: 18px;
 }
 .page-subtitle {
-  font-size: 14px; color: var(--ink-muted);
-  line-height: 1.85; max-width: 720px; margin: 0 auto;
+  font-size: 15.5px; color: var(--ink-muted);
+  line-height: 1.9; max-width: 760px; margin: 0 auto;
   word-break: keep-all;
 }
 
@@ -74,8 +74,8 @@ body {
   line-height: 1.35; margin-bottom: 14px; word-break: keep-all;
 }
 .doc-lead {
-  font-size: 14px; color: var(--ink-muted); line-height: 1.9;
-  word-break: keep-all; margin-bottom: 16px;
+  font-size: 16.5px; color: var(--ink); line-height: 1.9;
+  word-break: keep-all; margin-bottom: 18px;
 }
 .doc-h3 {
   font-size: 20px; font-weight: 800;
@@ -84,22 +84,22 @@ body {
   word-break: keep-all;
 }
 .doc-h4 {
-  font-size: 14px; font-weight: 700;
-  color: var(--ink); margin: 20px 0 10px;
+  font-size: 16px; font-weight: 700;
+  color: var(--ink); margin: 22px 0 10px;
 }
-.doc-p { font-size: 15.5px; color: var(--ink-muted); line-height: 1.95; word-break: keep-all; margin-bottom: 12px; }
+.doc-p { font-size: 16px; color: var(--ink-muted); line-height: 1.95; word-break: keep-all; margin-bottom: 16px; }
 .doc-p strong { color: var(--ink); }
 .callout {
   background: var(--surface-warm); border-radius: 12px;
-  padding: 16px 22px; font-size: 14.5px; color: var(--ink); line-height: 1.85;
-  margin: 14px 0; word-break: keep-all;
+  padding: 18px 22px; font-size: 15px; color: var(--ink); line-height: 1.9;
+  margin: 16px 0; word-break: keep-all;
 }
 .callout-amber {
   background: var(--amber-glow);
   border: 1px solid rgba(232, 146, 13, 0.25);
-  border-radius: 12px; padding: 16px 22px;
-  font-size: 14.5px; color: var(--ink); line-height: 1.85;
-  margin: 14px 0; word-break: keep-all;
+  border-radius: 12px; padding: 18px 22px;
+  font-size: 15px; color: var(--ink); line-height: 1.9;
+  margin: 16px 0; word-break: keep-all;
 }
 /* METHOD CARD (1부) */
 .method-card {
@@ -379,9 +379,13 @@ body {
   .page-hero { padding: 96px 16px 40px; }
   .doc-section { padding: 24px 16px; }
   .method-card { padding: 22px 20px; }
-  .doc-h2 { font-size: 18px; }
-  .doc-h3 { font-size: 14px; }
-  .doc-p, .doc-lead { font-size: 14.5px; }
+  .doc-h2 { font-size: 19px; }
+  .doc-h3 { font-size: 16px; }
+  .doc-h4 { font-size: 15px; }
+  .doc-p { font-size: 15.5px; }
+  .doc-lead { font-size: 16px; }
+  .page-subtitle { font-size: 14.5px; }
+  .callout, .callout-amber { font-size: 14.5px; }
   .sal-axes { grid-template-columns: 1fr; }
   .sta-table { font-size: 13px; }
   .sta-table th, .sta-table td { padding: 8px 10px; word-break: keep-all; }
@@ -676,11 +680,11 @@ body {
 
     <div class="sta-legend">
       <span><span class="sl-label">범례</span></span>
-      <span><b class="c-h">H</b> Human (담당자 작성)</span>
-      <span><b class="c-a">A</b> AI (자동수집)</span>
-      <span><b class="c-r">R</b> Rank (순위)</span>
-      <span><b class="c-p">P</b> Planning (계획)</span>
-      <span><b class="c-x">X</b> eXecution (실행)</span>
+      <span class="c-h"><b>H</b> Human (담당자 작성)</span>
+      <span class="c-a"><b>A</b> AI (자동수집)</span>
+      <span class="c-r"><b>R</b> Rank (순위)</span>
+      <span class="c-p"><b>P</b> Planning (계획)</span>
+      <span class="c-x"><b>X</b> eXecution (실행)</span>
     </div>
 
     <!-- H Part — 7개 -->
