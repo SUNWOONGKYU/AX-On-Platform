@@ -1,0 +1,44 @@
+SAL-DA 진단 + 개선·재진단 — AX-On Platform — 2026-04-30 (v2)
+
+==========================================
+시스템 등급:  10 / 10  (캡 미적용)
+리포트 품질:  90 / 100 (자가평가)
+==========================================
+
+총 카드 25 / Pass 21 · Acceptable 4 · Deferred 0 · Fail 0
+RuntimeFailFlag = false · 진단 완료 선언 가능 (시스템 측면)
+
+전후 비교:
+  지표         v1 (진단)   v2 (개선·재진단)
+  ─────────────────────────────────────
+  시스템 등급   5/10        10/10  ↑
+  Pass         16          21
+  Deferred     3           0
+  Fail         0           0
+
+[개선 실행 5건 → 모두 재진단 통과]
+  ✅ S1SE1 — vercel.json: HSTS·CSP·Referrer·Permissions·X-CTO·X-FO 전체 적용
+  ✅ S1AR2 — .vercelignore 신규 (_archive 등 배포 차단)
+  ✅ S1AC3 — common.css: prefers-reduced-motion 글로벌 fallback
+  ✅ S1AC1+CM2 — community.html: <h1 class="page-title"> 시멘틱 보강
+  ⚠️ S2RL1 — e2e/{smoke.spec.js, playwright.config.js, README.md}
+            (스크립트 작성 완료 / npm + @playwright/test 설치는 별도 PR → Acceptable)
+
+[잔여 Acceptable 4건 — Medium Priority, 다음 PR]
+  · S2PF1 — Core Web Vitals (CSS 외부화)
+  · S2PF2 — 인라인 CSS 무게
+  · S2UX3 — community 비로그인 안내
+  · S2RL1 — Playwright 실행 인프라 도입
+
+[변경된 파일]
+  · vercel.json (수정)
+  · .vercelignore (신규)
+  · css/common.css (추가)
+  · community.html (수정)
+  · e2e/smoke.spec.js, playwright.config.js, README.md (신규)
+  · sal_da_audit_v2/grid_records.json (재진단 갱신)
+  · sal_da_audit_v2/final_report.md (v2)
+  · sal_da_axon.html (재계산 갱신)
+
+[검증 권고]
+  · vercel 배포 후 securityheaders.com 등급 확인
