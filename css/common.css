@@ -275,6 +275,7 @@
   max-width: 1280px; margin: 6px auto 0; padding: 6px 40px 0;
   border-top: 1px solid var(--dark-border);
   text-align: center; font-size: 13px; color: var(--dark-text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 /* ── ANIMATIONS ── */
@@ -362,11 +363,13 @@
   .footer-inner { text-align: center; gap: 6px; }
   .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
   .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
+  .footer-copyright { padding: 6px 8px 0; font-size: 11px; }
 }
 
 @media (max-width: 480px) {
   .nav-inner { padding: 0 12px; }
   .footer-links { gap: 12px; }
+  .footer-copyright { font-size: 10px; }
 }
 
 /* ── ACCESSIBILITY: prefers-reduced-motion 글로벌 fallback (S1AC3) ── */
