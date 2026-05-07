@@ -363,13 +363,13 @@
   .footer-inner { text-align: center; gap: 6px; }
   .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
   .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
-  .footer-copyright { padding: 6px 8px 0; font-size: 11px; }
+  .footer-copyright { padding: 6px 8px 0; font-size: 12px; }
 }
 
 @media (max-width: 480px) {
   .nav-inner { padding: 0 12px; }
   .footer-links { gap: 12px; }
-  .footer-copyright { font-size: 10px; }
+  .footer-copyright { font-size: 12px; }
 }
 
 /* ── ACCESSIBILITY: prefers-reduced-motion 글로벌 fallback (S1AC3) ── */
