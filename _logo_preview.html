@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AX-On 로고 신규 4종 (창의 V2)</title>
+<style>
+  :root {
+    --amber: #e8920d;
+    --amber-light: #f5b942;
+    --amber-deep: #c47a0a;
+    --amber-soft: #fff8ed;
+    --teal: #0d9488;
+    --teal-light: #2dd4bf;
+    --coral: #e85d4a;
+    --ink: #1a1a2e;
+    --ink-muted: #6b7280;
+    --bg: #fafbfc;
+    --card: #ffffff;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg); color: var(--ink);
+    padding: 40px 24px; line-height: 1.6;
+  }
+  h1 { font-size: 32px; margin-bottom: 8px; text-align: center; letter-spacing: -0.5px;}
+  .sub { color: var(--ink-muted); text-align: center; margin-bottom: 48px; font-size: 15px; }
+  .container { max-width: 1280px; margin: 0 auto; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 28px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .card-label {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--amber), var(--amber-deep));
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1px; margin-bottom: 16px;
+  }
+  .card-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px;}
+  .card-desc { font-size: 14px; color: var(--ink-muted); margin-bottom: 24px; line-height: 1.7;}
+
+  .logo-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 28px 24px; background: #fafbfc;
+    border-radius: 14px; margin-bottom: 12px;
+  }
+  .logo-row.dark { background: #1a1a2e; }
+  .logo-row.dark .logo-text { color: #fff; }
+  .logo-text {
+    font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+    font-weight: 800; font-size: 24px;
+    letter-spacing: -0.5px; color: var(--ink);
+  }
+  .logo-text .accent { color: var(--amber); }
+
+  .size-tests {
+    display: flex; gap: 32px; align-items: center; justify-content: center;
+    padding: 24px; background: #f6f7f9; border-radius: 12px;
+    margin-top: 14px;
+  }
+  .size-tests svg { display: block; }
+
+  .specs {
+    margin-top: 18px; padding: 16px; background: #f6f7f9;
+    border-radius: 10px; font-size: 13px; color: var(--ink-muted);
+    line-height: 1.8;
+  }
+  .specs strong { color: var(--ink); }
+  .specs em { color: var(--amber-deep); font-style: normal; font-weight: 600; }
+
+  /* Pulse animation */
+  @keyframes pulse-ring {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  .pulse-ring { animation: pulse-ring 2s ease-out infinite; transform-origin: 24px 24px; }
+  .pulse-ring.r2 { animation-delay: 0.6s; }
+  .pulse-ring.r3 { animation-delay: 1.2s; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>AX-On 로고 신규 4종 (V2 — 창의)</h1>
+  <p class="sub">보편 모티프(모노그램·화살표) 탈피. 컨셉 차별화 우선.</p>
+
+  <div class="grid">
+
+    <!-- ─── 옵션 1: Pulse Origin (진원지/파장) ─── -->
+    <div class="card">
+      <span class="card-label">옵션 1 · 진원지</span>
+      <div class="card-title">Pulse Origin</div>
+      <p class="card-desc">한 점에서 파장이 퍼지는 진원지 메타포. "AX-On은 변혁의 시작점이자 발신지"</p>
+
+      <div class="logo-row">
+        <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="p1-core" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#fff5d8"/>
+              <stop offset="0.5" stop-color="#e8920d"/>
+              <stop offset="1" stop-color="#c47a0a"/>
+            </radialGradient>
+          </defs>
+          <!-- Static rings -->
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1" opacity="0.15"/>
+          <circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.35"/>
+          <circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.6" opacity="0.6"/>
+          <!-- Animated rings -->
+          <circle class="pulse-ring" cx="24" cy="24" r="6" fill="none" stroke="#e8920d" stroke-width="1.5"/>
+          <circle class="pulse-ring r2" cx="24" cy="24" r="6" fill="none" stroke="#e8920d" stroke-width="1.5"/>
+          <circle class="pulse-ring r3" cx="24" cy="24" r="6" fill="none" stroke="#e8920d" stroke-width="1.5"/>
+          <!-- Core -->
+          <circle cx="24" cy="24" r="5.5" fill="url(#p1-core)"/>
+          <circle cx="24" cy="24" r="2" fill="#fff5d8"/>
+        </svg>
+        <div class="logo-text">AX-<span class="accent">On</span></div>
+      </div>
+
+      <div class="logo-row dark">
+        <svg width="48" height="48" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#f5b942" stroke-width="1" opacity="0.25"/>
+          <circle cx="24" cy="24" r="14" fill="none" stroke="#f5b942" stroke-width="1.2" opacity="0.45"/>
+          <circle cx="24" cy="24" r="9" fill="none" stroke="#f5b942" stroke-width="1.6" opacity="0.7"/>
+          <circle cx="24" cy="24" r="5.5" fill="url(#p1-core)"/>
+          <circle cx="24" cy="24" r="2" fill="#fff5d8"/>
+        </svg>
+        <div class="logo-text">AX-<span class="accent">On</span></div>
+      </div>
+
+      <div class="size-tests">
+        <svg width="16" height="16" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="2" opacity="0.3"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="2" opacity="0.6"/><circle cx="24" cy="24" r="6" fill="url(#p1-core)"/></svg>
+        <svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.2"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.4" opacity="0.45"/><circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.8" opacity="0.7"/><circle cx="24" cy="24" r="5.5" fill="url(#p1-core)"/></svg>
+        <svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="#e8920d" stroke-width="1" opacity="0.15"/><circle cx="24" cy="24" r="14" fill="none" stroke="#e8920d" stroke-width="1.2" opacity="0.35"/><circle cx="24" cy="24" r="9" fill="none" stroke="#e8920d" stroke-width="1.6" opacity="0.6"/><circle cx="24" cy="24" r="5.5" fill="url(#p1-core)"/><circle cx="24" cy="24" r="2" fill="#fff5d8"/></svg>
+      </div>
+
+      <div class="specs">
+        <strong>컨셉</strong>: 진원지·발신지·파장. <em>AX-On이 변혁의 진원</em><br>
+        <strong>장점</strong>: 모던 미니멀, 애니메이션 가능, 모든 크기 잘 작동<br>
+        <strong>차별</strong>: 텍스트 의존 없음. 순수 기하학.
+      </div>
+    </div>
+
+    <!-- ─── 옵션 2: Power ⏻ + X (전원 픽토그램) ─── -->
+    <div class="card">
+      <span class="card-label">옵션 2 · 전원 ON</span>
+      <div class="card-title">Power Switch X</div>
+      <p class="card-desc">표준 전원 버튼(⏻) 픽토그램의 갭에 X 삽입. "AX를 켜는 스위치"</p>
+
+      <div class="logo-row">
+        <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="p2-grad" x1="0" y1="0" x2="48" y2="48">
+              <stop offset="0" stop-color="#e8920d"/>
+              <stop offset="1" stop-color="#c47a0a"/>
+            </linearGradient>
+          </defs>
+          <!-- Power circle (open at top) -->
+          <path d="M 14 16 A 13 13 0 1 0 34 16" fill="none" stroke="url(#p2-grad)" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- X in the gap -->
+          <line x1="20" y1="6" x2="28" y2="14" stroke="url(#p2-grad)" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="28" y1="6" x2="20" y2="14" stroke="url(#p2-grad)" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-text">AX-<span class="accent">On</span></div>
+      </div>
+
+      <div class="logo-row dark">
+        <svg width="48" height="48" viewBox="0 0 48 48">
+          <path d="M 14 16 A 13 13 0 1 0 34 16" fill="none" stroke="#f5b942" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="20" y1="6" x2="28" y2="14" stroke="#f5b942" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="28" y1="6" x2="20" y2="14" stroke="#f5b942" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-text">AX-<span class="accent">On</span></div>
+      </div>
+
+      <div class="size-tests">
+        <svg width="16" height="16" viewBox="0 0 48 48"><path d="M 14 16 A 13 13 0 1 0 34 16" fill="none" stroke="#e8920d" stroke-width="5" stroke-linecap="round"/><line x1="20" y1="6" x2="28" y2="14" stroke="#e8920d" stroke-width="5" stroke-linecap="round"/><line x1="28" y1="6" x2="20" y2="14" stroke="#e8920d" stroke-width="5" stroke-linecap="round"/></svg>
+        <svg width="26" height="26" viewBox="0 0 48 48"><path d="M 14 16 A 13 13 0 1 0 34 16" fill="none" stroke="#e8920d" stroke-width="4" stroke-linecap="round"/><line x1="20" y1="6" x2="28" y2="14" stroke="#e8920d" stroke-width="4" stroke-linecap="round"/><line x1="28" y1="6" x2="20" y2="14" stroke="#e8920d" stroke-width="4" stroke-linecap="round"/></svg>
+        <svg width="48" height="48" viewBox="0 0 48 48"><path d="M 14 16 A 13 13 0 1 0 34 16" fill="none" stroke="url(#p2-grad)" stroke-width="3.5" stroke-linecap="round"/><line x1="20" y1="6" x2="28" y2="14" stroke="url(#p2-grad)" stroke-width="3.5" stroke-linecap="round"/><line x1="28" y1="6" x2="20" y2="14" stroke="url(#p2-grad)" stroke-width="3.5" stroke-linecap="round"/></svg>
+      </div>
+
+      <div class="specs">
+        <strong>컨셉</strong>: 전원 ON 픽토그램 + X. <em>"AX를 켜다" 직역</em><br>
+        <strong>장점</strong>: 보편 인지(전원 버튼은 누구나 앎), 강력한 메시지<br>
+        <strong>차별</strong>: 표준 전원 아이콘의 직선을 X로 치환 (유일성)
+      </div>
+    </div>
+
+    <!-- ─── 옵션 3: Origami X (입체) ─── -->
+    <div class="card">
+      <span class="card-label">옵션 3 · 입체</span>
+      <div class="card-title">Origami X</div>
+      <p class="card-desc">종이접기 X — 평면이 접혀 입체로. <em>"평면적 사고 → 입체적 변혁"</em></p>
+
+      <div class="logo-row">
+        <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="p3-light" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f5b942"/>
+              <stop offset="1" stop-color="#e8920d"/>
+            </linearGradient>
+            <linearGradient id="p3-dark" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#c47a0a"/>
+              <stop offset="1" stop-color="#8a5407"/>
+            </linearGradient>
+            <linearGradient id="p3-mid" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#e8920d"/>
+              <stop offset="1" stop-color="#c47a0a"/>
+            </linearGradient>
+          </defs>
+          <!-- 4 facets of folded X -->
+          <polygon points="24,8 24,24 8,24" fill="url(#p3-light)"/>
+          <polygon points="24,8 24,24 40,24" fill="url(#p3-mid)"/>
+          <polygon points="24,40 24,24 8,24" fill="url(#p3-mid)"/>
+          <polygon points="24,40 24,24 40,24" fill="url(#p3-dark)"/>
+          <!-- Center ridge -->
+          <line x1="24" y1="8" x2="24" y2="40" stroke="#fff" stroke-width="0.8" opacity="0.4"/>
+          <line x1="8" y1="24" x2="40" y2="24" stroke="#fff" stroke-width="0.8" opacity="0.4"/>
+        </svg>
+        <div class="logo-text">AX-<span class="accent">On</span></div>
+      </div>
+
+      <div class="logo-row dark">
+        <svg width="48" height="48" viewBox="0 0 48 48">
+          <polygon points="24,8 24,24 8,24" fill="url(#p3-light)"/>
+          <polygon points="24,8 24,24 40,24" fill="url(#p3-mid)"/>
+          <polygon points="24,40 24,24 8,24" fill="url(#p3-mid)"/>
+          <polygon points="24,40 24,24 40,24" fill="url(#p3-dark)"/>
+          <line x1="24" y1="8" x2="24" y2="40" stroke="#fff" stroke-width="0.8" opacity="0.4"/>
+          <line x1="8" y1="24" x2="40" y2="24" stroke="#fff" stroke-width="0.8" opacity="0.4"/>
+        </svg>
+        <div class="logo-text">AX-<span class="accent">On</span></div>
+      </div>
+
+      <div class="size-tests">
+        <svg width="16" height="16" viewBox="0 0 48 48"><polygon points="24,8 24,24 8,24" fill="#f5b942"/><polygon points="24,8 24,24 40,24" fill="#e8920d"/><polygon points="24,40 24,24 8,24" fill="#e8920d"/><polygon points="24,40 24,24 40,24" fill="#c47a0a"/></svg>
+        <svg width="26" height="26" viewBox="0 0 48 48"><polygon points="24,8 24,24 8,24" fill="url(#p3-light)"/><polygon points="24,8 24,24 40,24" fill="url(#p3-mid)"/><polygon points="24,40 24,24 8,24" fill="url(#p3-mid)"/><polygon points="24,40 24,24 40,24" fill="url(#p3-dark)"/></svg>
+        <svg width="48" height="48" viewBox="0 0 48 48"><polygon points="24,8 24,24 8,24" fill="url(#p3-light)"/><polygon points="24,8 24,24 40,24" fill="url(#p3-mid)"/><polygon points="24,40 24,24 8,24" fill="url(#p3-mid)"/><polygon points="24,40 24,24 40,24" fill="url(#p3-dark)"/><line x1="24" y1="8" x2="24" y2="40" stroke="#fff" stroke-width="0.8" opacity="0.4"/><line x1="8" y1="24" x2="40" y2="24" stroke="#fff" stroke-width="0.8" opacity="0.4"/></svg>
+      </div>
+
+      <div class="specs">
+        <strong>컨셉</strong>: 종이접기 / 폴리곤 X. <em>"2D → 3D, 평면 → 입체 = 변혁"</em><br>
+        <strong>장점</strong>: 입체감으로 강한 시각 임팩트, 4면 음영으로 깊이감<br>
+        <strong>차별</strong>: 단색이 아닌 다이아몬드 facet 표현 (가장 독특)
+      </div>
+    </div>
+
+    <!-- ─── 옵션 4: Constellation Net (별자리/네트워크) ─── -->
+    <div class="card">
+      <span class="card-label">옵션 4 · 네트워크</span>
+      <div class="card-title">Constellation X</div>
+      <p class="card-desc">별자리/네트워크 X — 점과 선의 연결. <em>"전문가들이 만나 X 형상"</em></p>
+
+      <div class="logo-row">
+        <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="p4-node" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#fff5d8"/>
+              <stop offset="1" stop-color="#e8920d"/>
+            </radialGradient>
+          </defs>
+          <!-- Connection lines (X shape) -->
+          <line x1="10" y1="10" x2="38" y2="38" stroke="#e8920d" stroke-width="1.5" opacity="0.5"/>
+          <line x1="38" y1="10" x2="10" y2="38" stroke="#e8920d" stroke-width="1.5" opacity="0.5"/>
+          <!-- Cross connections (network) -->
+          <line x1="10" y1="10" x2="38" y2="10" stroke="#0d9488" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/>
+          <line x1="10" y1="38" x2="38" y2="38" stroke="#0d9488" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/>
+          <line x1="10" y1="10" x2="10" y2="38" stroke="#0d9488" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/>
+          <line x1="38" y1="10" x2="38" y2="38" stroke="#0d9488" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/>
+          <!-- Nodes -->
+          <circle cx="10" cy="10" r="3.5" fill="url(#p4-node)"/>
+          <circle cx="38" cy="10" r="3.5" fill="url(#p4-node)"/>
+          <circle cx="10" cy="38" r="3.5" fill="url(#p4-node)"/>
+          <circle cx="38" cy="38" r="3.5" fill="url(#p4-node)"/>
+          <!-- Center hub -->
+          <circle cx="24" cy="24" r="5" fill="#1a1a2e"/>
+          <circle cx="24" cy="24" r="3" fill="url(#p4-node)"/>
+        </svg>
+        <div class="logo-text">AX-<span class="accent">On</span></div>
+      </div>
+
+      <div class="logo-row dark">
+        <svg width="48" height="48" viewBox="0 0 48 48">
+          <line x1="10" y1="10" x2="38" y2="38" stroke="#f5b942" stroke-width="1.5" opacity="0.6"/>
+          <line x1="38" y1="10" x2="10" y2="38" stroke="#f5b942" stroke-width="1.5" opacity="0.6"/>
+          <line x1="10" y1="10" x2="38" y2="10" stroke="#2dd4bf" stroke-width="1" opacity="0.4" stroke-dasharray="2 2"/>
+          <line x1="10" y1="38" x2="38" y2="38" stroke="#2dd4bf" stroke-width="1" opacity="0.4" stroke-dasharray="2 2"/>
+          <line x1="10" y1="10" x2="10" y2="38" stroke="#2dd4bf" stroke-width="1" opacity="0.4" stroke-dasharray="2 2"/>
+          <line x1="38" y1="10" x2="38" y2="38" stroke="#2dd4bf" stroke-width="1" opacity="0.4" stroke-dasharray="2 2"/>
+          <circle cx="10" cy="10" r="3.5" fill="url(#p4-node)"/>
+          <circle cx="38" cy="10" r="3.5" fill="url(#p4-node)"/>
+          <circle cx="10" cy="38" r="3.5" fill="url(#p4-node)"/>
+          <circle cx="38" cy="38" r="3.5" fill="url(#p4-node)"/>
+          <circle cx="24" cy="24" r="5" fill="#fff"/>
+          <circle cx="24" cy="24" r="3" fill="url(#p4-node)"/>
+        </svg>
+        <div class="logo-text">AX-<span class="accent">On</span></div>
+      </div>
+
+      <div class="size-tests">
+        <svg width="16" height="16" viewBox="0 0 48 48"><line x1="10" y1="10" x2="38" y2="38" stroke="#e8920d" stroke-width="3"/><line x1="38" y1="10" x2="10" y2="38" stroke="#e8920d" stroke-width="3"/><circle cx="10" cy="10" r="6" fill="#e8920d"/><circle cx="38" cy="10" r="6" fill="#e8920d"/><circle cx="10" cy="38" r="6" fill="#e8920d"/><circle cx="38" cy="38" r="6" fill="#e8920d"/><circle cx="24" cy="24" r="7" fill="#1a1a2e"/></svg>
+        <svg width="26" height="26" viewBox="0 0 48 48"><line x1="10" y1="10" x2="38" y2="38" stroke="#e8920d" stroke-width="2" opacity="0.6"/><line x1="38" y1="10" x2="10" y2="38" stroke="#e8920d" stroke-width="2" opacity="0.6"/><circle cx="10" cy="10" r="4" fill="url(#p4-node)"/><circle cx="38" cy="10" r="4" fill="url(#p4-node)"/><circle cx="10" cy="38" r="4" fill="url(#p4-node)"/><circle cx="38" cy="38" r="4" fill="url(#p4-node)"/><circle cx="24" cy="24" r="5" fill="#1a1a2e"/><circle cx="24" cy="24" r="3" fill="url(#p4-node)"/></svg>
+        <svg width="48" height="48" viewBox="0 0 48 48"><line x1="10" y1="10" x2="38" y2="38" stroke="#e8920d" stroke-width="1.5" opacity="0.5"/><line x1="38" y1="10" x2="10" y2="38" stroke="#e8920d" stroke-width="1.5" opacity="0.5"/><line x1="10" y1="10" x2="38" y2="10" stroke="#0d9488" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/><line x1="10" y1="38" x2="38" y2="38" stroke="#0d9488" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/><line x1="10" y1="10" x2="10" y2="38" stroke="#0d9488" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/><line x1="38" y1="10" x2="38" y2="38" stroke="#0d9488" stroke-width="1" opacity="0.3" stroke-dasharray="2 2"/><circle cx="10" cy="10" r="3.5" fill="url(#p4-node)"/><circle cx="38" cy="10" r="3.5" fill="url(#p4-node)"/><circle cx="10" cy="38" r="3.5" fill="url(#p4-node)"/><circle cx="38" cy="38" r="3.5" fill="url(#p4-node)"/><circle cx="24" cy="24" r="5" fill="#1a1a2e"/><circle cx="24" cy="24" r="3" fill="url(#p4-node)"/></svg>
+      </div>
+
+      <div class="specs">
+        <strong>컨셉</strong>: 4 노드 + X 연결 + 중앙 허브. <em>"전문가 풀의 네트워크 = AX-On"</em><br>
+        <strong>장점</strong>: 네트워크 의미가 사업 본질(전문가 매칭) 정확히 반영<br>
+        <strong>차별</strong>: 점·선·허브 3 요소 — 별자리 같은 정체성
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 보너스 — 미니멀 한 줄 컨셉 -->
+  <div style="margin-top:48px; padding:32px; background:var(--card); border:1px solid var(--border); border-radius:20px;">
+    <div style="text-align:center; margin-bottom:24px;">
+      <span style="display:inline-block; background:#1a1a2e; color:#fff; padding:6px 14px; border-radius:999px; font-size:12px; font-weight:700; letter-spacing:1px;">Bonus · 워드마크 형태</span>
+      <h3 style="font-size:22px; margin-top:10px; letter-spacing:-0.5px;">로고 마크 없이 워드마크만 가는 방향</h3>
+      <p style="color:var(--ink-muted); font-size:14px; margin-top:6px;">Stripe·Vercel·Linear처럼 마크 없이 텍스트만으로 강한 정체성</p>
+    </div>
+    <div style="display:flex; gap:32px; justify-content:center; flex-wrap:wrap;">
+      <div style="padding:24px 36px; background:#fafbfc; border-radius:14px;">
+        <div style="font-family:'Outfit',sans-serif; font-size:32px; font-weight:900; letter-spacing:-1.5px; color:#1a1a2e;">AX<span style="color:#e8920d;">·</span>On</div>
+      </div>
+      <div style="padding:24px 36px; background:#1a1a2e; border-radius:14px;">
+        <div style="font-family:'Outfit',sans-serif; font-size:32px; font-weight:900; letter-spacing:-1.5px; color:#fff;">AX<span style="color:#f5b942;">·</span>On</div>
+      </div>
+      <div style="padding:24px 36px; background:#fff8ed; border-radius:14px;">
+        <div style="font-family:'Outfit',sans-serif; font-size:32px; font-weight:900; letter-spacing:-1.5px; color:#1a1a2e;">AX<span style="color:#e8920d; font-weight:400;">/</span>On</div>
+      </div>
+    </div>
+    <p style="margin-top:20px; text-align:center; color:var(--ink-muted); font-size:13px;">
+      구분자 변경 (- → · → /) + 폰트 무게 강화 = 마크 없어도 충분히 강함
+    </p>
+  </div>
+
+  <p style="text-align:center; margin-top:48px; color:var(--ink-muted); font-size:14px; line-height:1.8;">
+    <strong style="color:var(--ink);">선택 가이드</strong><br>
+    1 (Pulse Origin): 기술·미래 지향 · 모던 미니멀 추구<br>
+    2 (Power X): 메시지 명확 · 보편 인지율 최우선<br>
+    3 (Origami X): 디자인 임팩트 · 입체감 차별화<br>
+    4 (Constellation X): 네트워크/플랫폼 사업 본질 강조<br>
+    Bonus (워드마크): 마크 없는 미니멀 — Stripe 스타일
+  </p>
+</div>
+</body>
+</html>
